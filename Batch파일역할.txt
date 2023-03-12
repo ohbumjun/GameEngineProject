@@ -1,0 +1,7 @@
+더블클릭시 
+
+cmd 상에서 vendor\bin\premake\premake5.exe vs2017 를 실행
+
+Lua Script => Premake => 우리가 원하는 형태의 Visual Studio Project 를
+만들어준다. 이를 통해 Windows 뿐만 아니라 다양한 플랫폼에서의
+기능을 지원해줄 것이다.
