@@ -63,10 +63,18 @@ namespace Hazel
 		// make context current
 		glfwMakeContextCurrent(m_Window);
 
-		// m_Data 라는 구조체를 인자로 넘겨서, EventCallback 이라는 변수에 데이터 세팅
+		// m_Data 라는 구조체를 인자로 넘겨서, m_Data.EventCallback 이라는 변수에 데이터 세팅
 		glfwSetMonitorUserPointer((GLFWmonitor*)m_Window, &m_Data);
 
 		SetVSync(true);
+
+		// Set GLFW callbacks
+		// - window size 바뀔 때마다 호출되는 콜백
+		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
+		{
+			// window 는 glfwSetMonitorUserPointer 를 통해 세팅한 m_Window 가 들어오게 될 것이다.
+			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+		});
 	}
 
 	void WindowsWindow::Shutdown()

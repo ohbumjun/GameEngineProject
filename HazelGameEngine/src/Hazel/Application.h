@@ -4,6 +4,7 @@
 #include "Event/Event.h"
 #include "Window.h"
 
+
 // Application 의 실행을 Application Project 가 아니라
 // Engine 단에서 제어하고 싶은 것
 namespace Hazel
@@ -15,6 +16,8 @@ namespace Hazel
 		Application();
 		virtual ~Application();
 		void Run();
+
+		void OnEvent(Event& e);
 	private :
 		// unique ptr 로 세팅해줌으로써 소멸자에서 별도로 소멸시켜줄 필요가 없다.
 		std::unique_ptr<Window> m_Window;

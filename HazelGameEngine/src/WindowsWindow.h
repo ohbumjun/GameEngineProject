@@ -36,6 +36,8 @@ namespace Hazel
 			std::string Title;
 			unsigned int Width, Height;
 			bool VSync;
+
+			// Application.h 의 OnEvent 가 여기에 세팅될 것이다.
 			EventCallbackFn EventCallback;
 		};
 
