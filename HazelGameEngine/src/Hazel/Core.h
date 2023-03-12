@@ -1,13 +1,13 @@
 #pragma once
 
-// ¾Æ·¡ÀÇ ¸ÅÅ©·ÎµéÀº Engine ¿¡ Á¤ÀÇ
-// ¼³Á¤ -> c++ -> ÀüÃ³¸®±â. Ãß°¡
+// ì•„ë˜ì˜ ë§¤í¬ë¡œë“¤ì€ Engine ì— ì •ì˜
+// ì„¤ì • -> c++ -> ì „ì²˜ë¦¬ê¸°. ì¶”ê°€
 
 /*
-__declspec(dllimport) : ÇØ´ç ÄÚµå°¡ dll ·ÎºÎÅÍ import µÈ °ÍÀÌ¶ó´Â °ÍÀ» Ç¥½Ã
+__declspec(dllimport) : í•´ë‹¹ ì½”ë“œê°€ dll ë¡œë¶€í„° import ëœ ê²ƒì´ë¼ëŠ” ê²ƒì„ í‘œì‹œ
 
-Engine ÇÁ·ÎÁ§Æ®´Â HZ_BUILD_DLL ÀÌ Á¤ÀÇµÇ¾î ÀÖ´Ù. export ¸¦ ÇÒ °ÍÀÌ°í
-Client ´Â Á¤ÀÇ x, µû¶ó¼­ import ÇÒ °ÍÀÌ´Ù.
+Engine í”„ë¡œì íŠ¸ëŠ” HZ_BUILD_DLL ì´ ì •ì˜ë˜ì–´ ìˆë‹¤. export ë¥¼ í•  ê²ƒì´ê³ 
+Client ëŠ” ì •ì˜ x, ë”°ë¼ì„œ import í•  ê²ƒì´ë‹¤.
 */
 #ifdef HZ_PLATFORM_WINDOWS
 	#ifdef HZ_BUILD_DLL
@@ -17,6 +17,14 @@ Client ´Â Á¤ÀÇ x, µû¶ó¼­ import ÇÒ °ÍÀÌ´Ù.
 	#endif
 #else 
 	#error Hazel only support windows
+#endif
+
+#ifdef HZ_ENABLE_ASSERTS
+	#define HZ_ASSERT(x, ...) {if (!(x)) {HZ_ERROR("Assertion failed : {0}", __VA_ARGS__); __debugbreak();}} 
+	#define HZ_CORE_ASSERT(x, ...){if (!(x)){HZ_CORE_ERROR("Assertion failed : {0}", __VA_ARGS__);} __debugbreak();}
+#else 
+	#define HZ_ASSERT(x, ...)
+	#define HZ_CORE_ASSERT(x, ...)
 #endif
 
 #define BIT(x) (1 << x)

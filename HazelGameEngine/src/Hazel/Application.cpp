@@ -1,12 +1,15 @@
 #include "hzpch.h"
 #include "Application.h"
-
-// Event Test
 #include "Hazel/Event/ApplicationEvent.h"
 #include "Hazel/Log.h"
 
 namespace Hazel
 {
+	Application::Application()
+	{
+		// Window 생성자 호출
+		m_Window = std::unique_ptr<Window>(Window::Create());
+	}
 	Application::~Application()
 	{
 	}
@@ -14,15 +17,10 @@ namespace Hazel
 	{
 		// printf("Hello World");
 
-		WindowResizeEvent e(1200, 720);
-
-		if (e.IsInCategory(EventCategoryApplication))
-			HZ_TRACE(e);
-
-		if (e.IsInCategory(EventCategoryInput))
-			HZ_TRACE(e);
-
-		while (true);
+		while (m_Running)
+		{
+			m_Window->OnUpdate();
+		}
 	}
 	Application* CreateApplication()
 	{

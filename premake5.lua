@@ -11,6 +11,13 @@ workspace "HazelGameEngine" --솔루션파일 이름
 --결과물 폴더경로를 outputdir변수에 저장
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+-- root folder / solution directory 와 관련된 directory 들
+IncludeDir = {}
+IncludeDir["GLFW"] = "HazelGameEngine/vendor/GLFW/include"
+
+-- 해당 경로 내의 premake.lua 파일을 include => 그대로 복사붙여넣기 한다는 것이다. 여기 lua file 에
+include "HazelGameEngine/vendor/GLFW"
+
 project "HazelGameEngine"       --프로젝트 이름
     location "HazelGameEngine"
     kind "SharedLib"            
@@ -39,6 +46,14 @@ project "HazelGameEngine"       --프로젝트 이름
     {
         "%{prj.name}/src",
         "%{prj.name}/vendor/spdlog/include",
+        "%{IncludeDir.GLFW}"
+    }
+
+    -- static library 를 link 시킨다.
+    links
+    {
+        "GLFW",
+        "opengl32.lib"
     }
 
     filter "system:windows"     -- 특정환경에 대한 설정 (ex window환경 )
