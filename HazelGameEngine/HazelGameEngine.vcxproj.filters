@@ -31,6 +31,12 @@
     <ClInclude Include="src\Hazel\Event\MouseEvent.h">
       <Filter>Hazel\Event</Filter>
     </ClInclude>
+    <ClInclude Include="src\Hazel\Layer.h">
+      <Filter>Hazel</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\LayerStack.h">
+      <Filter>Hazel</Filter>
+    </ClInclude>
     <ClInclude Include="src\Hazel\Log.h">
       <Filter>Hazel</Filter>
     </ClInclude>
@@ -39,15 +45,15 @@
     </ClInclude>
     <ClInclude Include="src\WindowsWindow.h" />
     <ClInclude Include="src\hzpch.h" />
-    <ClInclude Include="src\Hazel\Layer.h">
-      <Filter>Hazel</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Hazel\LayerStack.h">
-      <Filter>Hazel</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Application.cpp">
+      <Filter>Hazel</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\Layer.cpp">
+      <Filter>Hazel</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\LayerStack.cpp">
       <Filter>Hazel</Filter>
     </ClCompile>
     <ClCompile Include="src\Hazel\Log.cpp">
@@ -58,11 +64,5 @@
     </ClCompile>
     <ClCompile Include="src\WindowsWindow.cpp" />
     <ClCompile Include="src\hzpch.cpp" />
-    <ClCompile Include="src\Hazel\Layer.cpp">
-      <Filter>Hazel</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Hazel\LayerStack.cpp">
-      <Filter>Hazel</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>

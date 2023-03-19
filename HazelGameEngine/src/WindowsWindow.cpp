@@ -4,6 +4,9 @@
 #include "Hazel/Event/ApplicationEvent.h"
 #include "Hazel/Event/KeyEvent.h"
 
+#include <glad/glad.h>
+
+
 namespace Hazel
 {
 	// Init 과정을 딱 한번만 진행해주기 위해서 static 변수를 활용
@@ -73,6 +76,11 @@ namespace Hazel
 
 		// make context current
 		glfwMakeContextCurrent(m_Window);
+
+		// Init GLAD
+		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+
+		HZ_CORE_ASSERT(status, "Faild to initialize Glad !");
 
 		// m_Data 라는 구조체를 인자로 넘겨서, m_Data.EventCallback 이라는 변수에 데이터 세팅
 		glfwSetWindowUserPointer(m_Window, &m_Data);

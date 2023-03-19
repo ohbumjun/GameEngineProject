@@ -14,9 +14,11 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 -- root folder / solution directory 와 관련된 directory 들
 IncludeDir = {}
 IncludeDir["GLFW"] = "HazelGameEngine/vendor/GLFW/include"
+IncludeDir["Glad"] = "HazelGameEngine/vendor/Glad/include"
 
 -- 해당 경로 내의 premake.lua 파일을 include => 그대로 복사붙여넣기 한다는 것이다. 여기 lua file 에
 include "HazelGameEngine/vendor/GLFW"
+include "HazelGameEngine/vendor/Glad"
 
 project "HazelGameEngine"       --프로젝트 이름
     location "HazelGameEngine"
@@ -46,13 +48,15 @@ project "HazelGameEngine"       --프로젝트 이름
     {
         "%{prj.name}/src",
         "%{prj.name}/vendor/spdlog/include",
-        "%{IncludeDir.GLFW}"
+        "%{IncludeDir.GLFW}",
+        "%{IncludeDir.Glad}" 
     }
 
     -- static library 를 link 시킨다.
     links
     {
         "GLFW",
+        "Glad",
         "opengl32.lib"
     }
 
@@ -65,6 +69,7 @@ project "HazelGameEngine"       --프로젝트 이름
         {
             "HZ_PLATFORM_WINDOWS",  --Hazel프로젝트에는 이러한 전처리가 있다.
             "HZ_BUILD_DLL"
+            -- "GLFW_INCLUDE_NONE" -- not include openGL header when include GLFW
         }
 
         postbuildcommands
