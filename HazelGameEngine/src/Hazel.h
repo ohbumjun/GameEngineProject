@@ -1,9 +1,12 @@
 #pragma once
 
-// Å¬¶óÀÌ¾ğÆ® ÇÁ·ÎÁ§Æ®¿¡¼­¸¸ ÇÊ¿äÇÑ Çì´õ ÆÄÀÏ Á¤º¸
+// í´ë¼ì´ì–¸íŠ¸ í”„ë¡œì íŠ¸ì—ì„œë§Œ í•„ìš”í•œ í—¤ë” íŒŒì¼ ì •ë³´
 
 /*Application*/
 #include "Hazel/Application.h"
+
+/*Layer*/
+#include "Hazel/Layer.h"
 
 /*Log*/
 // - before EntryPoint Needed

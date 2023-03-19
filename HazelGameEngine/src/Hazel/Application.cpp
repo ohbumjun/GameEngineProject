@@ -26,6 +26,9 @@ namespace Hazel
 			glClearColor(1, 0, 1, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
 			m_Window->OnUpdate();
+
+			for (Layer* layer : m_LayerStack)
+				layer->OnUpdate();
 		}
 	}
 	void Application::OnEvent(Event& e)
@@ -41,6 +44,23 @@ namespace Hazel
 		// 2) Event Dispatcher 에 의해 넘어온 Event 에 맞게
 		// 적절한 함수를 binding 시켜줄 것이다.
 		HZ_CORE_INFO("{0}", e);
+
+		// 가장 마지막에 그려지는 Layer 들. 즉, 화면 가장 위쪽에 있는 Layer 들 부터
+		// 차례로 이벤트 처리를 한다.
+		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin(); )
+		{
+			(*--it)->OnEvent(e);
+			if (e.m_Handled)
+				break;
+		}
+	}
+	void Application::PushLayer(Layer* layer)
+	{
+		m_LayerStack.PushLayer(layer);
+	}
+	void Application::PopLayer(Layer* layer)
+	{
+		m_LayerStack.PopLayer(layer);
 	}
 	bool Application::OnWindowClose(WindowCloseEvent& e)
 	{

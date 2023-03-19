@@ -74,14 +74,17 @@ project "HazelGameEngine"       --프로젝트 이름
 
     filter "configurations:Debug" --디버그구성일 때 설정
         defines "HZ_DEBUG"
+        buildoptions "/MDd" -- C/C++ -> CodeGeneration -> RunTime Library -> MT 세팅
         symbols "On"
 
     filter "configurations:Release" 
         defines "HZ_RELEASE"
+        buildoptions "/MDd"
         symbols "On"
 
     filter "configurations:Dist"
         defines "HZ_DIST"
+        buildoptions "/MDd"
         symbols "On"
 
 project "ApplicationProject"
