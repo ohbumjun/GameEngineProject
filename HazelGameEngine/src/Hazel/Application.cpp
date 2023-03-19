@@ -8,8 +8,14 @@ namespace Hazel
 {
 #define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 
+	// make it as single ton
+	Application* Application::s_Instance = nullptr;
+
 	Application::Application()
 	{
+		HZ_CORE_ASSERT(s_Instance, "Application Alread Exists");
+		s_Instance = this;
+
 		// Window 생성자 호출 => WIndowsWindow 생성
 		m_Window = std::unique_ptr<Window>(Window::Create());
 
@@ -57,6 +63,7 @@ namespace Hazel
 	void Application::PushLayer(Layer* layer)
 	{
 		m_LayerStack.PushLayer(layer);
+		layer->OnAttach();
 	}
 	void Application::PopLayer(Layer* layer)
 	{

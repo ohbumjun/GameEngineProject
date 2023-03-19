@@ -7,6 +7,8 @@
 
 /*Layer*/
 #include "Hazel/Layer.h"
+#include "Hazel/ImGui/ImGuiLayer.h"
+
 
 /*Log*/
 // - before EntryPoint Needed
