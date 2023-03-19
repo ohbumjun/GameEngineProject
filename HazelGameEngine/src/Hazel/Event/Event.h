@@ -102,12 +102,6 @@ namespace Hazel
 		//   EventDispatcher 인스턴스 하나를 만든다.
 		// - 3) Dispatch 함수를 통해 그때그때 다른
 		//   콜백함수를 실행한다. 다시 말해 Event 에 맞는 서로 다른 함수를 binding 시켜준다.
-		// - Event 발생 => OnEvent 콜백함수가 호출되면
-		//   Event Class 를 & 형태로 인자를 받게 될 것이다. 
-		// - Event 를 받으면 해당 Event 정보를 지닌
-		//   EventDispatcher 인스턴스 하나를 만든다.
-		// - Dispatch 함수를 통해 그때그때 다른
-		//   콜백함수를 실행한다.
 		EventDispatcher(Event& pEvent) :
 			m_Event(pEvent){}
 
@@ -116,7 +110,8 @@ namespace Hazel
 		{
 			// 현재 Dispatch 하려는 event 와 static 을 비교한다.
 			// Q. GetStaticType 를 왜 사용하는 거지 ..?
-			if (m_Event.GetEventType() == ::GetStaticType())
+			// - Static Type of Template (T) 와 동일한지 확인하는 것이다.
+			if (m_Event.GetEventType() == T::GetStaticType())
 			{
 				m_Event.m_Handled = func(*(T*)&m_Event);
 				return true;
