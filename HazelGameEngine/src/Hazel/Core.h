@@ -28,3 +28,5 @@ Client 는 정의 x, 따라서 import 할 것이다.
 #endif
 
 #define BIT(x) (1 << x)
+
+#define HZ_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)

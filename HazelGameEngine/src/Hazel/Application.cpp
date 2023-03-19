@@ -31,10 +31,13 @@ namespace Hazel
 		{
 			glClearColor(1, 0, 1, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
-			m_Window->OnUpdate();
 
 			for (Layer* layer : m_LayerStack)
 				layer->OnUpdate();
+
+			// 해당 줄이 위 줄보다 아래에 와야 한다
+			// swap buffer 함수가 있어서, Front Buffer 에 그려진 Scene 을 Back Buffer 와 바꿔버리는 역할
+			m_Window->OnUpdate();
 		}
 	}
 	void Application::OnEvent(Event& e)
@@ -63,6 +66,11 @@ namespace Hazel
 	void Application::PushLayer(Layer* layer)
 	{
 		m_LayerStack.PushLayer(layer);
+		layer->OnAttach();
+	}
+	void Application::PushOverlay(Layer* layer)
+	{
+		m_LayerStack.PushOverlay(layer);
 		layer->OnAttach();
 	}
 	void Application::PopLayer(Layer* layer)

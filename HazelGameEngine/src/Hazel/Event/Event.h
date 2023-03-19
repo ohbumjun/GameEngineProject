@@ -33,6 +33,7 @@ namespace Hazel
 
 		KeyPressed,
 		KeyReleased,
+		KeyTyped,
 		
 		MouseButtonPressed,
 		MouseButtonReleased,
@@ -117,6 +118,8 @@ namespace Hazel
 				m_Event.m_Handled = func(*(T*)&m_Event);
 				return true;
 			}
+
+			return false;
 		}
 
 	private :

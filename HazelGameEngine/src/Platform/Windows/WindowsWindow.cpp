@@ -146,6 +146,16 @@ namespace Hazel
 				}
 			});
 
+		glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int character)
+			{
+				// 인자로 들어오는 key 들은 openGL에 국한된 코드
+				// Hazel KeyCode 로 바꿔서, 다른 Engine 에도 범용적으로 적용될 수 있게 해야 한다.
+				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+
+				KeyTypedEvent event(character);
+				data.EventCallback(event);
+			});
+
 		glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods)
 			{
 				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);

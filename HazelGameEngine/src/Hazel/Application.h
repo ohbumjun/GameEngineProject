@@ -21,6 +21,7 @@ namespace Hazel
 		void OnEvent(Event& e);
 
 		void PushLayer(Layer* layer);
+		void PushOverlay(Layer* layer);
 		void PopLayer(Layer* layer);
 
 		inline Window& GetWindow() { return *m_Window; }
