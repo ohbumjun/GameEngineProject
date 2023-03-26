@@ -26,7 +26,8 @@ include "HazelGameEngine/vendor/imgui"
 project "HazelGameEngine"       --프로젝트 이름
     location "HazelGameEngine"
     kind "SharedLib"            
-    language "C++"              
+    language "C++"
+    staticruntime "off"              
 
     --생성파일(exe,lib,dll) 경로설정
     targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")  
@@ -86,15 +87,17 @@ project "HazelGameEngine"       --프로젝트 이름
         defines "HZ_DEBUG"
         buildoptions "/MDd" -- C/C++ -> CodeGeneration -> RunTime Library -> MT 세팅
         symbols "On"
+        runtime "Debug"
 
     filter "configurations:Release" 
         defines "HZ_RELEASE"
-        buildoptions "/MDd"
-        symbols "On"
+        runtime "Release"
+        optimize "On"
+
 
     filter "configurations:Dist"
         defines "HZ_DIST"
-        buildoptions "/MDd"
+        runtime "Release"
         symbols "On"
 
 project "ApplicationProject"
@@ -129,7 +132,6 @@ project "ApplicationProject"
 
     filter "system:windows"
             cppdialect "C++17"
-            staticruntime "On"
             systemversion "latest"
 
     filter "configurations:Debug"

@@ -4,6 +4,8 @@
 
 #include <glad/glad.h>
 
+#include "Input.h"
+
 namespace Hazel
 {
 #define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
@@ -35,8 +37,13 @@ namespace Hazel
 			for (Layer* layer : m_LayerStack)
 				layer->OnUpdate();
 
+			auto [x, y] = Input::GetMousePosition();
+
+			HZ_CORE_TRACE("{0}, {1}", x, y);
+
 			// 해당 줄이 위 줄보다 아래에 와야 한다
-			// swap buffer 함수가 있어서, Front Buffer 에 그려진 Scene 을 Back Buffer 와 바꿔버리는 역할
+			// 아래 함수에 swap buffer 함수가 있어서, 
+			// Front Buffer 에 그려진 Scene 을 Back Buffer 와 바꿔버리는 역할을 하기 때문이다. 
 			m_Window->OnUpdate();
 		}
 	}
