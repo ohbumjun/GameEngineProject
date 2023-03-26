@@ -1,10 +1,11 @@
 #pragma once
 
+#include "Hazel/Core.h"
 #include "Hazel/Event/Event.h"
 
 namespace Hazel {
 
-	class Layer
+	class HAZEL_API Layer
 	{
 	public:
 		Layer(const std::string& name = "Layer");

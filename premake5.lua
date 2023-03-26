@@ -1,5 +1,6 @@
 workspace "HazelGameEngine" --솔루션파일 이름
     architecture "x64"      --솔루션의 architecture, 32bit인지 64bit인지 설정
+    startproject "ApplicationProject"
 
     configurations          --구성 (debug모드, release모드 등 어떤 구성이 있는지?)
     {
@@ -68,7 +69,6 @@ project "HazelGameEngine"       --프로젝트 이름
 
     filter "system:windows"     -- 특정환경에 대한 설정 (ex window환경 )
             cppdialect "C++17"
-            staticruntime "on"
             systemversion "latest"   --윈도우버전을 최신으로 설정
 
         defines                    
@@ -85,9 +85,9 @@ project "HazelGameEngine"       --프로젝트 이름
 
     filter "configurations:Debug" --디버그구성일 때 설정
         defines "HZ_DEBUG"
+        runtime "Debug"
         buildoptions "/MDd" -- C/C++ -> CodeGeneration -> RunTime Library -> MT 세팅
         symbols "On"
-        runtime "Debug"
 
     filter "configurations:Release" 
         defines "HZ_RELEASE"
@@ -104,6 +104,7 @@ project "ApplicationProject"
     location "ApplicationProject"
     kind "ConsoleApp"
     language "C++"
+    staticruntime "off"
 
     targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
     objdir ("%{wks.location}/bin-int/" .. outputdir .. "/%{prj.name}")
@@ -136,12 +137,15 @@ project "ApplicationProject"
 
     filter "configurations:Debug"
         defines "HZ_DEBUG"
+        runtime "Debug"
         symbols "On"
 
     filter "configurations:Release"
         defines "HZ_RELEASE"
+        runtime "Release"
         symbols "On"
 
     filter "configurations:Dist"
         defines "HZ_DIST"
+        runtime "Release"
         symbols "On"

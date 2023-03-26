@@ -11,14 +11,14 @@ namespace Hazel
 	// export 해줘야 한다.
 	class HAZEL_API ImGuiLayer : public Layer
 	{
-		public:
-			ImGuiLayer();
-			~ImGuiLayer();
+	public:
+		ImGuiLayer();
+		~ImGuiLayer();
 
-			void OnAttach() override;
-			void OnDetach() override;
-			void OnUpdate() override;
-			void OnEvent(Event& event) override;
+		void OnAttach() override;
+		void OnDetach() override;
+		void OnUpdate() override;
+		void OnEvent(Event& event) override;
 
 	private :
 		bool OnMouseButtonPressedEvent(MouseButtonPressedEvent& e);
@@ -30,8 +30,8 @@ namespace Hazel
 		bool OnKeyTypedEvent(KeyTypedEvent& e);
 		bool OnWindowResizeEvent(WindowResizeEvent& e);
 
-		private:
-			float m_Time;
+	private:
+		float m_Time;
 	};
 }
 
