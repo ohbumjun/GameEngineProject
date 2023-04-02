@@ -15,7 +15,7 @@ namespace Hazel
 
 	Application::Application()
 	{
-		HZ_CORE_ASSERT(s_Instance, "Application Alread Exists");
+		HZ_CORE_ASSERT(!s_Instance, "Application Alread Exists");
 		s_Instance = this;
 
 		// Window 생성자 호출 => WIndowsWindow 생성
