@@ -17,12 +17,14 @@ IncludeDir = {}
 IncludeDir["GLFW"] = "HazelGameEngine/vendor/GLFW/include"
 IncludeDir["Glad"] = "HazelGameEngine/vendor/Glad/include"
 IncludeDir["ImGui"] = "HazelGameEngine/vendor/imgui"
+IncludeDir["glm"] = "HazelGameEngine/vendor/glm"
 
 -- 해당 경로 내의 premake.lua 파일을 include => 그대로 복사붙여넣기 한다는 것이다. 여기 lua file 에
 -- 관찰한 바, 아래의 include 파일들을 통해서 해당 프로젝트들이 솔루션에 추가된다.
 include "HazelGameEngine/vendor/GLFW"
 include "HazelGameEngine/vendor/Glad"
 include "HazelGameEngine/vendor/imgui"
+-- include "HazelGameEngine/vendor/glm" 오직 header only library 이므로 별도의 lua file 이 존재하지 않는다.
 
 project "HazelGameEngine"       --프로젝트 이름
     location "HazelGameEngine"
@@ -38,10 +40,12 @@ project "HazelGameEngine"       --프로젝트 이름
     pchheader "hzpch.h"
     pchsource "HazelGameEngine/src/hzpch.cpp"
 
-    files   --어떤파일을 컴파일 할 것인지?
+    files   --어떤파일을 컴파일 할 것인지? => 이를 통해 솔루션 상에서 볼 수 있게 된다.
     {
         "%{prj.name}/src/**.h", -- 프로젝트이름폴더-> src폴더안에있는 모든 헤더파일들
-        "%{prj.name}/src/**.cpp"
+        "%{prj.name}/src/**.cpp",
+        "%{prj.name}/vendor/glm/glm/**.hpp", -- glm 라이브러리의 각종 hpp, inl 파일들을 솔루션 탐색기상에서 볼 수 있게 하고 싶다.
+        "%{prj.name}/vendor/glm/glm/**.inl"
     }
 
     defines
@@ -55,7 +59,8 @@ project "HazelGameEngine"       --프로젝트 이름
         "%{prj.name}/vendor/spdlog/include",
         "%{IncludeDir.GLFW}",
         "%{IncludeDir.Glad}",
-        "%{IncludeDir.ImGui}"
+        "%{IncludeDir.ImGui}",
+        "%{IncludeDir.glm}"
     }
 
     -- static library 를 link 시킨다.
@@ -118,7 +123,8 @@ project "ApplicationProject"
     includedirs 
     {
         "HazelGameEngine/vendor/spdlog/include",
-        "HazelGameEngine/src"
+        "HazelGameEngine/src",
+        "%{IncludeDir.glm}"
     }
     
     links
