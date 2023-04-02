@@ -5,6 +5,7 @@
 #include "Window.h"
 #include "Event/ApplicationEvent.h"
 #include "LayerStack.h"
+#include "Hazel/ImGui/ImGuiLayer.h"
 
 // Application 의 실행을 Application Project 가 아니라
 // Engine 단에서 제어하고 싶은 것
@@ -36,6 +37,7 @@ namespace Hazel
 
 		// unique ptr 로 세팅해줌으로써 소멸자에서 별도로 소멸시켜줄 필요가 없다.
 		std::unique_ptr<Window> m_Window;
+		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;;
 		LayerStack m_LayerStack;
 

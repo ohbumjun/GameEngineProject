@@ -23,6 +23,12 @@ namespace Hazel
 
 		// WindowsWindow.WindowsData.EventCallback 에 해당 함수 세팅
 		m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
+
+		// 해당 ImGuiLayer 에 대한 소유권이 LayerStack 에 있어야하므로
+		// Unique Pointer로 생성하면 안된다.
+		// m_ImGuiLayer = std::make_unique<ImGuiLayer>();
+		m_ImGuiLayer = new ImGuiLayer();
+		PushOverlay(m_ImGuiLayer);
 	}
 	Application::~Application()
 	{
@@ -35,7 +41,18 @@ namespace Hazel
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			for (Layer* layer : m_LayerStack)
+			{
+				// ex) submit things for rendering
 				layer->OnUpdate();
+			}
+
+
+			m_ImGuiLayer->Begin();
+			for (Layer* layer : m_LayerStack)
+			{
+				layer->OnImGuiRender();
+			}
+			m_ImGuiLayer->End();
 
 			// 해당 줄이 위 줄보다 아래에 와야 한다
 			// 아래 함수에 swap buffer 함수가 있어서, 
