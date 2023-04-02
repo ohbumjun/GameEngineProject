@@ -103,8 +103,4 @@ namespace Hazel
 		m_Running = false;
 		return true;
 	}
-	Application* CreateApplication()
-	{
-		return nullptr;
-	}
 };
