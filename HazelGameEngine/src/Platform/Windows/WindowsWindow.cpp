@@ -6,6 +6,7 @@
 
 #include <glad/glad.h>
 
+#include "Platform/OpenGL/OpenGLContext.h"
 
 namespace Hazel
 {
@@ -34,7 +35,16 @@ namespace Hazel
 	void WindowsWindow::OnUpdate()
 	{
 		glfwPollEvents();
-		glfwSwapBuffers(m_Window);
+
+		m_Context->SwapBuffers();
+
+		// refresh window 
+		// 왜 m_Context->SwapBuffers() 안에 해당 함수를 옮겨놓는가 ?
+		// 여러 render api 에 맞게 동작시키기 위해서 일종의 Renderer 라는 Wrapper 로
+		// 한번 더 감싸는 것이다. 아래의 함수는 open gl 이라는 render api 에만
+		// 한정되어 동작하는 함수이기 때문이다.
+		// glfwSwapBuffers(m_Window);
+
 	}
 
 	void WindowsWindow::SetVSync(bool enabled)
@@ -58,6 +68,7 @@ namespace Hazel
 		m_Data.Width = props.Width;
 		m_Data.Height = props.Height;
 
+
 		// HZ_CORE_INFO("Creating Window {0} {1} {2}", props.Title, props.Width, props.Height);
 
 		if (!s_GLFWInitialized)
@@ -74,13 +85,10 @@ namespace Hazel
 		m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(),
 			nullptr, nullptr);
 
-		// make context current
-		glfwMakeContextCurrent(m_Window);
+		m_Context = new OpenGLContext(m_Window);
+		m_Context->Init();
 
-		// Init GLAD
-		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-
-		HZ_CORE_ASSERT(status, "Faild to initialize Glad !");
+		
 
 		// m_Data 라는 구조체를 인자로 넘겨서, m_Data.EventCallback 이라는 변수에 데이터 세팅
 		glfwSetWindowUserPointer(m_Window, &m_Data);

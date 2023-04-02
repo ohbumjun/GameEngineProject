@@ -4,6 +4,8 @@
 
 #include <GLFW/glfw3.h>
 
+#include "Renderer/GraphicsContext.h"
+
 namespace Hazel
 {
 	class WindowsWindow : public Window
@@ -30,7 +32,10 @@ namespace Hazel
 		virtual void Init(const WindowProps& props);
 		virtual void Shutdown();
 	private :
+		// Handle To Window
 		GLFWwindow* m_Window;
+
+		GraphicsContext* m_Context;
 
 		// 아래 struct 는 GLFW 에 넘겨주기 위한 데이터이다.
 		struct WindowData
