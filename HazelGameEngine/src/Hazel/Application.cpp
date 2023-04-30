@@ -81,6 +81,32 @@ namespace Hazel
 			sizeof(indices),
 			indices,
 			GL_STATIC_DRAW);
+
+		// layout(location = 0) :
+		// - where this attribute is in our index buffer
+		std::string vertexSrc = R"(
+			#version 330 core
+			
+			layout(location = 0) in vec3 a_Position;
+
+			void main()
+			{
+				gl_Position = vec4(a_Position, 1.0);
+			}
+		)";
+
+		std::string fragmentSrc = R"(
+			#version 330 core
+			
+			layout(location = 0) out vec4 color;
+
+			void main()
+			{
+				color = vec4(1.0, 0.0, 0.0, 1.0);
+			}
+		)";
+
+		m_Shader.reset(new Shader(vertexSrc, fragmentSrc));
 	}
 	Application::~Application()
 	{
@@ -91,6 +117,9 @@ namespace Hazel
 		{
 			glClearColor(0.1f, 0.1f, 0.1f, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
+
+			// 실제 draw 하기 전에 bind
+			m_Shader->Bind();
 
 			// bind vertex array
 			glBindVertexArray(m_VertexArray);

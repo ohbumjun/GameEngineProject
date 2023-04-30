@@ -7,6 +7,8 @@
 #include "LayerStack.h"
 #include "Hazel/ImGui/ImGuiLayer.h"
 
+#include "Renderer/Shader.h"
+
 // Application 의 실행을 Application Project 가 아니라
 // Engine 단에서 제어하고 싶은 것
 namespace Hazel
@@ -44,6 +46,8 @@ namespace Hazel
 		unsigned int m_VertexArray;
 		unsigned int m_VertexBuffer;
 		unsigned int m_IndexBuffer;
+
+		std::unique_ptr<Shader> m_Shader;
 	private :
 		static Application* s_Instance;
 	};
