@@ -1,8 +1,17 @@
 #include <Hazel.h>
 
+// 참고 : imgui 가 include 되는 원리 (혹은 link 원리)
+// imgui 를 빌드하여 static library로 만든다.
+// (imgui -> static lib)
+// 그리고 hazel 로 static lib 형태로 include 가 되게 한다.
+// hazel 은 dll 형태로 뽑아지게 된다.
+// (hazel -> dll)
+// client 는 dll 형태의 hazel 을 include 하는 것이다.
+#include "imgui/imgui.h"
+
 class ExampleLayer : public Hazel::Layer
 {
-public:
+public: 
 	ExampleLayer()
 		: Layer("Example")
 	{
@@ -33,7 +42,10 @@ public:
 	Sandbox()
 	{
 		PushLayer(new ExampleLayer());
-		PushOverlay(new Hazel::ImGuiLayer());
+		
+		// Client 측에서 ImGuiLayer 를 세팅하게 해주고 싶지 않다.
+		// Engine 측 Application 에서 추가하게 할 것이다.
+		// PushOverlay(new Hazel::ImGuiLayer());
 	}
 
 	~Sandbox()

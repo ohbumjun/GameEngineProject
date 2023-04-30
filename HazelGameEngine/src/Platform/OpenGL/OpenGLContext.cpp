@@ -22,6 +22,9 @@ namespace Hazel
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 
 		HZ_CORE_ASSERT(status, "Faild to initialize Glad !");
+	
+		// tell us what gpu we are using
+		HZ_CORE_INFO("OpenGL Renderer : {0}", fmt::ptr(glGetString(GL_RENDERER)));
 	}
 	void OpenGLContext::SwapBuffers()
 	{

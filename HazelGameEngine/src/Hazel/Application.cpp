@@ -28,7 +28,59 @@ namespace Hazel
 		// Unique Pointer로 생성하면 안된다.
 		// m_ImGuiLayer = std::make_unique<ImGuiLayer>();
 		m_ImGuiLayer = new ImGuiLayer();
+		
 		PushOverlay(m_ImGuiLayer);
+
+		// vertex array
+		glGenVertexArrays(1, &m_VertexArray);
+		glBindVertexArray(m_VertexArray);
+
+		// vertex buffer
+		glGenBuffers(1, &m_VertexBuffer);
+		glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+
+		float vertices[3 * 3] = {
+			-0.5f, -0.5f, 0.0f, // one point
+			0.5f,  -0.5f, 0.f,
+			0.0f, 0.5f, 0.0f
+		};
+
+		// upload vertexbuffer to gpu
+		glBufferData(GL_ARRAY_BUFFER, 
+			sizeof(vertices), 
+			vertices, 
+			GL_STATIC_DRAW);
+
+		glEnableVertexAttribArray(0);
+
+		glVertexAttribPointer(
+			// desribe data in index[0]
+			0, 
+			3,
+			GL_FLOAT, 
+			// GL_FALSE : no normalize
+			GL_FALSE,
+			// amount of data in single vertex
+			3 * sizeof(float),
+			nullptr);
+
+		// index buffer
+		glGenBuffers(1, &m_IndexBuffer);
+
+		// index buffer = element buffer
+		glBindBuffer(
+			GL_ELEMENT_ARRAY_BUFFER,
+			m_IndexBuffer
+			);
+
+		unsigned int indices[3] = {
+			0, 1, 2
+		};
+
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER,
+			sizeof(indices),
+			indices,
+			GL_STATIC_DRAW);
 	}
 	Application::~Application()
 	{
@@ -37,15 +89,23 @@ namespace Hazel
 	{
 		while (m_Running)
 		{
-			glClearColor(1, 0, 1, 1);
+			glClearColor(0.1f, 0.1f, 0.1f, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
+
+			// bind vertex array
+			glBindVertexArray(m_VertexArray);
+			
+			// draw with index
+			glDrawElements(GL_TRIANGLES, 
+				3, 
+				GL_UNSIGNED_INT, 
+				nullptr);
 
 			for (Layer* layer : m_LayerStack)
 			{
 				// ex) submit things for rendering
 				layer->OnUpdate();
 			}
-
 
 			m_ImGuiLayer->Begin();
 			for (Layer* layer : m_LayerStack)

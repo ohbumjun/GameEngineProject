@@ -28,9 +28,10 @@ include "HazelGameEngine/vendor/imgui"
 
 project "HazelGameEngine"       --프로젝트 이름
     location "HazelGameEngine"
-    kind "SharedLib"            
+    kind "StaticLib" -- static lib / kind "SharedLib" : dll      
     language "C++"
-    staticruntime "off"              
+    cppdialect "C++17"
+    staticruntime "on" -- static lib 일 경우 on, shared lib 일 경우 off    
 
     --생성파일(exe,lib,dll) 경로설정
     targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")  
@@ -73,8 +74,7 @@ project "HazelGameEngine"       --프로젝트 이름
     }
 
     filter "system:windows"     -- 특정환경에 대한 설정 (ex window환경 )
-            cppdialect "C++17"
-            systemversion "latest"   --윈도우버전을 최신으로 설정
+        systemversion "latest"   --윈도우버전을 최신으로 설정
 
         defines                    
         {
@@ -83,33 +83,35 @@ project "HazelGameEngine"       --프로젝트 이름
             "GLFW_INCLUDE_NONE" -- not include openGL header when include GLFW
         }
 
-        postbuildcommands
-        {
-            ("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/ApplicationProject/\"")
-        }
+        -- dll 파일을 만드는 것이 아니기 때문에 더이상 필요없다.
+        -- postbuildcommands
+        -- {
+        --    ("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/ApplicationProject/\"")
+        -- }
 
     filter "configurations:Debug" --디버그구성일 때 설정
         defines "HZ_DEBUG"
         runtime "Debug"
-        buildoptions "/MDd" -- C/C++ -> CodeGeneration -> RunTime Library -> MT 세팅
-        symbols "On"
+        -- hazel game engine을 dll 로 만드는 경우 세팅 => buildoptions "/MDd" -- C/C++ -> CodeGeneration -> RunTime Library -> MT 세팅
+        symbols "on" -- symbols "on" : debug version of library => generate debug symbols
 
     filter "configurations:Release" 
         defines "HZ_RELEASE"
         runtime "Release"
-        optimize "On"
+        optimize "On" -- optimize "on" : relase version of libray 
 
 
     filter "configurations:Dist"
         defines "HZ_DIST"
         runtime "Release"
-        symbols "On"
+        optimize "On"
 
 project "ApplicationProject"
     location "ApplicationProject"
     kind "ConsoleApp"
     language "C++"
-    staticruntime "off"
+    cppdialect "C++17"
+    staticruntime "on"
 
     targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
     objdir ("%{wks.location}/bin-int/" .. outputdir .. "/%{prj.name}")
@@ -124,6 +126,7 @@ project "ApplicationProject"
     {
         "HazelGameEngine/vendor/spdlog/include",
         "HazelGameEngine/src",
+        "HazelGameEngine/vendor",
         "%{IncludeDir.glm}"
     }
     
@@ -132,26 +135,25 @@ project "ApplicationProject"
         "HazelGameEngine"
     }
 
-    defines
-    {
-        "HZ_PLATFORM_WINDOWS"
-    }
-
     filter "system:windows"
-            cppdialect "C++17"
-            systemversion "latest"
+        systemversion "latest"
+
+        defines
+        {
+            "HZ_PLATFORM_WINDOWS"
+        }
 
     filter "configurations:Debug"
         defines "HZ_DEBUG"
         runtime "Debug"
-        symbols "On"
+        symbols "on"
 
     filter "configurations:Release"
         defines "HZ_RELEASE"
         runtime "Release"
-        symbols "On"
+        symbols "on"
 
     filter "configurations:Dist"
         defines "HZ_DIST"
         runtime "Release"
-        symbols "On"
+        optimize "on"
