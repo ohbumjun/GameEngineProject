@@ -141,9 +141,12 @@ public:
 
 			in vec3 v_Position;
 
+			uniform vec4 u_Color;
+
 			void main()
 			{
-				color = vec4(0.2f, 0.2, 0.8f, 1.0);
+				// color = vec4(0.2f, 0.2, 0.8f, 1.0);
+				color = u_Color;
 			}
 		)";
 
@@ -212,10 +215,22 @@ public:
 
 		glm::mat4 scale = glm::scale(glm::mat4(1.f), glm::vec3(0.1f));
 
+		glm::vec4 redColor(0.8f, 0.1f, 0.1f, 1.f);
+		glm::vec4 blueColor(0.1f, 0.1f, 0.8f, 1.f);
+
 		for (int i = 0; i < 5; ++i)
 		{
 			glm::vec3 pos(i * 0.2f, 0.f, 0.f);
 			glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
+			
+			if (i & 1)
+			{
+				m_BlueShader->UploadUniformFloat4("u_Color", redColor);
+			}
+			else
+			{
+				m_BlueShader->UploadUniformFloat4("u_Color", blueColor);
+			}
 			Hazel::Renderer::Submit(m_SquareArray, m_BlueShader, transform);
 		}
 

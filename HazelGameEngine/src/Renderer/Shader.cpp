@@ -136,6 +136,15 @@ namespace Hazel
 	{
 		glUseProgram(0);
 	}
+	void Shader::UploadUniformFloat4(const std::string& name, const glm::vec4& vec)
+	{
+		// shader 에 선언된 uniform 변수를 가져오기
+		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+
+		// uniform 변수를 shader 쪽에 세팅해주는 함수
+		// - 1 : 1개의 matrix 를 넘긴다
+		glUniform4f(location, vec.x, vec.y, vec.z, vec.w);
+	}
 	void Shader::UploadUniformMat4(const std::string& name, const glm::mat4& mat)
 	{
 		// shader 에 선언된 uniform 변수를 가져오기
