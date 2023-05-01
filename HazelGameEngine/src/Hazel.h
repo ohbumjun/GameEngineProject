@@ -16,6 +16,9 @@
 /*Input*/
 #include "Hazel/Input.h"
 
+/*TimeStamp*/
+#include "Hazel/Core/TimeStamp.h"
+
 /*Codes*/
 #include "Hazel/MouseButtonCodes.h"
 #include "Hazel/KeyCodes.h"

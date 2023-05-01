@@ -144,28 +144,27 @@ public:
 		)";
 
 		m_BlueShader.reset(new Hazel::Shader(vertexSrc2, fragmentSrc2));
-
 	}
 
-	void OnUpdate() override
+	void OnUpdate(Hazel::Timestep ts) override
 	{
 		/*Pos*/
 		if (Hazel::Input::IsKeyPressed(HZ_KEY_LEFT))
 		{
-			m_CameraPos.x -= m_CameraMoveSpeed;
+			m_CameraPos.x -= m_CameraMoveSpeed * ts;
 		}
 		else if (Hazel::Input::IsKeyPressed(HZ_KEY_RIGHT))
 		{
-			m_CameraPos.x += m_CameraMoveSpeed;
+			m_CameraPos.x += m_CameraMoveSpeed * ts;
 		}
 		
 		if (Hazel::Input::IsKeyPressed(HZ_KEY_UP))
 		{
-			m_CameraPos.y += m_CameraMoveSpeed;
+			m_CameraPos.y += m_CameraMoveSpeed * ts;
 		}
 		else if (Hazel::Input::IsKeyPressed(HZ_KEY_DOWN))
 		{
-			m_CameraPos.y -= m_CameraMoveSpeed;
+			m_CameraPos.y -= m_CameraMoveSpeed * ts;
 		}
 
 		/*Rot*/

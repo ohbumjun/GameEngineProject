@@ -1392,6 +1392,9 @@
     <ClInclude Include="src\Renderer\OrthographicCamera.h">
       <Filter>src\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Hazel\Core\TimeStamp.h">
+      <Filter>src\Hazel\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Application.cpp">

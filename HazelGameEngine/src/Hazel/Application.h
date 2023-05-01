@@ -8,6 +8,7 @@
 #include "Hazel/ImGui/ImGuiLayer.h"
 
 #include "Renderer/Shader.h"
+#include "Hazel/Core/TimeStamp.h"
 
 
 // Application 의 실행을 Application Project 가 아니라
@@ -44,7 +45,8 @@ namespace Hazel
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;;
 		LayerStack m_LayerStack;
-
+		Timestep m_Timestep;
+		float m_LastFrameTime = 0.f;
 	private :
 		static Application* s_Instance;
 	};

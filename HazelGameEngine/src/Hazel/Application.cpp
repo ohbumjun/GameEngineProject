@@ -7,6 +7,7 @@
 #include "Renderer/RenderCommand.h"
 #include "Renderer/Renderer.h"
 #include "Input.h"
+#include <GLFW/glfw3.h>
 
 namespace Hazel
 {
@@ -42,10 +43,17 @@ namespace Hazel
 	{
 		while (m_Running)
 		{
+			float time = glfwGetTime(); // Platform::GetTime
+
+			// Frame 사이의 소요시간
+			Timestep timeStep = time - m_LastFrameTime;
+
+			m_LastFrameTime = time;
+
 			for (Layer* layer : m_LayerStack)
 			{
 				// ex) submit things for rendering
-				layer->OnUpdate();
+				layer->OnUpdate(timeStep);
 			}
 
 			m_ImGuiLayer->Begin();
