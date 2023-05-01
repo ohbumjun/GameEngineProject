@@ -14,7 +14,8 @@ class ExampleLayer : public Hazel::Layer
 public: 
 	ExampleLayer()
 		: Layer("Example"),
-		m_Camera{ -1.6f, 1.6f, -0.9f, 0.9f }
+		m_Camera{ -1.6f, 1.6f, -0.9f, 0.9f },
+		m_CameraPos(0.f)
 	{
 
 		// Create Vertex Array
@@ -148,11 +149,40 @@ public:
 
 	void OnUpdate() override
 	{
+		/*Pos*/
+		if (Hazel::Input::IsKeyPressed(HZ_KEY_LEFT))
+		{
+			m_CameraPos.x -= m_CameraMoveSpeed;
+		}
+		else if (Hazel::Input::IsKeyPressed(HZ_KEY_RIGHT))
+		{
+			m_CameraPos.x += m_CameraMoveSpeed;
+		}
+		
+		if (Hazel::Input::IsKeyPressed(HZ_KEY_UP))
+		{
+			m_CameraPos.y += m_CameraMoveSpeed;
+		}
+		else if (Hazel::Input::IsKeyPressed(HZ_KEY_DOWN))
+		{
+			m_CameraPos.y -= m_CameraMoveSpeed;
+		}
+
+		/*Rot*/
+		if (Hazel::Input::IsKeyPressed(HZ_KEY_A))
+		{
+			m_CameraRot += m_CameraRotSpeed;
+		}
+		else if (Hazel::Input::IsKeyPressed(HZ_KEY_D))
+		{
+			m_CameraRot -= m_CameraRotSpeed;
+		}
+
 		Hazel::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.f });
 		Hazel::RenderCommand::Clear();
 
-		m_Camera.SetPosition({ 0.5f, 0.5f, 0.0f });
-		m_Camera.SetRotation(45.f);
+		m_Camera.SetPosition(m_CameraPos);
+		m_Camera.SetRotation(m_CameraRot);
 
 		// Renderer::BeginScene(camera, lights, environment);
 		// Scene 을 그리기 위해 필요한 모든 것을 한번에 그려낸다.
@@ -183,6 +213,10 @@ private :
 	std::shared_ptr<Hazel::VertexArray> m_SquareArray;
 
 	Hazel::OrthographicCamera m_Camera;
+	glm::vec3 m_CameraPos;
+	float m_CameraMoveSpeed = 0.1f;
+	float m_CameraRotSpeed = 0.1f;
+	float m_CameraRot     = 0.0f;
 };
 
 class Sandbox : public Hazel::Application

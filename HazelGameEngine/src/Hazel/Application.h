@@ -8,10 +8,6 @@
 #include "Hazel/ImGui/ImGuiLayer.h"
 
 #include "Renderer/Shader.h"
-#include "Renderer/Buffer.h"
-#include "Renderer/VertexArray.h"
-
-#include "Renderer/OrthographicCamera.h"
 
 
 // Application 의 실행을 Application Project 가 아니라
@@ -48,9 +44,6 @@ namespace Hazel
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;;
 		LayerStack m_LayerStack;
-
-		std::shared_ptr<VertexBuffer> m_VertexBuffer;
-		std::shared_ptr<IndexBuffer> m_IndexBuffer;
 
 	private :
 		static Application* s_Instance;
