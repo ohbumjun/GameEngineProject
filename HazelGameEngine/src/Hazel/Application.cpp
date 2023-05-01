@@ -45,8 +45,18 @@ namespace Hazel
 
 		m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
 		
+		BufferLayout layout = {
+			{ShaderDataType::Float3, "a_Position"}
+		};
+
+
 		glEnableVertexAttribArray(0);
 
+		// 의미
+		// - we have 3 floats at index 0 
+		// - not normalized
+		// - stride between each vertex : 3 * sizeof(float)
+		// - offset of particular elements is nothing
 		glVertexAttribPointer(
 			// desribe data in index[0]
 			0, 
@@ -54,7 +64,7 @@ namespace Hazel
 			GL_FLOAT, 
 			// GL_FALSE : no normalize
 			GL_FALSE,
-			// amount of data in single vertex
+			// amount of byte between each vertex
 			3 * sizeof(float),
 			nullptr);
 
