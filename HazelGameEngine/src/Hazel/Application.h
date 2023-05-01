@@ -9,11 +9,13 @@
 
 #include "Renderer/Shader.h"
 #include "Renderer/Buffer.h"
+#include "Renderer/VertexArray.h"
 
 // Application 의 실행을 Application Project 가 아니라
 // Engine 단에서 제어하고 싶은 것
 namespace Hazel
 {
+
 	// _declspec(dllexport) class Application
 	class HAZEL_API Application
 	{
@@ -44,11 +46,10 @@ namespace Hazel
 		bool m_Running = true;;
 		LayerStack m_LayerStack;
 
-		unsigned int m_VertexArray;
-
-		std::unique_ptr<Shader> m_Shader;
-		std::unique_ptr<VertexBuffer> m_VertexBuffer;
-		std::unique_ptr<IndexBuffer> m_IndexBuffer;
+		std::shared_ptr<Shader> m_Shader;
+		std::shared_ptr<VertexBuffer> m_VertexBuffer;
+		std::shared_ptr<IndexBuffer> m_IndexBuffer;
+		std::shared_ptr<VertexArray> m_VertexArray;
 	private :
 		static Application* s_Instance;
 	};

@@ -13,26 +13,6 @@ namespace Hazel
 	// make it as single ton
 	Application* Application::s_Instance = nullptr;
 
-	static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type)
-	{
-		switch (type)
-		{
-		case Hazel::ShaderDataType::Float: return GL_FLOAT;
-		case Hazel::ShaderDataType::Float2: return GL_FLOAT;
-		case Hazel::ShaderDataType::Float3: return GL_FLOAT;
-		case Hazel::ShaderDataType::Float4: return GL_FLOAT;
-		case Hazel::ShaderDataType::Mat3: return GL_FLOAT;
-		case Hazel::ShaderDataType::Mat4: return GL_FLOAT;
-		case Hazel::ShaderDataType::Int:  return GL_INT;
-		case Hazel::ShaderDataType::Int2: return GL_INT;
-		case Hazel::ShaderDataType::Int3: return GL_INT;
-		case Hazel::ShaderDataType::Int4: return GL_INT;
-		case Hazel::ShaderDataType::Bool: return GL_BOOL;
-		}
-
-		HZ_CORE_ASSERT(false, "Unknown ShaderDataType");
-		return 0;
-	}
 
 	Application::Application()
 	{
@@ -52,9 +32,8 @@ namespace Hazel
 		
 		PushOverlay(m_ImGuiLayer);
 
-		// vertex array
-		glGenVertexArrays(1, &m_VertexArray);
-		glBindVertexArray(m_VertexArray);
+		// Create Vertex Array
+		m_VertexArray.reset(VertexArray::Create());
 
 		// 아래 위치를 통해 Rendering 을 하면
 		// 가운데가 0,0,0 이 된다.
@@ -77,46 +56,14 @@ namespace Hazel
 		BufferLayout layout = {
 			{ShaderDataType::Float3, "a_Position"},
 			{ShaderDataType::Float4, "a_Color"}
-			// {ShaderDataType::Float3, "a_Normal"}
 		};
 
-		/*
-		// 의미
-		// - we have 3 floats at index 0 
-		// - not normalized
-		// - stride between each vertex : 3 * sizeof(float)
-		// - offset of particular elements is nothing
-		glVertexAttribPointer(
-			// desribe data in index[0]
-			0,
-			3,
-			GL_FLOAT,
-			// GL_FALSE : no normalize
-			GL_FALSE,
-			// amount of byte between each vertex
-			3 * sizeof(float),
-			nullptr);
-		*/
+		m_VertexBuffer->SetLayout(layout);
+		m_VertexArray->AddVertexBuffer(m_VertexBuffer);
 
-		uint32_t index = 0;
-		for (const auto& element : layout)
-		{
-			glEnableVertexAttribArray(index);
-			glVertexAttribPointer(
-				index,
-				element.GetComponentCount(),
-				ShaderDataTypeToOpenGLBaseType(element.Type),
-				element.Normalized ? GL_TRUE : GL_FALSE,
-				layout.GetStride(),
-				(const void*)element.Offset);
-			index++;
-		}
-
-		uint32_t indices[3] = {
-			0, 1, 2
-		};
-
+		uint32_t indices[3] = {0, 1, 2};
 		m_IndexBuffer.reset(IndexBuffer::Create(indices, 3));
+		m_VertexArray->SetIndexBuffer(m_IndexBuffer);
 
 		// layout(location = 0) :
 		// - where this attribute is in our index buffer
@@ -127,10 +74,12 @@ namespace Hazel
 			layout(location = 1) in vec4 a_Color;
 
 			out vec3 v_Position;
+			out vec4 v_Color;
 
 			void main()
 			{
 				v_Position = a_Position;
+				v_Color    = a_Color;
 				gl_Position = vec4(a_Position, 1.0);
 			}
 		)";
@@ -141,11 +90,12 @@ namespace Hazel
 			layout(location = 0) out vec4 color;
 
 			in vec3 v_Position;
+			in vec4 v_Color;
 
 			void main()
 			{
-				// color = vec4(1.0, 0.0, 0.0, 1.0);
-				color = vec4(v_Position * 0.5f + 0.5f, 1.0);
+				// color = vec4(v_Position * 0.5f + 0.5f, 1.0);
+				color = v_Color;
 			}
 		)";
 
@@ -165,7 +115,7 @@ namespace Hazel
 			m_Shader->Bind();
 
 			// bind vertex array
-			glBindVertexArray(m_VertexArray);
+			m_VertexArray->Bind();
 			
 			// draw with index
 			glDrawElements(GL_TRIANGLES, 
