@@ -13,6 +13,27 @@ namespace Hazel
 	// make it as single ton
 	Application* Application::s_Instance = nullptr;
 
+	static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type)
+	{
+		switch (type)
+		{
+		case Hazel::ShaderDataType::Float: return GL_FLOAT;
+		case Hazel::ShaderDataType::Float2: return GL_FLOAT;
+		case Hazel::ShaderDataType::Float3: return GL_FLOAT;
+		case Hazel::ShaderDataType::Float4: return GL_FLOAT;
+		case Hazel::ShaderDataType::Mat3: return GL_FLOAT;
+		case Hazel::ShaderDataType::Mat4: return GL_FLOAT;
+		case Hazel::ShaderDataType::Int:  return GL_INT;
+		case Hazel::ShaderDataType::Int2: return GL_INT;
+		case Hazel::ShaderDataType::Int3: return GL_INT;
+		case Hazel::ShaderDataType::Int4: return GL_INT;
+		case Hazel::ShaderDataType::Bool: return GL_BOOL;
+		}
+
+		HZ_CORE_ASSERT(false, "Unknown ShaderDataType");
+		return 0;
+	}
+
 	Application::Application()
 	{
 		HZ_CORE_ASSERT(!s_Instance, "Application Alread Exists");
@@ -37,21 +58,29 @@ namespace Hazel
 
 		// 아래 위치를 통해 Rendering 을 하면
 		// 가운데가 0,0,0 이 된다.
+		/*
+		layout 에 a_Position 만 있을 경우
 		float vertices[3 * 3] = {
 			-0.5f, -0.5f, 0.0f, // one point
 			0.5f,  -0.5f, 0.f,
 			0.0f, 0.5f, 0.0f
 		};
+		*/
+		float vertices[3 * 7] = {
+			/*pos*/-0.5f, -0.5f, 0.0f,  /*color*/ 1.0f, 0.0f, 1.0f, 1.0f,
+			0.5f,  -0.5f, 0.f,			/*color*/1.0f, 0.0f, 1.0f, 1.0f,
+			0.0f, 0.5f, 0.0f,			/*color*/1.0f, 0.0f, 1.0f, 1.0f
+		};
 
 		m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
 		
 		BufferLayout layout = {
-			{ShaderDataType::Float3, "a_Position"}
+			{ShaderDataType::Float3, "a_Position"},
+			{ShaderDataType::Float4, "a_Color"}
+			// {ShaderDataType::Float3, "a_Normal"}
 		};
 
-
-		glEnableVertexAttribArray(0);
-
+		/*
 		// 의미
 		// - we have 3 floats at index 0 
 		// - not normalized
@@ -59,14 +88,29 @@ namespace Hazel
 		// - offset of particular elements is nothing
 		glVertexAttribPointer(
 			// desribe data in index[0]
-			0, 
+			0,
 			3,
-			GL_FLOAT, 
+			GL_FLOAT,
 			// GL_FALSE : no normalize
 			GL_FALSE,
 			// amount of byte between each vertex
 			3 * sizeof(float),
 			nullptr);
+		*/
+
+		uint32_t index = 0;
+		for (const auto& element : layout)
+		{
+			glEnableVertexAttribArray(index);
+			glVertexAttribPointer(
+				index,
+				element.GetComponentCount(),
+				ShaderDataTypeToOpenGLBaseType(element.Type),
+				element.Normalized ? GL_TRUE : GL_FALSE,
+				layout.GetStride(),
+				(const void*)element.Offset);
+			index++;
+		}
 
 		uint32_t indices[3] = {
 			0, 1, 2
@@ -74,13 +118,13 @@ namespace Hazel
 
 		m_IndexBuffer.reset(IndexBuffer::Create(indices, 3));
 
-
 		// layout(location = 0) :
 		// - where this attribute is in our index buffer
 		std::string vertexSrc = R"(
 			#version 330 core
 			
 			layout(location = 0) in vec3 a_Position;
+			layout(location = 1) in vec4 a_Color;
 
 			out vec3 v_Position;
 
