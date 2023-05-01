@@ -65,8 +65,31 @@ namespace Hazel
 		m_IndexBuffer.reset(IndexBuffer::Create(indices, 3));
 		m_VertexArray->SetIndexBuffer(m_IndexBuffer);
 
-		// layout(location = 0) :
-		// - where this attribute is in our index buffer
+		/*Square*/
+		m_SquareArray.reset(VertexArray::Create());
+		
+		float squareVertices[3 * 4] = {
+			-0.75f, -0.5f, 0.0f,  
+			0.75f,  -0.5f, 0.f,		
+			0.75f,  0.5f, 0.0f,	
+			-0.75f, 0.5f, 0.0f
+		};
+		
+		std::shared_ptr<VertexBuffer> squareVB;
+		squareVB.reset(VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
+
+		BufferLayout squareVBLayout = {
+			{ShaderDataType::Float3, "a_Position"}
+		};
+
+		squareVB->SetLayout(squareVBLayout);
+		m_SquareArray->AddVertexBuffer(squareVB);
+
+		uint32_t squareIndices[] = { 0, 1, 2, 2, 3, 0 };
+		std::shared_ptr<IndexBuffer> squareIdxB;
+		squareIdxB.reset(IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
+		m_SquareArray->SetIndexBuffer(squareIdxB);
+
 		std::string vertexSrc = R"(
 			#version 330 core
 			
@@ -100,6 +123,36 @@ namespace Hazel
 		)";
 
 		m_Shader.reset(new Shader(vertexSrc, fragmentSrc));
+	
+		std::string vertexSrc2 = R"(
+			#version 330 core
+			
+			layout(location = 0) in vec3 a_Position;
+
+			out vec3 v_Position;
+
+			void main()
+			{
+				v_Position = a_Position;
+				gl_Position = vec4(a_Position, 1.0);
+			}
+		)";
+
+		std::string fragmentSrc2 = R"(
+			#version 330 core
+			
+			layout(location = 0) out vec4 color;
+
+			in vec3 v_Position;
+
+			void main()
+			{
+				color = vec4(0.2f, 0.2, 0.8f, 1.0);
+			}
+		)";
+
+		m_BlueShader.reset(new Shader(vertexSrc2, fragmentSrc2));
+
 	}
 	Application::~Application()
 	{
@@ -110,6 +163,14 @@ namespace Hazel
 		{
 			glClearColor(0.1f, 0.1f, 0.1f, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
+
+
+			m_BlueShader->Bind();
+			m_SquareArray->Bind();
+			glDrawElements(GL_TRIANGLES,
+				m_SquareArray->GetIndexBuffer()->GetCount(),
+				GL_UNSIGNED_INT,
+				nullptr);
 
 			// 실제 draw 하기 전에 bind
 			m_Shader->Bind();
@@ -164,25 +225,25 @@ namespace Hazel
 			if (e.m_Handled)
 				break;
 		}
-	}
+	};
 	void Application::PushLayer(Layer* layer)
 	{
 		m_LayerStack.PushLayer(layer);
 		layer->OnAttach();
-	}
+	};
 	void Application::PushOverlay(Layer* layer)
 	{
 		m_LayerStack.PushOverlay(layer);
 		layer->OnAttach();
-	}
+	};
 	void Application::PopLayer(Layer* layer)
 	{
 		m_LayerStack.PopLayer(layer);
-	}
+	};
 	bool Application::OnWindowClose(WindowCloseEvent& e)
 	{
 		// 해당 함수 호추 이후, Application::Run( ) 함수가 더이상 돌아가지 않게 될 것이다.
 		m_Running = false;
 		return true;
-	}
+	};
 };
