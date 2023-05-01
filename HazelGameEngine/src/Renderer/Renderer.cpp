@@ -1,20 +1,26 @@
 #include "hzpch.h"
 #include "Renderer.h"
 
-
 namespace Hazel
 {
+	Renderer::SceneData* Renderer::m_SceneData = new Renderer::SceneData;
+
 	// 역할
 	// - 우리가 사용하는 모든 shader 가 right uniform 을 가질 수 있게 처리
-	void Renderer::BeginScene()
+	void Renderer::BeginScene(OrthographicCamera& camera)
 	{
+		m_SceneData->ViewProjectionMatrix = camera.GetViewProjectionMatrix();
 	}
 	void Renderer::EndScene()
 	{
 	}
-	void Renderer::Submit(const std::shared_ptr<VertexArray>& vertexArray)
+	void Renderer::Submit(const std::shared_ptr<VertexArray>& vertexArray,
+		const std::shared_ptr<Shader>& shader)
 	{
-		// Bind 시키기
+		// 실제 draw 하기 전에 bind
+		shader->Bind();
+		shader->UploadUniformMat4("u_ViewProjection", m_SceneData->ViewProjectionMatrix);
+		
 		vertexArray->Bind();
 
 		// RenderCommand Queue 에 push

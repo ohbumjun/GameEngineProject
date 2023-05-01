@@ -11,6 +11,9 @@
 #include "Renderer/Buffer.h"
 #include "Renderer/VertexArray.h"
 
+#include "Renderer/OrthographicCamera.h"
+
+
 // Application 의 실행을 Application Project 가 아니라
 // Engine 단에서 제어하고 싶은 것
 namespace Hazel
@@ -53,6 +56,8 @@ namespace Hazel
 
 		std::shared_ptr<Shader> m_BlueShader;
 		std::shared_ptr<VertexArray> m_SquareArray;
+
+		OrthographicCamera m_Camera;
 	private :
 		static Application* s_Instance;
 	};

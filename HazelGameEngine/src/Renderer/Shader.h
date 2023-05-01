@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <glm/glm.hpp>
 
 namespace Hazel
 {
@@ -12,6 +13,8 @@ namespace Hazel
 
 		void Bind() const;
 		void Unbind() const;
+
+		void UploadUniformMat4(const std::string& name, const glm::mat4& mat);
 
 	private :
 		// 현재 해당 객체를 식벽하는 ID
