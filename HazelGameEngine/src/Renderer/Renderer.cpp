@@ -15,12 +15,18 @@ namespace Hazel
 	{
 	}
 	void Renderer::Submit(const std::shared_ptr<VertexArray>& vertexArray,
-		const std::shared_ptr<Shader>& shader)
+		const std::shared_ptr<Shader>& shader,
+		const glm::mat4& transform)
 	{
 		// 실제 draw 하기 전에 bind
 		shader->Bind();
+
+		// 한 프레임에서 Shader 당 한번씩만 호출해줘도 된다.
 		shader->UploadUniformMat4("u_ViewProjection", m_SceneData->ViewProjectionMatrix);
 		
+		// 각 object 마다 해당 함수를 호출해줘야 한다.
+		shader->UploadUniformMat4("u_Transform", transform);
+
 		vertexArray->Bind();
 
 		// RenderCommand Queue 에 push

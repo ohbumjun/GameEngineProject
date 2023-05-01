@@ -8,6 +8,7 @@
 // (hazel -> dll)
 // client 는 dll 형태의 hazel 을 include 하는 것이다.
 #include "imgui/imgui.h"
+#include <glm/gtc/type_ptr.hpp>
 
 class ExampleLayer : public Hazel::Layer
 {
@@ -15,7 +16,8 @@ public:
 	ExampleLayer()
 		: Layer("Example"),
 		m_Camera{ -1.6f, 1.6f, -0.9f, 0.9f },
-		m_CameraPos(0.f)
+		m_CameraPos(0.f),
+		m_SquarePos(0.f)
 	{
 
 		// Create Vertex Array
@@ -85,6 +87,7 @@ public:
 			layout(location = 1) in vec4 a_Color;
 
 			uniform mat4 u_ViewProjection;
+			uniform mat4 u_Transform;
 
 			out vec3 v_Position;
 			out vec4 v_Color;
@@ -93,7 +96,7 @@ public:
 			{
 				v_Position = a_Position;
 				v_Color    = a_Color;
-				gl_Position = u_ViewProjection * vec4(a_Position, 1.0);
+				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
 			}
 		)";
 
@@ -120,13 +123,14 @@ public:
 			layout(location = 0) in vec3 a_Position;
 
 			uniform mat4 u_ViewProjection;
+			uniform mat4 u_Transform;
 
 			out vec3 v_Position;
 
 			void main()
 			{
 				v_Position = a_Position;
-				gl_Position = u_ViewProjection * vec4(a_Position, 1.0);	
+				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);	
 			}
 		)";
 
@@ -177,6 +181,25 @@ public:
 			m_CameraRot -= m_CameraRotSpeed;
 		}
 
+		/*Square*/
+		if (Hazel::Input::IsKeyPressed(HZ_KEY_J))
+		{
+			m_SquarePos.x -= m_SquareMoveSpeed * ts;
+		}
+		else if (Hazel::Input::IsKeyPressed(HZ_KEY_L))
+		{
+			m_SquarePos.x += m_SquareMoveSpeed * ts;
+		}
+
+		if (Hazel::Input::IsKeyPressed(HZ_KEY_I))
+		{
+			m_SquarePos.y += m_SquareMoveSpeed * ts;
+		}
+		else if (Hazel::Input::IsKeyPressed(HZ_KEY_K))
+		{
+			m_SquarePos.y -= m_SquareMoveSpeed * ts;
+		}
+
 		Hazel::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.f });
 		Hazel::RenderCommand::Clear();
 
@@ -187,7 +210,9 @@ public:
 		// Scene 을 그리기 위해 필요한 모든 것을 한번에 그려낸다.
 		Hazel::Renderer::BeginScene(m_Camera);
 
-		Hazel::Renderer::Submit(m_SquareArray, m_BlueShader);
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), m_SquarePos);
+
+		Hazel::Renderer::Submit(m_SquareArray, m_BlueShader, transform);
 		Hazel::Renderer::Submit(m_VertexArray, m_Shader);
 
 		Hazel::Renderer::EndScene();
@@ -211,8 +236,11 @@ private :
 	std::shared_ptr<Hazel::Shader> m_BlueShader;
 	std::shared_ptr<Hazel::VertexArray> m_SquareArray;
 
+	glm::vec3 m_SquarePos;
+
 	Hazel::OrthographicCamera m_Camera;
 	glm::vec3 m_CameraPos;
+	float m_SquareMoveSpeed = 0.1f;
 	float m_CameraMoveSpeed = 0.1f;
 	float m_CameraRotSpeed = 0.1f;
 	float m_CameraRot     = 0.0f;
