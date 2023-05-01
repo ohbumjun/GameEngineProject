@@ -2,6 +2,7 @@
 #include "Buffer.h"
 #include "Platform/OpenGL/OpenGLBuffer.h"
 #include "Renderer.h"
+#include "RendererAPI.h"
 
 namespace Hazel
 {
@@ -9,10 +10,10 @@ namespace Hazel
 	{
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::None :
+		case RendererAPI::API::None :
 			HZ_CORE_ASSERT(false, "no api set");
 			return nullptr;
-		case RendererAPI::OpenGL :
+		case RendererAPI::API::OpenGL :
 			return new OpenGLVertexBuffer(vertices, size);
 		}
 
@@ -23,10 +24,10 @@ namespace Hazel
 	{
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::None:
+		case RendererAPI::API::None:
 			HZ_CORE_ASSERT(false, "no api set");
 			return nullptr;
-		case RendererAPI::OpenGL:
+		case RendererAPI::API::OpenGL:
 			return new OpenGLIndexBuffer(indices, size);
 		}
 

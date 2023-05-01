@@ -4,6 +4,8 @@
 
 #include <glad/glad.h>
 
+#include "Renderer/RenderCommand.h"
+#include "Renderer/Renderer.h"
 #include "Input.h"
 
 namespace Hazel
@@ -164,25 +166,23 @@ namespace Hazel
 			glClearColor(0.1f, 0.1f, 0.1f, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
 
+			RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.f});
+			RenderCommand::Clear();
 
-			m_BlueShader->Bind();
-			m_SquareArray->Bind();
-			glDrawElements(GL_TRIANGLES,
-				m_SquareArray->GetIndexBuffer()->GetCount(),
-				GL_UNSIGNED_INT,
-				nullptr);
+			// Renderer::BeginScene(camera, lights, environment);
+			// Scene 을 그리기 위해 필요한 모든 것을 한번에 그려낸다.
+			Renderer::BeginScene();
 
 			// 실제 draw 하기 전에 bind
-			m_Shader->Bind();
+			m_BlueShader->Bind();
+			Renderer::Submit(m_SquareArray);
 
-			// bind vertex array
-			m_VertexArray->Bind();
+			m_Shader->Bind();
+			Renderer::Submit(m_VertexArray);
+
+			// Renderer::Flush();
 			
-			// draw with index
-			glDrawElements(GL_TRIANGLES, 
-				m_IndexBuffer->GetCount(), 
-				GL_UNSIGNED_INT, 
-				nullptr);
+			Renderer::EndScene();
 
 			for (Layer* layer : m_LayerStack)
 			{

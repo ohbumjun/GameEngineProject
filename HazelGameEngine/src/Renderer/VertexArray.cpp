@@ -2,6 +2,7 @@
 #include "VertexArray.h"
 #include "Platform/OpenGL/OpenGLVertexArray.h"
 #include "Renderer.h"
+#include "RendererAPI.h"
 
 namespace Hazel
 {
@@ -9,10 +10,10 @@ namespace Hazel
 	{
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::None:
+		case RendererAPI::API::None:
 			HZ_CORE_ASSERT(false, "no api set");
 			return nullptr;
-		case RendererAPI::OpenGL:
+		case RendererAPI::API::OpenGL:
 			return new OpenGLVertexArray();
 		}
 
