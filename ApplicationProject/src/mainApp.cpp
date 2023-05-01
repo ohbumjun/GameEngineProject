@@ -59,10 +59,10 @@ public:
 		m_SquareArray.reset(Hazel::VertexArray::Create());
 
 		float squareVertices[3 * 4] = {
-			-0.75f, -0.5f, 0.0f,
-			0.75f,  -0.5f, 0.f,
-			0.75f,  0.5f, 0.0f,
-			-0.75f, 0.5f, 0.0f
+			-0.5f, -0.5f, 0.0f,
+			 0.5f,  -0.5f, 0.f,
+			 0.5f,  0.5f, 0.0f,
+			-0.5f, 0.5f, 0.0f
 		};
 
 		std::shared_ptr<Hazel::VertexBuffer> squareVB;
@@ -210,10 +210,16 @@ public:
 		// Scene 을 그리기 위해 필요한 모든 것을 한번에 그려낸다.
 		Hazel::Renderer::BeginScene(m_Camera);
 
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), m_SquarePos);
+		glm::mat4 scale = glm::scale(glm::mat4(1.f), glm::vec3(0.1f));
 
-		Hazel::Renderer::Submit(m_SquareArray, m_BlueShader, transform);
-		Hazel::Renderer::Submit(m_VertexArray, m_Shader);
+		for (int i = 0; i < 5; ++i)
+		{
+			glm::vec3 pos(i * 0.2f, 0.f, 0.f);
+			glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
+			Hazel::Renderer::Submit(m_SquareArray, m_BlueShader, transform);
+		}
+
+		// Hazel::Renderer::Submit(m_VertexArray, m_Shader);
 
 		Hazel::Renderer::EndScene();
 	}
