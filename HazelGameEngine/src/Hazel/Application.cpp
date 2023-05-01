@@ -16,8 +16,7 @@ namespace Hazel
 	Application* Application::s_Instance = nullptr;
 
 
-	Application::Application() :
-		m_Camera{-1.6f, 1.6f, -0.9f, 0.9f}
+	Application::Application() 
 	{
 		HZ_CORE_ASSERT(!s_Instance, "Application Alread Exists");
 		s_Instance = this;
@@ -35,131 +34,6 @@ namespace Hazel
 		
 		PushOverlay(m_ImGuiLayer);
 
-		// Create Vertex Array
-		m_VertexArray.reset(VertexArray::Create());
-
-		// 아래 위치를 통해 Rendering 을 하면
-		// 가운데가 0,0,0 이 된다.
-		/*
-		layout 에 a_Position 만 있을 경우
-		float vertices[3 * 3] = {
-			-0.5f, -0.5f, 0.0f, // one point
-			0.5f,  -0.5f, 0.f,
-			0.0f, 0.5f, 0.0f
-		};
-		*/
-		float vertices[3 * 7] = {
-			/*pos*/-0.5f, -0.5f, 0.0f,  /*color*/ 1.0f, 0.0f, 1.0f, 1.0f,
-			0.5f,  -0.5f, 0.f,			/*color*/1.0f, 0.0f, 1.0f, 1.0f,
-			0.0f, 0.5f, 0.0f,			/*color*/1.0f, 0.0f, 1.0f, 1.0f
-		};
-
-		m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
-		
-		BufferLayout layout = {
-			{ShaderDataType::Float3, "a_Position"},
-			{ShaderDataType::Float4, "a_Color"}
-		};
-
-		m_VertexBuffer->SetLayout(layout);
-		m_VertexArray->AddVertexBuffer(m_VertexBuffer);
-
-		uint32_t indices[3] = {0, 1, 2};
-		m_IndexBuffer.reset(IndexBuffer::Create(indices, 3));
-		m_VertexArray->SetIndexBuffer(m_IndexBuffer);
-
-		/*Square*/
-		m_SquareArray.reset(VertexArray::Create());
-		
-		float squareVertices[3 * 4] = {
-			-0.75f, -0.5f, 0.0f,  
-			0.75f,  -0.5f, 0.f,		
-			0.75f,  0.5f, 0.0f,	
-			-0.75f, 0.5f, 0.0f
-		};
-		
-		std::shared_ptr<VertexBuffer> squareVB;
-		squareVB.reset(VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
-
-		BufferLayout squareVBLayout = {
-			{ShaderDataType::Float3, "a_Position"}
-		};
-
-		squareVB->SetLayout(squareVBLayout);
-		m_SquareArray->AddVertexBuffer(squareVB);
-
-		uint32_t squareIndices[] = { 0, 1, 2, 2, 3, 0 };
-		std::shared_ptr<IndexBuffer> squareIdxB;
-		squareIdxB.reset(IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
-		m_SquareArray->SetIndexBuffer(squareIdxB);
-
-		std::string vertexSrc = R"(
-			#version 330 core
-			
-			layout(location = 0) in vec3 a_Position;
-			layout(location = 1) in vec4 a_Color;
-
-			uniform mat4 u_ViewProjection;
-
-			out vec3 v_Position;
-			out vec4 v_Color;
-
-			void main()
-			{
-				v_Position = a_Position;
-				v_Color    = a_Color;
-				gl_Position = u_ViewProjection * vec4(a_Position, 1.0);
-			}
-		)";
-
-		std::string fragmentSrc = R"(
-			#version 330 core
-			
-			layout(location = 0) out vec4 color;
-
-			in vec3 v_Position;
-			in vec4 v_Color;
-
-			void main()
-			{
-				// color = vec4(v_Position * 0.5f + 0.5f, 1.0);
-				color = v_Color;
-			}
-		)";
-
-		m_Shader.reset(new Shader(vertexSrc, fragmentSrc));
-	
-		std::string vertexSrc2 = R"(
-			#version 330 core
-			
-			layout(location = 0) in vec3 a_Position;
-
-			uniform mat4 u_ViewProjection;
-
-			out vec3 v_Position;
-
-			void main()
-			{
-				v_Position = a_Position;
-				gl_Position = u_ViewProjection * vec4(a_Position, 1.0);	
-			}
-		)";
-
-		std::string fragmentSrc2 = R"(
-			#version 330 core
-			
-			layout(location = 0) out vec4 color;
-
-			in vec3 v_Position;
-
-			void main()
-			{
-				color = vec4(0.2f, 0.2, 0.8f, 1.0);
-			}
-		)";
-
-		m_BlueShader.reset(new Shader(vertexSrc2, fragmentSrc2));
-
 	}
 	Application::~Application()
 	{
@@ -168,21 +42,6 @@ namespace Hazel
 	{
 		while (m_Running)
 		{
-			RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.f});
-			RenderCommand::Clear();
-
-			m_Camera.SetPosition({ 0.5f, 0.5f, 0.0f });
-			m_Camera.SetRotation(45.f);
-
-			// Renderer::BeginScene(camera, lights, environment);
-			// Scene 을 그리기 위해 필요한 모든 것을 한번에 그려낸다.
-			Renderer::BeginScene(m_Camera);
-
-			Renderer::Submit(m_SquareArray, m_BlueShader);
-			Renderer::Submit(m_VertexArray, m_Shader);
-
-			Renderer::EndScene();
-
 			for (Layer* layer : m_LayerStack)
 			{
 				// ex) submit things for rendering
