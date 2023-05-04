@@ -249,12 +249,21 @@ public:
 		}
 	}
 
-private :
-	std::shared_ptr<Hazel::Shader> m_Shader;
-	std::shared_ptr<Hazel::VertexArray> m_VertexArray;
+	virtual void OnImGuiRender() override
+	{
+		ImGui::Begin("Settings");
+		
+		ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
+		
+		ImGui::End();
+	}
 
-	std::shared_ptr<Hazel::Shader> m_BlueShader;
-	std::shared_ptr<Hazel::VertexArray> m_SquareArray;
+private :
+	Hazel::Ref<Hazel::Shader> m_Shader;
+	Hazel::Ref<Hazel::VertexArray> m_VertexArray;
+
+	Hazel::Ref<Hazel::Shader> m_BlueShader;
+	Hazel::Ref<Hazel::VertexArray> m_SquareArray;
 
 	glm::vec3 m_SquarePos;
 
@@ -265,7 +274,7 @@ private :
 	float m_CameraRotSpeed = 0.1f;
 	float m_CameraRot     = 0.0f;
 
-	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.0f, 1.f};
+	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.f};
 	};
 
 class Sandbox : public Hazel::Application
