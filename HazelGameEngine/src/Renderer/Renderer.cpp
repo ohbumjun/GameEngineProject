@@ -1,5 +1,6 @@
 #include "hzpch.h"
 #include "Renderer.h"
+#include "Platform/OpenGL/OpenGLShader.h"
 
 namespace Hazel
 {
@@ -22,10 +23,10 @@ namespace Hazel
 		shader->Bind();
 
 		// 한 프레임에서 Shader 당 한번씩만 호출해줘도 된다.
-		shader->UploadUniformMat4("u_ViewProjection", m_SceneData->ViewProjectionMatrix);
+		std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformMat4("u_ViewProjection", m_SceneData->ViewProjectionMatrix);
 		
 		// 각 object 마다 해당 함수를 호출해줘야 한다.
-		shader->UploadUniformMat4("u_Transform", transform);
+		std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformMat4("u_Transform", transform);
 
 		vertexArray->Bind();
 

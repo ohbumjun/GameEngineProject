@@ -1,5 +1,6 @@
 #include <Hazel.h>
 
+#include "Platform/OpenGL/OpenGLShader.h"
 // 참고 : imgui 가 include 되는 원리 (혹은 link 원리)
 // imgui 를 빌드하여 static library로 만든다.
 // (imgui -> static lib)
@@ -115,7 +116,7 @@ public:
 			}
 		)";
 
-		m_Shader.reset(new Hazel::Shader(vertexSrc, fragmentSrc));
+		m_Shader.reset(Hazel::Shader::Create(vertexSrc, fragmentSrc));
 
 		std::string vertexSrc2 = R"(
 			#version 330 core
@@ -145,12 +146,11 @@ public:
 
 			void main()
 			{
-				// color = vec4(0.2f, 0.2, 0.8f, 1.0);
 				color = u_Color;
 			}
 		)";
 
-		m_BlueShader.reset(new Hazel::Shader(vertexSrc2, fragmentSrc2));
+		m_BlueShader.reset(Hazel::Shader::Create(vertexSrc2, fragmentSrc2));
 	}
 
 	void OnUpdate(Hazel::Timestep ts) override
@@ -215,22 +215,21 @@ public:
 
 		glm::mat4 scale = glm::scale(glm::mat4(1.f), glm::vec3(0.1f));
 
-		glm::vec4 redColor(0.8f, 0.1f, 0.1f, 1.f);
-		glm::vec4 blueColor(0.1f, 0.1f, 0.8f, 1.f);
+		/*
+		Hazel::MaterialRef material = new Hazel::Material(m_FlatColorShader);
+		Hazel::MaterialInstanceRef material = new Hazel::MaterialInstance(material);
+		material->Set("u_Color", redColor);
+		material->Set("u_Texture", texture);
+		squareMesh->SetMaterial(material);
+		*/
+
+		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_BlueShader)->Bind();
+		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_BlueShader)->UploadUniformFloat4("u_Color", m_SquareColor);
 
 		for (int i = 0; i < 5; ++i)
 		{
 			glm::vec3 pos(i * 0.2f, 0.f, 0.f);
 			glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
-			
-			if (i & 1)
-			{
-				m_BlueShader->UploadUniformFloat4("u_Color", redColor);
-			}
-			else
-			{
-				m_BlueShader->UploadUniformFloat4("u_Color", blueColor);
-			}
 			Hazel::Renderer::Submit(m_SquareArray, m_BlueShader, transform);
 		}
 
@@ -265,7 +264,9 @@ private :
 	float m_CameraMoveSpeed = 0.1f;
 	float m_CameraRotSpeed = 0.1f;
 	float m_CameraRot     = 0.0f;
-};
+
+	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.0f, 1.f};
+	};
 
 class Sandbox : public Hazel::Application
 {
