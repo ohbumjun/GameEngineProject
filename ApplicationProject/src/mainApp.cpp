@@ -59,18 +59,21 @@ public:
 		/*Square*/
 		m_SquareArray.reset(Hazel::VertexArray::Create());
 
-		float squareVertices[3 * 4] = {
-			-0.5f, -0.5f, 0.0f,
-			 0.5f,  -0.5f, 0.f,
-			 0.5f,  0.5f, 0.0f,
-			-0.5f, 0.5f, 0.0f
+		// 5 floats per each vertex
+		float squareVertices[5 * 4] = {
+			/*Vertex Pos*/				/*Texture Cordinate*/ 
+			-0.5f, -0.5f, 0.0f	,			 /*Bottom Left  */		  0.0f, 0.0f,
+			 0.5f,  -0.5f, 0.f,				 /*Bottom Right*/		  1.0f, 0.0f,
+			 0.5f,  0.5f, 0.0f,			 /*Top Right*/			  1.0f, 1.0f
+			-0.5f, 0.5f, 0.0f,				 /*Top Left*/			      0.0f, 1.0f
 		};
 
 		std::shared_ptr<Hazel::VertexBuffer> squareVB;
 		squareVB.reset(Hazel::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
 
 		Hazel::BufferLayout squareVBLayout = {
-			{Hazel::ShaderDataType::Float3, "a_Position"}
+			{Hazel::ShaderDataType::Float3, "a_Position"},
+			{Hazel::ShaderDataType::Float2, "a_TexCoord"}
 		};
 
 		squareVB->SetLayout(squareVBLayout);
@@ -85,7 +88,7 @@ public:
 			#version 330 core
 			
 			layout(location = 0) in vec3 a_Position;
-			layout(location = 1) in vec4 a_Color;
+			layout(location = 1) in vec4 a_TexCoord;
 
 			uniform mat4 u_ViewProjection;
 			uniform mat4 u_Transform;
@@ -233,6 +236,11 @@ public:
 			Hazel::Renderer::Submit(m_SquareArray, m_BlueShader, transform);
 		}
 
+
+		// Geometry for Texture 
+		Hazel::Renderer::Submit(m_SquareArray, m_Shader, glm::scale(glm::mat4(1.f), glm::vec3(1.5f)));
+
+		// Triangle
 		// Hazel::Renderer::Submit(m_VertexArray, m_Shader);
 
 		Hazel::Renderer::EndScene();
@@ -275,7 +283,7 @@ private :
 	float m_CameraRot     = 0.0f;
 
 	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.f};
-	};
+};
 
 class Sandbox : public Hazel::Application
 {
