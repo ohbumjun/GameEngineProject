@@ -28,6 +28,8 @@ namespace Hazel
 		// WindowsWindow.WindowsData.EventCallback 에 해당 함수 세팅
 		m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
 
+		Renderer::Init();
+
 		// 해당 ImGuiLayer 에 대한 소유권이 LayerStack 에 있어야하므로
 		// Unique Pointer로 생성하면 안된다.
 		// m_ImGuiLayer = std::make_unique<ImGuiLayer>();

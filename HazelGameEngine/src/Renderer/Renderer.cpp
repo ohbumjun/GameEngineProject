@@ -15,6 +15,10 @@ namespace Hazel
 	void Renderer::EndScene()
 	{
 	}
+	void Renderer::Init()
+	{
+		RenderCommand::Init();
+	}
 	void Renderer::Submit(const std::shared_ptr<VertexArray>& vertexArray,
 		const std::shared_ptr<Shader>& shader,
 		const glm::mat4& transform)

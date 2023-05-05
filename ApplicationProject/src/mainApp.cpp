@@ -192,9 +192,8 @@ public:
 		// m_TextureShader.reset(Hazel::Shader::Create(sqaureVertexScr, sqaureFragSrc));
 
 		// Create Texture
-		// m_Texture = Hazel::Texture2D::Create("assets/textures/RGBA.png");
-		// m_Texture = Hazel::Texture2D::Create("assets/textures/curious.png");
 		m_Texture = Hazel::Texture2D::Create("assets/textures/RandomBox.png");
+		m_TransparentTexture = Hazel::Texture2D::Create("assets/textures/opaque.png");
 
 		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_TextureShader)->Bind();
 		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0);
@@ -285,10 +284,10 @@ public:
 
 		// Bind Texture
 		m_Texture->Bind();
-
-		// Geometry for Texture 
 		Hazel::Renderer::Submit(m_SquareArray, m_TextureShader, glm::scale(glm::mat4(1.f), glm::vec3(1.5f)));
-		// Hazel::Renderer::Submit(m_SquareArray, m_BlueShader, glm::scale(glm::mat4(1.f), glm::vec3(1.5f)));
+		
+		m_TransparentTexture->Bind();
+		Hazel::Renderer::Submit(m_SquareArray, m_TextureShader, glm::scale(glm::mat4(1.f), glm::vec3(1.5f)));
 
 		// Triangle
 		// Hazel::Renderer::Submit(m_VertexArray, m_Shader);
@@ -326,6 +325,7 @@ private :
 	Hazel::Ref<Hazel::Shader> m_TextureShader;
 
 	Hazel::Ref<Hazel::Texture2D> m_Texture;
+	Hazel::Ref<Hazel::Texture2D> m_TransparentTexture;
 
 	glm::vec3 m_SquarePos;
 
