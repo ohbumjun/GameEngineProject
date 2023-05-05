@@ -199,7 +199,7 @@ namespace Hazel
 		// 반면 Texture.glsl 와 같이 '.'가 있으면, '.' 위치 - 'T' 위치를 해줘야 count 가 나온다.
 		auto count = lastDot == std::string::npos ? filePath.size() - lastSlash : lastDot - lastSlash;
 
-		m_Name =  filePath.substr(lastSlash, lastDot - lastSlash).data();
+		m_Name = std::move(std::string(filePath.substr(lastSlash, count)));
 	}
 	OpenGLShader::OpenGLShader(std::string_view name, std::string_view vertexSrc, std::string_view fragmentSrc) 
 		: m_Name(name)

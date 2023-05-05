@@ -11,6 +11,7 @@
 #include "imgui/imgui.h"
 #include <glm/gtc/type_ptr.hpp>
 
+
 class ExampleLayer : public Hazel::Layer
 {
 public: 
@@ -156,14 +157,14 @@ public:
 		m_BlueShader = Hazel::Shader::Create("squareBlueShader", sqaureVertexScr, sqaureFragSrc);
 
 		// m_TextureShader.reset(Hazel::Shader::Create(textureShaderVertexSrc, textureShaderFragmentSrc));
-		m_TextureShader = Hazel::Shader::Create("assets/shaders/Texture.glsl");
+		auto textureShader = m_ShaderLibrary.Load("assets/shaders/Texture.glsl");
 
 		// Create Texture
 		m_Texture = Hazel::Texture2D::Create("assets/textures/RandomBox.png");
 		m_TransparentTexture = Hazel::Texture2D::Create("assets/textures/opaque.png");
 
-		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_TextureShader)->Bind();
-		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0);
+		std::dynamic_pointer_cast<Hazel::OpenGLShader>(textureShader)->Bind();
+		std::dynamic_pointer_cast<Hazel::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
 
 }
 
@@ -251,10 +252,11 @@ public:
 
 		// Bind Texture
 		m_Texture->Bind();
-		Hazel::Renderer::Submit(m_SquareArray, m_TextureShader, glm::scale(glm::mat4(1.f), glm::vec3(1.5f)));
+		auto textureShader = m_ShaderLibrary.Get("Texture");
+		Hazel::Renderer::Submit(m_SquareArray, textureShader, glm::scale(glm::mat4(1.f), glm::vec3(1.5f)));
 		
 		m_TransparentTexture->Bind();
-		Hazel::Renderer::Submit(m_SquareArray, m_TextureShader, glm::scale(glm::mat4(1.f), glm::vec3(1.5f)));
+		Hazel::Renderer::Submit(m_SquareArray, textureShader, glm::scale(glm::mat4(1.f), glm::vec3(1.5f)));
 
 		// Triangle
 		// Hazel::Renderer::Submit(m_VertexArray, m_Shader);
@@ -283,13 +285,14 @@ public:
 	}
 
 private :
+	Hazel::ShaderLibrary m_ShaderLibrary;
+
 	Hazel::Ref<Hazel::Shader> m_Shader;
 	Hazel::Ref<Hazel::VertexArray> m_VertexArray;
 
 	Hazel::Ref<Hazel::Shader> m_BlueShader;
 	Hazel::Ref<Hazel::VertexArray> m_SquareArray;
 
-	Hazel::Ref<Hazel::Shader> m_TextureShader;
 
 	Hazel::Ref<Hazel::Texture2D> m_Texture;
 	Hazel::Ref<Hazel::Texture2D> m_TransparentTexture;
