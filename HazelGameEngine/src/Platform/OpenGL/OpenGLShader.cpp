@@ -17,7 +17,9 @@ namespace Hazel
 
 	std::string OpenGLShader::ReadFile(std::string_view filePath)
 	{
-		std::ifstream in(filePath.data(), std::ios::in, std::ios::binary);
+		// std::ios::in       : read only
+		// std::ios::binary : read it as binary
+		std::ifstream in(filePath.data(), std::ios::in | std::ios::binary);
 		std::string result;
 
 		if (in)
@@ -84,7 +86,12 @@ namespace Hazel
 		// (참고 : OpenGLShader 라는 소스코드를 컴파일 하면 실행시킬 수 있는 프로그램을 얻는다)
 		// GLuint program = glCreateProgram();
 		GLuint program = glCreateProgram();
-		std::vector<GLenum> glShaderIDs(shaderSources.size());
+
+		HZ_CORE_ASSERT(shaderSources.size() <= 2, "There has to be at least 2 shader sources");
+
+		std::array<GLenum, 2> glShaderIDs;
+
+		int glShaderIDIndex = 0;
 
 		for (auto& key : shaderSources)
 		{
@@ -130,7 +137,7 @@ namespace Hazel
 			// Attach our OpenGLShaders to our program
 			glAttachShader(program, shader);
 
-			glShaderIDs.push_back(shader);
+			glShaderIDs[glShaderIDIndex++] = shader;
 		}
 
 
@@ -174,13 +181,28 @@ namespace Hazel
 		// 모두 성공할 경우 이때 비로소 m_RendererID 에 값을 세팅한다.
 		m_RendererID = program;
 	}
-	OpenGLShader::OpenGLShader(const std::string& filePath)
+	OpenGLShader::OpenGLShader(std::string_view filePath)
 	{
 		std::string shaderCode = std::move(ReadFile(filePath));
 		auto shaderSource = std::move(PreProcess(shaderCode));
 		Compile(shaderSource);
+
+		// assets/shaders/Texture.glsl -> Texture 추출
+		auto lastSlash = filePath.find_last_of("/\\");
+
+		// lastSlash + 1 ? : '/' 이후 'T' 에 해당하는 위치로 이동하기 위해 + 1
+		lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
+
+		auto lastDot = filePath.rfind('.');
+
+		// assets/shaders/Texture 와 같이 '.' 가 없으면 "Texture" 부분만 뽑아내야 한다. ==filePath.size() - lastSlash
+		// 반면 Texture.glsl 와 같이 '.'가 있으면, '.' 위치 - 'T' 위치를 해줘야 count 가 나온다.
+		auto count = lastDot == std::string::npos ? filePath.size() - lastSlash : lastDot - lastSlash;
+
+		m_Name =  filePath.substr(lastSlash, lastDot - lastSlash).data();
 	}
-	OpenGLShader::OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc) 
+	OpenGLShader::OpenGLShader(std::string_view name, std::string_view vertexSrc, std::string_view fragmentSrc) 
+		: m_Name(name)
 	{
 		std::unordered_map<GLenum, std::string> sources;
 		sources[GL_VERTEX_SHADER] = vertexSrc;
@@ -203,6 +225,7 @@ namespace Hazel
 	{
 		glUseProgram(0);
 	}
+	
 	void OpenGLShader::UploadUniformBool(const std::string& name, const bool& val)
 	{
 	}

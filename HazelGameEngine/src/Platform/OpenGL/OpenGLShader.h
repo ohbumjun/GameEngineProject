@@ -11,12 +11,14 @@ namespace Hazel
 	class OpenGLShader : public Shader
 	{
 	public:
-		OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc);
-		OpenGLShader(const std::string& filePath);
+		OpenGLShader(std::string_view name, std::string_view vertexSrc, std::string_view fragmentSrc);
+		OpenGLShader(std::string_view filePath);
 		virtual ~OpenGLShader();
 
 		void Bind() const override;
 		void Unbind() const override;
+
+		virtual const std::string& GetName() const override { return m_Name; }
 
 		void UploadUniformBool(const std::string& name, const bool& val);
 
@@ -43,5 +45,6 @@ namespace Hazel
 	private:
 		// 현재 해당 객체를 식벽하는 ID
 		uint32_t m_RendererID;
+		std::string m_Name;
 	};
 }

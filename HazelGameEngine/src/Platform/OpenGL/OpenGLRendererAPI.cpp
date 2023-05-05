@@ -32,9 +32,6 @@ namespace Hazel
 		// ex 1) 현재 그리는 색상이 아예 '반' 투명하다면 
 		// - src alpha = 0.5 / dest alpha = 1 - 0.5 = 0.5
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-
-
 	}
 
 	void OpenGLRendererAPI::DrawIndexed(const Ref<VertexArray>& vertexArray)
