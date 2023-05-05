@@ -60,15 +60,15 @@ public:
 		m_SquareArray.reset(Hazel::VertexArray::Create());
 
 		// 5 floats per each vertex
+		/*Vertex Pos + Texture Cordinate*/
 		float squareVertices[5 * 4] = {
-			/*Vertex Pos*/				/*Texture Cordinate*/ 
-			-0.5f, -0.5f, 0.0f	,			 /*Bottom Left  */		  0.0f, 0.0f,
-			 0.5f,  -0.5f, 0.f,				 /*Bottom Right*/		  1.0f, 0.0f,
-			 0.5f,  0.5f, 0.0f,			 /*Top Right*/			  1.0f, 1.0f
-			-0.5f, 0.5f, 0.0f,				 /*Top Left*/			      0.0f, 1.0f
+			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,  /*Bottom Left  */
+				0.5f, -0.5f, 0.0f, 1.0f, 0.0f,  /*Bottom Right*/
+				0.5f,  0.5f, 0.0f, 1.0f, 1.0f,   /*Top Right*/
+			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f    /*Top Left*/
 		};
 
-		std::shared_ptr<Hazel::VertexBuffer> squareVB;
+		Hazel::Ref<Hazel::VertexBuffer> squareVB;
 		squareVB.reset(Hazel::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
 
 		Hazel::BufferLayout squareVBLayout = {
@@ -88,7 +88,7 @@ public:
 			#version 330 core
 			
 			layout(location = 0) in vec3 a_Position;
-			layout(location = 1) in vec4 a_TexCoord;
+			layout(location = 1) in vec4 a_Color;
 
 			uniform mat4 u_ViewProjection;
 			uniform mat4 u_Transform;
@@ -121,7 +121,7 @@ public:
 
 		m_Shader.reset(Hazel::Shader::Create(vertexSrc, fragmentSrc));
 
-		std::string vertexSrc2 = R"(
+		std::string sqaureVertexScr = R"(
 			#version 330 core
 			
 			layout(location = 0) in vec3 a_Position;
@@ -138,7 +138,7 @@ public:
 			}
 		)";
 
-		std::string fragmentSrc2 = R"(
+		std::string sqaureFragSrc = R"(
 			#version 330 core
 			
 			layout(location = 0) out vec4 color;
@@ -153,7 +153,7 @@ public:
 			}
 		)";
 
-		m_BlueShader.reset(Hazel::Shader::Create(vertexSrc2, fragmentSrc2));
+		m_BlueShader.reset(Hazel::Shader::Create(sqaureVertexScr, sqaureFragSrc));
 	}
 
 	void OnUpdate(Hazel::Timestep ts) override
@@ -238,7 +238,7 @@ public:
 
 
 		// Geometry for Texture 
-		Hazel::Renderer::Submit(m_SquareArray, m_Shader, glm::scale(glm::mat4(1.f), glm::vec3(1.5f)));
+		// Hazel::Renderer::Submit(m_SquareArray, m_Shader, glm::scale(glm::mat4(1.f), glm::vec3(1.5f)));
 
 		// Triangle
 		// Hazel::Renderer::Submit(m_VertexArray, m_Shader);

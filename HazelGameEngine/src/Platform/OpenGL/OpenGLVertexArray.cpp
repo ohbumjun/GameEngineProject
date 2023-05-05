@@ -47,10 +47,10 @@ namespace Hazel
 
 	void OpenGLVertexArray::AddVertexBuffer(std::shared_ptr<VertexBuffer>& vertexBuffer)
 	{
-		glBindVertexArray(m_RendererID);
-		vertexBuffer->Bind();
-
 		HZ_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size() > 0, "vertex Buffer has no layout");
+		
+		vertexBuffer->Bind();
+		glBindVertexArray(m_RendererID);
 
 		/*
 		// 의미
@@ -71,15 +71,18 @@ namespace Hazel
 		*/
 
 		uint32_t index = 0;
-		for (const auto& element : vertexBuffer->GetLayout())
+		const auto& layout = vertexBuffer->GetLayout();
+
+		for (const auto& element : layout)
 		{
 			glEnableVertexAttribArray(index);
+
 			glVertexAttribPointer(
 				index,
 				element.GetComponentCount(),
 				ShaderDataTypeToOpenGLBaseType(element.Type),
 				element.Normalized ? GL_TRUE : GL_FALSE,
-				vertexBuffer->GetLayout().GetStride(),
+				layout.GetStride(),
 				(const void*)element.Offset);
 			index++;
 		};
