@@ -1,96 +1,139 @@
 #include "hzpch.h"
 #include "OpenGLShader.h"
 #include "Renderer/Renderer.h"
+#include <fstream>
+
 #include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
 
 namespace Hazel
 {
-	OpenGLShader::OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc) 
+	static GLenum ShaderTypeFromString(const std::string& type)
 	{
-		// Create an empty vertex OpenGLShader handle (create OpenGLShader)
-		// GLuint vertexOpenGLShader = glCreateOpenGLShader(GL_VERTEX_OpenGLShader);
-		GLuint vertexOpenGLShader = glCreateShader(GL_VERTEX_SHADER);
-		
+		if (type == "vertex") return GL_VERTEX_SHADER;
+		if (type == "fragment" || "pixel") return GL_FRAGMENT_SHADER;
 
-		// Send the vertex OpenGLShader source code to GL
-		// Note that std::string's .c_str is NULL character terminated.
-		const GLchar* source = vertexSrc.c_str();
-		glShaderSource(vertexOpenGLShader, 1, &source, 0);
+		HZ_CORE_ASSERT(false, "Unknown Shader Type");
+	}
 
-		// Compile the vertex OpenGLShader
-		glCompileShader(vertexOpenGLShader);
+	std::string OpenGLShader::ReadFile(std::string_view filePath)
+	{
+		std::ifstream in(filePath.data(), std::ios::in, std::ios::binary);
+		std::string result = ReadFile(filePath);
 
-		// Check if compliation succeded or failed
-		GLint isCompiled = 0;
-		glGetShaderiv(vertexOpenGLShader, GL_COMPILE_STATUS, &isCompiled);
-
-		// Fail Compile
-		if (isCompiled == GL_FALSE)
+		if (in)
 		{
-			GLint maxLength = 0;
+			// 파일 포인터를 파일 끝으로 보낸다.
+			in.seekg(0, std::ios::end);
 
-			// Get Length of logs (error message)
-			glGetShaderiv(vertexOpenGLShader, GL_INFO_LOG_LENGTH, &maxLength);
+			// 파일 크기만큼 resize
+			result.resize(in.tellg());
 
-			// The maxLength includes the NULL character
-			std::vector<GLchar> infoLog(maxLength);
-			glGetShaderInfoLog(vertexOpenGLShader, maxLength, &maxLength, &infoLog[0]);
+			// 다시 파일 처음으로 돌아가기 
+			in.seekg(0, std::ios::beg);
 
-			// We don't need the OpenGLShader anymore.
-			// (어차피 return 해서 나갈 것임)
-			glDeleteShader(vertexOpenGLShader);
+			// 파일 정보 읽어들이기 
+			in.read(&result[0], result.size());
+		}
+		else
+		{
+			HZ_CORE_ERROR("Could not open file : '{0}'", filePath);
+		}
+		return result;
+	}
+	std::unordered_map<GLenum, std::string> OpenGLShader::PreProcess(const std::string& source)
+	{
+		std::unordered_map<GLenum, std::string> shaderSources;
 
-			HZ_CORE_ERROR("vertex OpenGLShader compliation failure");
-			HZ_CORE_ERROR("{0}", infoLog.data());
-			HZ_CORE_ASSERT(false, "!");
-			return;
+		// keyword looking for
+		const char* typeToken = "#type";
+
+		size_t typeTokenLength = strlen(typeToken);
+
+		// 맨 처음에는 0 이 될 것이다. (만약 glsl 맨 윗줄에 #type 을 적어두었다면)
+		size_t pos = source.find(typeToken, 0);
+
+		// 모든 #type token 을 찾을 것이다.
+		while (pos != std::string::npos)
+		{
+			// 위에서 찾은 pos 이후부터 new line 으로 넘어가는 지점을 찾는다.
+			size_t eol = source.find_first_of("\r\n", pos);
+			HZ_CORE_ASSERT(eol != std::string::npos, "Syntax error");
+
+			// read 시작 위치 
+			size_t begin = pos + typeTokenLength + 1;
+			std::string type = source.substr(begin, eol - begin);
+			HZ_CORE_ASSERT(ShaderTypeFromString(type), "Invalid shader type specified");
+
+			// read 끝 위치 
+			size_t nextLinePos = source.find_first_not_of("\r\n", eol);
+
+			// 그 다음 #type 직전 위치까지 찾는다. ex) fragment [이부분부터] ~~ [여기까지]#type
+			pos = source.find(typeToken, nextLinePos);
+
+			// 해당 Type 의 Shader 코드를 읽는다.
+			shaderSources[ShaderTypeFromString(type)] = source.substr(nextLinePos, pos - (nextLinePos == std::string::npos ? source.size() - 1 : nextLinePos));
 		}
 
-		// Create an empty fragment OpenGLShader handle
-		GLuint fragmentOpenGLShader = glCreateShader(GL_FRAGMENT_SHADER);
-
-		// Send the fragment OpenGLShader source code to GL
-		// Note that std::string's .c_str is NULL character terminated.
-		source = fragmentSrc.c_str();
-		glShaderSource(fragmentOpenGLShader, 1, &source, 0);
-
-		// Compile the fragment OpenGLShader
-		glCompileShader(fragmentOpenGLShader);
-
-		glGetShaderiv(fragmentOpenGLShader, GL_COMPILE_STATUS, &isCompiled);
-		if (isCompiled == GL_FALSE)
-		{
-			GLint maxLength = 0;
-			glGetShaderiv(fragmentOpenGLShader, GL_INFO_LOG_LENGTH, &maxLength);
-
-			// The maxLength includes the NULL character
-			std::vector<GLchar> infoLog(maxLength);
-			glGetShaderInfoLog(fragmentOpenGLShader, maxLength, &maxLength, &infoLog[0]);
-
-			// We don't need the OpenGLShader anymore.
-			glDeleteShader(fragmentOpenGLShader);
-
-			// Either of them. Don't leak OpenGLShaders.
-			glDeleteShader(vertexOpenGLShader);
-
-			HZ_CORE_ERROR("fragment OpenGLShader compliation failure");
-			HZ_CORE_ERROR("{0}", infoLog.data());
-			HZ_CORE_ASSERT(false, "!");
-			return;
-		}
-
+		return shaderSources;
+	}
+	void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& shaderSources)
+	{
 		// Vertex and fragment OpenGLShaders are successfully compiled.
 		// Now time to link them together into a program.
 		// Get a program object.
 		// (참고 : OpenGLShader 라는 소스코드를 컴파일 하면 실행시킬 수 있는 프로그램을 얻는다)
 		// GLuint program = glCreateProgram();
-		m_RendererID = glCreateProgram();
-		GLuint program = m_RendererID;
+		GLuint program = glCreateProgram();
+		std::vector<GLenum> glShaderIDs(shaderSources.size());
 
-		// Attach our OpenGLShaders to our program
-		glAttachShader(program, vertexOpenGLShader);
-		glAttachShader(program, fragmentOpenGLShader);
+		for (auto& key : shaderSources)
+		{
+			GLenum shaderType = key.first;
+			const std::string& shaderString = key.second;
+
+			// Create an empty OpenGLShader handle (create OpenGLShader)
+			GLuint shader = glCreateShader(shaderType);
+
+			// Send the vertex OpenGLShader source code to GL
+			// Note that std::string's .c_str is NULL character terminated.
+			const GLchar* sourceCStr = shaderString.c_str();
+			glShaderSource(shader, 1, &sourceCStr, 0);
+
+			// Compile the vertex OpenGLShader
+			glCompileShader(shader);
+
+			// Check if compliation succeded or failed
+			GLint isCompiled = 0;
+			glGetShaderiv(shader, GL_COMPILE_STATUS, &isCompiled);
+
+			// Fail Compile
+			if (isCompiled == GL_FALSE)
+			{
+				GLint maxLength = 0;
+
+				// Get Length of logs (error message)
+				glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &maxLength);
+
+				// The maxLength includes the NULL character
+				std::vector<GLchar> infoLog(maxLength);
+				glGetShaderInfoLog(shader, maxLength, &maxLength, &infoLog[0]);
+
+				// We don't need the OpenGLShader anymore.
+				// (어차피 return 해서 나갈 것임)
+				glDeleteShader(shader);
+
+				HZ_CORE_ERROR("{0}", infoLog.data());
+				HZ_CORE_ASSERT(false, "shader compliation failure !");
+				return;
+			}
+
+			// Attach our OpenGLShaders to our program
+			glAttachShader(program, shader);
+
+			glShaderIDs.push_back(shader);
+		}
+
 
 		// Link our program
 		glLinkProgram(program);
@@ -110,9 +153,12 @@ namespace Hazel
 
 			// We don't need the program anymore.
 			glDeleteProgram(program);
+
 			// Don't leak OpenGLShaders either.
-			glDeleteShader(vertexOpenGLShader);
-			glDeleteShader(fragmentOpenGLShader);
+			for (auto& shaderID : glShaderIDs)
+			{
+				glDeleteShader(shaderID);
+			}
 			HZ_CORE_ERROR("OpenGLShader link failure");
 			HZ_CORE_ERROR("{0}", infoLog.data());
 			HZ_CORE_ASSERT(false, "!");
@@ -120,9 +166,30 @@ namespace Hazel
 		}
 
 		// Always detach OpenGLShaders after a successful link.
-		glDetachShader(program, vertexOpenGLShader);
-		glDetachShader(program, fragmentOpenGLShader);
+		// Don't leak OpenGLShaders either.
+		for (auto& shaderID : glShaderIDs)
+		{
+			glDetachShader(program, shaderID);
+		}
+
+		// 모두 성공할 경우 이때 비로소 m_RendererID 에 값을 세팅한다.
+		m_RendererID = program;
 	}
+	OpenGLShader::OpenGLShader(const std::string& filePath)
+	{
+		std::string shaderCode = std::move(ReadFile(filePath));
+		auto shaderSource = std::move(PreProcess(shaderCode));
+		Compile(shaderSource);
+	}
+	OpenGLShader::OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc) 
+	{
+		std::unordered_map<GLenum, std::string> sources;
+		sources[GL_VERTEX_SHADER] = vertexSrc;
+		sources[GL_FRAGMENT_SHADER] = fragmentSrc;
+
+		Compile(sources);
+	}
+	
 	OpenGLShader::~OpenGLShader()
 	{
 		glDeleteProgram(m_RendererID);
@@ -199,4 +266,5 @@ namespace Hazel
 		// - 1 : 1개의 matrix 를 넘긴다
 		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(mat));
 	}
+	
 }

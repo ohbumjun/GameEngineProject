@@ -9,6 +9,7 @@ namespace Hazel
 	{
 	public:
 		OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc);
+		OpenGLShader(const std::string& filePath);
 		virtual ~OpenGLShader();
 
 		void Bind() const override;
@@ -28,6 +29,13 @@ namespace Hazel
 
 		void UploadUniformMat3(const std::string& name, const glm::mat3& mat);
 		void UploadUniformMat4(const std::string& name, const glm::mat4& mat);
+
+	private :
+		std::string ReadFile(std::string_view filePath);
+		
+		// Type of Shader ~ Shader Source Code
+		std::unordered_map<GLenum, std::string> PreProcess(const std::string& source);
+		void Compile(const std::unordered_map<GLenum, std::string>& shaderSources);
 
 	private:
 		// 현재 해당 객체를 식벽하는 ID

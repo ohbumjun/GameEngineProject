@@ -154,6 +154,10 @@ public:
 		)";
 
 		m_BlueShader.reset(Hazel::Shader::Create(sqaureVertexScr, sqaureFragSrc));
+
+		// 하드웨어에서 파일 읽고
+		// 그것을 여러개의 Shader 파일로 나누고
+		Shader::Create("assets/shaders/Texture.glsl");
 	
 		std::string textureShaderVertexSrc = R"(
 			#version 330 core
