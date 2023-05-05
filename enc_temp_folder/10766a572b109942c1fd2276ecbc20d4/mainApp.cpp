@@ -192,9 +192,9 @@ public:
 		// m_TextureShader.reset(Hazel::Shader::Create(sqaureVertexScr, sqaureFragSrc));
 
 		// Create Texture
-		// m_Texture = Hazel::Texture2D::Create("assets/textures/RGBA.png");
+		m_Texture = Hazel::Texture2D::Create("assets/textures/RGBA.png");
 		// m_Texture = Hazel::Texture2D::Create("assets/textures/curious.png");
-		m_Texture = Hazel::Texture2D::Create("assets/textures/RandomBox.png");
+		// m_Texture = Hazel::Texture2D::Create("assets/textures/RandomBox.png");
 
 		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_TextureShader)->Bind();
 		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0);

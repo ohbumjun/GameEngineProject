@@ -16,6 +16,7 @@
 /*Input*/
 #include "Hazel/Input.h"
 
+
 /*TimeStamp*/
 #include "Hazel/Core/TimeStamp.h"
 
@@ -30,7 +31,7 @@
 #include "Renderer/Buffer.h"
 #include "Renderer/Shader.h"
 #include "Renderer/VertexArray.h"
-
+#include "Renderer/Texture.h"
 
 /*Entry Point*/
 #include "Hazel/EntryPoint.h"

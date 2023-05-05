@@ -142,11 +142,7 @@ namespace Hazel
 	}
 	void OpenGLShader::UploadUniformInt(const std::string& name, const int& val)
 	{
-		// OpenGLShader 에 선언된 uniform 변수를 가져오기
 		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
-
-		// uniform 변수를 OpenGLShader 쪽에 세팅해주는 함수
-		// - 1 : 1개의 matrix 를 넘긴다
 		glUniform1i(location, val);
 	}
 	void OpenGLShader::UploadUniformFloat(const std::string& name, const float& val)

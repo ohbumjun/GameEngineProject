@@ -1,5 +1,5 @@
 #include "hzpch.h"
-#include "OpenGLTexture2D.h"
+#include "OpenGLTexture.h"
 
 #include <glad/glad.h>
 #include <stb_image.h>
@@ -10,6 +10,12 @@ namespace Hazel
 		m_Path(path)
 	{
 		int width, height, channels;
+
+		// OPENGL 은 Texture Coord 가 아래 -> 위 방향으로 증가한다고 계산
+		// 하지만 stbl 은 위에서 아래 방향으로 증가한다고 계산
+		// 따라서 그 값들을 뒤집어 줘야 한다.
+		stbi_set_flip_vertically_on_load(1);
+
 		stbi_uc* data = stbi_load(path.c_str(), &width, &height, &channels, 0);
 		
 		HZ_CORE_ASSERT(data, "Failed to load image");
@@ -28,8 +34,8 @@ namespace Hazel
 		// - texture 가 원래 크기보다 smaller 하게 display 될때, Linear Interpolation 적용
 		glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		
-		// - texture 가 원래 크기보다 크게 하게 display 될때, Linear Interpolation 적용
-		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		// - texture 가 원래 크기보다 크게 하게 display 될때,  Neareset Interpolation 적용
+		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 		// texture data 의 일부분을 update 하는 함수
 		// - m_RendererID : Update 할 Texture Object
