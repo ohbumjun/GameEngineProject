@@ -63,8 +63,8 @@ public:
 		/*Vertex Pos + Texture Cordinate*/
 		float squareVertices[5 * 4] = {
 			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,  /*Bottom Left  */
-				0.5f, -0.5f, 0.0f, 1.0f, 0.0f,  /*Bottom Right*/
-				0.5f,  0.5f, 0.0f, 1.0f, 1.0f,   /*Top Right*/
+			0.5f, -0.5f, 0.0f, 1.0f, 0.0f,  /*Bottom Right*/
+			0.5f,  0.5f, 0.0f, 1.0f, 1.0f,   /*Top Right*/
 			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f    /*Top Left*/
 		};
 
@@ -154,7 +154,47 @@ public:
 		)";
 
 		m_BlueShader.reset(Hazel::Shader::Create(sqaureVertexScr, sqaureFragSrc));
-	}
+	
+		std::string textureVertexScr = R"(
+			#version 330 core
+			
+			layout(location = 0) in vec3 a_Position;
+			layout(location = 1) in vec2 a_TexCoord;
+
+			uniform mat4 u_ViewProjection;
+			uniform mat4 u_Transform;
+
+			out vec2  v_TexCoord;
+			out vec3 v_Position;
+
+			void main()
+			{
+				v_Position = a_Position;
+				v_TexCoord = a_TexCoord;
+				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);	
+			}
+		)";
+
+		std::string textureFragSrc = R"(
+			#version 330 core
+			
+			layout(location = 0) out vec4 color;
+
+			in vec3 v_Position;
+			in vec2 v_TexCoord;
+
+			uniform vec4 u_Color;
+
+			void main()
+			{
+				// color = u_Color;
+				color = vec4(v_TexCoord, 0.f, 1.f);
+			}
+		)";
+
+		m_TextureShader.reset(Hazel::Shader::Create(textureVertexScr, textureFragSrc));
+
+}
 
 	void OnUpdate(Hazel::Timestep ts) override
 	{
@@ -238,7 +278,7 @@ public:
 
 
 		// Geometry for Texture 
-		// Hazel::Renderer::Submit(m_SquareArray, m_Shader, glm::scale(glm::mat4(1.f), glm::vec3(1.5f)));
+		Hazel::Renderer::Submit(m_SquareArray, m_TextureShader, glm::scale(glm::mat4(1.f), glm::vec3(1.5f)));
 
 		// Triangle
 		// Hazel::Renderer::Submit(m_VertexArray, m_Shader);
@@ -272,6 +312,8 @@ private :
 
 	Hazel::Ref<Hazel::Shader> m_BlueShader;
 	Hazel::Ref<Hazel::VertexArray> m_SquareArray;
+
+	Hazel::Ref<Hazel::Shader> m_TextureShader;
 
 	glm::vec3 m_SquarePos;
 
