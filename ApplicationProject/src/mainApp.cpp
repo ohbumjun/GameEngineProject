@@ -17,9 +17,8 @@ class ExampleLayer : public Hazel::Layer
 public: 
 	ExampleLayer()
 		: Layer("Example"),
-		m_Camera{ -1.6f, 1.6f, -0.9f, 0.9f },
-		m_CameraPos(0.f),
-		m_SquarePos(0.f)
+		// m_CameraController( -1.6f, 1.6f, -0.9f, 0.9f ),
+		m_CameraController(1200.f / 720.f)
 	{
 
 		// Create Vertex Array
@@ -170,63 +169,17 @@ public:
 
 	void OnUpdate(Hazel::Timestep ts) override
 	{
-		/*Pos*/
-		if (Hazel::Input::IsKeyPressed(HZ_KEY_LEFT))
-		{
-			m_CameraPos.x -= m_CameraMoveSpeed * ts;
-		}
-		else if (Hazel::Input::IsKeyPressed(HZ_KEY_RIGHT))
-		{
-			m_CameraPos.x += m_CameraMoveSpeed * ts;
-		}
-		
-		if (Hazel::Input::IsKeyPressed(HZ_KEY_UP))
-		{
-			m_CameraPos.y += m_CameraMoveSpeed * ts;
-		}
-		else if (Hazel::Input::IsKeyPressed(HZ_KEY_DOWN))
-		{
-			m_CameraPos.y -= m_CameraMoveSpeed * ts;
-		}
+		// Update
+		m_CameraController.OnUpdate(ts);
 
-		/*Rot*/
-		if (Hazel::Input::IsKeyPressed(HZ_KEY_A))
-		{
-			m_CameraRot += m_CameraRotSpeed;
-		}
-		else if (Hazel::Input::IsKeyPressed(HZ_KEY_D))
-		{
-			m_CameraRot -= m_CameraRotSpeed;
-		}
-
-		/*Square*/
-		if (Hazel::Input::IsKeyPressed(HZ_KEY_J))
-		{
-			m_SquarePos.x -= m_SquareMoveSpeed * ts;
-		}
-		else if (Hazel::Input::IsKeyPressed(HZ_KEY_L))
-		{
-			m_SquarePos.x += m_SquareMoveSpeed * ts;
-		}
-
-		if (Hazel::Input::IsKeyPressed(HZ_KEY_I))
-		{
-			m_SquarePos.y += m_SquareMoveSpeed * ts;
-		}
-		else if (Hazel::Input::IsKeyPressed(HZ_KEY_K))
-		{
-			m_SquarePos.y -= m_SquareMoveSpeed * ts;
-		}
-
+		// Render
 		Hazel::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.f });
 		Hazel::RenderCommand::Clear();
 
-		m_Camera.SetPosition(m_CameraPos);
-		m_Camera.SetRotation(m_CameraRot);
 
 		// Renderer::BeginScene(camera, lights, environment);
 		// Scene 을 그리기 위해 필요한 모든 것을 한번에 그려낸다.
-		Hazel::Renderer::BeginScene(m_Camera);
+		Hazel::Renderer::BeginScene(m_CameraController.GetCamera());
 
 		glm::mat4 scale = glm::scale(glm::mat4(1.f), glm::vec3(0.1f));
 
@@ -266,13 +219,7 @@ public:
 
 	void OnEvent(Hazel::Event& event) override
 	{
-		if (event.GetEventType() == Hazel::EventType::KeyPressed)
-		{
-			Hazel::KeyPressedEvent& e = (Hazel::KeyPressedEvent&)event;
-			if (e.GetKeyCode() == HZ_KEY_TAB)
-				HZ_TRACE("Tab key is pressed (event)!");
-			HZ_TRACE("{0}", (char)e.GetKeyCode());
-		}
+		m_CameraController.OnEvent(event);
 	}
 
 	virtual void OnImGuiRender() override
@@ -293,19 +240,10 @@ private :
 	Hazel::Ref<Hazel::Shader> m_BlueShader;
 	Hazel::Ref<Hazel::VertexArray> m_SquareArray;
 
-
 	Hazel::Ref<Hazel::Texture2D> m_Texture;
 	Hazel::Ref<Hazel::Texture2D> m_TransparentTexture;
 
-	glm::vec3 m_SquarePos;
-
-	Hazel::OrthographicCamera m_Camera;
-	glm::vec3 m_CameraPos;
-	float m_SquareMoveSpeed = 0.1f;
-	float m_CameraMoveSpeed = 0.1f;
-	float m_CameraRotSpeed = 0.1f;
-	float m_CameraRot     = 0.0f;
-
+	Hazel::OrthographicCameraController m_CameraController;
 	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.f};
 };
 

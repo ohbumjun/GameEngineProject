@@ -15,8 +15,12 @@ namespace Hazel
 
 		float GetRotation() { return m_Rotation; }
 		const glm::vec3& GetPosition() const { return m_Position; }
+		
 		void SetPosition(const glm::vec3& position);
 		void SetRotation(float Rot);
+		void SetProjection(float left, float right, float bottom, float top);
+
+
 		const glm::mat4& GetProjectionMatrix() { return m_ProjectionMatrix; }
 		const glm::mat4& GetViewMatrix() { return m_ViewMatrix; }
 		const glm::mat4& GetViewProjectionMatrix() { return m_ViewProjectionMatrix; }

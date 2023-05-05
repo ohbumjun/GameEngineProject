@@ -63,7 +63,7 @@
     <ClInclude Include="src\Hazel\Core\Core.h">
       <Filter>src\Hazel\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hazel\Core\TimeStamp.h">
+    <ClInclude Include="src\Hazel\Core\TimeStep.h">
       <Filter>src\Hazel\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\EntryPoint.h">
@@ -1410,6 +1410,9 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
+    <ClInclude Include="src\Hazel\Core\OrthographicCameraController.h">
+      <Filter>src\Hazel\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Application.cpp">
@@ -1487,5 +1490,11 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
+    <ClCompile Include="src\Hazel\Core\OrthographicCameraController.cpp">
+      <Filter>src\Hazel\Core</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="메모ㅗtxt.txt" />
   </ItemGroup>
 </Project>

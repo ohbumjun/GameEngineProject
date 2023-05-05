@@ -8,7 +8,7 @@
 #include "Hazel/ImGui/ImGuiLayer.h"
 
 #include "Renderer/Shader.h"
-#include "Hazel/Core/TimeStamp.h"
+#include "Hazel/Core/TimeStep.h"
 
 
 // Application 의 실행을 Application Project 가 아니라

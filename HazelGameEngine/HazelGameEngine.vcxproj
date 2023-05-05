@@ -143,7 +143,8 @@
     <ClInclude Include="src\Hazel.h" />
     <ClInclude Include="src\Hazel\Application.h" />
     <ClInclude Include="src\Hazel\Core\Core.h" />
-    <ClInclude Include="src\Hazel\Core\TimeStamp.h" />
+    <ClInclude Include="src\Hazel\Core\OrthographicCameraController.h" />
+    <ClInclude Include="src\Hazel\Core\TimeStep.h" />
     <ClInclude Include="src\Hazel\EntryPoint.h" />
     <ClInclude Include="src\Hazel\Event\ApplicationEvent.h" />
     <ClInclude Include="src\Hazel\Event\Event.h" />
@@ -595,6 +596,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Application.cpp" />
+    <ClCompile Include="src\Hazel\Core\OrthographicCameraController.cpp" />
     <ClCompile Include="src\Hazel\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\Hazel\ImGui\ImGuilBuild.cpp" />
     <ClCompile Include="src\Hazel\Layer.cpp" />
@@ -632,6 +634,9 @@
     <ProjectReference Include="vendor\imgui\ImGui.vcxproj">
       <Project>{C0FF640D-2C14-8DBE-F595-301E616989EF}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="메모ㅗtxt.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

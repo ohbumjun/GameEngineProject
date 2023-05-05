@@ -31,6 +31,7 @@ namespace Hazel
 
 	class HAZEL_API MouseScrolledEvent : public Event
 	{
+		// Mouse Scroll 하는데 xoffset 이 0 이상임 ? 말이 됨 ? y 만 바뀌는 거 아님 ?
 	public:
 		MouseScrolledEvent(float xOffset, float yOffset) :
 			m_XOffset(xOffset), m_YOffset(yOffset) {}
