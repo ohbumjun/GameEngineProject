@@ -155,10 +155,6 @@ public:
 
 		m_BlueShader.reset(Hazel::Shader::Create(sqaureVertexScr, sqaureFragSrc));
 
-		// 하드웨어에서 파일 읽고
-		// 그것을 여러개의 Shader 파일로 나누고
-		Shader::Create("assets/shaders/Texture.glsl");
-	
 		std::string textureShaderVertexSrc = R"(
 			#version 330 core
 			
@@ -192,8 +188,8 @@ public:
 			}
 		)";
 
-		m_TextureShader.reset(Hazel::Shader::Create(textureShaderVertexSrc, textureShaderFragmentSrc));
-		// m_TextureShader.reset(Hazel::Shader::Create(sqaureVertexScr, sqaureFragSrc));
+		// m_TextureShader.reset(Hazel::Shader::Create(textureShaderVertexSrc, textureShaderFragmentSrc));
+		m_TextureShader.reset(Hazel::Shader::Create("assets/shaders/Texture.glsl"));
 
 		// Create Texture
 		m_Texture = Hazel::Texture2D::Create("assets/textures/RandomBox.png");

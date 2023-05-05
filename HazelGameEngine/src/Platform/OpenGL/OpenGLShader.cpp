@@ -2,7 +2,6 @@
 #include "OpenGLShader.h"
 #include "Renderer/Renderer.h"
 #include <fstream>
-
 #include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -19,7 +18,7 @@ namespace Hazel
 	std::string OpenGLShader::ReadFile(std::string_view filePath)
 	{
 		std::ifstream in(filePath.data(), std::ios::in, std::ios::binary);
-		std::string result = ReadFile(filePath);
+		std::string result;
 
 		if (in)
 		{

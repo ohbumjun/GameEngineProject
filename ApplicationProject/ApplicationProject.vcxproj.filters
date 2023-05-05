@@ -4,10 +4,24 @@
     <Filter Include="src">
       <UniqueIdentifier>{f5053797-d6ae-46a1-8ea7-450a211717eb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="assets">
+      <UniqueIdentifier>{0e8f013a-2423-452c-94d0-0ee7591fdd1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\textures">
+      <UniqueIdentifier>{3531cf25-b9d0-44ce-a355-5f5299699770}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\shaders">
+      <UniqueIdentifier>{164107da-6258-4d17-854b-7ad1d17933a4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\mainApp.cpp">
       <Filter>src</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\shaders\Texture.glsl">
+      <Filter>assets\shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

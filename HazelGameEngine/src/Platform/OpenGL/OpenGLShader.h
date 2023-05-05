@@ -3,6 +3,9 @@
 #include "Renderer/Shader.h"
 #include <glm/glm.hpp>
 
+// TODO Remove
+typedef unsigned int GLenum;
+
 namespace Hazel
 {
 	class OpenGLShader : public Shader
