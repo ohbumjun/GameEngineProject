@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Core/Core.h"
-#include "Event/Event.h"
+#include "Hazel/Core/Core.h"
+#include "Hazel/Event/Event.h"
 #include "Window.h"
-#include "Event/ApplicationEvent.h"
+#include "Hazel/Event/ApplicationEvent.h"
 #include "LayerStack.h"
 #include "Hazel/ImGui/ImGuiLayer.h"
 

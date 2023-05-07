@@ -1,7 +1,7 @@
 #pragma once
 
 #include "hzpch.h"
-#include "Core/Core.h"
+#include "Hazel/Core/Core.h"
 
 #define GLM_ENABLE_EXPERIMENTAL
 
