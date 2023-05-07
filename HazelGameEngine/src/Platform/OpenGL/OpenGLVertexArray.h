@@ -8,6 +8,7 @@ namespace Hazel
 	{
 		friend class VertexArray;
 
+	public :
 		OpenGLVertexArray();
 		virtual ~OpenGLVertexArray();
 

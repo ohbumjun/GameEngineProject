@@ -128,11 +128,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\mainApp.cpp" />
+    <ClCompile Include="src\SandBox2D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HazelGameEngine\HazelGameEngine.vcxproj">
       <Project>{692DC840-D5B8-3505-DEC9-B8F94AD49105}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\SandBox2D.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\shaders\FlatColor.glsl" />
+    <None Include="assets\shaders\Texture.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,5 +1,10 @@
 #include <Hazel.h>
 
+/*Entry Point -> Application 프로젝트 한 곳에서만 include 해야 한다.
+따라서main app 이 있는 곳으로 include 처리한다.
+*/
+#include "Hazel/Core/EntryPoint.h"
+
 #include "Platform/OpenGL/OpenGLShader.h"
 // 참고 : imgui 가 include 되는 원리 (혹은 link 원리)
 // imgui 를 빌드하여 static library로 만든다.
@@ -11,6 +16,7 @@
 #include "imgui/imgui.h"
 #include <glm/gtc/type_ptr.hpp>
 
+#include "SandBox2D.h"
 
 class ExampleLayer : public Hazel::Layer
 {
@@ -22,7 +28,7 @@ public:
 	{
 
 		// Create Vertex Array
-		m_VertexArray.reset(Hazel::VertexArray::Create());
+		m_VertexArray = Hazel::VertexArray::Create();
 
 		// 아래 위치를 통해 Rendering 을 하면
 		// 가운데가 0,0,0 이 된다.
@@ -41,7 +47,7 @@ public:
 		};
 
 		std::shared_ptr<Hazel::VertexBuffer> vertexBuffer;
-		vertexBuffer.reset(Hazel::VertexBuffer::Create(vertices, sizeof(vertices)));
+		vertexBuffer = Hazel::VertexBuffer::Create(vertices, sizeof(vertices));
 
 		Hazel::BufferLayout layout = {
 			{Hazel::ShaderDataType::Float3, "a_Position"},
@@ -53,11 +59,11 @@ public:
 
 		uint32_t indices[3] = { 0, 1, 2 };
 		Hazel::Ref<Hazel::IndexBuffer> indexBuffer;
-		indexBuffer.reset(Hazel::IndexBuffer::Create(indices, 3));
+		indexBuffer = Hazel::IndexBuffer::Create(indices, 3);
 		m_VertexArray->SetIndexBuffer(indexBuffer);
 
 		/*Square*/
-		m_SquareArray.reset(Hazel::VertexArray::Create());
+		m_SquareArray = Hazel::VertexArray::Create();
 
 		// 5 floats per each vertex
 		/*Vertex Pos + Texture Cordinate*/
@@ -69,7 +75,7 @@ public:
 		};
 
 		Hazel::Ref<Hazel::VertexBuffer> squareVB;
-		squareVB.reset(Hazel::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
+		squareVB = Hazel::VertexBuffer::Create(squareVertices, sizeof(squareVertices));
 
 		Hazel::BufferLayout squareVBLayout = {
 			{Hazel::ShaderDataType::Float3, "a_Position"},
@@ -81,7 +87,7 @@ public:
 
 		uint32_t squareIndices[] = { 0, 1, 2, 2, 3, 0 };
 		Hazel::Ref<Hazel::IndexBuffer> squareIdxB;
-		squareIdxB.reset(Hazel::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
+		squareIdxB = Hazel::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t));
 		m_SquareArray->SetIndexBuffer(squareIdxB);
 
 		std::string vertexSrc = R"(
@@ -252,7 +258,8 @@ class Sandbox : public Hazel::Application
 public:
 	Sandbox()
 	{
-		PushLayer(new ExampleLayer());
+		// PushLayer(new ExampleLayer());
+		PushLayer(new SandBox2D());
 		
 		// Client 측에서 ImGuiLayer 를 세팅하게 해주고 싶지 않다.
 		// Engine 측 Application 에서 추가하게 할 것이다.
