@@ -39,11 +39,13 @@ namespace Hazel
 
 	private :
 		bool OnWindowClose(WindowCloseEvent& e);
+		bool OnWindowResize(WindowResizeEvent& e);
 
 		// unique ptr 로 세팅해줌으로써 소멸자에서 별도로 소멸시켜줄 필요가 없다.
 		std::unique_ptr<Window> m_Window;
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;;
+		bool m_Minimized = false;;
 		LayerStack m_LayerStack;
 		Timestep m_Timestep;
 		float m_LastFrameTime = 0.f;

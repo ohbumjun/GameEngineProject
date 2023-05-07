@@ -52,10 +52,16 @@ namespace Hazel
 
 			m_LastFrameTime = time;
 
-			for (Layer* layer : m_LayerStack)
+			// 최소화 버튼을 누르고 나면 실질적인 Rendering 을 적용하지 않을 것이다.
+			// IMGUI 는 최소화 버튼을 눌러도, 별도로 Docking 되어 진행될 수 있다.
+			// 따라서 m_Minimized 변수에 영향 받지 않게 할 것이다.
+			if (m_Minimized == false)
 			{
-				// ex) submit things for rendering
-				layer->OnUpdate(timeStep);
+				for (Layer* layer : m_LayerStack)
+				{
+					// ex) submit things for rendering
+					layer->OnUpdate(timeStep);
+				}
 			}
 
 			m_ImGuiLayer->Begin();
@@ -80,10 +86,11 @@ namespace Hazel
 		// e 가 WindowCloseEvent 라면 !! OnWindowClose 함수를 실행하게 한다
 		// 만약 아니라면 실행 X
 		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClose));
+		dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(OnWindowResize));
 
 		// 2) Event Dispatcher 에 의해 넘어온 Event 에 맞게
 		// 적절한 함수를 binding 시켜줄 것이다.
-		HZ_CORE_INFO("{0}", e);
+		// HZ_CORE_INFO("{0}", e);
 
 		// 가장 마지막에 그려지는 Layer 들. 즉, 화면 가장 위쪽에 있는 Layer 들 부터
 		// 차례로 이벤트 처리를 한다.
@@ -113,5 +120,23 @@ namespace Hazel
 		// 해당 함수 호추 이후, Application::Run( ) 함수가 더이상 돌아가지 않게 될 것이다.
 		m_Running = false;
 		return true;
+	};
+	bool Application::OnWindowResize(WindowResizeEvent& e)
+	{
+		// minimize 
+		if (e.GetWidth() == 0 || e.GetHeight() == 0)
+		{
+			m_Minimized = true;
+
+			return false;
+		}
+
+		m_Minimized = false;
+
+		// Tell Renderer the change
+		Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
+
+		// 모든 Layer 가 Resize Event 를 알게 하기 위해 return false
+		return false;
 	};
 };

@@ -39,6 +39,9 @@ namespace Hazel
 
 		m_Camera.SetPosition(m_CameraPos);
 
+		// Zoom Level 에 따라 움직임 속도 조절하기
+		m_CameraMoveSpeed = m_ZoomLevel;
+
 		/*Rot*/
 		if (m_Rotation)
 		{
@@ -66,6 +69,8 @@ namespace Hazel
     {
 		// change zoom level by offset
 		m_ZoomLevel -= e.GetYOffset();
+
+		m_ZoomLevel = std::max(m_ZoomLevel, 0.25f);
 
 		m_Camera.SetProjection(-1.f * m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
 

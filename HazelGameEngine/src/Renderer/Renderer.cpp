@@ -19,6 +19,11 @@ namespace Hazel
 	{
 		RenderCommand::Init();
 	}
+	void Renderer::OnWindowResize(uint32_t width, uint32_t height)
+	{
+		// Multi ViewPort 사용시 수정할 사항
+		RenderCommand::SetViewPort(0, 0, width, height);
+	}
 	void Renderer::Submit(const std::shared_ptr<VertexArray>& vertexArray,
 		const std::shared_ptr<Shader>& shader,
 		const glm::mat4& transform)

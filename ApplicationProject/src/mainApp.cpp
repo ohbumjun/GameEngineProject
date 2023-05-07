@@ -18,7 +18,7 @@ public:
 	ExampleLayer()
 		: Layer("Example"),
 		// m_CameraController( -1.6f, 1.6f, -0.9f, 0.9f ),
-		m_CameraController(1200.f / 720.f)
+		m_CameraController(1200.f / 720.f, true)
 	{
 
 		// Create Vertex Array
