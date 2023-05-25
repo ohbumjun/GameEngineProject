@@ -208,7 +208,6 @@ public:
 			Hazel::Renderer::Submit(m_SquareArray, m_BlueShader, transform);
 		}
 
-
 		// Bind Texture
 		m_Texture->Bind();
 		auto textureShader = m_ShaderLibrary.Get("Texture");

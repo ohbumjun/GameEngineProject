@@ -81,14 +81,14 @@ namespace Hazel
     {
 		m_AspectRatio = (float)e.GetWidth() / (float)e.GetHeight();
 		
-		// Resize 를 하게 되면 ZoomLevel 이 변경되는지도 확인해보기
-
-		// 대각선으로 확대, 축소 하면, AspectRation 값은 변하지 않는다. ??
-		// -> 그래서 균일하게 대상들이 축소된다 ?
+		// 좌우 크기 조절 => 대상들 크기 변화 X
+		// 상하 크기 조절 => 대상들 크기 변화 (비례)
 		
-		// 하나의 축 크기 변화 => AspectRation 값은 변한다. 
-		// -> 그런데 하나의 축만으로 늘리거나 줄이면, 대상들은 변하지 않는다.
-		m_Camera.SetProjection(-1.f * m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+		m_Camera.SetProjection(
+			-1.f * m_AspectRatio * m_ZoomLevel, 
+			         m_AspectRatio * m_ZoomLevel, 
+			-1.f * m_ZoomLevel,
+			         m_ZoomLevel);
         
 		return false;
     }

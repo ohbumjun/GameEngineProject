@@ -8,7 +8,6 @@ public:
 	SandBox2D();
 	virtual ~SandBox2D() = default;
 
-
 	virtual void OnAttach() override;
 	virtual void OnDetach() override;
 	void OnUpdate(Hazel::Timestep ts) override;
