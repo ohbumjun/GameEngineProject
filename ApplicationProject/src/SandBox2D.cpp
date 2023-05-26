@@ -12,7 +12,7 @@ SandBox2D::SandBox2D()
 
 void SandBox2D::OnAttach()
 {
-	
+	m_CheckerboardTexture = Hazel::Texture2D::Create("assets/textures/sample.png");
 }
 
 void SandBox2D::OnDetach()
@@ -34,7 +34,8 @@ void SandBox2D::OnUpdate(Hazel::Timestep ts)
 
 	// TODO : Shader Set Mat4, Set Float4 (Add Functions For these)
 	Hazel::Renderer2D::DrawQuad({ 0.f, 0.f }, { 1.f, 1.f }, { 0.8f, 0.2f, 0.3f, 1.0f });
-	Hazel::Renderer2D::DrawQuad({ 5.f, 5.f }, { 1.5f, 1.5f }, { 0.2f, 0.2f, 0.3f, 1.0f });
+	Hazel::Renderer2D::DrawQuad({ 1.f, 1.f }, { 1.5f, 1.5f }, { 0.2f, 0.2f, 0.8f, 1.0f });
+	Hazel::Renderer2D::DrawQuad({ 2.f, 2.f }, { 2.0f, 2.0f }, m_CheckerboardTexture);
 
 	Hazel::Renderer2D::EndScene();
 }

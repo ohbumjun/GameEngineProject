@@ -240,6 +240,11 @@ namespace Hazel
 	{
 		UploadUniformFloat4(name, value);
 	}
+
+	void OpenGLShader::SetInt(const std::string& name, int value)
+	{
+		UploadUniformInt(name, value);
+	}
 	
 	void OpenGLShader::UploadUniformBool(const std::string& name, const bool& val)
 	{
@@ -255,7 +260,6 @@ namespace Hazel
 		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
 
 		// uniform 변수를 OpenGLShader 쪽에 세팅해주는 함수
-		// - 1 : 1개의 matrix 를 넘긴다
 		glUniform1f(location, val);
 	}
 	void OpenGLShader::UploadUniformFloat2(const std::string& name, const glm::vec2& vec)
@@ -264,7 +268,6 @@ namespace Hazel
 		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
 
 		// uniform 변수를 OpenGLShader 쪽에 세팅해주는 함수
-		// - 1 : 1개의 matrix 를 넘긴다
 		glUniform2f(location, vec.x, vec.y);
 	}
 	void OpenGLShader::UploadUniformFloat3(const std::string& name, const glm::vec3& val)
@@ -273,7 +276,6 @@ namespace Hazel
 		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
 
 		// uniform 변수를 OpenGLShader 쪽에 세팅해주는 함수
-		// - 1 : 1개의 matrix 를 넘긴다
 		glUniform3f(location, val.x, val.y, val.z);
 	}
 	void OpenGLShader::UploadUniformFloat4(const std::string& name, const glm::vec4& vec)
@@ -282,7 +284,6 @@ namespace Hazel
 		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
 
 		// uniform 변수를 OpenGLShader 쪽에 세팅해주는 함수
-		// - 1 : 1개의 matrix 를 넘긴다
 		glUniform4f(location, vec.x, vec.y, vec.z, vec.w);
 	}
 	void OpenGLShader::UploadUniformMat3(const std::string& name, const glm::mat3& mat)
@@ -291,7 +292,6 @@ namespace Hazel
 		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
 
 		// uniform 변수를 OpenGLShader 쪽에 세팅해주는 함수
-		// - 1 : 1개의 matrix 를 넘긴다
 		glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(mat));
 	}
 	void OpenGLShader::UploadUniformMat4(const std::string& name, const glm::mat4& mat)
@@ -300,7 +300,6 @@ namespace Hazel
 		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
 
 		// uniform 변수를 OpenGLShader 쪽에 세팅해주는 함수
-		// - 1 : 1개의 matrix 를 넘긴다
 		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(mat));
 	}
 	
