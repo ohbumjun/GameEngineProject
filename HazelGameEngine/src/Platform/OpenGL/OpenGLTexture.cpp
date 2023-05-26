@@ -62,6 +62,9 @@ namespace Hazel
 		// - texture 가 원래 크기보다 크게 하게 display 될때,  Neareset Interpolation 적용
 		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
+		// Texture Coord 가 1, 1 범위 넘어설 때 어떤 식으로 표현할 것인가
+		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
+
 		// texture data 의 일부분을 update 하는 함수
 		// - m_RendererID : Update 할 Texture Object
 		// - Texture Level : 0
@@ -69,7 +72,7 @@ namespace Hazel
 		// - Region being updated : m_Width, m_Height
 		// - Data Type
 		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, dataFormat, GL_UNSIGNED_BYTE, data);
-	
+
 		stbi_image_free(data);
 	}
 
