@@ -3,6 +3,7 @@
 #include "VertexArray.h"
 #include "Shader.h"
 #include "RenderCommand.h"
+#include <glm/gtc/matrix_transform.hpp>
 
 namespace Hazel
 {
@@ -59,8 +60,6 @@ namespace Hazel
 		s_Data->FlatColorShader->Bind();
 		s_Data->FlatColorShader->SetMat4(
 			"u_ViewProjection", const_cast<OrthographicCamera&>(camera).GetViewProjectionMatrix());
-		s_Data->FlatColorShader->SetMat4("u_Transform", glm::mat4(1.f));
-
 	}
 
 	void Renderer2D::EndScene()
@@ -76,6 +75,13 @@ namespace Hazel
 	{
 		// 혹시나 문제 생기면, 여기에 Shader 한번 더 bind
 		s_Data->FlatColorShader->SetFloat4("u_Color", color);
+
+		// x,y 축 기준으로만 scale 을 조정할 것이다.
+		glm::mat4 scale = glm::scale(glm::mat4(1.f), {size.x, size.y, 1.0f});
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * 
+			/*rotation*/ scale;
+
+		s_Data->FlatColorShader->SetMat4("u_Transform", transform);
 
 		// actual draw call
 		s_Data->QuadVertexArray->Bind();

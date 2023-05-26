@@ -30,18 +30,13 @@ void SandBox2D::OnUpdate(Hazel::Timestep ts)
 
 	// Renderer::BeginScene(camera, lights, environment);
 	// Scene 을 그리기 위해 필요한 모든 것을 한번에 그려낸다.
-	// Hazel::Renderer::BeginScene(m_CameraController.GetCamera());
 	Hazel::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
 	// TODO : Shader Set Mat4, Set Float4 (Add Functions For these)
 	Hazel::Renderer2D::DrawQuad({ 0.f, 0.f }, { 1.f, 1.f }, { 0.8f, 0.2f, 0.3f, 1.0f });
+	Hazel::Renderer2D::DrawQuad({ 5.f, 5.f }, { 1.5f, 1.5f }, { 0.2f, 0.2f, 0.3f, 1.0f });
 
 	Hazel::Renderer2D::EndScene();
-
-	// 매 프레임마다 넘겨주는 것이다.
-	// std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_FlatShader)->Bind();
-	// std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_FlatShader)->UploadUniformFloat4("u_Color", m_SquareColor);
-	// Hazel::Renderer::Submit(m_SquareArray, m_FlatShader, glm::scale(glm::mat4(1.f), glm::vec3(1.5f)));
 }
 
 void SandBox2D::OnEvent(Hazel::Event& event)
