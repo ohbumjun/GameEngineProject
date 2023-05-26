@@ -3,7 +3,6 @@
 #include "VertexArray.h"
 #include "Shader.h"
 #include "RenderCommand.h"
-#include "Platform/OpenGL/OpenGLShader.h"
 
 namespace Hazel
 {
@@ -57,11 +56,10 @@ namespace Hazel
 
 	void Renderer2D::BeginScene(const OrthographicCamera& camera)
 	{
-		std::dynamic_pointer_cast<OpenGLShader>(s_Data->FlatColorShader)->Bind();
-		std::dynamic_pointer_cast<OpenGLShader>(s_Data->FlatColorShader)->UploadUniformMat4(
+		s_Data->FlatColorShader->Bind();
+		s_Data->FlatColorShader->SetMat4(
 			"u_ViewProjection", const_cast<OrthographicCamera&>(camera).GetViewProjectionMatrix());
-		std::dynamic_pointer_cast<OpenGLShader>(s_Data->FlatColorShader)->UploadUniformMat4(
-			"u_Transform", glm::mat4(1.f));
+		s_Data->FlatColorShader->SetMat4("u_Transform", glm::mat4(1.f));
 
 	}
 
@@ -77,8 +75,7 @@ namespace Hazel
 	void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color)
 	{
 		// 혹시나 문제 생기면, 여기에 Shader 한번 더 bind
-		std::dynamic_pointer_cast<OpenGLShader>(s_Data->FlatColorShader)->UploadUniformFloat4(
-			"u_Color", color);
+		s_Data->FlatColorShader->SetFloat4("u_Color", color);
 
 		// actual draw call
 		s_Data->QuadVertexArray->Bind();
