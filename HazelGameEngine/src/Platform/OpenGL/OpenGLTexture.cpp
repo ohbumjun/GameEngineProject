@@ -76,6 +76,11 @@ namespace Hazel
 		stbi_image_free(data);
 	}
 
+	OpenGLTexture2D::OpenGLTexture2D(uint32_t width, uint32_t height)
+	{
+		// 기본 Texture 를 만들어주는 기능
+	}
+
 	OpenGLTexture2D::~OpenGLTexture2D()
 	{
 		glDeleteTextures(1, &m_RendererID);
