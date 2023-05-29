@@ -74,6 +74,7 @@ namespace Hazel
 
 		if (!s_GLFWInitialized)
 		{
+			HZ_PROFILE_SCOPE("glfwInit");
 			int success = glfwInit();
 			HZ_CORE_ASSERT(success, "Could not initialize GLFW");
 
@@ -83,13 +84,15 @@ namespace Hazel
 			s_GLFWInitialized = true;
 		}
 
-		m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(),
-			nullptr, nullptr);
+		{
+			HZ_PROFILE_SCOPE("glfwCreateWindow");
+			m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(),
+				nullptr, nullptr);
+		}
+		
 
 		m_Context = new OpenGLContext(m_Window);
 		m_Context->Init();
-
-		
 
 		// m_Data 라는 구조체를 인자로 넘겨서, m_Data.EventCallback 이라는 변수에 데이터 세팅
 		glfwSetWindowUserPointer(m_Window, &m_Data);

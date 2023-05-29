@@ -50,6 +50,8 @@ namespace Hazel
 	{
 		while (m_Running)
 		{
+			HZ_PROFILE_SCOPE("Run Loop");
+
 			float time = glfwGetTime(); // Platform::GetTime
 
 			// Frame 사이의 소요시간
@@ -62,6 +64,8 @@ namespace Hazel
 			// 따라서 m_Minimized 변수에 영향 받지 않게 할 것이다.
 			if (m_Minimized == false)
 			{
+				HZ_PROFILE_SCOPE("LayerStack OnUpdate");
+
 				for (Layer* layer : m_LayerStack)
 				{
 					// ex) submit things for rendering
@@ -70,9 +74,13 @@ namespace Hazel
 			}
 
 			m_ImGuiLayer->Begin();
-			for (Layer* layer : m_LayerStack)
 			{
-				layer->OnImGuiRender();
+				HZ_PROFILE_SCOPE("LayerStack ImguiRender");
+
+				for (Layer* layer : m_LayerStack)
+				{
+					layer->OnImGuiRender();
+				}
 			}
 			m_ImGuiLayer->End();
 
@@ -84,6 +92,8 @@ namespace Hazel
 	}
 	void Application::OnEvent(Event& e)
 	{
+		HZ_PROFILE_FUNCTION();
+
 		// 1) Window 에서 Event 를 입력받아 적절한 Event 객체 + EventDispatcher 객체를 만들어서
 		// OnEvent 함수를 호출한다.
 		EventDispatcher dispatcher(e);

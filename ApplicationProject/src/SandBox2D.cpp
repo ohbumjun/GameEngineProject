@@ -24,7 +24,6 @@ void SandBox2D::OnUpdate(Hazel::Timestep ts)
 
 	// Update
 	{
-		HZ_PROFILE_SCOPE("CameraController::Update");
 		m_CameraController.OnUpdate(ts);
 	}
 
@@ -35,7 +34,6 @@ void SandBox2D::OnUpdate(Hazel::Timestep ts)
 	// Renderer::BeginScene(camera, lights, environment);
 	// Scene 을 그리기 위해 필요한 모든 것을 한번에 그려낸다.
 	{
-		HZ_PROFILE_SCOPE("Renderer2D::BeginScene");
 		Hazel::Renderer2D::BeginScene(m_CameraController.GetCamera());
 	}
 
