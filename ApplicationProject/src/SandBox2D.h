@@ -22,5 +22,12 @@ private:
 	Hazel::Ref<Hazel::Shader> m_FlatShader;
 	Hazel::Ref<Hazel::Texture2D> m_CheckerboardTexture;
 
+	struct ProfileResult
+	{
+		const char* name;
+		float time;
+	};
+
+	std::vector<ProfileResult> m_ProfileResult;
 };
 
