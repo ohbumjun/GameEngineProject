@@ -41,6 +41,9 @@ namespace Hazel
 		glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(),
 			GL_UNSIGNED_INT,
 			nullptr);
+
+		// Open GL 에 Bind 된 Texture Unbind 시키기
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
 	void OpenGLRendererAPI::SetViewPort(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
