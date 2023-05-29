@@ -86,6 +86,7 @@ project "HazelGameEngine"       --프로젝트 이름
 
         defines                    
         {
+            "HZ_PROFILE",
             "HZ_PLATFORM_WINDOWS",  --Hazel프로젝트에는 이러한 전처리가 있다.
             "HZ_BUILD_DLL",
             "GLFW_INCLUDE_NONE" -- not include openGL header when include GLFW
