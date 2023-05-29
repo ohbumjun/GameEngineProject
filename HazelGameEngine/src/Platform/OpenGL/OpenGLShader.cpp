@@ -17,6 +17,8 @@ namespace Hazel
 
 	std::string OpenGLShader::ReadFile(std::string_view filePath)
 	{
+		HZ_PROFILE_FUNCTION();
+
 		// std::ios::in       : read only
 		// std::ios::binary : read it as binary
 		std::ifstream in(filePath.data(), std::ios::in | std::ios::binary);
@@ -44,6 +46,8 @@ namespace Hazel
 	}
 	std::unordered_map<GLenum, std::string> OpenGLShader::PreProcess(const std::string& source)
 	{
+		HZ_PROFILE_FUNCTION();
+
 		std::unordered_map<GLenum, std::string> shaderSources;
 
 		// keyword looking for
@@ -80,6 +84,8 @@ namespace Hazel
 	}
 	void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& shaderSources)
 	{
+		HZ_PROFILE_FUNCTION();
+
 		// Vertex and fragment OpenGLShaders are successfully compiled.
 		// Now time to link them together into a program.
 		// Get a program object.
@@ -183,6 +189,8 @@ namespace Hazel
 	}
 	OpenGLShader::OpenGLShader(std::string_view filePath)
 	{
+		HZ_PROFILE_FUNCTION();
+
 		std::string shaderCode = std::move(ReadFile(filePath));
 		auto shaderSource = std::move(PreProcess(shaderCode));
 		Compile(shaderSource);
@@ -204,6 +212,8 @@ namespace Hazel
 	OpenGLShader::OpenGLShader(std::string_view name, std::string_view vertexSrc, std::string_view fragmentSrc) 
 		: m_Name(name)
 	{
+		HZ_PROFILE_FUNCTION();
+
 		std::unordered_map<GLenum, std::string> sources;
 		sources[GL_VERTEX_SHADER] = vertexSrc;
 		sources[GL_FRAGMENT_SHADER] = fragmentSrc;
@@ -213,16 +223,22 @@ namespace Hazel
 	
 	OpenGLShader::~OpenGLShader()
 	{
+		HZ_PROFILE_FUNCTION();
+
 		glDeleteProgram(m_RendererID);
 	}
 	void OpenGLShader::Bind() const
 	{
+		HZ_PROFILE_FUNCTION();
+
 		// 해당 OpenGLShader 로 무언가를 그리고 싶을 때
 		// 해당 함수를 먼저 실행할 것이다.
 		glUseProgram(m_RendererID);
 	}
 	void OpenGLShader::Unbind() const
 	{
+		HZ_PROFILE_FUNCTION();
+
 		glUseProgram(0);
 	}
 

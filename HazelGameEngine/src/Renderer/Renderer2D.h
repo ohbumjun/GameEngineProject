@@ -12,7 +12,7 @@ namespace Hazel
 	{
 	public :
 		static void Init();
-		static void Shutdown();
+		static void ShutDown();
 		static void BeginScene(const OrthographicCamera& camera);
 		static void EndScene();
 

@@ -15,6 +15,8 @@ namespace Hazel
 	}
 	void OpenGLContext::Init()
 	{
+		HZ_PROFILE_FUNCTION();
+
 		// make context current
 		glfwMakeContextCurrent(m_WindowHandle);
 
@@ -28,6 +30,8 @@ namespace Hazel
 	}
 	void OpenGLContext::SwapBuffers()
 	{
+		HZ_PROFILE_FUNCTION();
+
 		// refresh window 
 		glfwSwapBuffers(m_WindowHandle);
 	}

@@ -18,6 +18,8 @@ namespace Hazel
 
 	void Renderer2D::Init()
 	{
+		HZ_PROFILE_FUNCTION();
+
 		s_Data = new Renderer2DStorage();
 
 		/*Square*/
@@ -32,7 +34,6 @@ namespace Hazel
 			0.5f,  0.5f, 0.0f, 1.0f, 1.0f,   /*Top Right*/
 			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f    /*Top Left*/
 		};
-
 
 		Ref<VertexBuffer> squareVB;
 		squareVB = VertexBuffer::Create(squareVertices, sizeof(squareVertices));
@@ -59,8 +60,10 @@ namespace Hazel
 		s_Data->TextureShader->SetInt("u_Texture", 0);
 	}
 
-	void Renderer2D::Shutdown()
+	void Renderer2D::ShutDown()
 	{
+		HZ_PROFILE_FUNCTION();
+
 		delete s_Data;
 	}
 
@@ -107,6 +110,8 @@ namespace Hazel
 
 	void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const Ref<Texture2D>& texture)
 	{
+		HZ_PROFILE_FUNCTION();
+
 		s_Data->TextureShader->Bind();
 
 		// default : 0번째 slot 에 세팅

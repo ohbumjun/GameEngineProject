@@ -18,8 +18,17 @@ namespace Hazel
 	}
 	void Renderer::Init()
 	{
+		HZ_PROFILE_FUNCTION();
+
+		// ex) openGL 설정값
 		RenderCommand::Init();
+
+		// ex) Vertex, Shader 등 세팅
 		Renderer2D::Init();
+	}
+	void Renderer::ShutDown()
+	{
+		Renderer2D::ShutDown();
 	}
 	void Renderer::OnWindowResize(uint32_t width, uint32_t height)
 	{

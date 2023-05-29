@@ -29,19 +29,26 @@ namespace Hazel
 
 	OpenGLVertexArray::OpenGLVertexArray()
 	{
+		HZ_PROFILE_FUNCTION();
 		glCreateVertexArrays(1, &m_RendererID);
 	}
 	OpenGLVertexArray::~OpenGLVertexArray()
 	{
+		HZ_PROFILE_FUNCTION();
+
 		glDeleteVertexArrays(1, &m_RendererID);
 	}
 	void OpenGLVertexArray::Bind() const
 	{
+		HZ_PROFILE_FUNCTION();
+
 		glBindVertexArray(m_RendererID);
 	}
 
 	void OpenGLVertexArray::Unbind() const
 	{
+		HZ_PROFILE_FUNCTION();
+
 		glBindVertexArray(0);
 	}
 
@@ -88,11 +95,6 @@ namespace Hazel
 		};
 
 		m_VertexBuffers.push_back(vertexBuffer);
-
-
-		/*
-		
-		*/
 	}
 
 	void OpenGLVertexArray::SetIndexBuffer(std::shared_ptr<IndexBuffer>& indexBuffer)

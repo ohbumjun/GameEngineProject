@@ -16,10 +16,12 @@ namespace Hazel
 	// make it as single ton
 	Application* Application::s_Instance = nullptr;
 
-
 	Application::Application() 
 	{
+		HZ_PROFILE_FUNCTION();
+
 		HZ_CORE_ASSERT(!s_Instance, "Application Alread Exists");
+		
 		s_Instance = this;
 
 		// Window 생성자 호출 => WIndowsWindow 생성
@@ -40,6 +42,9 @@ namespace Hazel
 	}
 	Application::~Application()
 	{
+		HZ_PROFILE_FUNCTION();
+
+		Renderer::ShutDown();
 	}
 	void Application::Run()
 	{

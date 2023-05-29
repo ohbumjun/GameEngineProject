@@ -8,6 +8,8 @@ namespace Hazel
 	OpenGLTexture2D::OpenGLTexture2D(const std::string& path) :
 		m_Path(path)
 	{
+		HZ_PROFILE_FUNCTION();
+
 		int width, height, channels;
 
 		// OPENGL 은 Texture Coord 가 아래 -> 위 방향으로 증가한다고 계산
@@ -16,7 +18,11 @@ namespace Hazel
 		stbi_set_flip_vertically_on_load(1);
 
 		// channels : 한 픽셀에 몇개의 채널이 존재하는지 ex) rgb, rgba -> 각각 3개, 4개
-		stbi_uc* data = stbi_load(path.c_str(), &width, &height, &channels, 0);
+		stbi_uc* data = nullptr;
+		{
+			HZ_PROFILE_SCOPE("OpenGLTexture2D::OpenGLTexture2D(const std::string&)::stbi_load");
+			data = stbi_load(path.c_str(), &width, &height, &channels, 0);
+		}
 		
 		HZ_CORE_ASSERT(data, "Failed to load image");
 		
@@ -83,6 +89,8 @@ namespace Hazel
 		m_Width(width),
 		m_Height(height)
 	{
+		HZ_PROFILE_FUNCTION();
+
 		// 기본 Texture 를 만들어주는 기능
 
 		m_InternalFormat = GL_RGBA8, m_DataFormat = GL_RGBA;
@@ -113,6 +121,8 @@ namespace Hazel
 
 	OpenGLTexture2D::~OpenGLTexture2D()
 	{
+		HZ_PROFILE_FUNCTION();
+
 		glDeleteTextures(1, &m_RendererID);
 	}
 	uint32_t OpenGLTexture2D::GetWidth() const
@@ -130,6 +140,8 @@ namespace Hazel
 	}
 	void OpenGLTexture2D::SetData(void* data, uint32_t size)
 	{
+		HZ_PROFILE_FUNCTION();
+
 		uint32_t bytesPerPixel = m_DataFormat == GL_RGBA ? 4 : 3;
 
 		HZ_CORE_ASSERT(size == m_Width * m_Height * bytesPerPixel,
