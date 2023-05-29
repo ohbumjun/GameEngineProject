@@ -11,6 +11,7 @@ namespace Hazel
 	{
 		Ref<VertexArray> QuadVertexArray;
 		Ref<Shader> TextureShader;
+		Ref<Texture2D> WhiteTexture;
 	};
 
 	static Renderer2DStorage* s_Data;
@@ -49,6 +50,10 @@ namespace Hazel
 		squareIdxB = IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t));
 		s_Data->QuadVertexArray->SetIndexBuffer(squareIdxB);
 
+		s_Data->WhiteTexture = Texture2D::Create(1, 1);
+		uint32_t whiteTextureData = 0xffffffff;
+		s_Data->WhiteTexture->SetData(&whiteTextureData, /*1 * 1 */sizeof(uint32_t));
+
 		s_Data->TextureShader = Shader::Create("assets/shaders/Texture.glsl");
 		s_Data->TextureShader->Bind();
 		s_Data->TextureShader->SetInt("u_Texture", 0);
@@ -81,7 +86,7 @@ namespace Hazel
 		s_Data->TextureShader->SetFloat4("u_Color", color);
 
 		// Bind Default White Texture
-
+		s_Data->WhiteTexture->Bind();
 
 		// x,y 축 기준으로만 scale 을 조정할 것이다.
 		glm::mat4 scale = glm::scale(glm::mat4(1.f), {size.x, size.y, 1.0f});
@@ -103,12 +108,12 @@ namespace Hazel
 	void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const Ref<Texture2D>& texture)
 	{
 		s_Data->TextureShader->Bind();
+
+		// default : 0번째 slot 에 세팅
+		texture->Bind();
 		
 		// 기본 Color 로 세팅
 		s_Data->TextureShader->SetFloat4("u_Color", glm::vec4(1.0f));
-	
-		// default : 0번째 slot 에 세팅
-		texture->Bind();
 
 		// x,y 축 기준으로만 scale 을 조정할 것이다.
 		glm::mat4 scale = glm::scale(glm::mat4(1.f), { size.x, size.y, 1.0f });

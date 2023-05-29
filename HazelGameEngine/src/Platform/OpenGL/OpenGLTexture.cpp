@@ -1,7 +1,6 @@
 #include "hzpch.h"
 #include "OpenGLTexture.h"
 
-#include <glad/glad.h>
 #include <stb_image.h>
 
 namespace Hazel
@@ -43,8 +42,10 @@ namespace Hazel
 			break;
 		}
 
-		HZ_CORE_ASSERT(internalFormat && dataFormat, "format should not be 0");
+		m_InternalFormat = internalFormat;
+		m_DataFormat = dataFormat;
 
+		HZ_CORE_ASSERT(internalFormat && dataFormat, "format should not be 0");
 
 		// 잘못 읽거나 (a 를 r 로 읽거나) / overflow (더 많은 데이터 제공)
 
@@ -64,6 +65,7 @@ namespace Hazel
 
 		// Texture Coord 가 1, 1 범위 넘어설 때 어떤 식으로 표현할 것인가
 		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 		// texture data 의 일부분을 update 하는 함수
 		// - m_RendererID : Update 할 Texture Object
@@ -71,14 +73,42 @@ namespace Hazel
 		// - Position where update should begin : (0,0)
 		// - Region being updated : m_Width, m_Height
 		// - Data Type
-		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, dataFormat, GL_UNSIGNED_BYTE, data);
+		glTextureSubImage2D(m_RendererID, 
+			0, 0, 0, m_Width, m_Height, dataFormat, GL_UNSIGNED_BYTE, data);
 
 		stbi_image_free(data);
 	}
 
-	OpenGLTexture2D::OpenGLTexture2D(uint32_t width, uint32_t height)
+	OpenGLTexture2D::OpenGLTexture2D(uint32_t width, uint32_t height) :
+		m_Width(width),
+		m_Height(height)
 	{
 		// 기본 Texture 를 만들어주는 기능
+
+		m_InternalFormat = GL_RGBA8, m_DataFormat = GL_RGBA;
+
+		HZ_CORE_ASSERT(m_InternalFormat && m_DataFormat, "format should not be 0");
+
+		// 잘못 읽거나 (a 를 r 로 읽거나) / overflow (더 많은 데이터 제공)
+
+		// buffer data 를 gpu 가 인식할 수 있는 형태로 만들기
+		// + 만들어낸 Texture Object 를 가리키는 ID 리턴
+		glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
+
+		// gpu 쪽에 Texture Buffer 가 들어갈 메모리 할당
+		glTextureStorage2D(m_RendererID, 1, m_InternalFormat, m_Width, m_Height);
+
+		// gpu 쪽에 넘겨주기 
+		// - texture 가 원래 크기보다 smaller 하게 display 될때, Linear Interpolation 적용
+		glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+		// - texture 가 원래 크기보다 크게 하게 display 될때,  Neareset Interpolation 적용
+		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+		// Texture Coord 가 1, 1 범위 넘어설 때 어떤 식으로 표현할 것인가
+		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
 	}
 
 	OpenGLTexture2D::~OpenGLTexture2D()
@@ -97,6 +127,23 @@ namespace Hazel
 	{
 		// Fragment Shader 의 slot 번째에 해당 Texture 객체를 binding 한다.
 		glBindTextureUnit(slot, m_RendererID);
+	}
+	void OpenGLTexture2D::SetData(void* data, uint32_t size)
+	{
+		uint32_t bytesPerPixel = m_DataFormat == GL_RGBA ? 4 : 3;
+
+		HZ_CORE_ASSERT(size == m_Width * m_Height * bytesPerPixel,
+			"Data must be entire texture");
+
+		// texture data 의 일부분을 update 하는 함수
+		// - m_RendererID : Update 할 Texture Object
+		// - Texture Level : 0
+		// - Position where update should begin : (0,0)
+		// - Region being updated : m_Width, m_Height
+		// - Data Type
+		glTextureSubImage2D(m_RendererID, 
+			0, 0, 0, m_Width, m_Height, m_DataFormat, GL_UNSIGNED_BYTE, data);
+
 	}
 }
 
