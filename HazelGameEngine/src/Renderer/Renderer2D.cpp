@@ -87,6 +87,7 @@ namespace Hazel
 	{
 		// 혹시나 문제 생기면, 여기에 Shader 한번 더 bind
 		s_Data->TextureShader->SetFloat4("u_Color", color);
+		s_Data->TextureShader->SetFloat("m_TilingFactor", 1.0f);
 
 		// Bind Default White Texture
 		s_Data->WhiteTexture->Bind();
@@ -103,12 +104,12 @@ namespace Hazel
 		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, const Ref<Texture2D>& texture)
+	void Renderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, const Ref<Texture2D>& texture, float tilingFactor)
 	{
-		DrawQuad({ pos.x, pos.y, 0.f }, size, texture);
+		DrawQuad({ pos.x, pos.y, 0.f }, size, texture, tilingFactor);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const Ref<Texture2D>& texture)
+	void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const Ref<Texture2D>& texture, float tilingFactor)
 	{
 		HZ_PROFILE_FUNCTION();
 
@@ -119,6 +120,7 @@ namespace Hazel
 		
 		// 기본 Color 로 세팅
 		s_Data->TextureShader->SetFloat4("u_Color", glm::vec4(1.0f));
+		s_Data->TextureShader->SetFloat("m_TilingFactor", tilingFactor);
 
 		// x,y 축 기준으로만 scale 을 조정할 것이다.
 		glm::mat4 scale = glm::scale(glm::mat4(1.f), { size.x, size.y, 1.0f });

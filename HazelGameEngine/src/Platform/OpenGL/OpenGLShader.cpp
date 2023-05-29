@@ -261,6 +261,11 @@ namespace Hazel
 	{
 		UploadUniformInt(name, value);
 	}
+
+	void OpenGLShader::SetFloat(const std::string& name, float value)
+	{
+		UploadUniformFloat(name, value);
+	}
 	
 	void OpenGLShader::UploadUniformBool(const std::string& name, const bool& val)
 	{

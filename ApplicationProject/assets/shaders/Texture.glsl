@@ -23,10 +23,11 @@ layout(location = 0) out vec4 color;
 in vec2 v_TexCoord;
 			
 uniform vec4 u_Color;
+uniform float m_TilingFactor;
 uniform sampler2D u_Texture;
 
 void main()
 {
     // Texture 가 없는 경우 : 기본 white texture * u_Color 형태로 구현
-	color = texture(u_Texture, v_TexCoord) * u_Color;
+	color = texture(u_Texture, v_TexCoord * m_TilingFactor) * u_Color;
 }
