@@ -104,14 +104,16 @@ namespace Hazel
 		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, const Ref<Texture2D>& texture, float tilingFactor)
+	void Renderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, 
+		const Ref<Texture2D>&texture, float tilingFactor, const glm::vec4& tintColor)
 	{
 		HZ_PROFILE_FUNCTION();
 
 		DrawQuad({ pos.x, pos.y, 0.f }, size, texture, tilingFactor);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const Ref<Texture2D>& texture, float tilingFactor)
+	void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, 
+		const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor)
 	{
 		HZ_PROFILE_FUNCTION();
 
@@ -121,7 +123,7 @@ namespace Hazel
 		texture->Bind();
 		
 		// 기본 Color 로 세팅
-		s_Data->TextureShader->SetFloat4("u_Color", glm::vec4(1.0f));
+		s_Data->TextureShader->SetFloat4("u_Color", tintColor);
 		s_Data->TextureShader->SetFloat("m_TilingFactor", tilingFactor);
 
 		// x,y 축 기준으로만 scale 을 조정할 것이다.
@@ -168,19 +170,20 @@ namespace Hazel
 		s_Data->QuadVertexArray->Bind();
 		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
 	}
-	void Renderer2D::DrawRotatedQuad(const glm::vec2& pos, const glm::vec2& size, float rotation, const Ref<Texture2D>& texture, float tilingFactor)
+	void Renderer2D::DrawRotatedQuad(const glm::vec2& pos, const glm::vec2& size, 
+		float rotation, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor)
 	{
 		HZ_PROFILE_FUNCTION();
 
-		DrawRotatedQuad({ pos.x, pos.y, 0.f }, size, rotation, texture, tilingFactor);
+		DrawRotatedQuad({ pos.x, pos.y, 0.f }, size, rotation, texture, tilingFactor, tintColor);
 	}
-	void Renderer2D::DrawRotatedQuad(const glm::vec3& pos, const glm::vec2& size, 
-		float rotation, const Ref<Texture2D>& texture, float tilingFactor)
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& pos, const glm::vec2& size,
+		float rotation, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor)
 	{
 		HZ_PROFILE_FUNCTION();
 
 		// 혹시나 문제 생기면, 여기에 Shader 한번 더 bind
-		s_Data->TextureShader->SetFloat4("u_Color", glm::vec4(1.0f));
+		s_Data->TextureShader->SetFloat4("u_Color", tintColor);
 		s_Data->TextureShader->SetFloat("m_TilingFactor", tilingFactor);
 
 		// Bind Default White Texture
