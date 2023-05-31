@@ -106,6 +106,8 @@ namespace Hazel
 
 	void Renderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, const Ref<Texture2D>& texture, float tilingFactor)
 	{
+		HZ_PROFILE_FUNCTION();
+
 		DrawQuad({ pos.x, pos.y, 0.f }, size, texture, tilingFactor);
 	}
 
@@ -133,6 +135,70 @@ namespace Hazel
 		s_Data->QuadVertexArray->Bind();
 
 		// 해당 함수안에 Texture Bind 가 존재한다.
+		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
+	}
+	void Renderer2D::DrawRotatedQuad(const glm::vec2& pos, const glm::vec2& size, float rotation, const glm::vec4& color)
+	{
+		HZ_PROFILE_FUNCTION();
+
+		DrawRotatedQuad({ pos.x, pos.y, 0.f }, size, rotation, color);
+	}
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& pos, const glm::vec2& size, float rotation, const glm::vec4& color)
+	{
+		HZ_PROFILE_FUNCTION();
+
+		// 혹시나 문제 생기면, 여기에 Shader 한번 더 bind
+		s_Data->TextureShader->SetFloat4("u_Color", color);
+		s_Data->TextureShader->SetFloat("m_TilingFactor", 1.0f);
+
+		// Bind Default White Texture
+		s_Data->WhiteTexture->Bind();
+
+		// x,y 축 기준으로만 scale 을 조정할 것이다.
+		glm::mat4 scale = glm::scale(glm::mat4(1.f), { size.x, size.y, 1.0f });
+
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) 
+			// 2D renderer 이므로 z 축 회전을 적용한다.
+			* glm::rotate(glm::mat4(1.f), rotation, {0.f, 0.f, 1.f})
+			* scale;
+
+		s_Data->TextureShader->SetMat4("u_Transform", transform);
+
+		// actual draw call
+		s_Data->QuadVertexArray->Bind();
+		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
+	}
+	void Renderer2D::DrawRotatedQuad(const glm::vec2& pos, const glm::vec2& size, float rotation, const Ref<Texture2D>& texture, float tilingFactor)
+	{
+		HZ_PROFILE_FUNCTION();
+
+		DrawRotatedQuad({ pos.x, pos.y, 0.f }, size, rotation, texture, tilingFactor);
+	}
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& pos, const glm::vec2& size, 
+		float rotation, const Ref<Texture2D>& texture, float tilingFactor)
+	{
+		HZ_PROFILE_FUNCTION();
+
+		// 혹시나 문제 생기면, 여기에 Shader 한번 더 bind
+		s_Data->TextureShader->SetFloat4("u_Color", glm::vec4(1.0f));
+		s_Data->TextureShader->SetFloat("m_TilingFactor", tilingFactor);
+
+		// Bind Default White Texture
+		s_Data->WhiteTexture->Bind();
+
+		// x,y 축 기준으로만 scale 을 조정할 것이다.
+		glm::mat4 scale = glm::scale(glm::mat4(1.f), { size.x, size.y, 1.0f });
+
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos)
+			// 2D renderer 이므로 z 축 회전을 적용한다.
+			* glm::rotate(glm::mat4(1.f), rotation, { 0.f, 0.f, 1.f })
+			* scale;
+
+		s_Data->TextureShader->SetMat4("u_Transform", transform);
+
+		// actual draw call
+		s_Data->QuadVertexArray->Bind();
+
 		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
 	}
 }

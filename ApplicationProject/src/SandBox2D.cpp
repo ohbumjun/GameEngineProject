@@ -40,7 +40,7 @@ void SandBox2D::OnUpdate(Hazel::Timestep ts)
 	// TODO : Shader Set Mat4, Set Float4 (Add Functions For these)
 	Hazel::Renderer2D::DrawQuad({ 0.f, 0.f }, { 1.f, 1.f }, { 0.8f, 0.2f, 0.3f, 1.0f });
 	Hazel::Renderer2D::DrawQuad({ 1.f, 1.f }, { 1.5f, 1.5f }, { 0.2f, 0.2f, 0.8f, 1.0f });
-	Hazel::Renderer2D::DrawQuad({ -1.f, -1.f }, { 10.f, 10.f }, m_CheckerboardTexture, 2.f);
+	Hazel::Renderer2D::DrawRotatedQuad({ -1.f, -1.f }, { 10.f, 10.f }, glm::radians(5.f), m_CheckerboardTexture, 2.f);
 
 	Hazel::Renderer2D::EndScene();
 }
