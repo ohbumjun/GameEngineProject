@@ -7,23 +7,45 @@
 
 namespace Hazel
 {
-	struct Renderer2DStorage
+	// 각 정점이 가지고 있어야할 정보
+	struct QuadVertex
 	{
-		Ref<VertexArray> QuadVertexArray;
-		Ref<Shader> TextureShader;
-		Ref<Texture2D> WhiteTexture;
+		glm::vec3 Position;
+		glm::vec4 Color;
+		glm::vec2 TexCoord;
+		// Todo : color, tex id ...
 	};
 
-	static Renderer2DStorage* s_Data;
+	struct Renderer2DData
+	{
+		const uint32_t MaxQuads    = 10000;
+		const uint32_t MaxVertices = MaxQuads * 4;
+		const uint32_t MaxIndices  = MaxQuads * 6;
+
+		Ref<VertexArray> QuadVertexArray;
+		Ref<VertexBuffer> QuadVertexBuffer;
+		Ref<Shader> TextureShader;
+		Ref<Texture2D> WhiteTexture;
+
+		// 총 몇개의 quad indice 가 그려지고 있는가
+		// Quad 를 그릴 때마다 + 6 해줄 것이다.
+		uint32_t QuadIndexCount = 0;
+
+		// QuadVertex 들을 담은 배열.을 가리키는 포인터
+		QuadVertex* QuadVertexBufferBase = nullptr;
+
+		// QuadVertexBufferBase 라는 배열 내에서 각 원소를 순회하기 위한 포인터
+		QuadVertex* QuadVertexBufferPtr = nullptr;
+	};
+
+	static Renderer2DData s_Data;
 
 	void Renderer2D::Init()
 	{
 		HZ_PROFILE_FUNCTION();
 
-		s_Data = new Renderer2DStorage();
-
 		/*Square*/
-		s_Data->QuadVertexArray = VertexArray::Create();
+		s_Data.QuadVertexArray = VertexArray::Create();
 
 		// 5 floats per each vertex
 		/*Vertex Pos + Texture Cordinate*/
@@ -35,47 +57,96 @@ namespace Hazel
 			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f    /*Top Left*/
 		};
 
-		Ref<VertexBuffer> squareVB;
-		squareVB = VertexBuffer::Create(squareVertices, sizeof(squareVertices));
+		// Ref<VertexBuffer> squareVB;
+		// squareVB = VertexBuffer::Create(squareVertices, sizeof(squareVertices));
+		
+		s_Data.QuadVertexBuffer = VertexBuffer::Create(s_Data.MaxVertices * sizeof(QuadVertex));
 
 		BufferLayout squareVBLayout = {
 			{ShaderDataType::Float3, "a_Position"},
+			{ShaderDataType::Float4, "a_Color"},
 			{ShaderDataType::Float2, "a_TexCoord"}
 		};
 
-		squareVB->SetLayout(squareVBLayout);
-		s_Data->QuadVertexArray->AddVertexBuffer(squareVB);
+		// squareVB->SetLayout(squareVBLayout);
+		// s_Data.QuadVertexArray->AddVertexBuffer(squareVB);
+		s_Data.QuadVertexBuffer->SetLayout(squareVBLayout);
+		s_Data.QuadVertexArray->AddVertexBuffer(s_Data.QuadVertexBuffer);
 
-		uint32_t squareIndices[] = { 0, 1, 2, 2, 3, 0 };
-		Ref<IndexBuffer> squareIdxB;
-		squareIdxB = IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t));
-		s_Data->QuadVertexArray->SetIndexBuffer(squareIdxB);
+		// 모든 Vertex 를 담을 수 있는 충분한 크기만큼 메모리를 할당한다.
+		s_Data.QuadVertexBufferBase = new QuadVertex[s_Data.MaxVertices];
 
-		s_Data->WhiteTexture = Texture2D::Create(1, 1);
+		// uint32_t squareIndices[] = { 0, 1, 2, 2, 3, 0 };
+		// Ref<IndexBuffer> squareIdxB;
+		// squareIdxB = IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t));
+		// s_Data.QuadVertexArray->SetIndexBuffer(squareIdxB);
+		uint32_t* quadIndices = new uint32_t[s_Data.MaxIndices];
+
+		uint32_t offset = 0;
+
+		for (uint32_t i = 0; i < s_Data.MaxIndices; i += 6)
+		{
+			quadIndices[i + 0] = offset + 0;
+			quadIndices[i + 1] = offset + 1;
+			quadIndices[i + 2] = offset + 2;
+
+			quadIndices[i + 3] = offset + 2;
+			quadIndices[i + 4] = offset + 3;
+			quadIndices[i + 5] = offset + 0;
+
+			offset += 4;
+		}
+		Ref<IndexBuffer> quadIdxB = IndexBuffer::Create(quadIndices, s_Data.MaxIndices);
+		s_Data.QuadVertexArray->SetIndexBuffer(quadIdxB);
+		delete [] quadIndices;
+
+		s_Data.WhiteTexture = Texture2D::Create(1, 1);
 		uint32_t whiteTextureData = 0xffffffff;
-		s_Data->WhiteTexture->SetData(&whiteTextureData, /*1 * 1 */sizeof(uint32_t));
+		s_Data.WhiteTexture->SetData(&whiteTextureData, /*1 * 1 */sizeof(uint32_t));
 
-		s_Data->TextureShader = Shader::Create("assets/shaders/Texture.glsl");
-		s_Data->TextureShader->Bind();
-		s_Data->TextureShader->SetInt("u_Texture", 0);
+		s_Data.TextureShader = Shader::Create("assets/shaders/Texture.glsl");
+		s_Data.TextureShader->Bind();
+		s_Data.TextureShader->SetInt("u_Texture", 0);
 	}
 
 	void Renderer2D::ShutDown()
 	{
 		HZ_PROFILE_FUNCTION();
 
-		delete s_Data;
+		delete s_Data.QuadVertexBufferBase;
 	}
 
 	void Renderer2D::BeginScene(const OrthographicCamera& camera)
 	{
-		s_Data->TextureShader->Bind();
-		s_Data->TextureShader->SetMat4(
+		HZ_PROFILE_FUNCTION();
+
+		s_Data.TextureShader->Bind();
+		s_Data.TextureShader->SetMat4(
 			"u_ViewProjection", const_cast<OrthographicCamera&>(camera).GetViewProjectionMatrix());
+	
+		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
+		s_Data.QuadIndexCount = 0;
 	}
 
 	void Renderer2D::EndScene()
 	{
+		HZ_PROFILE_FUNCTION();
+
+		// EndScene 에서 s_Data.QuadVertexBufferPtr 을 이용하여 쌓아놓은 정점 정보들을
+		// 이용하여 한번에 그려낼 것이다.
+		// - 포인터를 숫자 형태로 형변환하기 위해  (uint8_t*) 로 캐스팅한다.
+		uint32_t dataSize = (uint8_t*)s_Data.QuadVertexBufferPtr - (uint8_t*)s_Data.QuadVertexBufferBase;
+		s_Data.QuadVertexBuffer->SetData(s_Data.QuadVertexBufferBase, dataSize);
+
+		Flush();
+	}
+
+	void Renderer2D::Flush()
+	{
+		HZ_PROFILE_FUNCTION();
+
+		// Batch Rendering 의 경우, 한번의 DrawCall 을 한다.
+		RenderCommand::DrawIndexed(s_Data.QuadVertexArray, s_Data.QuadIndexCount);
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, const glm::vec4& color)
@@ -85,23 +156,56 @@ namespace Hazel
 
 	void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color)
 	{
+		HZ_PROFILE_FUNCTION();
+
+		// 시계 방향으로 4개의 정점 정보를 모두 세팅한다.
+		// 왼쪽 아래
+		s_Data.QuadVertexBufferPtr->Position = pos;
+		s_Data.QuadVertexBufferPtr->Color = color;
+		s_Data.QuadVertexBufferPtr->TexCoord = {0.f, 0.f}; 
+		s_Data.QuadVertexBufferPtr++;
+
+		// 오른쪽 아래
+		s_Data.QuadVertexBufferPtr->Position = {pos.x + size.x, pos.y, 0.f};
+		s_Data.QuadVertexBufferPtr->Color = color;
+		s_Data.QuadVertexBufferPtr->TexCoord = { 1.f, 0.f };
+		s_Data.QuadVertexBufferPtr++;
+
+		// 오른쪽 위
+		s_Data.QuadVertexBufferPtr->Position = { pos.x + size.x, pos.y + size.y, 0.f };
+		s_Data.QuadVertexBufferPtr->Color = color;
+		s_Data.QuadVertexBufferPtr->TexCoord = { 1.f, 1.f };
+		s_Data.QuadVertexBufferPtr++;
+
+		// 왼쪽 위
+		s_Data.QuadVertexBufferPtr->Position = { pos.x, pos.y + size.y, 0.f };
+		s_Data.QuadVertexBufferPtr->Color = color;
+		s_Data.QuadVertexBufferPtr->TexCoord = { 0.f, 1.f };
+		s_Data.QuadVertexBufferPtr++;
+
+		s_Data.QuadIndexCount += 6;
+		/*
+		아래는 Batch Rendering 이 아니라, 하나의 단일 Quad 를 그릴 경우 코드
+		Batch Rendering 에서는 EndScene 에서 한꺼번에 처리해줄 것이다.
+		
 		// 혹시나 문제 생기면, 여기에 Shader 한번 더 bind
-		s_Data->TextureShader->SetFloat4("u_Color", color);
-		s_Data->TextureShader->SetFloat("m_TilingFactor", 1.0f);
+		s_Data.TextureShader->SetFloat4("u_Color", color);
+		s_Data.TextureShader->SetFloat("m_TilingFactor", 1.0f);
 
 		// Bind Default White Texture
-		s_Data->WhiteTexture->Bind();
+		s_Data.WhiteTexture->Bind();
 
 		// x,y 축 기준으로만 scale 을 조정할 것이다.
 		glm::mat4 scale = glm::scale(glm::mat4(1.f), {size.x, size.y, 1.0f});
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * 
-			/*rotation*/ scale;
+			scale;
 
-		s_Data->TextureShader->SetMat4("u_Transform", transform);
+		s_Data.TextureShader->SetMat4("u_Transform", transform);
 
 		// actual draw call
-		s_Data->QuadVertexArray->Bind();
-		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
+		s_Data.QuadVertexArray->Bind();
+		RenderCommand::DrawIndexed(s_Data.QuadVertexArray);
+		*/
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, 
@@ -117,27 +221,27 @@ namespace Hazel
 	{
 		HZ_PROFILE_FUNCTION();
 
-		s_Data->TextureShader->Bind();
+		s_Data.TextureShader->Bind();
 
 		// default : 0번째 slot 에 세팅
 		texture->Bind();
 		
 		// 기본 Color 로 세팅
-		s_Data->TextureShader->SetFloat4("u_Color", tintColor);
-		s_Data->TextureShader->SetFloat("m_TilingFactor", tilingFactor);
+		s_Data.TextureShader->SetFloat4("u_Color", tintColor);
+		s_Data.TextureShader->SetFloat("m_TilingFactor", tilingFactor);
 
 		// x,y 축 기준으로만 scale 을 조정할 것이다.
 		glm::mat4 scale = glm::scale(glm::mat4(1.f), { size.x, size.y, 1.0f });
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) *
 			/*rotation*/ scale;
 
-		s_Data->TextureShader->SetMat4("u_Transform", transform);
+		s_Data.TextureShader->SetMat4("u_Transform", transform);
 
 		// actual draw call
-		s_Data->QuadVertexArray->Bind();
+		s_Data.QuadVertexArray->Bind();
 
 		// 해당 함수안에 Texture Bind 가 존재한다.
-		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
+		RenderCommand::DrawIndexed(s_Data.QuadVertexArray);
 	}
 	void Renderer2D::DrawRotatedQuad(const glm::vec2& pos, const glm::vec2& size, float rotation, const glm::vec4& color)
 	{
@@ -150,11 +254,11 @@ namespace Hazel
 		HZ_PROFILE_FUNCTION();
 
 		// 혹시나 문제 생기면, 여기에 Shader 한번 더 bind
-		s_Data->TextureShader->SetFloat4("u_Color", color);
-		s_Data->TextureShader->SetFloat("m_TilingFactor", 1.0f);
+		s_Data.TextureShader->SetFloat4("u_Color", color);
+		s_Data.TextureShader->SetFloat("m_TilingFactor", 1.0f);
 
 		// Bind Default White Texture
-		s_Data->WhiteTexture->Bind();
+		s_Data.WhiteTexture->Bind();
 
 		// x,y 축 기준으로만 scale 을 조정할 것이다.
 		glm::mat4 scale = glm::scale(glm::mat4(1.f), { size.x, size.y, 1.0f });
@@ -164,11 +268,11 @@ namespace Hazel
 			* glm::rotate(glm::mat4(1.f), rotation, {0.f, 0.f, 1.f})
 			* scale;
 
-		s_Data->TextureShader->SetMat4("u_Transform", transform);
+		s_Data.TextureShader->SetMat4("u_Transform", transform);
 
 		// actual draw call
-		s_Data->QuadVertexArray->Bind();
-		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
+		s_Data.QuadVertexArray->Bind();
+		RenderCommand::DrawIndexed(s_Data.QuadVertexArray);
 	}
 	void Renderer2D::DrawRotatedQuad(const glm::vec2& pos, const glm::vec2& size, 
 		float rotation, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor)
@@ -183,11 +287,11 @@ namespace Hazel
 		HZ_PROFILE_FUNCTION();
 
 		// 혹시나 문제 생기면, 여기에 Shader 한번 더 bind
-		s_Data->TextureShader->SetFloat4("u_Color", tintColor);
-		s_Data->TextureShader->SetFloat("m_TilingFactor", tilingFactor);
+		s_Data.TextureShader->SetFloat4("u_Color", tintColor);
+		s_Data.TextureShader->SetFloat("m_TilingFactor", tilingFactor);
 
 		// Bind Default White Texture
-		s_Data->WhiteTexture->Bind();
+		s_Data.WhiteTexture->Bind();
 
 		// x,y 축 기준으로만 scale 을 조정할 것이다.
 		glm::mat4 scale = glm::scale(glm::mat4(1.f), { size.x, size.y, 1.0f });
@@ -197,12 +301,12 @@ namespace Hazel
 			* glm::rotate(glm::mat4(1.f), rotation, { 0.f, 0.f, 1.f })
 			* scale;
 
-		s_Data->TextureShader->SetMat4("u_Transform", transform);
+		s_Data.TextureShader->SetMat4("u_Transform", transform);
 
 		// actual draw call
-		s_Data->QuadVertexArray->Bind();
+		s_Data.QuadVertexArray->Bind();
 
-		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
+		RenderCommand::DrawIndexed(s_Data.QuadVertexArray);
 	}
 }
 

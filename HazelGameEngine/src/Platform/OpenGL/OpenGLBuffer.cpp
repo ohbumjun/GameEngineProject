@@ -7,8 +7,31 @@ namespace Hazel
 {
 	/* VertexBuffer */
 
+	OpenGLVertexBuffer::OpenGLVertexBuffer(uint32_t size)
+	{
+		HZ_PROFILE_FUNCTION();
+
+		glCreateBuffers(1, &m_RendererID);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
+
+		// upload vertexbuffer to gpu
+		glBufferData(GL_ARRAY_BUFFER,
+			size,
+			nullptr, // vertex buffer with no data
+
+			// GL_DYNAMIC_DRAW 
+			// - 해당 변수는 일종의 hint 이다
+			// - GL_STATIC_DRAW 라고 세팅해도 동작은 할 것이다
+			// - 그저 gpu 측에 현재 vertex buffer 에 매 프레임마다 데이터를 넣어줄 것
+			//   이라고 얘기해주는 개념이다.
+			GL_DYNAMIC_DRAW);
+	}
+
 	OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, uint32_t size)
 	{
+		HZ_PROFILE_FUNCTION();
+
 		glCreateBuffers(1, &m_RendererID);
 
 		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
@@ -22,16 +45,31 @@ namespace Hazel
 
 	OpenGLVertexBuffer::~OpenGLVertexBuffer()
 	{
+		HZ_PROFILE_FUNCTION();
+
 		glDeleteBuffers(1, &m_RendererID);
+	}
+
+	void OpenGLVertexBuffer::SetData(const void* data, uint32_t size)
+	{
+		HZ_PROFILE_FUNCTION();
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
+
+		glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);
 	}
 
 	void OpenGLVertexBuffer::Bind() const
 	{
+		HZ_PROFILE_FUNCTION();
+
 		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
 	}
 
 	void OpenGLVertexBuffer::Unbind() const
 	{
+		HZ_PROFILE_FUNCTION();
+
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 

@@ -102,10 +102,6 @@ namespace Hazel
         InstrumentationTimer(const char* name)
             : m_Name(name), m_Stopped(false)
         {
-//#if HZ_PROFILE
-//            int a = 1, b = 2, c = 3;
-//            c = a + b;
-//#endif
             // 시간 간격을 주기 위해 2번 호출
             m_StartTimepoint = std::chrono::high_resolution_clock::now();
             m_StartTimepoint = std::chrono::high_resolution_clock::now();

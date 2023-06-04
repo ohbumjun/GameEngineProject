@@ -124,6 +124,12 @@ namespace Hazel
 		virtual void SetLayout(const BufferLayout& layout) = 0;
 		virtual const BufferLayout& GetLayout() const = 0;
 
+		virtual void SetData(const void* data, uint32_t size) = 0;
+
+		// dynamic buffer
+		static Ref<VertexBuffer> Create(uint32_t size);
+
+		// static buffer 
 		static Ref<VertexBuffer> Create(float* vertices, uint32_t size);
 	};
 
@@ -133,10 +139,9 @@ namespace Hazel
 		virtual ~IndexBuffer() {}
 		virtual void Bind()const = 0 {}
 		virtual void Unbind()const = 0 {}
-
 		virtual uint32_t GetCount() = 0;
 
-		static Ref<IndexBuffer> Create(uint32_t* vertices, uint32_t size);
+		static Ref<IndexBuffer> Create(uint32_t* vertices, uint32_t count);
 
 	};
 }
