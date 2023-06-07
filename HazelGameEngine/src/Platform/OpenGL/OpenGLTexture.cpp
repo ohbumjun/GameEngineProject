@@ -136,6 +136,8 @@ namespace Hazel
 	void OpenGLTexture2D::Bind(uint32_t slot) const
 	{
 		// Fragment Shader 의 slot 번째에 해당 Texture 객체를 binding 한다.
+		HZ_PROFILE_FUNCTION();
+
 		glBindTextureUnit(slot, m_RendererID);
 	}
 	void OpenGLTexture2D::SetData(void* data, uint32_t size)

@@ -13,7 +13,8 @@ namespace Hazel
 		glm::vec3 Position;
 		glm::vec4 Color;
 		glm::vec2 TexCoord;
-		// Todo : color, tex id ...
+		float TexIndex;			 // Texture Slot 상 mapping 된 index
+		float TilingFactor;
 	};
 
 	struct Renderer2DData
@@ -21,6 +22,7 @@ namespace Hazel
 		const uint32_t MaxQuads    = 10000;
 		const uint32_t MaxVertices = MaxQuads * 4;
 		const uint32_t MaxIndices  = MaxQuads * 6;
+		static const uint32_t MaxTextureSlots = 32; 
 
 		Ref<VertexArray> QuadVertexArray;
 		Ref<VertexBuffer> QuadVertexBuffer;
@@ -36,6 +38,9 @@ namespace Hazel
 
 		// QuadVertexBufferBase 라는 배열 내에서 각 원소를 순회하기 위한 포인터
 		QuadVertex* QuadVertexBufferPtr = nullptr;
+
+		std::array<Ref<Texture2D>, MaxTextureSlots> TextureSlots;
+		uint32_t TextureSlotIndex = 1; // 0 : Default White Texture 로 세팅
 	};
 
 	static Renderer2DData s_Data;
@@ -65,7 +70,9 @@ namespace Hazel
 		BufferLayout squareVBLayout = {
 			{ShaderDataType::Float3, "a_Position"},
 			{ShaderDataType::Float4, "a_Color"},
-			{ShaderDataType::Float2, "a_TexCoord"}
+			{ShaderDataType::Float2, "a_TexCoord"},
+			{ShaderDataType::Float,   "a_TexIndex"},
+			{ShaderDataType::Float,   "a_TilingFactor"}
 		};
 
 		// squareVB->SetLayout(squareVBLayout);
@@ -106,7 +113,25 @@ namespace Hazel
 
 		s_Data.TextureShader = Shader::Create("assets/shaders/Texture.glsl");
 		s_Data.TextureShader->Bind();
+
+		int samplers[s_Data.MaxTextureSlots];
+		for (uint32_t i = 0; i < s_Data.MaxTextureSlots; ++i)
+		{
+			samplers[i] = i;
+		}
+		s_Data.TextureShader->SetIntArray("u_Textures", samplers, s_Data.MaxTextureSlots);
+
+#if OLD_PATH
 		s_Data.TextureShader->SetInt("u_Texture", 0);
+#endif
+
+		for (uint32_t i = 0; i < s_Data.TextureSlots.size(); ++i)
+		{
+			s_Data.TextureSlots[i] = 0;
+		}
+
+		// bind default texture
+		s_Data.TextureSlots[0] = s_Data.WhiteTexture;
 	}
 
 	void Renderer2D::ShutDown()
@@ -114,6 +139,8 @@ namespace Hazel
 		HZ_PROFILE_FUNCTION();
 
 		delete s_Data.QuadVertexBufferBase;
+
+		s_Data.TextureSlotIndex = 1;
 	}
 
 	void Renderer2D::BeginScene(const OrthographicCamera& camera)
@@ -126,6 +153,9 @@ namespace Hazel
 	
 		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
 		s_Data.QuadIndexCount = 0;
+
+		// 0 
+		s_Data.TextureSlotIndex = 1;
 	}
 
 	void Renderer2D::EndScene()
@@ -145,6 +175,13 @@ namespace Hazel
 	{
 		HZ_PROFILE_FUNCTION();
 
+		// 모든 Texture 를 한꺼번에 Bind 해야 한다.
+		// 0 번째에 기본적으로 Binding 된 WhiteTexture 도 Bind 해줘야 한다.
+		for (uint32_t i = 0; i < s_Data.TextureSlotIndex; ++i)
+		{
+			s_Data.TextureSlots[i]->Bind(i);
+		}
+
 		// Batch Rendering 의 경우, 한번의 DrawCall 을 한다.
 		RenderCommand::DrawIndexed(s_Data.QuadVertexArray, s_Data.QuadIndexCount);
 	}
@@ -158,36 +195,49 @@ namespace Hazel
 	{
 		HZ_PROFILE_FUNCTION();
 
+		const float texIndex = 0.f; // white texture
+		const float tilingFactor = 1.f;
+
 		// 시계 방향으로 4개의 정점 정보를 모두 세팅한다.
 		// 왼쪽 아래
 		s_Data.QuadVertexBufferPtr->Position = pos;
 		s_Data.QuadVertexBufferPtr->Color = color;
 		s_Data.QuadVertexBufferPtr->TexCoord = {0.f, 0.f}; 
+		s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
+		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
 		s_Data.QuadVertexBufferPtr++;
 
 		// 오른쪽 아래
-		s_Data.QuadVertexBufferPtr->Position = {pos.x + size.x, pos.y, 0.f};
+		s_Data.QuadVertexBufferPtr->Position = { pos.x + size.x, pos.y, 0.f };
 		s_Data.QuadVertexBufferPtr->Color = color;
 		s_Data.QuadVertexBufferPtr->TexCoord = { 1.f, 0.f };
+		s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
+		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
 		s_Data.QuadVertexBufferPtr++;
 
 		// 오른쪽 위
 		s_Data.QuadVertexBufferPtr->Position = { pos.x + size.x, pos.y + size.y, 0.f };
 		s_Data.QuadVertexBufferPtr->Color = color;
 		s_Data.QuadVertexBufferPtr->TexCoord = { 1.f, 1.f };
+		s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
+		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
 		s_Data.QuadVertexBufferPtr++;
 
 		// 왼쪽 위
 		s_Data.QuadVertexBufferPtr->Position = { pos.x, pos.y + size.y, 0.f };
 		s_Data.QuadVertexBufferPtr->Color = color;
 		s_Data.QuadVertexBufferPtr->TexCoord = { 0.f, 1.f };
+		s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
+		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
 		s_Data.QuadVertexBufferPtr++;
 
 		s_Data.QuadIndexCount += 6;
+
 		/*
 		아래는 Batch Rendering 이 아니라, 하나의 단일 Quad 를 그릴 경우 코드
 		Batch Rendering 에서는 EndScene 에서 한꺼번에 처리해줄 것이다.
-		
+		*/
+#if OLD_PATH
 		// 혹시나 문제 생기면, 여기에 Shader 한번 더 bind
 		s_Data.TextureShader->SetFloat4("u_Color", color);
 		s_Data.TextureShader->SetFloat("m_TilingFactor", 1.0f);
@@ -205,7 +255,7 @@ namespace Hazel
 		// actual draw call
 		s_Data.QuadVertexArray->Bind();
 		RenderCommand::DrawIndexed(s_Data.QuadVertexArray);
-		*/
+#endif
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, 
@@ -221,6 +271,68 @@ namespace Hazel
 	{
 		HZ_PROFILE_FUNCTION();
 
+		constexpr glm::vec4 color = { 1.f, 1.f, 1.f, 1.f };
+
+		// 현재 인자로 들어온 Texture 에 대한 s_Data.TextureSlot 내 Texture Index 를 찾아야 한다.
+		float textureIndex = 0.f;
+
+		for (uint32_t i = 0; i < s_Data.TextureSlotIndex; ++i)
+		{
+			// Texture2D& compTexture = *s_Data.TextureSlots[i].get();
+
+			if (*s_Data.TextureSlots[i].get() == *texture.get())
+			{
+				textureIndex = (float)i;
+				break;
+			}
+		}
+
+		// new texture
+		if (textureIndex == 0.f)
+		{
+			textureIndex = (float)s_Data.TextureSlotIndex;
+			s_Data.TextureSlots[s_Data.TextureSlotIndex] = texture;
+			s_Data.TextureSlotIndex += 1;
+		}
+
+		// 시계 방향으로 4개의 정점 정보를 모두 세팅한다.
+		// 왼쪽 아래
+		s_Data.QuadVertexBufferPtr->Position = pos;
+		s_Data.QuadVertexBufferPtr->Color = color;
+		s_Data.QuadVertexBufferPtr->TexCoord = { 0.f, 0.f };
+		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
+		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+		s_Data.QuadVertexBufferPtr++;
+
+		// 오른쪽 아래
+		s_Data.QuadVertexBufferPtr->Position = { pos.x + size.x, pos.y, 0.f };
+		s_Data.QuadVertexBufferPtr->Color = color;
+		s_Data.QuadVertexBufferPtr->TexCoord = { 1.f, 0.f };
+		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
+		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+		s_Data.QuadVertexBufferPtr++;
+
+		// 오른쪽 위
+		s_Data.QuadVertexBufferPtr->Position = { pos.x + size.x, pos.y + size.y, 0.f };
+		s_Data.QuadVertexBufferPtr->Color = color;
+		s_Data.QuadVertexBufferPtr->TexCoord = { 1.f, 1.f };
+		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
+		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+		s_Data.QuadVertexBufferPtr++;
+
+		// 왼쪽 위
+		s_Data.QuadVertexBufferPtr->Position = { pos.x, pos.y + size.y, 0.f };
+		s_Data.QuadVertexBufferPtr->Color = color;
+		s_Data.QuadVertexBufferPtr->TexCoord = { 0.f, 1.f };
+		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
+		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+		s_Data.QuadVertexBufferPtr++;
+
+		s_Data.QuadIndexCount += 6;
+
+
+
+#if OLD_PATH
 		s_Data.TextureShader->Bind();
 
 		// default : 0번째 slot 에 세팅
@@ -242,6 +354,7 @@ namespace Hazel
 
 		// 해당 함수안에 Texture Bind 가 존재한다.
 		RenderCommand::DrawIndexed(s_Data.QuadVertexArray);
+#endif
 	}
 	void Renderer2D::DrawRotatedQuad(const glm::vec2& pos, const glm::vec2& size, float rotation, const glm::vec4& color)
 	{

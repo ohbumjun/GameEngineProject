@@ -100,6 +100,7 @@ namespace Hazel
 	void OpenGLVertexArray::SetIndexBuffer(std::shared_ptr<IndexBuffer>& indexBuffer)
 	{
 		glBindVertexArray(m_RendererID);
+
 		indexBuffer->Bind();
 
 		m_IndexedBuffer = indexBuffer;
