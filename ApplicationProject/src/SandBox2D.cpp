@@ -38,6 +38,7 @@ void SandBox2D::OnUpdate(Hazel::Timestep ts)
 	// TODO : Shader Set Mat4, Set Float4 (Add Functions For these)
 	// Hazel::Renderer2D::DrawQuad({ 0.f, 0.f }, { 1.f, 1.f }, { 0.8f, 0.2f, 0.3f, 1.0f });
 	Hazel::Renderer2D::DrawQuad({ 1.5f, 1.5f }, { 1.5f, 1.5f }, { 0.2f, 0.2f, 0.8f, 1.0f });
+	Hazel::Renderer2D::DrawRotatedQuad({ 1.5f, 1.5f }, { 1.5f, 1.5f }, 20.f, { 0.2f, 0.2f, 0.8f, 1.0f });
 	// Hazel::Renderer2D::DrawQuad({ 1.f, 1.f }, { 1.5f, 1.5f }, m_CheckerboardTexture);
 	Hazel::Renderer2D::DrawRotatedQuad({ 0.f, 0.f }, { 3.f, 3.f }, 
 		 5.f, m_CheckerboardTexture, 2.f, glm::vec4(1.0f, 0.9f, 0.9f, 1.0f));
