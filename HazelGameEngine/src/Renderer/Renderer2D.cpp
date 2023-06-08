@@ -5,6 +5,8 @@
 #include "RenderCommand.h"
 #include <glm/gtc/matrix_transform.hpp>
 
+#define STATISTICS 1
+
 namespace Hazel
 {
 	// 각 정점이 가지고 있어야할 정보
@@ -223,7 +225,7 @@ namespace Hazel
 	{
 		HZ_PROFILE_FUNCTION();
 
-		if (s_Data.QuadIndexCount > Renderer2DData::MaxIndices)
+		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
 		{
 			FlushAndReset();
 		}
@@ -270,6 +272,10 @@ namespace Hazel
 
 		s_Data.QuadIndexCount += 6;
 
+#if STATISTICS
+		s_Data.stats.QuadCount++;
+#endif
+
 		/*
 		아래는 Batch Rendering 이 아니라, 하나의 단일 Quad 를 그릴 경우 코드
 		Batch Rendering 에서는 EndScene 에서 한꺼번에 처리해줄 것이다.
@@ -308,7 +314,7 @@ namespace Hazel
 	{
 		HZ_PROFILE_FUNCTION();
 
-		if (s_Data.QuadIndexCount > Renderer2DData::MaxIndices)
+		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
 		{
 			FlushAndReset();
 		}
@@ -410,7 +416,7 @@ namespace Hazel
 	{
 		HZ_PROFILE_FUNCTION();
 
-		if (s_Data.QuadIndexCount > Renderer2DData::MaxIndices)
+		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
 		{
 			FlushAndReset();
 		}
