@@ -39,6 +39,23 @@ namespace Hazel
 		static void DrawRotatedQuad(const glm::vec3& pos, const glm::vec2& size, float rotation,
 			const Ref<Texture2D>& texture, float tilingFactor = 1.f,
 			const glm::vec4& tintColor = glm::vec4(1.0f));
+
+
+		// 매Update 초반 마다 reset 해줄 것이다.
+		struct Statistics
+		{
+			uint32_t DrawCalls = 0;
+			uint32_t QuadCount = 0;
+
+			uint32_t GetTotalVertexCount() { return QuadCount * 4; }
+			uint32_t GetTotalIndexCount() { return QuadCount * 6; }
+		};
+
+		static Statistics GetStats();
+		static void ResetStats();
+
+	private :
+		static void FlushAndReset();
 	};
 };
 

@@ -28,8 +28,13 @@ void SandBox2D::OnUpdate(Hazel::Timestep ts)
 	}
 
 	// Render
+	Hazel::Renderer2D::ResetStats();
+
 	Hazel::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.f });
 	Hazel::RenderCommand::Clear();
+
+	static float rotation = 0.f;
+	rotation += ts * 20.f;
 
 	// Renderer::BeginScene(camera, lights, environment);
 	// Scene 을 그리기 위해 필요한 모든 것을 한번에 그려낸다.
@@ -39,6 +44,7 @@ void SandBox2D::OnUpdate(Hazel::Timestep ts)
 	// Hazel::Renderer2D::DrawQuad({ 0.f, 0.f }, { 1.f, 1.f }, { 0.8f, 0.2f, 0.3f, 1.0f });
 	Hazel::Renderer2D::DrawQuad({ 1.5f, 1.5f }, { 1.5f, 1.5f }, { 0.2f, 0.2f, 0.8f, 1.0f });
 	Hazel::Renderer2D::DrawRotatedQuad({ 1.5f, 1.5f }, { 1.5f, 1.5f }, 20.f, { 0.2f, 0.2f, 0.8f, 1.0f });
+	Hazel::Renderer2D::DrawRotatedQuad({ 2.5f, 2.5f }, { 1.5f, 1.5f }, rotation, { 0.9f, 0.2f, 0.8f, 1.0f });
 	// Hazel::Renderer2D::DrawQuad({ 1.f, 1.f }, { 1.5f, 1.5f }, m_CheckerboardTexture);
 	Hazel::Renderer2D::DrawRotatedQuad({ 0.f, 0.f }, { 3.f, 3.f }, 
 		 5.f, m_CheckerboardTexture, 2.f, glm::vec4(1.0f, 0.9f, 0.9f, 1.0f));
@@ -55,6 +61,13 @@ void SandBox2D::OnEvent(Hazel::Event& event)
 void SandBox2D::OnImGuiRender()
 {
 	ImGui::Begin("Settings");
+
+	auto stats = Hazel::Renderer2D::GetStats();
+	ImGui::Text("Renderer2D Stats  : ");
+	ImGui::Text("Draw Calls : %d", stats.DrawCalls);
+	ImGui::Text("Quads : %d", stats.QuadCount);
+	ImGui::Text("Vertices : %d", stats.GetTotalVertexCount());
+	ImGui::Text("Indices : %d", stats.GetTotalIndexCount());
 
 	ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
 

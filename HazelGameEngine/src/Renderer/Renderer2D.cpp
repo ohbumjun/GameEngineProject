@@ -19,9 +19,9 @@ namespace Hazel
 
 	struct Renderer2DData
 	{
-		const uint32_t MaxQuads    = 10000;
-		const uint32_t MaxVertices = MaxQuads * 4;
-		const uint32_t MaxIndices  = MaxQuads * 6;
+		static const uint32_t MaxQuads    = 10000;
+		static const uint32_t MaxVertices = MaxQuads * 4;
+		static const uint32_t MaxIndices  = MaxQuads * 6;
 		static const uint32_t MaxTextureSlots = 32; 
 
 		Ref<VertexArray> QuadVertexArray;
@@ -44,6 +44,8 @@ namespace Hazel
 
 		// mesh local pos
 		glm::vec4 QuadVertexPositions[4];
+
+		Renderer2D::Statistics stats;
 	};
 
 	static Renderer2DData s_Data;
@@ -180,6 +182,19 @@ namespace Hazel
 		Flush();
 	}
 
+	void Renderer2D::FlushAndReset()
+	{
+		EndScene();
+
+		// 1) Begin Scene 과 달리 TextureShader 를 새로 Bind 할 필요도 없고
+		// 2) VewProjectionMatrix 를 Bind 할 필요도 없다.
+
+		s_Data.QuadIndexCount = 0;
+		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
+		s_Data.TextureSlotIndex = 1;
+	}
+
+
 	void Renderer2D::Flush()
 	{
 		HZ_PROFILE_FUNCTION();
@@ -193,6 +208,10 @@ namespace Hazel
 
 		// Batch Rendering 의 경우, 한번의 DrawCall 을 한다.
 		RenderCommand::DrawIndexed(s_Data.QuadVertexArray, s_Data.QuadIndexCount);
+
+#if STATISTICS
+		s_Data.stats.DrawCalls++;
+#endif
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, const glm::vec4& color)
@@ -203,6 +222,15 @@ namespace Hazel
 	void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color)
 	{
 		HZ_PROFILE_FUNCTION();
+
+		if (s_Data.QuadIndexCount > Renderer2DData::MaxIndices)
+		{
+			FlushAndReset();
+		}
+
+#if STATISTICS
+
+#endif
 
 		const float texIndex = 0.f; // white texture
 		const float tilingFactor = 1.f;
@@ -280,6 +308,11 @@ namespace Hazel
 	{
 		HZ_PROFILE_FUNCTION();
 
+		if (s_Data.QuadIndexCount > Renderer2DData::MaxIndices)
+		{
+			FlushAndReset();
+		}
+
 		constexpr glm::vec4 color = { 1.f, 1.f, 1.f, 1.f };
 
 		// 현재 인자로 들어온 Texture 에 대한 s_Data.TextureSlot 내 Texture Index 를 찾아야 한다.
@@ -339,7 +372,9 @@ namespace Hazel
 
 		s_Data.QuadIndexCount += 6;
 
-
+#if STATISTICS
+		s_Data.stats.QuadCount++;
+#endif
 
 #if OLD_PATH
 		s_Data.TextureShader->Bind();
@@ -374,6 +409,11 @@ namespace Hazel
 	void Renderer2D::DrawRotatedQuad(const glm::vec3& pos, const glm::vec2& size, float rotation, const glm::vec4& color)
 	{
 		HZ_PROFILE_FUNCTION();
+
+		if (s_Data.QuadIndexCount > Renderer2DData::MaxIndices)
+		{
+			FlushAndReset();
+		}
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos)
 			* glm::rotate(glm::mat4(1.f), glm::radians(rotation), { 0.f, 0.f, 1.f }) // z 축 회전
@@ -417,6 +457,9 @@ namespace Hazel
 
 		s_Data.QuadIndexCount += 6;
 
+#if STATISTICS
+		s_Data.stats.QuadCount++;
+#endif
 
 #if one
 		// 혹시나 문제 생기면, 여기에 Shader 한번 더 bind
@@ -517,6 +560,11 @@ namespace Hazel
 		s_Data.QuadVertexBufferPtr++;
 
 		s_Data.QuadIndexCount += 6;
+
+#if STATISTICS
+		s_Data.stats.QuadCount++;
+#endif
+
 #if one
 		// 혹시나 문제 생기면, 여기에 Shader 한번 더 bind
 		s_Data.TextureShader->SetFloat4("u_Color", tintColor);
@@ -540,6 +588,15 @@ namespace Hazel
 
 		RenderCommand::DrawIndexed(s_Data.QuadVertexArray);
 #endif
+	}
+	
+	Renderer2D::Statistics Renderer2D::GetStats()
+	{
+		return s_Data.stats;
+	}
+	void Renderer2D::ResetStats()
+	{
+		memset(&s_Data.stats, 0, sizeof(Renderer2D::Statistics));
 	}
 }
 
