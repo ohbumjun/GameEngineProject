@@ -3,6 +3,34 @@
 #include "imgui/imgui.h"
 #include <glm/gtc/type_ptr.hpp>
 
+// 24 wide map
+static const uint32_t s_mapWidth = 24;
+static const char* s_MapTiles = 
+"WWWWWWWWWWWWWWWWWWWWWWWW"
+"WWWWWWWWWWWWWWWWWWWWWWWW"
+"WWWWWWWWWWWWWWWWWWWWWWWW"
+"WWWWWWWWWWWWWWWWWWWWWWWW"
+"WWWWWWWWWWWWWWWWWWWWWWWW"
+"WWWWWWWWWWWWDWWWWWWWWDWW"
+"WWWWWWWWWWWWWWWWWWWWWWWW"
+"WWWWWDWWWWWWWWWWWWWWWWWW"
+"WWWWWWWWWWWWWWWWWWWWWWWW"
+"WWWWWWWWWWWWWWWWWWDWWWWW"
+"WWWWWDWWWWWWWWWWWWWWWWWW"
+"WWWWWWWWWWWWWWWWWWWWWWWW"
+"WWWWWWWWWWWWWWWWDWWWWWWW"
+"WWWWWWWWWDWWWWWWWWWWWWWW"
+"WWWWWWWWWWWWWWWDWWWWWWWW"
+"WWWWWWWWWWWWWWWWWWWWWWWW"
+"WWWWWWWWDWWWWWWWWWWWWWWW"
+"WWWWWWWWWWWWWWWWWWWWWWWW"
+"WWWWWWWWWWWWWWWWDWWWWWWW"
+"WWWWWWWWWWWWWWWWWWWWWWWW"
+"WWWWWWWWWWWWWWWWWWWWWWWW"
+"WWWWWWWWWWWWWWWWWWWWWWWW"
+"WWWWWWWWWWWWWWWWWWWWWWWW"
+"WWWWWWWWWWWWWWWWWWWWWWWW";
+
 SandBox2D::SandBox2D()
 	: Layer("SandBox2D"),
 		m_CameraController(1200.f / 720.f, true)
@@ -13,9 +41,16 @@ void SandBox2D::OnAttach()
 {
 	m_CheckerboardTexture = Hazel::Texture2D::Create("assets/textures/sample.png");
 	m_SpriteSheet				= Hazel::Texture2D::Create("assets/game/textures/RPGpack_sheet_2X.png");
-	m_TextureStairs				= Hazel::SubTexture2D::CreateFromCoords(m_SpriteSheet, {7, 6}, {128, 128});
+	// m_TextureStairs				= Hazel::SubTexture2D::CreateFromCoords(m_SpriteSheet, {7, 6}, {128, 128});
 	m_TextureBarrel				= Hazel::SubTexture2D::CreateFromCoords(m_SpriteSheet, {8, 2}, {128, 128});
-	m_TextureTree				= Hazel::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 2, 1 }, { 128, 128 }, { 1,2 });
+	// m_TextureTree				= Hazel::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 2, 1 }, { 128, 128 }, { 1,2 });
+	// m_TextureGrass				= Hazel::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 1, 11 }, { 128, 128 }, { 1,2 });
+
+	m_TextureMap['D'] = Hazel::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 6, 11 }, { 128, 128 });
+	m_TextureMap['W'] = Hazel::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 11, 11 }, { 128, 128 });
+
+	m_MapWidth = s_mapWidth;
+	m_MapHeight = strlen(s_MapTiles) / s_mapWidth;
 
 	// Init Particle
 	m_Particle.ColorBegin = { 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
@@ -25,6 +60,8 @@ void SandBox2D::OnAttach()
 	m_Particle.Velocity = { 0.0f, 0.0f };
 	m_Particle.VelocityVariation = { 3.0f, 1.0f };
 	m_Particle.Position = { 0.0f, 0.0f };
+
+	m_CameraController.SetZoomLevel(0.25f);
 }
 
 void SandBox2D::OnDetach()
@@ -112,9 +149,32 @@ void SandBox2D::OnUpdate(Hazel::Timestep ts)
 
 	{
 		Hazel::Renderer2D::BeginScene(m_CameraController.GetCamera());
-		Hazel::Renderer2D::DrawQuad({ 4.5f, 3.5f, -0.1f }, { 1.5f, 1.5f }, m_TextureStairs, 1.f, { 0.2f, 0.2f, 0.8f, 1.0f });
-		Hazel::Renderer2D::DrawQuad({ 4.5f, 5.5f, -0.1f }, { 1.5f, 1.5f }, m_TextureBarrel, 1.f, { 0.2f, 0.2f, 0.8f, 1.0f });
-		Hazel::Renderer2D::DrawQuad({ 1.5f, 5.5f, -0.1f }, { 1.5f, 1.5f }, m_TextureTree, 1.f, { 0.2f, 0.2f, 0.8f, 1.0f });
+
+		for (uint32_t y = 0; y < m_MapHeight; ++y)
+		{
+			for (uint32_t x = 0; x < m_MapWidth; ++x)
+			{
+				char tileType = s_MapTiles[x + y * m_MapWidth];
+
+				Hazel::Ref<Hazel::SubTexture2D> texture;
+
+				if (m_TextureMap.find(tileType) == m_TextureMap.end())
+				{
+					texture = m_TextureBarrel;
+				}
+				else
+				{
+					texture = m_TextureMap[tileType];
+				}
+
+				Hazel::Renderer2D::DrawQuad({ x - m_MapWidth / 2.f, y - m_MapHeight / 2.f, -0.1f }, { 1.f, 1.f }, texture);
+			}
+		}
+
+		// Hazel::Renderer2D::DrawQuad({ 4.5f, 1.5f, -0.1f }, { 1.5f, 1.5f }, m_TextureStairs, 1.f, { 0.2f, 0.2f, 0.8f, 1.0f });
+		// Hazel::Renderer2D::DrawQuad({ 2.5f, 1.5f, -0.1f }, { 1.5f, 1.5f }, m_TextureBarrel, 1.f, { 0.2f, 0.2f, 0.8f, 1.0f });
+		// Hazel::Renderer2D::DrawQuad({ 1.5f, 1.5f, -0.1f }, { 1.5f, 1.5f }, m_TextureTree, 1.f, { 0.2f, 0.2f, 0.8f, 1.0f });
+		// Hazel::Renderer2D::DrawQuad({ 0.5f, 1.5f, -0.1f }, { 1.5f, 1.5f }, m_TextureGrass, 1.f, { 0.2f, 0.2f, 0.8f, 1.0f });
 		Hazel::Renderer2D::EndScene();
 	}
 }
