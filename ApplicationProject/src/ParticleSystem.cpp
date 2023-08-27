@@ -48,7 +48,11 @@ void ParticleSystem::OnRender(Hazel::OrthographicCamera& camera)
 
 		float size = glm::lerp(particle.SizeEnd, particle.SizeBegin, life);
 
-		Hazel::Renderer2D::DrawRotatedQuad(particle.Position, { size, size }, particle.Rotation, color);
+		// 위쪽에다 그리기 위함
+		// 현재  depth testing 을 적용하는 중이다. 같은 z 깊이라면, 그려지지 않는다.
+		glm::vec3 position = {particle.Position.x, particle.Position.y, 0.2f};
+
+		Hazel::Renderer2D::DrawRotatedQuad(position, { size, size }, particle.Rotation, color);
 	}
 
 	Hazel::Renderer2D::EndScene();
@@ -75,5 +79,5 @@ void ParticleSystem::Emit(const ParticleProps& particleProps)
 	particle.SizeBegin = particleProps.SizeBegin + particleProps.SizeVariation * (Random::Float() - 0.5f);
 	particle.SizeEnd = particleProps.SizeEnd;
 
-	m_PoolIndex = --m_PoolIndex % m_ParticlePool.size();
+	m_PoolIndex =  --m_PoolIndex % m_ParticlePool.size();
 }
