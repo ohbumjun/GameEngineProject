@@ -1,0 +1,47 @@
+outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+
+// Debug-Windows-x64 등을 만들어낼 것이다.
+// 그리고 outputdir 은 일종의 변수처럼 활용할 것이다. 
+
+targetdir ("bin/" .. outputdir .. "/%{proj.name}")
+// proj.name = HazelGameEngine
+
+files
+    {
+        "%{proj.name}/src/**.h",
+        "%{proj.name}/src/**.cpp"
+    }
+// src 파일안에 있는 모든 h, cpp 파일을 대상으로 !
+
+filter "system::windows"
+// 해당 키워드 아래에 있는 사항은 다른 filter 를 만나지 않는 이상
+// windows 에만 적용되는 사항이다.
+
+includedirs
+    {
+        "%{proj.name}/vendor/spdlog/include"
+    }
+// 추가 포함 디렉토리
+
+defines
+        {
+            "HZ_PLATFORM_WINDOWS",
+            "HZ_BUILD_DLL",
+            "_WINDLL"
+        }
+// 전처리기에 미리 추가한 사항들
+
+postbuildcommands
+        {
+            ("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/ApplicationProject/\"")
+        }
+// Engine Project 의 빌드가 끝난 후
+// HazelGameEngine\bin\Debug-windows-x86_64\HazelGameEngine 에 있는 내용을
+// HazelGameEngine\bin\Debug-windows-x86_64\ApplicationProject 라는 폴더에 복사해주겠다는 의미이다.
+// 이를 통해 Application 이 참조하는 dll 파일을 복사해줄 수 있다.
+
+links
+    {
+        "HazelGameEngine"
+    }
+// 참조 정보 : ex) 클라이언트 -> 엔진 프로젝트
