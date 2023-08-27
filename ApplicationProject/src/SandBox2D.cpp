@@ -41,6 +41,7 @@ void SandBox2D::OnUpdate(Hazel::Timestep ts)
 	// Reset
 	{
 		Hazel::Renderer2D::ResetStats();
+
 		Hazel::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.f });
 		Hazel::RenderCommand::Clear();
 	}
@@ -48,7 +49,7 @@ void SandBox2D::OnUpdate(Hazel::Timestep ts)
 	// Render
 #if 0
 	{
-		
+
 
 		static float rotation = 0.f;
 		rotation += ts * 20.f;

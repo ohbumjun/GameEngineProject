@@ -814,7 +814,7 @@ namespace Hazel
 		RenderCommand::DrawIndexed(s_Data.QuadVertexArray);
 #endif
 	}
-
+	
 	
 	Renderer2D::Statistics Renderer2D::GetStats()
 	{
