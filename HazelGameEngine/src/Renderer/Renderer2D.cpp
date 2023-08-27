@@ -422,7 +422,7 @@ namespace Hazel
 		}
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos)
-			* glm::rotate(glm::mat4(1.f), glm::radians(rotation), { 0.f, 0.f, 1.f }) // z 축 회전
+			* glm::rotate(glm::mat4(1.f), rotation, { 0.f, 0.f, 1.f }) // z 축 회전
 			* glm::scale(glm::mat4(1.f), { size.x, size.y, 1.f });
 
 		const float texIndex = 0.f; // white texture
@@ -524,10 +524,10 @@ namespace Hazel
 			textureIndex = (float)s_Data.TextureSlotIndex;
 			s_Data.TextureSlots[s_Data.TextureSlotIndex] = texture;
 			s_Data.TextureSlotIndex += 1;
-	}
+		}
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos)
-			* glm::rotate(glm::mat4(1.f), glm::radians(rotation), { 0.f, 0.f, 1.f }) // z 축 회전
+			* glm::rotate(glm::mat4(1.f), rotation, { 0.f, 0.f, 1.f }) // z 축 회전
 			* glm::scale(glm::mat4(1.f), { size.x, size.y, 1.f });
 
 		// 시계 방향으로 4개의 정점 정보를 모두 세팅한다.

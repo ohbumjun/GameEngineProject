@@ -128,6 +128,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\mainApp.cpp" />
+    <ClCompile Include="src\ParticleSystem.cpp" />
+    <ClCompile Include="src\Random.cpp" />
     <ClCompile Include="src\SandBox2D.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -136,6 +138,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\ParticleSystem.h" />
+    <ClInclude Include="src\Random.h" />
     <ClInclude Include="src\SandBox2D.h" />
   </ItemGroup>
   <ItemGroup>

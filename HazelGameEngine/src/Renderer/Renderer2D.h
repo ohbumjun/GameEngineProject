@@ -29,6 +29,11 @@ namespace Hazel
 			const Ref<Texture2D>& texture, float tilingFactor = 1.f,
 			const glm::vec4& tintColor = glm::vec4(1.0f));
 
+		/*
+		* rotation 은 radian 형태로 client 에서 넘겨주게 할 것이다
+		* 물론, 일반 각도를 받아서 engine 단에서 그것을 변형해줄 수도 있겠지만, 이는 성능 저하를 일으킬 것이다
+		* Client 단에서 할 수 있는 사항들은 Client 가 처리할 수 있게 변경할 것이다.
+		*/
 		static void DrawRotatedQuad(const glm::vec2& pos, const glm::vec2& size, float rotation,
 			const glm::vec4& color);
 		static void DrawRotatedQuad(const glm::vec3& pos, const glm::vec2& size, float rotation,

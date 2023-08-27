@@ -56,6 +56,21 @@ namespace Hazel
 
 		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
 
+		/*
+		이미 gpu 측으로 보낸 buffer object 의 일부 data 를 update 하는 함수이다.
+		여기서 buffer object 는 다양한 type 의 data 를 담는 buffer 일 것이다 ex) texture buffer, vertex buffer...
+		이미 upload 한 buffer 전체를 replace 할 필요가 없다는 것이 최적화 관점에서 장점이다.
+
+		1st param	: target buffer object. 즉 어떤 type 의 buffer object 를 update 할 것인가
+		ex) GL_ARRAY_BUFFER : vertex buffer, GL_ELEMENT_ARRAY_BUFFER  : index buffer
+
+		2nd param : offset
+		3rd			 : update 하는 byte 의 size
+		4th			 : buffer 측으로 upload 하고자 하는 data 에 대한 pointer
+
+							즉, data 포인터 시작점으로부터 size byte 크기 만큼 target buffer 의 내용을 update 하고자 하는 것.
+							여기서 update 란 사실상 cpu 의 data 를 gpu 측으로 transfer 시키는 것을 의미한다.
+		*/
 		glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);
 	}
 

@@ -21,9 +21,21 @@
     <ClCompile Include="src\SandBox2D.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Random.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ParticleSystem.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\SandBox2D.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ParticleSystem.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Random.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

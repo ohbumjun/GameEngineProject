@@ -12,6 +12,7 @@ namespace Hazel
 		:
 		m_Rotation(rotation),
 		m_AspectRatio(aspectRatio),
+		m_Bounds({ -m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel }),
 		m_Camera (-1.f * m_AspectRatio* m_ZoomLevel, m_AspectRatio* m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel)
 	{
 	}
@@ -72,6 +73,8 @@ namespace Hazel
 
 		m_ZoomLevel = std::max(m_ZoomLevel, 0.25f);
 
+		m_Bounds = { -m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel };
+		
 		m_Camera.SetProjection(-1.f * m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
 
         return false;
@@ -81,6 +84,8 @@ namespace Hazel
     {
 		m_AspectRatio = (float)e.GetWidth() / (float)e.GetHeight();
 		
+		m_Bounds = { -m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel };
+
 		// 좌우 크기 조절 => 대상들 크기 변화 X
 		// 상하 크기 조절 => 대상들 크기 변화 (비례)
 		
