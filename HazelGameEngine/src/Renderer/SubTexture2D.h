@@ -13,7 +13,11 @@ namespace Hazel
 		const Ref<Texture2D> GetTexture() const { return m_Texture; }
 		const glm::vec2* GetTexCoords() const { return m_TexCoords; }
 
-		static Ref<SubTexture2D> CreateFromCoords(const Ref<Texture2D>& texture, const glm::vec2& coords, const glm::vec2& spriteSize);
+		/*
+		cellSize			: 기준이 되는 sprite size
+		spriteSize		:  각 Grid 의 크기 ex) cellSize 128, 128 일 때, 128, 256 짜리 크기 Sprite 를 표현하기 위해 spriteSize 는 1,2 가 된다.
+		*/
+		static Ref<SubTexture2D> CreateFromCoords(const Ref<Texture2D>& texture, const glm::vec2& coords, const glm::vec2& cellSize, const glm::vec2& spriteSize = { 1,1 });
 	private :
 		Ref<Texture2D> m_Texture;
 

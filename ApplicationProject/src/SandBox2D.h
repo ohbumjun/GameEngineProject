@@ -23,6 +23,8 @@ private:
 	Hazel::Ref<Hazel::Texture2D> m_CheckerboardTexture;
 	Hazel::Ref<Hazel::Texture2D> m_SpriteSheet;
 	Hazel::Ref<Hazel::SubTexture2D> m_TextureStairs;
+	Hazel::Ref<Hazel::SubTexture2D> m_TextureTree;
+	Hazel::Ref<Hazel::SubTexture2D> m_TextureBarrel;
 	ParticleProps m_Particle;
 	ParticleSystem m_ParticleSystem;
 };

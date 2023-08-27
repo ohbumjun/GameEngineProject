@@ -14,6 +14,8 @@ void SandBox2D::OnAttach()
 	m_CheckerboardTexture = Hazel::Texture2D::Create("assets/textures/sample.png");
 	m_SpriteSheet				= Hazel::Texture2D::Create("assets/game/textures/RPGpack_sheet_2X.png");
 	m_TextureStairs				= Hazel::SubTexture2D::CreateFromCoords(m_SpriteSheet, {7, 6}, {128, 128});
+	m_TextureBarrel				= Hazel::SubTexture2D::CreateFromCoords(m_SpriteSheet, {8, 2}, {128, 128});
+	m_TextureTree				= Hazel::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 2, 1 }, { 128, 128 }, { 1,2 });
 
 	// Init Particle
 	m_Particle.ColorBegin = { 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
@@ -111,6 +113,8 @@ void SandBox2D::OnUpdate(Hazel::Timestep ts)
 	{
 		Hazel::Renderer2D::BeginScene(m_CameraController.GetCamera());
 		Hazel::Renderer2D::DrawQuad({ 4.5f, 3.5f, -0.1f }, { 1.5f, 1.5f }, m_TextureStairs, 1.f, { 0.2f, 0.2f, 0.8f, 1.0f });
+		Hazel::Renderer2D::DrawQuad({ 4.5f, 5.5f, -0.1f }, { 1.5f, 1.5f }, m_TextureBarrel, 1.f, { 0.2f, 0.2f, 0.8f, 1.0f });
+		Hazel::Renderer2D::DrawQuad({ 1.5f, 5.5f, -0.1f }, { 1.5f, 1.5f }, m_TextureTree, 1.f, { 0.2f, 0.2f, 0.8f, 1.0f });
 		Hazel::Renderer2D::EndScene();
 	}
 }

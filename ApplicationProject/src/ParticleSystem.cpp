@@ -37,7 +37,7 @@ void ParticleSystem::OnRender(Hazel::OrthographicCamera& camera)
 
 	for (auto& particle : m_ParticlePool)
 	{
-		if (!particle.Active && particle.PrevFrameSize < 0.0f)
+		if (!particle.Active)
 		{
 			continue;
 		}
@@ -47,7 +47,7 @@ void ParticleSystem::OnRender(Hazel::OrthographicCamera& camera)
 		float size = glm::lerp(particle.SizeEnd, particle.SizeBegin, life);
 		particle.PrevFrameSize = size;
 		glm::vec4 color = glm::lerp(particle.ColorEnd, particle.ColorBegin, life);
-		//color.a = color.a * life;
+		color.a = color.a * life;
 
 		// 위쪽에다 그리기 위함
 		// 현재  depth testing 을 적용하는 중이다. 같은 z 깊이라면, 그려지지 않는다.
@@ -81,5 +81,8 @@ void ParticleSystem::Emit(const ParticleProps& particleProps)
 	particle.SizeEnd = particleProps.SizeEnd;
 
 	// m_PoolIndex : uint32 이기 때문에 음수가 되지 않는다.
-	m_PoolIndex = --m_PoolIndex % m_ParticlePool.size();
+	bool h = false;
+	--m_PoolIndex;
+	m_PoolIndex = m_PoolIndex >= m_ParticlePool.size() ? m_ParticlePool.size() - 1 : m_PoolIndex;
+	bool h2 = true;
 }
