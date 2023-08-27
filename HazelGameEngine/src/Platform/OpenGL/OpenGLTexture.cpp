@@ -99,7 +99,7 @@ namespace Hazel
 
 		// 잘못 읽거나 (a 를 r 로 읽거나) / overflow (더 많은 데이터 제공)
 
-		// buffer data 를 gpu 가 인식할 수 있는 형태로 만들기
+		// texture object 를 만들어주는 함수
 		// + 만들어낸 Texture Object 를 가리키는 ID 리턴
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
 

@@ -272,6 +272,9 @@ void SandBox2D::OnImGuiRender()
 
 			ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
 
+			uint32_t textureID = m_SpriteSheet->GetRendererID();
+			ImGui::Image((void*)textureID, ImVec2{64.f, 64.f});
+
 			ImGui::End();
 		}
 
