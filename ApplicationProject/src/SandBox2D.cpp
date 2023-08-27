@@ -77,13 +77,19 @@ void SandBox2D::OnUpdate(Hazel::Timestep ts)
 			auto height = Hazel::Application::Get().GetWindow().GetHeight();
 
 			auto bounds = m_CameraController.GetBounds();
-			auto pos = m_CameraController.GetCamera().GetPosition();
+			auto pos		= m_CameraController.GetCamera().GetPosition();
 			x = (x / width) * bounds.GetWidth() - bounds.GetWidth() * 0.5f;
 			y = bounds.GetHeight() * 0.5f - (y / height) * bounds.GetHeight();
 			m_Particle.Position = { x + pos.x, y + pos.y };
+			
 			for (int i = 0; i < 5; i++)
+			{
 				m_ParticleSystem.Emit(m_Particle);
+			}
 		}
+
+		m_ParticleSystem.OnUpdate(ts);
+		m_ParticleSystem.OnRender(m_CameraController.GetCamera());
 	}
 }
 
