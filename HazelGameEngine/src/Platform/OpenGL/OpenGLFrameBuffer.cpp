@@ -24,35 +24,83 @@ namespace Hazel
 		// - allows you to perform various rendering operations and manipulations before displaying the final result on the screen
 		glCreateFramebuffers(1, &m_RendererID);
 
+		glBindFramebuffer(GL_TEXTURE_2D, m_RendererID);
+
+		// 아래 과정은, FrameBuffer 를 위한 텍스처를 생성하는 과정이다.
+		// 일반적인 텍스쳐 생성과정과 거의 동일하다. 다만, 텍스처의 크기를 스크린 크기로 설정한다는 것 + 마지막 nullptr 인자를 넣는다는 것
+		// 해당 텍스쳐에 대해 우리는 오직 메모리만 할당하고, 실제로 채워넣지는 않는다. 왜냐하면, 텍스처를 채우는 행위는 우리가 frameBuffer 에
+		// 렌더링 하면, 그때 가서 텍스쳐가 채워지는 것이기 때문이다.
+		// 그리고 일반적인 Texture 생성때와 달리, wrapping method 나 mipmapping 을 신경쓰지 않아도 된다는 장점이 있다.
+
 		// texture object 를 만들어주는 함수
 		// + 만들어낸 Texture Object 를 가리키는 ID 리턴
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_ColorAttachment);
+		glBindTexture(GL_TEXTURE_2D,  m_ColorAttachment);
 
-		// glTexImage2D : texture object 에 2D texture 를 명시하거나 load 할 때 사용하는 함수로
-		//							pixel data 를 texture 에 upload 할 수 있고, 해당 texture 의 다양한 속성 ex) format, mipmapping 등을 정의할 수 있게 한다.
-		//						- image, pixel data 를 그래픽 카드 메모리에 upload 한다 (cpu -> gpu)
-		//						- 해당 image 를 만든 이후, rendering 에 사용할 수 있다. ex) texture 를 geometry 표면에 입히기
+		// Texturing 을 통해 image array 가, shader 에 의해 읽게 될 수 있다.
+		// glTexImage2D : Texture image 를 define 하기 위해 호출하는 함수. 해당 texture image 의 각종 속성을 parameter 를 통해 정한다.
 		glTexImage2D(
 			GL_TEXTURE_2D, 
-			0, // mip map level
-			GL_RGBA8,  // texture data 의 format ex) 1byte for each channel
+			0,									 // mip map level
+			GL_RGBA8,					// texture data 의 format ex) 1byte for each channel
 			m_Specification.Width ,  // width of texture image
 			m_Specification.Height,  // height of texture image
 			0,									// Border width
 			GL_RGBA,						// Format of pixel data
 			GL_UNSIGNED_BYTE,		// Data type of pixel data
-			nullptr);							// pointer to pixel data
+			nullptr);							// pointer to pixel data		: 마지막 3개 인자는 image 가 메모리 상에서 어떻게 표현되는지를 정의한다.
 
 
-		glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,		GL_LINEAR);
+		glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,	GL_LINEAR);
 	
+		// attach a texture image to a framebuffer object
 		glFramebufferTexture2D(
-			GL_FRAMEBUFFER,
-			GL_COLOR_ATTACHMENT10,
+			GL_FRAMEBUFFER,					// Specifies the framebuffer target
+			// GL_DEPTH_ATTACHMENT		:  depth texture 를 framebuffer 객체에 첨부
+			// GL_STENCIL_ATTACHMENT	:  stencil texture 
+			GL_COLOR_ATTACHMENT0,	// attachment :  specifies whether the texture image should be attached to the framebuffer object's color, depth, or stencil buffer
 			GL_TEXTURE_2D,
-			m_ColorAttachment,
-			0);
+			m_ColorAttachment,				// texture : Specifies the texture object whose image is to be attached
+			0);										// mip map level
+
+		// Depth Buffer
+		glCreateTextures(GL_TEXTURE_2D, 1, &m_DepthAttachment);
+		glBindTexture(GL_TEXTURE_2D, m_DepthAttachment);
+
+		glTexStorage2D(GL_TEXTURE_2D, 
+			1, 
+			GL_DEPTH24_STENCIL8, 
+			m_Specification.Width, 
+			m_Specification.Height);
+
+		glFramebufferTexture2D(
+			GL_FRAMEBUFFER,					// Specifies the framebuffer target
+			// GL_DEPTH_ATTACHMENT		:  depth texture 를 framebuffer 객체에 첨부
+			// GL_STENCIL_ATTACHMENT	:  stencil texture 
+			GL_DEPTH_STENCIL_ATTACHMENT,	// attachment :  specifies whether the texture image should be attached to the framebuffer object's color, depth, or stencil buffer
+			GL_TEXTURE_2D,
+			m_DepthAttachment,				// texture : Specifies the texture object whose image is to be attached
+			0);										// mip map level
+
+
+		// Check
+		HZ_CORE_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "FrameBuffer is complete");
+
+
+		// Unbind custom frameBuffer
+		// -> 기본 frame buffer 를 활성화 한다.
+		glBindFramebuffer(GL_TEXTURE_2D, 0);
+	}
+
+	void OpenGLFrameBuffer::Bind()
+	{
+		glBindFramebuffer(GL_TEXTURE_2D, m_RendererID);
+	}
+
+	void OpenGLFrameBuffer::UnBind()
+	{
+		glBindFramebuffer(GL_TEXTURE_2D, 0);
 	}
 
 }

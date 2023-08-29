@@ -30,6 +30,7 @@
 #include "Renderer/RenderCommand.h"
 #include "Renderer/Buffer.h"
 #include "Renderer/Shader.h"
+#include "Renderer/FrameBuffer.h"
 #include "Renderer/VertexArray.h"
 #include "Renderer/Texture.h"
 #include "Renderer/SubTexture2D.h"

@@ -19,13 +19,18 @@ public:
 private:
 	// Temp
 	Hazel::OrthographicCameraController m_CameraController;
+
 	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.f };
 	Hazel::Ref<Hazel::Texture2D> m_CheckerboardTexture;
 	Hazel::Ref<Hazel::Texture2D> m_SpriteSheet;
+
 	Hazel::Ref<Hazel::SubTexture2D> m_TextureStairs;
 	Hazel::Ref<Hazel::SubTexture2D> m_TextureTree;
 	Hazel::Ref<Hazel::SubTexture2D> m_TextureGrass;
 	Hazel::Ref<Hazel::SubTexture2D> m_TextureBarrel;
+
+	Hazel::Ref<Hazel::FrameBuffer> m_FrameBuffer;
+
 	ParticleProps m_Particle;
 	ParticleSystem m_ParticleSystem;
 

@@ -61,6 +61,11 @@ void SandBox2D::OnAttach()
 	m_Particle.VelocityVariation = { 3.0f, 1.0f };
 	m_Particle.Position = { 0.0f, 0.0f };
 
+	Hazel::FrameBufferSpecification fbSpec{};
+	fbSpec.Width = 1280;
+	fbSpec.Height = 720;
+	m_FrameBuffer = Hazel::FrameBuffer::Create(fbSpec);
+
 	m_CameraController.SetZoomLevel(0.25f);
 }
 
@@ -78,9 +83,10 @@ void SandBox2D::OnUpdate(Hazel::Timestep ts)
 	}
 
 	// Reset
+	Hazel::Renderer2D::ResetStats();
+	
 	{
-		Hazel::Renderer2D::ResetStats();
-
+		m_FrameBuffer->Bind();
 		Hazel::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.f });
 		Hazel::RenderCommand::Clear();
 	}
@@ -177,6 +183,9 @@ void SandBox2D::OnUpdate(Hazel::Timestep ts)
 		// Hazel::Renderer2D::DrawQuad({ 0.5f, 1.5f, -0.1f }, { 1.5f, 1.5f }, m_TextureGrass, 1.f, { 0.2f, 0.2f, 0.8f, 1.0f });
 		Hazel::Renderer2D::EndScene();
 	}
+
+
+	m_FrameBuffer->UnBind();
 }
 
 void SandBox2D::OnEvent(Hazel::Event& event)
@@ -186,8 +195,6 @@ void SandBox2D::OnEvent(Hazel::Event& event)
 
 void SandBox2D::OnImGuiRender()
 {
-	
-
 	{
 		static bool dockSpaceOpen = true;
 		bool* p_open = &dockSpaceOpen;
@@ -272,8 +279,9 @@ void SandBox2D::OnImGuiRender()
 
 			ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
 
-			uint32_t textureID = m_SpriteSheet->GetRendererID();
-			ImGui::Image((void*)textureID, ImVec2{64.f, 64.f});
+			
+			uint32_t textureID = m_FrameBuffer->GetColorAttachmentRendererID();
+			ImGui::Image((void*)textureID, ImVec2{1280.f, 720.f});
 
 			ImGui::End();
 		}
