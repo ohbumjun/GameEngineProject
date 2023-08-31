@@ -16,7 +16,7 @@ namespace Hazel
 	// make it as single ton
 	Application* Application::s_Instance = nullptr;
 
-	Application::Application() 
+	Application::Application(const std::string& name)
 	{
 		HZ_PROFILE_FUNCTION();
 
@@ -25,7 +25,7 @@ namespace Hazel
 		s_Instance = this;
 
 		// Window 생성자 호출 => WIndowsWindow 생성
-		m_Window = std::unique_ptr<Window>(Window::Create());
+		m_Window = std::unique_ptr<Window>(Window::Create(WindowProps(name)));
 
 		// WindowsWindow.WindowsData.EventCallback 에 해당 함수 세팅
 		m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));

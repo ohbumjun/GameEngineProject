@@ -36,14 +36,14 @@ namespace Hazel
 	{
 		glfwPollEvents();
 
-		m_Context->SwapBuffers();
-
 		// refresh window 
 		// 왜 m_Context->SwapBuffers() 안에 해당 함수를 옮겨놓는가 ?
 		// 여러 render api 에 맞게 동작시키기 위해서 일종의 Renderer 라는 Wrapper 로
 		// 한번 더 감싸는 것이다. 아래의 함수는 open gl 이라는 render api 에만
 		// 한정되어 동작하는 함수이기 때문이다.
 		// glfwSwapBuffers(m_Window);
+
+		m_Context->SwapBuffers();
 
 	}
 

@@ -20,7 +20,7 @@ namespace Hazel
 	class HAZEL_API Application
 	{
 	public:
-		Application();
+		Application(const std::string& name = "DefaultName");
 		virtual ~Application();
 		void Run();
 		void Close();
