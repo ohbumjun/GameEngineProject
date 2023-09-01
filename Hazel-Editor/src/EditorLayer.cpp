@@ -149,7 +149,6 @@ namespace Hazel
 			Hazel::Renderer2D::EndScene();
 		}
 
-
 		m_FrameBuffer->UnBind();
 	}
 
@@ -160,7 +159,7 @@ namespace Hazel
 
 	void EditorLayer::OnImGuiRender()
 	{
-		static bool dockingEnabled = false;
+		static bool dockingEnabled = true;
 
 		if (dockingEnabled)
 		{
@@ -233,6 +232,9 @@ namespace Hazel
 			ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
 
 			{
+				// Get rid of padding
+				ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0,0 });
+
 				ImGui::Begin("ViewPort");
 
 				ImVec2 viewPortPanelSize = ImGui::GetContentRegionAvail();
@@ -252,6 +254,7 @@ namespace Hazel
 				ImGui::Image((void*)textureID, ImVec2{ (float)m_ViewPortSize.x, (float)m_ViewPortSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
 				ImGui::End();
+				ImGui::PopStyleVar();
 			}
 			ImGui::End();
 

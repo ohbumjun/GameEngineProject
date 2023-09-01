@@ -109,11 +109,6 @@ namespace Hazel
 	void OpenGLFrameBuffer::Bind()
 	{
 		glBindFramebuffer(GL_TEXTURE_2D, m_RendererID);
-
-		// 해당 함수는, 이제부터 해당 FrameBuffer 에 그리겠다는 의미이다.
-		// 그렇다면 우리의 ViewPort 또한 FrameBuffer 의 Size 에 맞게 그리면 된다.
-		glViewport(0, 0, m_Specification.Width, m_Specification.Height);
-
 	}
 
 	void OpenGLFrameBuffer::UnBind()
