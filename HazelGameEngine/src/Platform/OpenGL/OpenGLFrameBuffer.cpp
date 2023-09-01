@@ -14,11 +14,24 @@ namespace Hazel
 	OpenGLFrameBuffer::~OpenGLFrameBuffer()
 	{
 		glDeleteFramebuffers(1, &m_RendererID);
+		glDeleteTextures(1, &m_ColorAttachment);
+		glDeleteTextures(1, &m_DepthAttachment);
 	}
 
 	// State is not valid, so recreate it
 	void OpenGLFrameBuffer::Invalidate()
 	{
+		// RenderID 가 이미 세팅된 상황이라면
+		if (m_RendererID != 0)
+		{
+			// 기존에 세팅되었던 것을 모두 지운다.
+			glDeleteFramebuffers(1, &m_RendererID);
+			glDeleteTextures(1, &m_ColorAttachment);
+			glDeleteTextures(1, &m_DepthAttachment);
+
+			// 새로운 FrameBuffer 를 아래 함수들을 통해 만든다.
+		}
+
 		// Used to create framebuffer objects
 		// A framebuffer is a memory buffer that stores pixel data for display
 		// - allows you to perform various rendering operations and manipulations before displaying the final result on the screen
@@ -103,5 +116,12 @@ namespace Hazel
 		glBindFramebuffer(GL_TEXTURE_2D, 0);
 	}
 
+	void OpenGLFrameBuffer::Resize(uint32_t width, uint32_t height)
+	{
+		m_Specification.Width = width;
+		m_Specification.Height = height;
+
+		Invalidate();
+	}
 }
 

@@ -31,6 +31,8 @@ namespace Hazel
 
 		Ref<FrameBuffer> m_FrameBuffer;
 
+		glm::vec2 m_ViewPortSize;
+
 		uint32_t m_MapWidth;
 		uint32_t m_MapHeight;
 		std::unordered_map<char, Ref<SubTexture2D>> m_TextureMap;

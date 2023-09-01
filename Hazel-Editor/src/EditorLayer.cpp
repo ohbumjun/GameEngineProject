@@ -160,7 +160,7 @@ namespace Hazel
 
 	void EditorLayer::OnImGuiRender()
 	{
-		static bool dockingEnabled = true;
+		static bool dockingEnabled = false;
 
 		if (dockingEnabled)
 		{
@@ -232,11 +232,27 @@ namespace Hazel
 			ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 			ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
 
-			uint32_t textureID = m_CheckerboardTexture->GetRendererID();
-			// 기본 imgui : min (0,0) ~ max(1,1)
-			// opengl 과 imgui 는 texture uv 의 y 가 반대이다
-			// 따라서 이를 적용해주기 위해 min(0,1), ~ max(1,0) 으로 세팅한다.
-			ImGui::Image((void*)textureID, ImVec2{ 1280.0f, 720.0f }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+			{
+				ImGui::Begin("ViewPort");
+
+				ImVec2 viewPortPanelSize = ImGui::GetContentRegionAvail();
+
+				if (m_ViewPortSize != *((glm::vec2*)&viewPortPanelSize))
+				{
+					// Viewport resize 가 일어난 것이므로, 해당 size 에 맞게 frame buffer 를 다시 생성할 것이다.
+					m_FrameBuffer->Resize(viewPortPanelSize.x, viewPortPanelSize.y);
+				}
+				m_ViewPortSize = { (uint32_t)viewPortPanelSize.x, (uint32_t)viewPortPanelSize.y };
+
+				uint32_t textureID = m_FrameBuffer->GetColorAttachmentRendererID();
+
+				// 기본 imgui : min (0,0) ~ max(1,1)
+				// opengl 과 imgui 는 texture uv 의 y 가 반대이다
+				// 따라서 이를 적용해주기 위해 min(0,1), ~ max(1,0) 으로 세팅한다.
+				ImGui::Image((void*)textureID, ImVec2{ (float)m_ViewPortSize.x, (float)m_ViewPortSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+
+				ImGui::End();
+			}
 			ImGui::End();
 
 			ImGui::End();
@@ -255,12 +271,14 @@ namespace Hazel
 
 			ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
 
-			uint32_t textureID = m_CheckerboardTexture->GetRendererID();
+			uint32_t textureID = m_FrameBuffer->GetColorAttachmentRendererID();
+			// uint32_t textureID = m_CheckerboardTexture->GetRendererID();
 
 			// 기본 imgui : min (0,0) ~ max(1,1)
 			// opengl 과 imgui 는 texture uv 의 y 가 반대이다
 			// 따라서 이를 적용해주기 위해 min(0,1), ~ max(1,0) 으로 세팅한다.
-			ImGui::Image((void*)textureID, ImVec2{ 1280.0f, 720.0f }, ImVec2{0, 1}, ImVec2{1, 0});
+			// ImGui::Image((void*)textureID, ImVec2{ (float)m_ViewPortSize .x, (float)m_ViewPortSize .y}, ImVec2{0, 1}, ImVec2{1, 0});
+			ImGui::Image((void*)textureID, ImVec2{ (float)1280, (float)720}, ImVec2{0, 1}, ImVec2{1, 0});
 			ImGui::End();
 		}
 	}
