@@ -8,6 +8,7 @@ namespace Hazel
 	{
 		uint32_t Width, Height;
 		// FramebufferFormat : ex) Color Buffer, Depth Buffer, Shadow Map...
+		
 		uint32_t Samples = 1;
 
 		// false : glBindFrameBuffer(0) 와 같은 의미이다

@@ -31,7 +31,7 @@ namespace Hazel
 
 		Ref<FrameBuffer> m_FrameBuffer;
 
-		glm::vec2 m_ViewPortSize;
+		glm::vec2 m_ViewportSize;
 
 		uint32_t m_MapWidth;
 		uint32_t m_MapHeight;
