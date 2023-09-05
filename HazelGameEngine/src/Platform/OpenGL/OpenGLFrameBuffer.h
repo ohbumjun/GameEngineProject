@@ -8,7 +8,7 @@ namespace Hazel
 	{
 	public :
 		OpenGLFrameBuffer(const FrameBufferSpecification& spec);
-		virtual ~OpenGLFrameBuffer();
+		virtual ~OpenGLFrameBuffer() override;
 
 		virtual uint32_t GetColorAttachmentRendererID() const override { return m_ColorAttachment; };
 		virtual const FrameBufferSpecification& GetSpecification() override {return m_Specification;}
