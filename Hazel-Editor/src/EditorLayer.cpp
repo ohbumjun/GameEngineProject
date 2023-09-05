@@ -239,6 +239,15 @@ namespace Hazel
 		{
 			m_FrameBuffer->Resize((uint32_t)viewportPanelSize.x, (uint32_t)viewportPanelSize.y);
 			m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
+			
+			/*
+			FrameBuffer 에 그려진 내용은 CameraController 의 Camera 로 부터
+			보여지는 내용이다.
+
+			전체 Window 를 Resize 하던, 해당 ViewPort 만 Resize 하던
+			어떤 이유로 인해 ViewPort  크기가 변하면 
+			그에 맞게 Viewport 크기도 변화해야 할 것이다.
+			*/
 			m_CameraController.OnResize(viewportPanelSize.x, viewportPanelSize.y);
 		}
 		uint32_t textureID = m_FrameBuffer->GetColorAttachmentRendererID();

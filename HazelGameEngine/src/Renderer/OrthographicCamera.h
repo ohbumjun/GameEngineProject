@@ -4,8 +4,6 @@
 
 namespace Hazel
 {
-	
-
 	// 2d camera
 	class OrthographicCamera
 	{

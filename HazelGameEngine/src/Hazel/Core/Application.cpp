@@ -103,7 +103,7 @@ namespace Hazel
 		EventDispatcher dispatcher(e);
 
 		// e 가 WindowCloseEvent 라면 !! OnWindowClose 함수를 실행하게 한다
-		// 만약 아니라면 실행 X
+		// 만약 아니라면 내부적으로 실행 X
 		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClose));
 		dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(OnWindowResize));
 
