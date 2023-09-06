@@ -23,6 +23,8 @@ namespace Hazel
 		void Begin();
 		void End();
 
+		void BlockEvents(bool block);
+
 		/*
 		#include "backends/imgui_impl_opengl3.h"
 		#include "backends/imgui_impl_glfw.h" 
@@ -40,6 +42,7 @@ namespace Hazel
 		*/
 
 	private:
+		bool m_BlockEvents = true;
 		float m_Time;
 	};
 }

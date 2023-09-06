@@ -11,6 +11,13 @@
 
 namespace Hazel
 {
+	/*
+	- std::bind : std::function 객체 리턴
+	ex) BIND_EVENT_FN(OnEvent)
+		- Application Class 의 OnEvent 함수정보를 담은 std::function 객체를 생성
+		- 현재 Application::s_Instance 라는 객체의 멤버함수 실행
+		- 해당 std::function 은 인자를 하나 받는 형태가 된다.
+	*/
 #define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 
 	// make it as single ton
@@ -113,11 +120,12 @@ namespace Hazel
 
 		// 가장 마지막에 그려지는 Layer 들. 즉, 화면 가장 위쪽에 있는 Layer 들 부터
 		// 차례로 이벤트 처리를 한다.
+		// 즉, stack 의 뒤에서 앞으로, 위에서 아래로, 순서로 event 를 처리한다.
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin(); )
 		{
-			(*--it)->OnEvent(e);
 			if (e.m_Handled)
 				break;
+			(*--it)->OnEvent(e);
 		}
 	};
 	void Application::PushLayer(Layer* layer)

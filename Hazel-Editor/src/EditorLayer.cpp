@@ -71,6 +71,8 @@ namespace Hazel
 		HZ_PROFILE_FUNCTION();
 
 		// Update
+		// m_ViewportFocused ? void ImGuiLayer::OnEvent 함수 참고
+		if (m_ViewportFocused)
 		{
 			m_CameraController.OnUpdate(ts);
 		}
@@ -233,6 +235,9 @@ namespace Hazel
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 		ImGui::Begin("Viewport");
+
+		m_ViewportFocused = ImGui::IsWindowFocused();
+
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 
 		if (m_ViewportSize != *((glm::vec2*)&viewportPanelSize))

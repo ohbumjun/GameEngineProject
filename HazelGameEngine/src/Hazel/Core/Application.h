@@ -30,6 +30,8 @@ namespace Hazel
 		void PushOverlay(Layer* layer);
 		void PopLayer(Layer* layer);
 
+		ImGuiLayer* GetImGuiLayer() const {return m_ImGuiLayer;};
+
 		inline Window& GetWindow() { return *m_Window; }
 
 		inline static Application& Get()

@@ -31,6 +31,8 @@ namespace Hazel
 
 		Ref<FrameBuffer> m_FrameBuffer;
 
+		bool m_ViewportFocused = false;
+
 		glm::vec2 m_ViewportSize = { 0,0 };
 
 		uint32_t m_MapWidth;

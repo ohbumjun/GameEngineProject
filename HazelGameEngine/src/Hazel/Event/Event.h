@@ -78,7 +78,6 @@ namespace Hazel
 		{
 			return GetCategoryFlags() & category;
 		}
-	protected :
 		/*
 		해당 변수가 true 라면 이미 다른 Layer 에서 해당 event 를 다뤘으니
 		현재 Layer 에서는 해당 Event 를 다루지 않겠다는 의미이다.
