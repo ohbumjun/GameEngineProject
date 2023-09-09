@@ -225,80 +225,10 @@ namespace Hazel
 	{
 		HZ_PROFILE_FUNCTION();
 
-		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
-		{
-			FlushAndReset();
-		}
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos)
+			* glm::scale(glm::mat4(1.f), { size.x, size.y, 1.f });
 
-#if STATISTICS
-
-#endif
-
-		const float texIndex = 0.f; // white texture
-		const float tilingFactor = 1.f;
-
-		// 시계 방향으로 4개의 정점 정보를 모두 세팅한다.
-		// 왼쪽 아래
-		s_Data.QuadVertexBufferPtr->Position = pos;
-		s_Data.QuadVertexBufferPtr->Color = color;
-		s_Data.QuadVertexBufferPtr->TexCoord = {0.f, 0.f}; 
-		s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
-		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
-		s_Data.QuadVertexBufferPtr++;
-
-		// 오른쪽 아래
-		s_Data.QuadVertexBufferPtr->Position = { pos.x + size.x, pos.y, 0.f };
-		s_Data.QuadVertexBufferPtr->Color = color;
-		s_Data.QuadVertexBufferPtr->TexCoord = { 1.f, 0.f };
-		s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
-		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
-		s_Data.QuadVertexBufferPtr++;
-
-		// 오른쪽 위
-		s_Data.QuadVertexBufferPtr->Position = { pos.x + size.x, pos.y + size.y, 0.f };
-		s_Data.QuadVertexBufferPtr->Color = color;
-		s_Data.QuadVertexBufferPtr->TexCoord = { 1.f, 1.f };
-		s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
-		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
-		s_Data.QuadVertexBufferPtr++;
-
-		// 왼쪽 위
-		s_Data.QuadVertexBufferPtr->Position = { pos.x, pos.y + size.y, 0.f };
-		s_Data.QuadVertexBufferPtr->Color = color;
-		s_Data.QuadVertexBufferPtr->TexCoord = { 0.f, 1.f };
-		s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
-		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
-		s_Data.QuadVertexBufferPtr++;
-
-		s_Data.QuadIndexCount += 6;
-
-#if STATISTICS
-		s_Data.stats.QuadCount++;
-#endif
-
-		/*
-		아래는 Batch Rendering 이 아니라, 하나의 단일 Quad 를 그릴 경우 코드
-		Batch Rendering 에서는 EndScene 에서 한꺼번에 처리해줄 것이다.
-		*/
-#if OLD_PATH
-		// 혹시나 문제 생기면, 여기에 Shader 한번 더 bind
-		s_Data.TextureShader->SetFloat4("u_Color", color);
-		s_Data.TextureShader->SetFloat("m_TilingFactor", 1.0f);
-
-		// Bind Default White Texture
-		s_Data.WhiteTexture->Bind();
-
-		// x,y 축 기준으로만 scale 을 조정할 것이다.
-		glm::mat4 scale = glm::scale(glm::mat4(1.f), {size.x, size.y, 1.0f});
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * 
-			scale;
-
-		s_Data.TextureShader->SetMat4("u_Transform", transform);
-
-		// actual draw call
-		s_Data.QuadVertexArray->Bind();
-		RenderCommand::DrawIndexed(s_Data.QuadVertexArray);
-#endif
+		DrawQuad(transform, color);
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, 
@@ -314,73 +244,10 @@ namespace Hazel
 	{
 		HZ_PROFILE_FUNCTION();
 
-		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
-		{
-			FlushAndReset();
-		}
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos)
+			* glm::scale(glm::mat4(1.f), { size.x, size.y, 1.f });
 
-		constexpr glm::vec4 color = { 1.f, 1.f, 1.f, 1.f };
-
-		// 현재 인자로 들어온 Texture 에 대한 s_Data.TextureSlot 내 Texture Index 를 찾아야 한다.
-		float textureIndex = 0.f;
-
-		for (uint32_t i = 0; i < s_Data.TextureSlotIndex; ++i)
-		{
-			// Texture2D& compTexture = *s_Data.TextureSlots[i].get();
-
-			if (*s_Data.TextureSlots[i].get() == *texture.get())
-			{
-				textureIndex = (float)i;
-				break;
-			}
-		}
-
-		// new texture
-		if (textureIndex == 0.f)
-		{
-			textureIndex = (float)s_Data.TextureSlotIndex;
-			s_Data.TextureSlots[s_Data.TextureSlotIndex] = texture;
-			s_Data.TextureSlotIndex += 1;
-		}
-
-		// 시계 방향으로 4개의 정점 정보를 모두 세팅한다.
-		// 왼쪽 아래
-		s_Data.QuadVertexBufferPtr->Position = pos;
-		s_Data.QuadVertexBufferPtr->Color = color;
-		s_Data.QuadVertexBufferPtr->TexCoord = { 0.f, 0.f };
-		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
-		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
-		s_Data.QuadVertexBufferPtr++;
-
-		// 오른쪽 아래
-		s_Data.QuadVertexBufferPtr->Position = { pos.x + size.x, pos.y, 0.f };
-		s_Data.QuadVertexBufferPtr->Color = color;
-		s_Data.QuadVertexBufferPtr->TexCoord = { 1.f, 0.f };
-		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
-		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
-		s_Data.QuadVertexBufferPtr++;
-
-		// 오른쪽 위
-		s_Data.QuadVertexBufferPtr->Position = { pos.x + size.x, pos.y + size.y, 0.f };
-		s_Data.QuadVertexBufferPtr->Color = color;
-		s_Data.QuadVertexBufferPtr->TexCoord = { 1.f, 1.f };
-		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
-		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
-		s_Data.QuadVertexBufferPtr++;
-
-		// 왼쪽 위
-		s_Data.QuadVertexBufferPtr->Position = { pos.x, pos.y + size.y, 0.f };
-		s_Data.QuadVertexBufferPtr->Color = color;
-		s_Data.QuadVertexBufferPtr->TexCoord = { 0.f, 1.f };
-		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
-		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
-		s_Data.QuadVertexBufferPtr++;
-
-		s_Data.QuadIndexCount += 6;
-
-#if STATISTICS
-		s_Data.stats.QuadCount++;
-#endif
+		DrawQuad(transform, texture, tilingFactor, tintColor);
 
 #if OLD_PATH
 		s_Data.TextureShader->Bind();
@@ -426,7 +293,6 @@ namespace Hazel
 		}
 
 		constexpr glm::vec4 color = { 1.f, 1.f, 1.f, 1.f };
-		// constexpr glm::vec2 textureCoords[] = { {0.f, 0.f}, {1.f, 0.f} ,{1.f, 1.f}, {0.f, 1.f} };
 		const glm::vec2* textureCoords = subTexture->GetTexCoords();
 		const Ref<Texture2D> texture = subTexture->GetTexture();
 
@@ -515,6 +381,103 @@ namespace Hazel
 		RenderCommand::DrawIndexed(s_Data.QuadVertexArray);
 #endif
 	}
+
+	void Renderer2D::DrawQuad(const glm::mat4& transform, const glm::vec4& color)
+	{
+		HZ_PROFILE_FUNCTION();
+
+		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
+		{
+			FlushAndReset();
+		}
+
+		constexpr glm::vec2 textureCoords[] = { {0.f, 0.f}, {1.f, 0.f} ,{1.f, 1.f}, {0.f, 1.f} };
+
+		const float texIndex = 0.f; // white texture
+		const float tilingFactor = 1.f;
+
+		// 시계 방향으로 4개의 정점 정보를 모두 세팅한다.
+		// 왼쪽 아래
+		// 오른쪽 아래
+		// 오른쪽 위
+		// 왼쪽 위
+
+		constexpr size_t quadVertexCnt = 4;
+		for (size_t i = 0; i < quadVertexCnt; ++i)
+		{
+			s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[i];
+			s_Data.QuadVertexBufferPtr->Color = color;
+			s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[i];
+			s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
+			s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+			s_Data.QuadVertexBufferPtr++;
+		}
+
+
+		s_Data.QuadIndexCount += 6;
+
+#if STATISTICS
+		s_Data.stats.QuadCount++;
+#endif
+	};
+
+	void Renderer2D::DrawQuad(const glm::mat4& transform, const Ref<Texture2D>& texture,
+		float tilingFactor, const glm::vec4& tintColor)
+	{
+		HZ_PROFILE_FUNCTION();
+
+		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
+		{
+			FlushAndReset();
+		}
+
+		constexpr glm::vec4 color = { 1.f, 1.f, 1.f, 1.f };
+		constexpr glm::vec2 textureCoords[] = { {0.f, 0.f}, {1.f, 0.f} ,{1.f, 1.f}, {0.f, 1.f} };
+
+		// 현재 인자로 들어온 Texture 에 대한 s_Data.TextureSlot 내 Texture Index 를 찾아야 한다.
+		float textureIndex = 0.f;
+
+		for (uint32_t i = 0; i < s_Data.TextureSlotIndex; ++i)
+		{
+			if (*s_Data.TextureSlots[i].get() == *texture.get())
+			{
+				textureIndex = (float)i;
+				break;
+			}
+		}
+
+		// new texture
+		if (textureIndex == 0.f)
+		{
+			textureIndex = (float)s_Data.TextureSlotIndex;
+			s_Data.TextureSlots[s_Data.TextureSlotIndex] = texture;
+			s_Data.TextureSlotIndex += 1;
+		}
+
+		// 시계 방향으로 4개의 정점 정보를 모두 세팅한다.
+		// 왼쪽 아래
+		// 오른쪽 아래
+		// 오른쪽 위
+		// 왼쪽 위
+		constexpr size_t quadVertexCnt = 4;
+
+		for (size_t i = 0; i < quadVertexCnt; ++i)
+		{
+			s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[i];
+			s_Data.QuadVertexBufferPtr->Color = color;
+			s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[i];
+			s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
+			s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+			s_Data.QuadVertexBufferPtr++;
+		}
+
+		s_Data.QuadIndexCount += 6;
+
+#if STATISTICS
+		s_Data.stats.QuadCount++;
+#endif
+	}
+
 	void Renderer2D::DrawRotatedQuad(const glm::vec2& pos, const glm::vec2& size, float rotation, const glm::vec4& color)
 	{
 		HZ_PROFILE_FUNCTION();
@@ -529,6 +492,7 @@ namespace Hazel
 		{
 			FlushAndReset();
 		}
+		constexpr glm::vec2 textureCoords[] = { {0.f, 0.f}, {1.f, 0.f} ,{1.f, 1.f}, {0.f, 1.f} };
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos)
 			* glm::rotate(glm::mat4(1.f), rotation, { 0.f, 0.f, 1.f }) // z 축 회전
@@ -539,36 +503,20 @@ namespace Hazel
 
 		// 시계 방향으로 4개의 정점 정보를 모두 세팅한다.
 		// 왼쪽 아래
-		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[0];
-		s_Data.QuadVertexBufferPtr->Color = color;
-		s_Data.QuadVertexBufferPtr->TexCoord = { 0.f, 0.f };
-		s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
-		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
-		s_Data.QuadVertexBufferPtr++;
-
 		// 오른쪽 아래
-		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[1];
-		s_Data.QuadVertexBufferPtr->Color = color;
-		s_Data.QuadVertexBufferPtr->TexCoord = { 1.f, 0.f };
-		s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
-		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
-		s_Data.QuadVertexBufferPtr++;
-
 		// 오른쪽 위
-		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[2];
-		s_Data.QuadVertexBufferPtr->Color = color;
-		s_Data.QuadVertexBufferPtr->TexCoord = { 1.f, 1.f };
-		s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
-		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
-		s_Data.QuadVertexBufferPtr++;
-
 		// 왼쪽 위
-		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[3];
-		s_Data.QuadVertexBufferPtr->Color = color;
-		s_Data.QuadVertexBufferPtr->TexCoord = { 0.f, 1.f };
-		s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
-		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
-		s_Data.QuadVertexBufferPtr++;
+
+		constexpr size_t quadVertexCnt = 4;
+		for (size_t i = 0; i < quadVertexCnt; ++i)
+		{
+			s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[i];
+			s_Data.QuadVertexBufferPtr->Color = color;
+			s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[i];
+			s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
+			s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+			s_Data.QuadVertexBufferPtr++;
+		}
 
 		s_Data.QuadIndexCount += 6;
 
@@ -612,6 +560,7 @@ namespace Hazel
 		HZ_PROFILE_FUNCTION();
 
 		constexpr glm::vec4 color = { 1.f, 1.f, 1.f, 1.f };
+		constexpr glm::vec2 textureCoords[] = { {0.f, 0.f}, {1.f, 0.f} ,{1.f, 1.f}, {0.f, 1.f} };
 
 		// 현재 인자로 들어온 Texture 에 대한 s_Data.TextureSlot 내 Texture Index 를 찾아야 한다.
 		float textureIndex = 0.f;
@@ -641,38 +590,22 @@ namespace Hazel
 
 		// 시계 방향으로 4개의 정점 정보를 모두 세팅한다.
 		// 왼쪽 아래
+		// 오른쪽 아래
+		// 오른쪽 위
+		// 왼쪽 위
 		// s_Data.QuadVertexBufferPtr->Position = pos;
 		// transform * s_Data.QuadVertexPositions[0] : opengl 오른손 좌표계 반영 위해, mat4 를 vec4 앞에 곱한다.
-		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[0];
-		s_Data.QuadVertexBufferPtr->Color = color;
-		s_Data.QuadVertexBufferPtr->TexCoord = { 0.f, 0.f };
-		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
-		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
-		s_Data.QuadVertexBufferPtr++;
+		constexpr size_t quadVertexCnt = 4;
 
-		// 오른쪽 아래
-		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[1];
-		s_Data.QuadVertexBufferPtr->Color = color;
-		s_Data.QuadVertexBufferPtr->TexCoord = { 1.f, 0.f };
-		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
-		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
-		s_Data.QuadVertexBufferPtr++;
-
-		// 오른쪽 위
-		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[2];
-		s_Data.QuadVertexBufferPtr->Color = color;
-		s_Data.QuadVertexBufferPtr->TexCoord = { 1.f, 1.f };
-		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
-		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
-		s_Data.QuadVertexBufferPtr++;
-
-		// 왼쪽 위
-		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[3];
-		s_Data.QuadVertexBufferPtr->Color = color;
-		s_Data.QuadVertexBufferPtr->TexCoord = { 0.f, 1.f };
-		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
-		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
-		s_Data.QuadVertexBufferPtr++;
+		for (size_t i = 0; i < quadVertexCnt; ++i)
+		{
+			s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[i];
+			s_Data.QuadVertexBufferPtr->Color = color;
+			s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[i];
+			s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
+			s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+			s_Data.QuadVertexBufferPtr++;
+		}
 
 		s_Data.QuadIndexCount += 6;
 
@@ -749,40 +682,21 @@ namespace Hazel
 			* glm::rotate(glm::mat4(1.f), rotation, { 0.f, 0.f, 1.f }) // z 축 회전
 			* glm::scale(glm::mat4(1.f), { size.x, size.y, 1.f });
 
+		constexpr size_t quadVertexCnt = 4;
+
 		// 시계 방향으로 4개의 정점 정보를 모두 세팅한다.
 		// 왼쪽 아래
 		// s_Data.QuadVertexBufferPtr->Position = pos;
 		// transform * s_Data.QuadVertexPositions[0] : opengl 오른손 좌표계 반영 위해, mat4 를 vec4 앞에 곱한다.
-		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[0];
-		s_Data.QuadVertexBufferPtr->Color = color;
-		s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[0];
-		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
-		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
-		s_Data.QuadVertexBufferPtr++;
-
-		// 오른쪽 아래
-		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[1];
-		s_Data.QuadVertexBufferPtr->Color = color;
-		s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[1];
-		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
-		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
-		s_Data.QuadVertexBufferPtr++;
-
-		// 오른쪽 위
-		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[2];
-		s_Data.QuadVertexBufferPtr->Color = color;
-		s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[2];
-		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
-		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
-		s_Data.QuadVertexBufferPtr++;
-
-		// 왼쪽 위
-		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[3];
-		s_Data.QuadVertexBufferPtr->Color = color;
-		s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[3];
-		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
-		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
-		s_Data.QuadVertexBufferPtr++;
+		for (size_t i = 0; i < quadVertexCnt; ++i)
+		{
+			s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[i];
+			s_Data.QuadVertexBufferPtr->Color = color;
+			s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[i];
+			s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
+			s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+			s_Data.QuadVertexBufferPtr++;
+		}
 
 		s_Data.QuadIndexCount += 6;
 

@@ -59,6 +59,11 @@ namespace Hazel
 		fbSpec.Height = 720;
 		m_FrameBuffer = Hazel::FrameBuffer::Create(fbSpec);
 
+		m_ActiveScene = CreateRef<Scene>();
+		auto squareEntity = m_ActiveScene->CreateEntity();
+		m_ActiveScene->Reg().emplace<TransformComponent>(squareEntity);
+		m_ActiveScene->Reg().emplace<SpriteRenderComponent>(squareEntity, glm::vec4{0.f, 1.f, 0.f, 1.f});
+
 		m_CameraController.SetZoomLevel(0.25f);
 	}
 
@@ -77,76 +82,23 @@ namespace Hazel
 			m_CameraController.OnUpdate(ts);
 		}
 
+		// Scene update
+		{
+			// m_ActiveScene->OnUpdate(ts);
+		}
+
 		// Reset
 		Hazel::Renderer2D::ResetStats();
-
-		{
-			m_FrameBuffer->Bind();
-			Hazel::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.f });
-			Hazel::RenderCommand::Clear();
-		}
+		m_FrameBuffer->Bind();
+		Hazel::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.f });
+		Hazel::RenderCommand::Clear();
 
 		// Render
-#if 0
-		{
-			static float rotation = 0.f;
-			rotation += ts * 20.f;
+		Hazel::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
-			// Renderer::BeginScene(camera, lights, environment);
-			// Scene 을 그리기 위해 필요한 모든 것을 한번에 그려낸다.
-			Hazel::Renderer2D::BeginScene(m_CameraController.GetCamera());
+		m_ActiveScene->OnUpdate(ts);
 
-			Hazel::Renderer2D::DrawQuad({ 1.5f, 1.5f, -0.1f }, { 1.5f, 1.5f }, m_CheckerboardTexture, 1.f, { 0.2f, 0.2f, 0.8f, 1.0f });
-			Hazel::Renderer2D::DrawRotatedQuad({ 2.5f, 2.5f }, { 1.5f, 1.5f }, glm::radians(rotation), { 0.9f, 0.2f, 0.8f, 1.0f });
-			Hazel::Renderer2D::DrawRotatedQuad({ 0.f, 0.f }, { 1.f, 1.f }, glm::radians(5.f), m_CheckerboardTexture, 2.f, glm::vec4(1.0f, 0.9f, 0.9f, 1.0f));
-
-			// Hazel::Renderer2D::EndScene();
-
-			// Hazel::Renderer2D::BeginScene(m_CameraController.GetCamera());
-
-			for (float y = -5.f; y < 5.f; y += 0.5f)
-			{
-				for (float x = -5.f; x < 5.f; x += 0.5f)
-				{
-					glm::vec3 color = { (x + 5.f) / 10.f, 0.4f, (y + 5.f) / 10.f };
-					Hazel::Renderer2D::DrawQuad({ x, y }, { 0.45f, 0.45f }, { color, 0.5f });
-				}
-			}
-			Hazel::Renderer2D::EndScene();
-		}
-#endif
-
-
-		{
-			Hazel::Renderer2D::BeginScene(m_CameraController.GetCamera());
-
-			for (uint32_t y = 0; y < m_MapHeight; ++y)
-			{
-				for (uint32_t x = 0; x < m_MapWidth; ++x)
-				{
-					char tileType = s_MapTiles[x + y * m_MapWidth];
-
-					Hazel::Ref<Hazel::SubTexture2D> texture;
-
-					if (m_TextureMap.find(tileType) == m_TextureMap.end())
-					{
-						texture = m_TextureBarrel;
-					}
-					else
-					{
-						texture = m_TextureMap[tileType];
-					}
-
-					Hazel::Renderer2D::DrawQuad({ x - m_MapWidth / 2.f, y - m_MapHeight / 2.f, -0.1f }, { 1.f, 1.f }, texture);
-				};
-			};
-
-			// Hazel::Renderer2D::DrawQuad({ 4.5f, 1.5f, -0.1f }, { 1.5f, 1.5f }, m_TextureStairs, 1.f, { 0.2f, 0.2f, 0.8f, 1.0f });
-			// Hazel::Renderer2D::DrawQuad({ 2.5f, 1.5f, -0.1f }, { 1.5f, 1.5f }, m_TextureBarrel, 1.f, { 0.2f, 0.2f, 0.8f, 1.0f });
-			// Hazel::Renderer2D::DrawQuad({ 1.5f, 1.5f, -0.1f }, { 1.5f, 1.5f }, m_TextureTree, 1.f, { 0.2f, 0.2f, 0.8f, 1.0f });
-			// Hazel::Renderer2D::DrawQuad({ 0.5f, 1.5f, -0.1f }, { 1.5f, 1.5f }, m_TextureGrass, 1.f, { 0.2f, 0.2f, 0.8f, 1.0f });
-			Hazel::Renderer2D::EndScene();
-		}
+		Hazel::Renderer2D::EndScene();
 
 		m_FrameBuffer->UnBind();
 	}
@@ -280,7 +232,7 @@ namespace Hazel
 			viewPortFocusedNow = true;
 		}
 
-		m_VieportInteracted = m_ViewportHovered || m_ViewportFocused;
+		m_VieportInteracted = m_ViewportHovered || viewPortFocusedNow;
 
 		// Application::Get().GetImGuiLayer()->BlockEvents(!m_ViewportFocused || !m_ViewportHovered);
 		Application::Get().GetImGuiLayer()->BlockEvents(!m_VieportInteracted);

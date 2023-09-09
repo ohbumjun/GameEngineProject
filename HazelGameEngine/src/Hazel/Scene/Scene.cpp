@@ -1,5 +1,7 @@
 #include "hzpch.h"
 #include "Scene.h"
+#include "Component.h"
+#include "Renderer/Renderer2D.h"
 #include <glm/glm.hpp>
 
 namespace Hazel
@@ -59,5 +61,20 @@ namespace Hazel
 	Scene::~Scene()
 	{
 	}
-	
+	void Scene::OnUpdate(const Timestep& ts)
+	{
+		auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRenderComponent>);
+
+		for (const auto& entity : group)
+		{
+			auto& [transform, sprite] = group.get<TransformComponent, SpriteRenderComponent>(entity);
+
+			Renderer2D::DrawQuad(transform, sprite.color);
+		}
+	}
+
+	entt::entity Scene::CreateEntity()
+	{
+		return m_Registry.create();
+	}
 }

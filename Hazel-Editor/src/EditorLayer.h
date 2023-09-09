@@ -29,6 +29,8 @@ namespace Hazel
 		Ref<SubTexture2D> m_TextureGrass;
 		Ref<SubTexture2D> m_TextureBarrel;
 
+		Ref<Scene> m_ActiveScene;
+
 		Ref<FrameBuffer> m_FrameBuffer;
 
 		bool m_ViewportFocused  = false;

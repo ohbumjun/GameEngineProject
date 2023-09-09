@@ -24,6 +24,10 @@
 #include "Hazel/Core/MouseButtonCodes.h"
 #include "Hazel/Core/KeyCodes.h"
 
+/*Scene*/
+#include "Hazel/Scene/Scene.h"
+#include "Hazel/Scene/Component.h"
+
 /*Renderer*/
 #include "Renderer/Renderer.h"
 #include "Renderer/Renderer2D.h"

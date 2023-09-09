@@ -1,6 +1,7 @@
 #pragma once
 
 #include "entt.hpp"
+#include "Hazel/Core/TimeStep.h"
 
 namespace Hazel
 {
@@ -16,6 +17,11 @@ namespace Hazel
 	public :
 		Scene();
 		virtual ~Scene();
+
+		entt::entity CreateEntity();
+		void OnUpdate(const Timestep& ts);
+
+		entt::registry& Reg() { return m_Registry; }
 
 	private :
 		/*
