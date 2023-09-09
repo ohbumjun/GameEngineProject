@@ -14,14 +14,14 @@ namespace Hazel
 
 	class Scene
 	{
+		friend class Entity;
 	public :
 		Scene();
 		virtual ~Scene();
 
-		entt::entity CreateEntity();
-		void OnUpdate(const Timestep& ts);
+		Entity CreateEntity();
 
-		entt::registry& Reg() { return m_Registry; }
+		void OnUpdate(const Timestep& ts);
 
 	private :
 		/*
@@ -30,7 +30,6 @@ namespace Hazel
 		*/
 		entt::registry m_Registry;
 
-		friend class Entity;
 	};
 }
 

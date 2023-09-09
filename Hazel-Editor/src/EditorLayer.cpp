@@ -60,10 +60,10 @@ namespace Hazel
 		m_FrameBuffer = Hazel::FrameBuffer::Create(fbSpec);
 
 		m_ActiveScene = CreateRef<Scene>();
-		auto squareEntity = m_ActiveScene->CreateEntity();
-		m_ActiveScene->Reg().emplace<TransformComponent>(squareEntity);
-		m_ActiveScene->Reg().emplace<SpriteRenderComponent>(squareEntity, glm::vec4{0.f, 1.f, 0.f, 1.f});
-
+		Entity squareEntity = m_ActiveScene->CreateEntity();
+		squareEntity.AddComponent<TransformComponent>();
+		squareEntity.AddComponent<SpriteRenderComponent>(glm::vec4{ 0.f, 1.f, 0.f, 1.f });
+	
 		m_CameraController.SetZoomLevel(0.25f);
 	}
 

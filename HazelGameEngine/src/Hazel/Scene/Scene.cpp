@@ -3,6 +3,7 @@
 #include "Component.h"
 #include "Renderer/Renderer2D.h"
 #include <glm/glm.hpp>
+#include "Entity.h"
 
 namespace Hazel
 {
@@ -71,10 +72,14 @@ namespace Hazel
 
 			Renderer2D::DrawQuad(transform, sprite.color);
 		}
-	}
+	};
 
-	entt::entity Scene::CreateEntity()
+	Entity Scene::CreateEntity()
 	{
-		return m_Registry.create();
+		Entity entity{ m_Registry.create(), this };
+
+		entity.AddComponent<TransformComponent>();
+
+		return entity;
 	}
 }
