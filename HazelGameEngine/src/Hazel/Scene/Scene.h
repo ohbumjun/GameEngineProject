@@ -29,6 +29,8 @@ namespace Hazel
 		* entity : component  들이 어디에 속하는지에 대한 id 정보일 뿐이다.
 		*/
 		entt::registry m_Registry;
+
+		friend class Entity;
 	};
 }
 

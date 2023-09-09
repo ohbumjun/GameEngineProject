@@ -159,6 +159,7 @@
     <ClInclude Include="src\Hazel\Event\MouseEvent.h" />
     <ClInclude Include="src\Hazel\ImGui\ImGuiLayer.h" />
     <ClInclude Include="src\Hazel\Scene\Component.h" />
+    <ClInclude Include="src\Hazel\Scene\Entity.h" />
     <ClInclude Include="src\Hazel\Scene\Scene.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
@@ -608,6 +609,7 @@
     <ClCompile Include="src\Hazel\Core\Window.cpp" />
     <ClCompile Include="src\Hazel\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\Hazel\ImGui\ImGuilBuild.cpp" />
+    <ClCompile Include="src\Hazel\Scene\Entity.cpp" />
     <ClCompile Include="src\Hazel\Scene\Scene.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp" />
