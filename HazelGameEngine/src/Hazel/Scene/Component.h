@@ -3,6 +3,19 @@
 
 namespace Hazel
 {
+	struct NameComponent
+	{
+		std::string name = "";
+		NameComponent() = default;
+		NameComponent(const NameComponent& other) :
+			name(other.name) {};
+		NameComponent(const std::string& name) :
+			name(name) {}
+
+		operator const std::string& () const { return name; }
+		operator std::string& () { return name; }
+	};
+
 	struct TransformComponent
 	{
 		glm::mat4 transform = glm::mat4(1.f);

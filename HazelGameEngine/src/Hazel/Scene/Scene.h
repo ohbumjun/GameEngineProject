@@ -19,7 +19,7 @@ namespace Hazel
 		Scene();
 		virtual ~Scene();
 
-		Entity CreateEntity();
+		Entity CreateEntity(const std::string& name = "");
 
 		void OnUpdate(const Timestep& ts);
 
