@@ -5,6 +5,8 @@
 
 namespace Hazel
 {
+	static const uint32_t s_MaxFrameBufferSize = 8192;
+
 	OpenGLFrameBuffer::OpenGLFrameBuffer(const FrameBufferSpecification& spec)
 		: m_Specification(spec)
 	{
@@ -141,6 +143,11 @@ namespace Hazel
 
 	void OpenGLFrameBuffer::Resize(uint32_t width, uint32_t height)
 	{
+		if (width <= 0 || height <= 0 || width >= s_MaxFrameBufferSize || height >= s_MaxFrameBufferSize)
+		{
+			return;
+		}
+
 		m_Specification.Width = width;
 		m_Specification.Height = height;
 
