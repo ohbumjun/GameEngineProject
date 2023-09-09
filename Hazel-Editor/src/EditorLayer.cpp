@@ -72,7 +72,7 @@ namespace Hazel
 
 		// Update
 		// m_ViewportFocused ? void ImGuiLayer::OnEvent 함수 참고
-		if (m_ViewportFocused)
+		if (m_VieportInteracted)
 		{
 			m_CameraController.OnUpdate(ts);
 		}
@@ -280,10 +280,10 @@ namespace Hazel
 			viewPortFocusedNow = true;
 		}
 
-		bool blockEvent = m_ViewportHovered || viewPortFocusedNow;
+		m_VieportInteracted = m_ViewportHovered || m_ViewportFocused;
 
 		// Application::Get().GetImGuiLayer()->BlockEvents(!m_ViewportFocused || !m_ViewportHovered);
-		Application::Get().GetImGuiLayer()->BlockEvents(!blockEvent);
+		Application::Get().GetImGuiLayer()->BlockEvents(!m_VieportInteracted);
 
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 

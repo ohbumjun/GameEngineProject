@@ -33,6 +33,7 @@ namespace Hazel
 
 		bool m_ViewportFocused  = false;
 		bool m_ViewportHovered  = false;
+		bool m_VieportInteracted = false;
 
 		glm::vec2 m_ViewportSize = { 0,0 };
 
