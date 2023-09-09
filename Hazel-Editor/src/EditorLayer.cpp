@@ -236,7 +236,54 @@ namespace Hazel
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 		ImGui::Begin("Viewport");
 
-		m_ViewportFocused = ImGui::IsWindowFocused();
+		/*
+		* 해당 viewport 를 한번 클릭하면 true. 다른 곳을 클릭하면 그때 false 가 되지만
+		* 다른 곳을 클릭하지 않는 이상, 한번 클릭하면 계속 true 가 된다는 것이다.
+		*/
+		bool prevFocused		= m_ViewportFocused;
+		m_ViewportFocused	= ImGui::IsWindowFocused();
+		m_ViewportHovered	= ImGui::IsWindowHovered();
+
+		/*
+		즉, 만약 viewport 가 focus 혹은 hover 되었다면, ImguiLayer 단에서 event 를 처리하고 싶다.
+		즉, 다른 layer 에서는 event 를 처리하지 않게 하고 싶은 것이다.
+		ex) 다른 imgui 창에 마우스를 대고 있으면, scroll 을 해도, Viewport 상에서 camera 의
+		     zoom in, zoom out 이 일어나지 않게 하고 싶은 것이다.
+		     반대로, Viewport 에 마우스를 대고 있으면 scroll 했을 때, 다른 imgui 창에
+		     어떤 영향도 안 미치고 싶다.
+
+		BlockEvent(true) 라는 것은, ImGuiLayer 가 event 를 인식하게 한다는 것이고
+		다른 Layer 들은 event 를 인식하지 않게 한다는 것이다.
+		ImGuiLayer 가 event 를 인식한다는 것은, ImGui 창에서 scoll 을 하면
+		ImGui 창이 scroll 된다는 것이고
+		다른 Layer 들은 scroll 관련 영향을 안받는다는 것이다.
+
+		EditorLayer 의 CameraController 가 event 를 인식하지 않는 것.
+		Camera 의 zoom in ,zoom out 이 일어나지 않는다는 것.
+
+		반대로 BlockEvent(false) 라는 것은, ImGuiLayer 가 event 를 인식하지 않는 것
+		다른 Layer 들은 event 를 인식하는 것
+		Editor Layer 에서 CameraController 가 event 를 인식하고
+		Camera 의 zoom in ,out 이 일어나게 하는 것
+
+		따라서 Focus 되거나 Hover 가 되면 , ImGuiLayer 는 Event 를 인식하지 않게 하고
+		EditorLayer 가 event 를 인식할 수 있게 해야 한다.
+		ImGuiLayer 의 m_BlockEvents 를 false 로 만들어야 한다.
+		Focus 혹은 Hover 둘 중 하나라도 되면 false 이고
+		Focuse 혹은 Hover 둘다 안되어야만 true 이다.
+		*/
+
+		bool viewPortFocusedNow = false;
+
+		if (m_ViewportFocused && prevFocused == false)
+		{
+			viewPortFocusedNow = true;
+		}
+
+		bool blockEvent = m_ViewportHovered || viewPortFocusedNow;
+
+		// Application::Get().GetImGuiLayer()->BlockEvents(!m_ViewportFocused || !m_ViewportHovered);
+		Application::Get().GetImGuiLayer()->BlockEvents(!blockEvent);
 
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 
