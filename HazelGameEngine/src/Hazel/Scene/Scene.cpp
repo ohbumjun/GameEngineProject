@@ -8,7 +8,10 @@ namespace Hazel
 
 	Practice::Practice()
 	{
-		struct MeshComponent{};
+		struct MeshComponent
+		{
+			float value;
+		};
 		struct TransformComponent
 		{
 			glm::mat4 transform;
@@ -41,7 +44,7 @@ namespace Hazel
 			TransformComponent& transform2 = view.get<TransformComponent>(entity);
 		}
 
-		auto group = m_Registry.group<TransformComponent>();
+		auto group = m_Registry.group<TransformComponent>(entt::get<MeshComponent>);
 
 		for (const auto& entity : group)
 		{
