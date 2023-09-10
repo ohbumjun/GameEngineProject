@@ -31,6 +31,7 @@ namespace Hazel
 		Ref<Scene> m_ActiveScene;
 
 		Entity m_SquareEntity;
+		Entity m_CameraEntity;
 
 		Ref<FrameBuffer> m_FrameBuffer;
 

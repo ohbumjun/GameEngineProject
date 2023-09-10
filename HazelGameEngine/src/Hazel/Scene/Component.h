@@ -48,6 +48,10 @@ namespace Hazel
 	{
 		Camera camera;
 
+		// Scene 내 여러 개 CameraComponent  가 있을 수 있다.
+		// MainCamera 를 뭐라고 세팅할 것인가.
+		bool isPrimary = true;
+
 		CameraComponent() = default;
 		CameraComponent(const CameraComponent& other) :
 			camera(other.camera) {};
