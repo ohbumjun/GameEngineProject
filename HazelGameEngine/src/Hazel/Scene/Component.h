@@ -52,6 +52,8 @@ namespace Hazel
 		// MainCamera 를 뭐라고 세팅할 것인가.
 		bool isPrimary = true;
 
+		bool isFixedAspectRatio = false;
+
 		CameraComponent() = default;
 		CameraComponent(const CameraComponent& other) :
 			camera(other.camera) {};

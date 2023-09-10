@@ -68,11 +68,11 @@ namespace Hazel
 		glm::mat4* cameraTransform = nullptr;
 
 		{
-			auto group = m_Registry.view<CameraComponent, TransformComponent>();
+			auto view = m_Registry.view<CameraComponent, TransformComponent>();
 
-			for (auto& entity : group)
+			for (auto& entity : view)
 			{
-				auto& [camera, transform] = group.get<CameraComponent, TransformComponent>(entity);
+				auto& [camera, transform] = view.get<CameraComponent, TransformComponent>(entity);
 			
 				if (camera.isPrimary)
 				{
@@ -110,5 +110,13 @@ namespace Hazel
 		entity.AddComponent<NameComponent>(name);
 
 		return entity;
+	}
+	void Scene::OnViewportResize(uint32_t width, uint32_t height)
+	{
+		m_ViewportWidth = width;
+		m_ViewportHeight = height;
+
+		// height : orthographic size
+		// width  : orthographic size (viewport size) * aspect ratio
 	}
 }

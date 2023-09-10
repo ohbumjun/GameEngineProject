@@ -44,9 +44,9 @@ namespace Hazel
 		m_CheckerboardTexture = Hazel::Texture2D::Create("assets/textures/sample.png");
 		m_SpriteSheet = Hazel::Texture2D::Create("assets/game/textures/RPGpack_sheet_2X.png");
 		// m_TextureStairs				= Hazel::SubTexture2D::CreateFromCoords(m_SpriteSheet, {7, 6}, {128, 128});
-		m_TextureBarrel = Hazel::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 8, 2 }, { 128, 128 });
 		// m_TextureTree				= Hazel::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 2, 1 }, { 128, 128 }, { 1,2 });
 		// m_TextureGrass				= Hazel::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 1, 11 }, { 128, 128 }, { 1,2 });
+		m_TextureBarrel = Hazel::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 8, 2 }, { 128, 128 });
 
 		m_TextureMap['D'] = Hazel::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 6, 11 }, { 128, 128 });
 		m_TextureMap['W'] = Hazel::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 11, 11 }, { 128, 128 });
@@ -64,14 +64,10 @@ namespace Hazel
 		m_SquareEntity.AddComponent<SpriteRenderComponent>(glm::vec4{ 0.f, 1.f, 0.f, 1.f });
 	
 		m_CameraEntity = m_ActiveScene->CreateEntity();
-		m_CameraEntity.AddComponent<CameraComponent>(
-				glm::ortho(-16.f, 16.f, -9.f, 9.f, -1.f, 1.f)
-			);
+		m_CameraEntity.AddComponent<CameraComponent>(glm::ortho(-16.f, 16.f, -9.f, 9.f, -1.f, 1.f));
 
 		m_SecondCameraEntity = m_ActiveScene->CreateEntity();
-		auto& secCc = m_SecondCameraEntity.AddComponent<CameraComponent>(
-			glm::ortho(-1.f, 1.f, -1.f, 1.f, -1.f, 1.f)
-			);
+		auto& secCc = m_SecondCameraEntity.AddComponent<CameraComponent>(glm::ortho(-1.f, 1.f, -1.f, 1.f, -1.f, 1.f));
 		secCc.isPrimary = false;
 
 		m_CameraController.SetZoomLevel(0.25f);
@@ -91,17 +87,16 @@ namespace Hazel
 
 			if (spec.Width != m_ViewportSize.x || spec.Height != m_ViewportSize.y)
 			{
-				m_FrameBuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-
 				/*
 				FrameBuffer 에 그려진 내용은 CameraController 의 Camera 로 부터
 				보여지는 내용이다.
-
 				전체 Window 를 Resize 하던, 해당 ViewPort 만 Resize 하던
 				어떤 이유로 인해 ViewPort  크기가 변하면
 				그에 맞게 Viewport 크기도 변화해야 할 것이다.
 				*/
+				m_FrameBuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 				m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
+				m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 			}
 		}
 
