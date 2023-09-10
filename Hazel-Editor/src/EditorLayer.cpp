@@ -60,9 +60,8 @@ namespace Hazel
 		m_FrameBuffer = Hazel::FrameBuffer::Create(fbSpec);
 
 		m_ActiveScene = CreateRef<Scene>();
-		Entity squareEntity = m_ActiveScene->CreateEntity();
-		squareEntity.AddComponent<TransformComponent>();
-		squareEntity.AddComponent<SpriteRenderComponent>(glm::vec4{ 0.f, 1.f, 0.f, 1.f });
+		m_SquareEntity = m_ActiveScene->CreateEntity();
+		m_SquareEntity.AddComponent<SpriteRenderComponent>(glm::vec4{ 0.f, 1.f, 0.f, 1.f });
 	
 		m_CameraController.SetZoomLevel(0.25f);
 	}
@@ -74,6 +73,26 @@ namespace Hazel
 	void EditorLayer::OnUpdate(Hazel::Timestep ts)
 	{
 		HZ_PROFILE_FUNCTION();
+
+		// Resize
+		{
+			Hazel::FrameBufferSpecification spec = m_FrameBuffer->GetSpecification();
+
+			if (spec.Width != m_ViewportSize.x || spec.Height != m_ViewportSize.y)
+			{
+				m_FrameBuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+
+				/*
+				FrameBuffer 에 그려진 내용은 CameraController 의 Camera 로 부터
+				보여지는 내용이다.
+
+				전체 Window 를 Resize 하던, 해당 ViewPort 만 Resize 하던
+				어떤 이유로 인해 ViewPort  크기가 변하면
+				그에 맞게 Viewport 크기도 변화해야 할 것이다.
+				*/
+				m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
+			}
+		}
 
 		// Update
 		// m_ViewportFocused ? void ImGuiLayer::OnEvent 함수 참고
@@ -181,7 +200,16 @@ namespace Hazel
 		ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
 		ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 
-		ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
+		if (m_SquareEntity)
+		{
+			ImGui::Separator();
+			auto& name = m_SquareEntity.GetComponent<NameComponent>().name;
+			ImGui::Text("%s", name.c_str());
+			auto& squareColor = m_SquareEntity.GetComponent<SpriteRenderComponent>().color;
+			ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
+			ImGui::Separator();
+		}
+
 
 		ImGui::End();
 
@@ -239,21 +267,8 @@ namespace Hazel
 
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 
-		if (m_ViewportSize != *((glm::vec2*)&viewportPanelSize))
-		{
-			m_FrameBuffer->Resize((uint32_t)viewportPanelSize.x, (uint32_t)viewportPanelSize.y);
-			m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
-			
-			/*
-			FrameBuffer 에 그려진 내용은 CameraController 의 Camera 로 부터
-			보여지는 내용이다.
+		m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
 
-			전체 Window 를 Resize 하던, 해당 ViewPort 만 Resize 하던
-			어떤 이유로 인해 ViewPort  크기가 변하면 
-			그에 맞게 Viewport 크기도 변화해야 할 것이다.
-			*/
-			m_CameraController.OnResize(viewportPanelSize.x, viewportPanelSize.y);
-		}
 		uint32_t textureID = m_FrameBuffer->GetColorAttachmentRendererID();
 		// uint32_t textureID = m_CheckerboardTexture->GetRendererID();
 		ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });

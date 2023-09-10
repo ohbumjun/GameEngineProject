@@ -1,6 +1,8 @@
 #pragma once
 #include <glm/glm.hpp>
 
+#include "Hazel/Core/Camera.h"
+
 namespace Hazel
 {
 	struct NameComponent
@@ -40,5 +42,16 @@ namespace Hazel
 
 		operator const glm::vec4& () const { return color; }
 		operator glm::vec4& () { return color; }
+	};
+
+	struct CameraComponent
+	{
+		Camera camera;
+
+		CameraComponent() = default;
+		CameraComponent(const CameraComponent& other) :
+			camera(other.camera) {};
+		CameraComponent(const glm::mat4& projection) :
+			camera(projection) {}
 	};
 }

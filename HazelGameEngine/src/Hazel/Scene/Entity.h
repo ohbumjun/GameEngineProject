@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "entt.hpp"
 #include "Scene.h"
@@ -8,6 +8,7 @@ namespace Hazel
 	class Entity
 	{
 	public:
+		Entity() = default;
 		Entity(entt::entity hanel, Scene* scene);
 		Entity(const Entity& other) = default;
 
@@ -19,6 +20,13 @@ namespace Hazel
 
 			return m_Scene->m_Registry.emplace<T>(m_EntityHandle, std::forward<Args>(args)...);
 		};
+		template<typename T>
+		T& GetComponent()
+		{
+			HZ_CORE_ASSERT(HasComponent<T>() == true, "Component Does not Exist");
+
+			return m_Scene->m_Registry.get<T>(m_EntityHandle);
+		}
 
 		template<typename T>
 		bool HasComponent()
@@ -34,8 +42,10 @@ namespace Hazel
 			m_Scene->m_Registry.remove<T>(m_EntityHandle);
 		};
 
+		operator bool() const { return m_EntityHandle != entt::null; }
+
 	private:
-		entt::entity m_EntityHandle;
+		entt::entity m_EntityHandle{ entt::null };
 
 		/*
 		Entity 가 Scene 객체에 대한 소유권을 가지게 하고 싶지 않다

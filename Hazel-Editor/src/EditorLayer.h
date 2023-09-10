@@ -20,7 +20,6 @@ namespace Hazel
 		// Temp
 		OrthographicCameraController m_CameraController;
 
-		glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.f };
 		Ref<Texture2D> m_CheckerboardTexture;
 		Ref<Texture2D> m_SpriteSheet;
 
@@ -30,6 +29,8 @@ namespace Hazel
 		Ref<SubTexture2D> m_TextureBarrel;
 
 		Ref<Scene> m_ActiveScene;
+
+		Entity m_SquareEntity;
 
 		Ref<FrameBuffer> m_FrameBuffer;
 
