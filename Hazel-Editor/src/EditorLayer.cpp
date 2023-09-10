@@ -68,6 +68,12 @@ namespace Hazel
 				glm::ortho(-16.f, 16.f, -9.f, 9.f, -1.f, 1.f)
 			);
 
+		m_SecondCameraEntity = m_ActiveScene->CreateEntity();
+		auto& secCc = m_SecondCameraEntity.AddComponent<CameraComponent>(
+			glm::ortho(-1.f, 1.f, -1.f, 1.f, -1.f, 1.f)
+			);
+		secCc.isPrimary = false;
+
 		m_CameraController.SetZoomLevel(0.25f);
 	}
 
@@ -211,6 +217,14 @@ namespace Hazel
 			ImGui::Separator();
 		}
 
+		ImGui::DragFloat3("Camera Transform",
+			glm::value_ptr(m_CameraEntity.GetComponent<TransformComponent>().transform[3]));
+		
+		if (ImGui::Checkbox("Camera A", &m_PrimaryCamera))
+		{
+			m_CameraEntity.GetComponent<CameraComponent>().isPrimary = m_PrimaryCamera;
+			m_SecondCameraEntity.GetComponent<CameraComponent>().isPrimary = !m_PrimaryCamera;
+		}
 
 		ImGui::End();
 
