@@ -4,6 +4,7 @@
 
 Hazel::SceneCamera::SceneCamera()
 {
+	RecalculateProjection();
 }
 
 Hazel::SceneCamera::~SceneCamera()

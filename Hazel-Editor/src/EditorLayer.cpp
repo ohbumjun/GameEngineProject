@@ -225,6 +225,17 @@ namespace Hazel
 			m_SecondCameraEntity.GetComponent<CameraComponent>().isPrimary = !m_PrimaryCamera;
 		}
 
+		{
+			auto& cameraComp = m_SecondCameraEntity.GetComponent<CameraComponent>();
+			auto& camera = cameraComp.camera;
+			float orthoSize = camera.GetOrthoGraphicSize();
+
+			if (ImGui::DragFloat("Second Camera Ortho Size", &orthoSize))
+			{
+				camera.SetOrthoGraphicSize(orthoSize);
+			}
+		}
+
 		ImGui::End();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });

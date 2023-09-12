@@ -28,6 +28,7 @@ namespace Hazel
 		};
 
 		entt::entity entity = m_Registry.create();
+
 		m_Registry.emplace<TransformComponent>(entity, glm::mat4(1.f));
 
 		// Transform Component 생성 때마다 해당 함수 호출
@@ -74,6 +75,7 @@ namespace Hazel
 			{
 				auto& [camera, transform] = view.get<CameraComponent, TransformComponent>(entity);
 			
+				// Primary Camera 로 현재 Scene 을 바라본다.
 				if (camera.isPrimary)
 				{
 					mainCamera = &camera.camera;
@@ -127,7 +129,7 @@ namespace Hazel
 
 			if (cameraComp.isFixedAspectRatio == false)
 			{
-				// cameraComp.camera.SetViewportSize(width, height);
+				cameraComp.camera.SetViewportSize(width, height);
 			}
 		}
 	}
