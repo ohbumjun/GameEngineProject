@@ -69,20 +69,16 @@ namespace Hazel
 			// Native Sript Update
 			m_Registry.view<NativeScriptComponent>().each([=](auto& nativeComp)
 			{
+				// TODO : move to scene play ex) onPlayScene
 				if (nativeComp.m_Instance == nullptr)
 				{
-					nativeComp.OnInstantiateFunction();
-					// nativeComp.m_Instance->m_Entity = { entity, this };
-					if (nativeComp.OnCreateFunction)
-					{
-						nativeComp.OnCreateFunction(nativeComp.m_Instance);
-					}
+					nativeComp.m_Instance = nativeComp.OnInstantiateScript();
+
+					// 여기서 entity 를 세팅할 수 없다. each 함수가 인자를 하나만 받는 듯.
+					nativeComp.m_Instance->OnCreate();
 				};
 			
-				if (nativeComp.OnUpdateFunction)
-				{
-					nativeComp.OnUpdateFunction(nativeComp.m_Instance, ts);
-				}
+				nativeComp.m_Instance->OnUpdate(ts);
 			});
 		}
 
