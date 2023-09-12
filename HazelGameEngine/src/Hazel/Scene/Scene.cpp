@@ -52,7 +52,7 @@ namespace Hazel
 
 		for (const auto& entity : group)
 		{
-			auto& [transform, mesh] = group.get<TransformComponent, MeshComponent>(entity);
+			auto [transform, mesh] = group.get<TransformComponent, MeshComponent>(entity);
 
 		}
 	}
@@ -90,7 +90,7 @@ namespace Hazel
 
 			for (auto& entity : view)
 			{
-				auto& [camera, transform] = view.get<CameraComponent, TransformComponent>(entity);
+				auto [camera, transform] = view.get<CameraComponent, TransformComponent>(entity);
 			
 				// Primary Camera 로 현재 Scene 을 바라본다.
 				if (camera.isPrimary)
@@ -111,7 +111,9 @@ namespace Hazel
 
 			for (const auto& entity : group)
 			{
-				auto& [transform, sprite] = group.get<TransformComponent, SpriteRenderComponent>(entity);
+				// auto& 가 필요없다. 왜냐하면 group.get 의 리턴값은  tuple<comp&, comp&> 이다.
+				// 즉, tuple 자체를 굳이 & 로 받을 필요도 없을 뿐더러, 이미 compont 정보들은 & 로 리턴한다.
+				auto [transform, sprite] = group.get<TransformComponent, SpriteRenderComponent>(entity);
 
 				Renderer2D::DrawQuad(transform, sprite.color);
 			}
