@@ -143,6 +143,7 @@
     <ClInclude Include="src\Hazel.h" />
     <ClInclude Include="src\Hazel\Core\Application.h" />
     <ClInclude Include="src\Hazel\Scene\SceneCamera.h" />
+    <ClInclude Include="src\Hazel\Scene\ScriptableEntity.h" />
     <ClInclude Include="src\Hazel\Utils\Random.h" />
     <ClInclude Include="src\Renderer\Camera.h" />
     <ClInclude Include="src\Hazel\Core\Core.h" />
@@ -605,6 +606,7 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Hazel\Scene\ScriptableEntity.cpp" />
     <ClCompile Include="src\Hazel\Utils\Random.cpp" />
     <ClCompile Include="src\Hazel\Scene\SceneCamera.cpp" />
     <ClCompile Include="src\Renderer\Camera.cpp" />

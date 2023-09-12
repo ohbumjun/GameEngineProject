@@ -2,6 +2,7 @@
 #include <glm/glm.hpp>
 
 #include "Hazel/Scene/SceneCamera.h"
+#include "Hazel/Scene/ScriptableEntity.h"
 
 namespace Hazel
 {
@@ -59,5 +60,28 @@ namespace Hazel
 			camera(other.camera) {};
 		CameraComponent(const glm::mat4& projection) :
 			camera(projection) {}
+	};
+
+	struct NativeScriptComponent
+	{
+		ScriptableEntity* m_Instance;
+		std::function<void()> m_OnInstantiateFunction;
+		std::function<void()> m_OnDestroyInstantiateFunction;
+
+		std::function<void(ScriptableEntity*)> m_OnCreateFunction;
+		std::function<void(ScriptableEntity*)> m_OnDestroyFunction;
+		std::function<void(ScriptableEntity*, Timestep)> m_OnUpdateunction;
+
+		template<typename T>
+		void Bind()
+		{
+			m_OnDestroyInstantiateFunction = [this]() {delete (T*)m_Instance; }
+			m_OnInstantiateFunction = [this]() {m_Instance = new T(); m_Instance = nullptr; }
+
+			// instance 의 type 은 T type 일 것이다.
+			m_OnCreateFunction = [&](ScriptableEntity* instance) {((T*)instance)->OnCreate(); }
+			m_OnDestroyFunction = [&](ScriptableEntity* instance) {((T*)instance)->OnDestroy(); }
+			m_OnUpdateunction = [&](ScriptableEntity* instance, Timestep ts) {((T*)instance)->OnUpdate(ts); }
+		}
 	};
 }

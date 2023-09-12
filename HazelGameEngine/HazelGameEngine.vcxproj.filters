@@ -1437,6 +1437,7 @@
     <ClInclude Include="src\Renderer\Camera.h" />
     <ClInclude Include="src\Hazel\Scene\SceneCamera.h" />
     <ClInclude Include="src\Hazel\Utils\Random.h" />
+    <ClInclude Include="src\Hazel\Scene\ScriptableEntity.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Core\Application.cpp">
@@ -1534,5 +1535,6 @@
     <ClCompile Include="src\Renderer\Camera.cpp" />
     <ClCompile Include="src\Hazel\Scene\SceneCamera.cpp" />
     <ClCompile Include="src\Hazel\Utils\Random.cpp" />
+    <ClCompile Include="src\Hazel\Scene\ScriptableEntity.cpp" />
   </ItemGroup>
 </Project>

@@ -6,16 +6,16 @@ namespace Hazel
 {
 	class ScriptableEntity
 	{
-	public :
+	public:
 		template<typename T>
 		T& GetComponent()
 		{
 			return m_Entity.GetComponent<T>();
 		}
-	private :
+	private:
 		Entity m_Entity;
 		friend class Scene;
 	};
-}
+};
 
 
