@@ -71,6 +71,27 @@ namespace Hazel
 		secCc.isPrimary = false;
 
 		m_CameraController.SetZoomLevel(0.25f);
+
+		class CameraTestController : public ScriptableEntity
+		{
+		public :
+			void OnCreate()
+			{
+				bool h = true;
+
+			}
+			void OnUpdate(Timestep ts)
+			{
+				bool h = true;
+
+			}
+			void OnDestroy()
+			{
+				bool h = true;
+			}
+		};
+
+		m_SecondCameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraTestController>();
 	}
 
 	void EditorLayer::OnDetach()

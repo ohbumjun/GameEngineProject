@@ -64,24 +64,24 @@ namespace Hazel
 
 	struct NativeScriptComponent
 	{
-		ScriptableEntity* m_Instance;
-		std::function<void()> m_OnInstantiateFunction;
-		std::function<void()> m_OnDestroyInstantiateFunction;
+		ScriptableEntity* m_Instance = nullptr;
+		std::function<void()> OnInstantiateFunction;
+		std::function<void()> OnDestroyInstantiateFunction;
 
-		std::function<void(ScriptableEntity*)> m_OnCreateFunction;
-		std::function<void(ScriptableEntity*)> m_OnDestroyFunction;
-		std::function<void(ScriptableEntity*, Timestep)> m_OnUpdateunction;
+		std::function<void(ScriptableEntity*)> OnCreateFunction;
+		std::function<void(ScriptableEntity*)> OnDestroyFunction;
+		std::function<void(ScriptableEntity*, Timestep)> OnUpdateFunction;
 
 		template<typename T>
 		void Bind()
 		{
-			m_OnDestroyInstantiateFunction = [this]() {delete (T*)m_Instance; }
-			m_OnInstantiateFunction = [this]() {m_Instance = new T(); m_Instance = nullptr; }
+			OnDestroyInstantiateFunction = [this]() {delete (T*)m_Instance; };
+			OnInstantiateFunction = [this]() {m_Instance = new T(); m_Instance = nullptr; };
 
 			// instance 의 type 은 T type 일 것이다.
-			m_OnCreateFunction = [&](ScriptableEntity* instance) {((T*)instance)->OnCreate(); }
-			m_OnDestroyFunction = [&](ScriptableEntity* instance) {((T*)instance)->OnDestroy(); }
-			m_OnUpdateunction = [&](ScriptableEntity* instance, Timestep ts) {((T*)instance)->OnUpdate(ts); }
+			OnCreateFunction = [&](ScriptableEntity* instance) {((T*)instance)->OnCreate(); };
+			OnDestroyFunction = [&](ScriptableEntity* instance) {((T*)instance)->OnDestroy(); };
+			OnUpdateFunction = [&](ScriptableEntity* instance, Timestep ts) {((T*)instance)->OnUpdate(ts); };
 		}
 	};
 }
