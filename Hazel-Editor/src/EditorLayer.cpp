@@ -95,7 +95,11 @@ namespace Hazel
 				그에 맞게 Viewport 크기도 변화해야 할 것이다.
 				*/
 				m_FrameBuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+				
+				// CameraController 의 Camera Projection Matrix 정보 다시 세팅
 				m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
+				
+				// Scene 에 있는 모든 CameraComponent 의 Camera 정보 다시 세팅
 				m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 			}
 		}

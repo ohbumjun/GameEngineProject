@@ -21,9 +21,6 @@
     <ClCompile Include="src\SandBox2D.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Random.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\ParticleSystem.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -35,16 +32,5 @@
     <ClInclude Include="src\ParticleSystem.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Random.h">
-      <Filter>src</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="assets\shaders\Texture.glsl">
-      <Filter>assets\shaders</Filter>
-    </None>
-    <None Include="assets\shaders\FlatColor.glsl">
-      <Filter>assets\shaders</Filter>
-    </None>
   </ItemGroup>
 </Project>

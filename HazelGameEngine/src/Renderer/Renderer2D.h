@@ -3,7 +3,7 @@
 #include "OrthographicCamera.h"
 #include "Texture.h"
 #include "SubTexture2D.h"
-#include "Hazel/Core/Camera.h"
+#include "Renderer/Camera.h"
 
 namespace Hazel
 {

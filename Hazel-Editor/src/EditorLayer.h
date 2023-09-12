@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Hazel.h>
+#include "ParticleSystem.h"
 
 namespace Hazel
 {
@@ -47,6 +48,9 @@ namespace Hazel
 		uint32_t m_MapWidth;
 		uint32_t m_MapHeight;
 		std::unordered_map<char, Ref<SubTexture2D>> m_TextureMap;
+
+		ParticleProps m_Particle;
+		ParticleSystem m_ParticleSystem;
 	};
 }
 

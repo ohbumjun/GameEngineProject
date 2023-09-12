@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 // 클라이언트 프로젝트에서만 필요한 헤더 파일 정보
 
@@ -16,7 +16,6 @@
 /*Input*/
 #include "Hazel/Core/Input.h"
 
-
 /*TimeStamp*/
 #include "Hazel/Core/TimeStep.h"
 
@@ -28,6 +27,9 @@
 #include "Hazel/Scene/Scene.h"
 #include "Hazel/Scene/Component.h"
 #include "Hazel/Scene/Entity.h"
+
+/*Utils*/
+#include "Hazel/Utils/Random.h"
 
 /*Renderer*/
 #include "Renderer/Renderer.h"

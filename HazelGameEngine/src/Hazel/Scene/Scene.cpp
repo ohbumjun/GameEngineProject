@@ -111,6 +111,7 @@ namespace Hazel
 
 		return entity;
 	}
+
 	void Scene::OnViewportResize(uint32_t width, uint32_t height)
 	{
 		m_ViewportWidth = width;
@@ -118,5 +119,16 @@ namespace Hazel
 
 		// height : orthographic size
 		// width  : orthographic size (viewport size) * aspect ratio
+		auto cameras = m_Registry.view<CameraComponent>();
+
+		for (auto& entity : cameras)
+		{
+			auto& cameraComp = cameras.get<CameraComponent>(entity);
+
+			if (cameraComp.isFixedAspectRatio == false)
+			{
+				// cameraComp.camera.SetViewportSize(width, height);
+			}
+		}
 	}
 }

@@ -1,7 +1,5 @@
 #include "ParticleSystem.h"
-
-#include "Random.h"
-
+#include "Hazel/Utils/Random.h"
 #include <glm/gtc/constants.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/compatibility.hpp>

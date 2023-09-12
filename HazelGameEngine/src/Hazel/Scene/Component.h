@@ -1,7 +1,7 @@
 #pragma once
 #include <glm/glm.hpp>
 
-#include "Hazel/Core/Camera.h"
+#include "Hazel/Scene/SceneCamera.h"
 
 namespace Hazel
 {
@@ -46,7 +46,7 @@ namespace Hazel
 
 	struct CameraComponent
 	{
-		Camera camera;
+		SceneCamera camera;
 
 		// Scene 내 여러 개 CameraComponent  가 있을 수 있다.
 		// MainCamera 를 뭐라고 세팅할 것인가.
