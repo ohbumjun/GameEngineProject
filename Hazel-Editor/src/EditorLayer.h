@@ -2,6 +2,7 @@
 
 #include <Hazel.h>
 #include "ParticleSystem.h"
+#include "Panel/SceneHierarchyPanel.h"
 
 namespace Hazel
 {
@@ -51,6 +52,9 @@ namespace Hazel
 
 		ParticleProps m_Particle;
 		ParticleSystem m_ParticleSystem;
+
+		// Panels
+		Ref<SceneHierarchyPanel> m_SceneHierachyPanel;
 	};
 }
 

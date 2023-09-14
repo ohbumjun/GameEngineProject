@@ -92,6 +92,10 @@ namespace Hazel
 		};
 
 		m_SecondCameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraTestController>();
+	
+		// Panels
+		m_SceneHierachyPanel = CreateRef<SceneHierarchyPanel>();
+		m_SceneHierachyPanel->SetContext(m_ActiveScene);
 	}
 
 	void EditorLayer::OnDetach()
@@ -158,170 +162,185 @@ namespace Hazel
 	{
 		HZ_PROFILE_FUNCTION();
 
-		// Note: Switch this to true to enable dockspace
-		static bool dockspaceOpen = true;
-		static bool opt_fullscreen_persistant = true;
-		bool opt_fullscreen = opt_fullscreen_persistant;
-		static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
-
-		// We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
-		// because it would be confusing to have two docking targets within each others.
-		ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
-		if (opt_fullscreen)
 		{
-			ImGuiViewport* viewport = ImGui::GetMainViewport();
-			ImGui::SetNextWindowPos(viewport->Pos);
-			ImGui::SetNextWindowSize(viewport->Size);
-			ImGui::SetNextWindowViewport(viewport->ID);
-			ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-			ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-			window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
-			window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
-		}
+			// DockSpace
+			// Note: Switch this to true to enable dockspace
+			static bool dockspaceOpen = true;
+			static bool opt_fullscreen_persistant = true;
+			bool opt_fullscreen = opt_fullscreen_persistant;
+			static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
 
-		// When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background and handle the pass-thru hole, so we ask Begin() to not render a background.
-		if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
-			window_flags |= ImGuiWindowFlags_NoBackground;
-
-		// Important: note that we proceed even if Begin() returns false (aka window is collapsed).
-		// This is because we want to keep our DockSpace() active. If a DockSpace() is inactive, 
-		// all active windows docked into it will lose their parent and become undocked.
-		// We cannot preserve the docking relationship between an active window and an inactive docking, otherwise 
-		// any change of dockspace/settings would lead to windows being stuck in limbo and never being visible.
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-		ImGui::Begin("DockSpace Demo", &dockspaceOpen, window_flags);
-		ImGui::PopStyleVar();
-
-		if (opt_fullscreen)
-			ImGui::PopStyleVar(2);
-
-		// DockSpace
-		ImGuiIO& io = ImGui::GetIO();
-		if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
-		{
-			ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-			ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
-		}
-
-		if (ImGui::BeginMenuBar())
-		{
-			if (ImGui::BeginMenu("File"))
+			// We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
+			// because it would be confusing to have two docking targets within each others.
+			ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+			if (opt_fullscreen)
 			{
-				// Disabling fullscreen would allow the window to be moved to the front of other windows, 
-				// which we can't undo at the moment without finer window depth/z control.
-				//ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen_persistant);
-
-				if (ImGui::MenuItem("Exit")) Hazel::Application::Get().Close();
-				ImGui::EndMenu();
+				ImGuiViewport* viewport = ImGui::GetMainViewport();
+				ImGui::SetNextWindowPos(viewport->Pos);
+				ImGui::SetNextWindowSize(viewport->Size);
+				ImGui::SetNextWindowViewport(viewport->ID);
+				ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+				ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+				window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+				window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
 			}
 
-			ImGui::EndMenuBar();
+			// When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background and handle the pass-thru hole, so we ask Begin() to not render a background.
+			if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
+				window_flags |= ImGuiWindowFlags_NoBackground;
+
+			// Important: note that we proceed even if Begin() returns false (aka window is collapsed).
+			// This is because we want to keep our DockSpace() active. If a DockSpace() is inactive, 
+			// all active windows docked into it will lose their parent and become undocked.
+			// We cannot preserve the docking relationship between an active window and an inactive docking, otherwise 
+			// any change of dockspace/settings would lead to windows being stuck in limbo and never being visible.
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+			ImGui::Begin("DockSpace Demo", &dockspaceOpen, window_flags);
+			ImGui::PopStyleVar();
+
+			if (opt_fullscreen)
+				ImGui::PopStyleVar(2);
+
+			// DockSpace
+			ImGuiIO& io = ImGui::GetIO();
+			if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+			{
+				ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+				ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+			}
+
+			if (ImGui::BeginMenuBar())
+			{
+				if (ImGui::BeginMenu("File"))
+				{
+					// Disabling fullscreen would allow the window to be moved to the front of other windows, 
+					// which we can't undo at the moment without finer window depth/z control.
+					//ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen_persistant);
+
+					if (ImGui::MenuItem("Exit")) Hazel::Application::Get().Close();
+					ImGui::EndMenu();
+				}
+
+				ImGui::EndMenuBar();
+			}
 		}
-
-		ImGui::Begin("Settings");
-
-		auto stats = Hazel::Renderer2D::GetStats();
-		ImGui::Text("Renderer2D Stats:");
-		ImGui::Text("Draw Calls: %d", stats.DrawCalls);
-		ImGui::Text("Quads: %d", stats.QuadCount);
-		ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
-		ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
-
-		if (m_SquareEntity)
-		{
-			ImGui::Separator();
-			auto& name = m_SquareEntity.GetComponent<NameComponent>().name;
-			ImGui::Text("%s", name.c_str());
-			auto& squareColor = m_SquareEntity.GetComponent<SpriteRenderComponent>().color;
-			ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
-			ImGui::Separator();
-		}
-
-		ImGui::DragFloat3("Camera Transform",
-			glm::value_ptr(m_CameraEntity.GetComponent<TransformComponent>().transform[3]));
 		
-		if (ImGui::Checkbox("Camera A", &m_PrimaryCamera))
 		{
-			m_CameraEntity.GetComponent<CameraComponent>().isPrimary = m_PrimaryCamera;
-			m_SecondCameraEntity.GetComponent<CameraComponent>().isPrimary = !m_PrimaryCamera;
+			// Panels
+			m_SceneHierachyPanel->OnImGuiRender();
 		}
 
 		{
-			auto& cameraComp = m_SecondCameraEntity.GetComponent<CameraComponent>();
-			auto& camera = cameraComp.camera;
-			float orthoSize = camera.GetOrthoGraphicSize();
+			// Settings
+			ImGui::Begin("Settings");
 
-			if (ImGui::DragFloat("Second Camera Ortho Size", &orthoSize))
+			auto stats = Hazel::Renderer2D::GetStats();
+			ImGui::Text("Renderer2D Stats:");
+			ImGui::Text("Draw Calls: %d", stats.DrawCalls);
+			ImGui::Text("Quads: %d", stats.QuadCount);
+			ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
+			ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
+
+			if (m_SquareEntity)
 			{
-				camera.SetOrthoGraphicSize(orthoSize);
+				ImGui::Separator();
+				auto& name = m_SquareEntity.GetComponent<NameComponent>().name;
+				ImGui::Text("%s", name.c_str());
+				auto& squareColor = m_SquareEntity.GetComponent<SpriteRenderComponent>().color;
+				ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
+				ImGui::Separator();
 			}
+
+			ImGui::DragFloat3("Camera Transform",
+				glm::value_ptr(m_CameraEntity.GetComponent<TransformComponent>().transform[3]));
+
+			if (ImGui::Checkbox("Camera A", &m_PrimaryCamera))
+			{
+				m_CameraEntity.GetComponent<CameraComponent>().isPrimary = m_PrimaryCamera;
+				m_SecondCameraEntity.GetComponent<CameraComponent>().isPrimary = !m_PrimaryCamera;
+			}
+
+			{
+				auto& cameraComp = m_SecondCameraEntity.GetComponent<CameraComponent>();
+				auto& camera = cameraComp.camera;
+				float orthoSize = camera.GetOrthoGraphicSize();
+
+				if (ImGui::DragFloat("Second Camera Ortho Size", &orthoSize))
+				{
+					camera.SetOrthoGraphicSize(orthoSize);
+				}
+			}
+
+			ImGui::End();
 		}
-
-		ImGui::End();
-
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
-		ImGui::Begin("Viewport");
-
-		/*
-		* 해당 viewport 를 한번 클릭하면 true. 다른 곳을 클릭하면 그때 false 가 되지만
-		* 다른 곳을 클릭하지 않는 이상, 한번 클릭하면 계속 true 가 된다는 것이다.
-		*/
-		bool prevFocused		= m_ViewportFocused;
-		m_ViewportFocused	= ImGui::IsWindowFocused();
-		m_ViewportHovered	= ImGui::IsWindowHovered();
-
-		/*
-		즉, 만약 viewport 가 focus 혹은 hover 되었다면, ImguiLayer 단에서 event 를 처리하고 싶다.
-		즉, 다른 layer 에서는 event 를 처리하지 않게 하고 싶은 것이다.
-		ex) 다른 imgui 창에 마우스를 대고 있으면, scroll 을 해도, Viewport 상에서 camera 의
-		     zoom in, zoom out 이 일어나지 않게 하고 싶은 것이다.
-		     반대로, Viewport 에 마우스를 대고 있으면 scroll 했을 때, 다른 imgui 창에
-		     어떤 영향도 안 미치고 싶다.
-
-		BlockEvent(true) 라는 것은, ImGuiLayer 가 event 를 인식하게 한다는 것이고
-		다른 Layer 들은 event 를 인식하지 않게 한다는 것이다.
-		ImGuiLayer 가 event 를 인식한다는 것은, ImGui 창에서 scoll 을 하면
-		ImGui 창이 scroll 된다는 것이고
-		다른 Layer 들은 scroll 관련 영향을 안받는다는 것이다.
-
-		EditorLayer 의 CameraController 가 event 를 인식하지 않는 것.
-		Camera 의 zoom in ,zoom out 이 일어나지 않는다는 것.
-
-		반대로 BlockEvent(false) 라는 것은, ImGuiLayer 가 event 를 인식하지 않는 것
-		다른 Layer 들은 event 를 인식하는 것
-		Editor Layer 에서 CameraController 가 event 를 인식하고
-		Camera 의 zoom in ,out 이 일어나게 하는 것
-
-		따라서 Focus 되거나 Hover 가 되면 , ImGuiLayer 는 Event 를 인식하지 않게 하고
-		EditorLayer 가 event 를 인식할 수 있게 해야 한다.
-		ImGuiLayer 의 m_BlockEvents 를 false 로 만들어야 한다.
-		Focus 혹은 Hover 둘 중 하나라도 되면 false 이고
-		Focuse 혹은 Hover 둘다 안되어야만 true 이다.
-		*/
-
-		bool viewPortFocusedNow = false;
-
-		if (m_ViewportFocused && prevFocused == false)
+		
 		{
-			viewPortFocusedNow = true;
+			// ViewPort
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
+			ImGui::Begin("Viewport");
+
+			/*
+			* 해당 viewport 를 한번 클릭하면 true. 다른 곳을 클릭하면 그때 false 가 되지만
+			* 다른 곳을 클릭하지 않는 이상, 한번 클릭하면 계속 true 가 된다는 것이다.
+			*/
+			bool prevFocused = m_ViewportFocused;
+			m_ViewportFocused = ImGui::IsWindowFocused();
+			m_ViewportHovered = ImGui::IsWindowHovered();
+
+			/*
+			즉, 만약 viewport 가 focus 혹은 hover 되었다면, ImguiLayer 단에서 event 를 처리하고 싶다.
+			즉, 다른 layer 에서는 event 를 처리하지 않게 하고 싶은 것이다.
+			ex) 다른 imgui 창에 마우스를 대고 있으면, scroll 을 해도, Viewport 상에서 camera 의
+				 zoom in, zoom out 이 일어나지 않게 하고 싶은 것이다.
+				 반대로, Viewport 에 마우스를 대고 있으면 scroll 했을 때, 다른 imgui 창에
+				 어떤 영향도 안 미치고 싶다.
+
+			BlockEvent(true) 라는 것은, ImGuiLayer 가 event 를 인식하게 한다는 것이고
+			다른 Layer 들은 event 를 인식하지 않게 한다는 것이다.
+			ImGuiLayer 가 event 를 인식한다는 것은, ImGui 창에서 scoll 을 하면
+			ImGui 창이 scroll 된다는 것이고
+			다른 Layer 들은 scroll 관련 영향을 안받는다는 것이다.
+
+			EditorLayer 의 CameraController 가 event 를 인식하지 않는 것.
+			Camera 의 zoom in ,zoom out 이 일어나지 않는다는 것.
+
+			반대로 BlockEvent(false) 라는 것은, ImGuiLayer 가 event 를 인식하지 않는 것
+			다른 Layer 들은 event 를 인식하는 것
+			Editor Layer 에서 CameraController 가 event 를 인식하고
+			Camera 의 zoom in ,out 이 일어나게 하는 것
+
+			따라서 Focus 되거나 Hover 가 되면 , ImGuiLayer 는 Event 를 인식하지 않게 하고
+			EditorLayer 가 event 를 인식할 수 있게 해야 한다.
+			ImGuiLayer 의 m_BlockEvents 를 false 로 만들어야 한다.
+			Focus 혹은 Hover 둘 중 하나라도 되면 false 이고
+			Focuse 혹은 Hover 둘다 안되어야만 true 이다.
+			*/
+
+			bool viewPortFocusedNow = false;
+
+			if (m_ViewportFocused && prevFocused == false)
+			{
+				viewPortFocusedNow = true;
+			}
+
+			m_VieportInteracted = m_ViewportHovered || viewPortFocusedNow;
+
+			// Application::Get().GetImGuiLayer()->BlockEvents(!m_ViewportFocused || !m_ViewportHovered);
+			Application::Get().GetImGuiLayer()->BlockEvents(!m_VieportInteracted);
+
+			ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+
+			m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
+
+			uint32_t textureID = m_FrameBuffer->GetColorAttachmentRendererID();
+			// uint32_t textureID = m_CheckerboardTexture->GetRendererID();
+			ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+			ImGui::End();
+			ImGui::PopStyleVar();
+
+			ImGui::End();
 		}
-
-		m_VieportInteracted = m_ViewportHovered || viewPortFocusedNow;
-
-		// Application::Get().GetImGuiLayer()->BlockEvents(!m_ViewportFocused || !m_ViewportHovered);
-		Application::Get().GetImGuiLayer()->BlockEvents(!m_VieportInteracted);
-
-		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-
-		m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
-
-		uint32_t textureID = m_FrameBuffer->GetColorAttachmentRendererID();
-		// uint32_t textureID = m_CheckerboardTexture->GetRendererID();
-		ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-		ImGui::End();
-		ImGui::PopStyleVar();
-
-		ImGui::End();
+	
 	}
 
 }
