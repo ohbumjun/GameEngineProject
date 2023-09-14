@@ -20,21 +20,31 @@ namespace Hazel
 
 	void SceneHierarchyPanel::OnImGuiRender()
 	{
-		ImGui::Begin("SceneHierarchy");
+		{
+			// Scene Hierarchy
+			ImGui::Begin("SceneHierarchy");
 
-		m_Context->m_Registry.each([&](auto entityID)
+			m_Context->m_Registry.each([&](auto entityID)
+				{
+					Entity entity{ entityID, m_Context.get() };
+					drawEntityNode(entity);
+				});
+
+			ImGui::End();
+		}
+
+		{
+			// Property
+			ImGui::Begin("Properties");
+
+			if (m_SelectedEntity)
 			{
-				Entity entity{ entityID, m_Context.get() };
-				
-				drawEntityNode(entity);
+				drawComponents(m_SelectedEntity);
+			}
 
-				auto& nc = entity.GetComponent<NameComponent>();
+			ImGui::End();
+		}
 
-				ImGui::Text("%s", nc.name.c_str());
-			});
-
-
-		ImGui::End();
 	}
 
 	// draw selectable list of entities
@@ -57,8 +67,44 @@ namespace Hazel
 		
 		if (isOpened)
 		{
+			{
+				// Tree 안에 Tree Node 가 보일 수 있게 한다.
+				ImGuiTreeNodeFlags flags = (m_SelectedEntity == entity ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow;
+				bool isOpened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entity, flags, name.c_str());
+
+				if (isOpened)
+				{
+
+					ImGui::TreePop();
+				}
+			}
+
 			ImGui::TreePop();
 		}
+	}
+
+	void SceneHierarchyPanel::drawComponents(Entity entity)
+	{
+		if (entity.HasComponent<NameComponent>())
+		{
+			// 여기서 name 을 수정할 수 있게 한다.
+			auto& name = entity.GetComponent<NameComponent>().name;
+
+			char buffer[256];
+			memset(buffer, 0, sizeof(buffer));
+			strcpy_s(buffer, sizeof(buffer), name.c_str());
+
+			if (ImGui::InputText("Tag", buffer, sizeof(buffer)))
+			{
+				name = std::string(buffer);
+			}
+		}
+
+		if (entity.HasComponent<TransformComponent>())
+		{
+
+		}
+
 	}
 }
 
