@@ -60,13 +60,13 @@ namespace Hazel
 		m_FrameBuffer = Hazel::FrameBuffer::Create(fbSpec);
 
 		m_ActiveScene = CreateRef<Scene>();
-		m_SquareEntity = m_ActiveScene->CreateEntity();
+		m_SquareEntity = m_ActiveScene->CreateEntity("Square Entity");
 		m_SquareEntity.AddComponent<SpriteRenderComponent>(glm::vec4{ 0.f, 1.f, 0.f, 1.f });
 	
-		m_CameraEntity = m_ActiveScene->CreateEntity();
+		m_CameraEntity = m_ActiveScene->CreateEntity("Main Camera Entity");
 		m_CameraEntity.AddComponent<CameraComponent>(glm::ortho(-16.f, 16.f, -9.f, 9.f, -1.f, 1.f));
 
-		m_SecondCameraEntity = m_ActiveScene->CreateEntity();
+		m_SecondCameraEntity = m_ActiveScene->CreateEntity("Second Camera Entity");
 		auto& secCc = m_SecondCameraEntity.AddComponent<CameraComponent>(glm::ortho(-1.f, 1.f, -1.f, 1.f, -1.f, 1.f));
 		secCc.isPrimary = false;
 
