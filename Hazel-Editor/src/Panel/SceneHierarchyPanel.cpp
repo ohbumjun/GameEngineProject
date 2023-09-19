@@ -126,9 +126,10 @@ namespace Hazel
 			{
 				// transform 조정
 				auto& cameraComp = entity.GetComponent<CameraComponent>();
+				auto& camera = cameraComp.camera;
 
 				const char* projectionTypeStrings[] = { "Projection", "Orthographic" };
-				const char* currentProjectionTypeString = projectionTypeStrings[(int)cameraComp.camera.GetProjectionType()];
+				const char* currentProjectionTypeString = projectionTypeStrings[(int)camera.GetProjectionType()];
 
 				if (ImGui::BeginCombo("Projection", currentProjectionTypeString))
 				{
@@ -139,7 +140,7 @@ namespace Hazel
 						if (ImGui::Selectable(projectionTypeStrings[i], isSelected))
 						{
 							currentProjectionTypeString = projectionTypeStrings[i];
-							cameraComp.camera.SetProjectionType((SceneCamera::ProjectionType)i);
+							camera.SetProjectionType((SceneCamera::ProjectionType)i);
 						}
 
 						if (isSelected)
@@ -149,6 +150,32 @@ namespace Hazel
 					}
 
 					ImGui::EndCombo();
+				};
+
+				if (camera.GetProjectionType() == SceneCamera::ProjectionType::Projective)
+				{
+
+				}
+				else if (camera.GetProjectionType() == SceneCamera::ProjectionType::Orthographic)
+				{
+					float orthoSize		= camera.GetOrthoGraphicSize();
+					float orthoNear		= camera.GetOrthographicNear();
+					float orthoFar			= camera.GetOrthographicFar();
+
+					if (ImGui::DragFloat("Size", &orthoSize))
+					{
+						camera.SetOrthoGraphicSize(orthoSize);
+					}
+
+					if (ImGui::DragFloat("Near", &orthoNear))
+					{
+						camera.SetOrthographicNearClip(orthoNear);
+					}
+
+					if (ImGui::DragFloat("Far", &orthoFar))
+					{
+						camera.SetOrthographicFarClip(orthoFar);
+					}
 				}
 
 				ImGui::TreePop();

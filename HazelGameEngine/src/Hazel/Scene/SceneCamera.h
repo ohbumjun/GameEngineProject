@@ -20,9 +20,17 @@ namespace Hazel
 		void RecalculateProjection();
 	
 		float GetOrthoGraphicSize() const { return m_OrthographicSize; }
-		void SetOrthoGraphicSize(float size) { m_OrthographicSize = size; }
+		void SetOrthoGraphicSize(float size) { m_OrthographicSize = size; RecalculateProjection(); }
 		ProjectionType GetProjectionType() const { return m_ProjectionType; }
 		void SetProjectionType(ProjectionType type) { m_ProjectionType = type; }
+
+		// ortho 와 projective 의 near, far 은 구분되어야 한다.
+		// ortho 는 near, far 아 -1, 1 정도이지만
+		// projective 는 near, far 이 0 , 1000 이렇게 될 수 있기 때문이다.
+		float GetOrthographicNear()	const { return m_OrthographicNear; }
+		float GetOrthographicFar()		const { return m_OrthographicFar; }
+		void SetOrthographicNearClip(float nearClip) { m_OrthographicNear = nearClip; RecalculateProjection();}
+		void SetOrthographicFarClip(float farClip) { m_OrthographicFar = farClip; RecalculateProjection();}
 	private :
 		ProjectionType m_ProjectionType = ProjectionType::Orthographic;
 

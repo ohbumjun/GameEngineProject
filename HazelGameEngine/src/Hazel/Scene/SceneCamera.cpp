@@ -36,6 +36,14 @@ void Hazel::SceneCamera::RecalculateProjection()
 	float orthoTop = m_OrthographicSize * 0.5f;
 	float orthoBottom = m_OrthographicSize * -0.5f;
 
+	/*
+	orthoLeft, orthoRight, orthoTop, orthoBottom: These parameters define the boundaries of the orthographic projection in world space. 
+	The left, right, top, and bottom values specify the extents of the view volume along the X and Y axes. 
+	Objects within this volume will be visible in the rendered scene.
+
+	즉, 해당 값들이 작다면, 보여지는 공간이 작다는 것이고, 보여지는 대상이 커보인다는 것이다.
+	반면, 해당 값들이 크다면, 보여지는 공간이 넓다는 의미이고, 보여지는 대상이 작아보인다는 것이다.
+	*/
 	m_ProjectionMatrix = glm::ortho(orthoLeft, orthoRight, orthoTop, orthoBottom, m_OrthographicNear, m_OrthographicFar);
 
 }
