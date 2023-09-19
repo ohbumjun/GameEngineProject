@@ -53,6 +53,8 @@ namespace Hazel
 		// MainCamera 를 뭐라고 세팅할 것인가.
 		bool isPrimary = true;
 
+		// true 라면, viewport resize 에 영향 받지 않게 하고
+		// false 라면, viewport resize 에 영향을 받게 한다.
 		bool isFixedAspectRatio = false;
 
 		CameraComponent() = default;

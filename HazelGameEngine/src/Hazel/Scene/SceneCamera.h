@@ -7,6 +7,8 @@ namespace Hazel
 	class SceneCamera : public Camera
 	{
 	public :
+		enum class ProjectionType { Projective = 0, Orthographic = 1 };
+
 		SceneCamera();
 		SceneCamera(const glm::mat4& projection) : Camera(projection) {}
 		~SceneCamera();
@@ -19,7 +21,11 @@ namespace Hazel
 	
 		float GetOrthoGraphicSize() const { return m_OrthographicSize; }
 		void SetOrthoGraphicSize(float size) { m_OrthographicSize = size; }
+		ProjectionType GetProjectionType() const { return m_ProjectionType; }
+		void SetProjectionType(ProjectionType type) { m_ProjectionType = type; }
 	private :
+		ProjectionType m_ProjectionType = ProjectionType::Orthographic;
+
 		float m_OrthographicSize = 10.f;
 		float m_OrthographicNear = -1.f, m_OrthographicFar = 1.f;
 

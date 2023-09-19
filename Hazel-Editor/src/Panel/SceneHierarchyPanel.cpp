@@ -4,6 +4,7 @@
 #include "Hazel/Scene/Component.h"
 
 #include <imgui/imgui.h>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace Hazel
 {
@@ -94,7 +95,7 @@ namespace Hazel
 			memset(buffer, 0, sizeof(buffer));
 			strcpy_s(buffer, sizeof(buffer), name.c_str());
 
-			if (ImGui::InputText("Tag", buffer, sizeof(buffer)))
+			if (ImGui::InputText("Name", buffer, sizeof(buffer)))
 			{
 				name = std::string(buffer);
 			}
@@ -102,9 +103,57 @@ namespace Hazel
 
 		if (entity.HasComponent<TransformComponent>())
 		{
+			// 해당 영역을 선택해서 열어야만 조정 가능하다
+			if (ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(),
+				ImGuiTreeNodeFlags_DefaultOpen, "Transform"))
+			{
+				// transform 조정
+				auto& transform = entity.GetComponent<TransformComponent>().transform;
 
+				// transform[3]), 0.5f => mat4 행렬의 마지막 '행' 이 아니라 '열'을 의미한다.
+				// (의문) OPENGL 좌표계 기준으로 마지막 '열' 은 translation 에 대한 것이다.
+				ImGui::DragFloat3("Position", glm::value_ptr(transform[3]), 0.1f);
+
+				ImGui::TreePop();
+			}
 		}
 
+		if (entity.HasComponent<CameraComponent>())
+		{
+			// 해당 영역을 선택해서 열어야만 조정 가능하다
+			if (ImGui::TreeNodeEx((void*)typeid(CameraComponent).hash_code(),
+				ImGuiTreeNodeFlags_DefaultOpen, "Camera"))
+			{
+				// transform 조정
+				auto& cameraComp = entity.GetComponent<CameraComponent>();
+
+				const char* projectionTypeStrings[] = { "Projection", "Orthographic" };
+				const char* currentProjectionTypeString = projectionTypeStrings[(int)cameraComp.camera.GetProjectionType()];
+
+				if (ImGui::BeginCombo("Projection", currentProjectionTypeString))
+				{
+					for (int i = 0; i < 2; ++i)
+					{
+						bool isSelected = currentProjectionTypeString == projectionTypeStrings[i];
+
+						if (ImGui::Selectable(projectionTypeStrings[i], isSelected))
+						{
+							currentProjectionTypeString = projectionTypeStrings[i];
+							cameraComp.camera.SetProjectionType((SceneCamera::ProjectionType)i);
+						}
+
+						if (isSelected)
+						{
+							ImGui::SetItemDefaultFocus();
+						}
+					}
+
+					ImGui::EndCombo();
+				}
+
+				ImGui::TreePop();
+			}
+		}
 	}
 }
 
