@@ -108,11 +108,9 @@ namespace Hazel
 				ImGuiTreeNodeFlags_DefaultOpen, "Transform"))
 			{
 				// transform 조정
-				auto& transform = entity.GetComponent<TransformComponent>().transform;
+				auto& transformComp = entity.GetComponent<TransformComponent>();
 
-				// transform[3]), 0.5f => mat4 행렬의 마지막 '행' 이 아니라 '열'을 의미한다.
-				// (의문) OPENGL 좌표계 기준으로 마지막 '열' 은 translation 에 대한 것이다.
-				ImGui::DragFloat3("Position", glm::value_ptr(transform[3]), 0.1f);
+				ImGui::DragFloat3("Position", glm::value_ptr(transformComp.Translation), 0.1f);
 
 				ImGui::TreePop();
 			}

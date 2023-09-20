@@ -255,7 +255,7 @@ namespace Hazel
 			}
 
 			ImGui::DragFloat3("Camera Transform",
-				glm::value_ptr(m_CameraEntity.GetComponent<TransformComponent>().transform[3]));
+				glm::value_ptr(m_CameraEntity.GetComponent<TransformComponent>().Translation));
 
 			if (ImGui::Checkbox("Main Camera", &m_PrimaryCamera))
 			{

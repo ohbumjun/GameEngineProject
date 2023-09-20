@@ -96,7 +96,7 @@ namespace Hazel
 				if (camera.isPrimary)
 				{
 					mainCamera = &camera.camera;
-					cameraTransform = &transform.transform;
+					cameraTransform = &transform.GetTransform();
 					break;
 				}
 			}
@@ -115,7 +115,7 @@ namespace Hazel
 				// 즉, tuple 자체를 굳이 & 로 받을 필요도 없을 뿐더러, 이미 compont 정보들은 & 로 리턴한다.
 				auto [transform, sprite] = group.get<TransformComponent, SpriteRenderComponent>(entity);
 
-				Renderer2D::DrawQuad(transform, sprite.color);
+				Renderer2D::DrawQuad(transform.GetTransform(), sprite.color);
 			}
 
 			Renderer2D::EndScene();
