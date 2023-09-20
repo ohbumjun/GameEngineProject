@@ -257,7 +257,7 @@ namespace Hazel
 			ImGui::DragFloat3("Camera Transform",
 				glm::value_ptr(m_CameraEntity.GetComponent<TransformComponent>().transform[3]));
 
-			if (ImGui::Checkbox("Camera A", &m_PrimaryCamera))
+			if (ImGui::Checkbox("Main Camera", &m_PrimaryCamera))
 			{
 				m_CameraEntity.GetComponent<CameraComponent>().isPrimary = m_PrimaryCamera;
 				m_SecondCameraEntity.GetComponent<CameraComponent>().isPrimary = !m_PrimaryCamera;

@@ -202,6 +202,21 @@ namespace Hazel
 				ImGui::TreePop();
 			}
 		}
+
+		if (entity.HasComponent<SpriteRenderComponent>())
+		{
+			// 해당 영역을 선택해서 열어야만 조정 가능하다
+			if (ImGui::TreeNodeEx((void*)typeid(SpriteRenderComponent).hash_code(),
+				ImGuiTreeNodeFlags_DefaultOpen, "Sprite Color"))
+			{
+				// transform 조정
+				auto& sprite = entity.GetComponent<SpriteRenderComponent>();
+
+				ImGui::ColorEdit4("Color", glm::value_ptr(sprite.color));
+
+				ImGui::TreePop();
+			}
+		}
 	}
 }
 
