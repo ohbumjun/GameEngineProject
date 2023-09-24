@@ -307,16 +307,19 @@ namespace Hazel
 
 		if (entity.HasComponent<SpriteRenderComponent>())
 		{
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4.f, 4.f });
 			// 해당 영역을 선택해서 열어야만 조정 가능하다
 			bool opened = ImGui::TreeNodeEx((void*)typeid(SpriteRenderComponent).hash_code(),
 				treeNodeFlag, "Sprite Color");
 
-			ImGui::SameLine();
+			ImGui::SameLine(ImGui::GetWindowWidth() - 25.f);
 
 			bool removeComponent = false;
 
 			if (ImGui::Button("+"))
 				ImGui::OpenPopup("ComponentSettings");
+
+			ImGui::PopStyleVar();
 
 			if (ImGui::BeginPopup("ComponentSettings"))
 			{

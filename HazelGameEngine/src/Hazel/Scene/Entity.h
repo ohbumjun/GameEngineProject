@@ -17,8 +17,9 @@ namespace Hazel
 		T& AddComponent(Args&&... args)
 		{
 			HZ_CORE_ASSERT(HasComponent<T>() == false, "Component Already Exist");
-
-			return m_Scene->m_Registry.emplace<T>(m_EntityHandle, std::forward<Args>(args)...);
+			T& newComp = m_Scene->m_Registry.emplace<T>(m_EntityHandle, std::forward<Args>(args)...);
+			m_Scene->OnComponentAdded<T>(*this, newComp);
+			return newComp;
 		};
 		template<typename T>
 		T& GetComponent()

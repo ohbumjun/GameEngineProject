@@ -12,6 +12,8 @@ namespace Hazel
 		entt::registry m_Registry;
 	};
 
+	class Entity;
+
 	class Scene
 	{
 		friend class Entity;
@@ -25,6 +27,10 @@ namespace Hazel
 		void DestroyEntity(const Entity& entity);
 		void OnViewportResize(uint32_t width, uint32_t height);
 		void OnUpdate(const Timestep& ts);
+
+		// Component 추가시 호출되는 함수
+		template<typename T>
+		void OnComponentAdded(Entity entity, T& component);
 
 	private :
 		/*
