@@ -3,6 +3,8 @@
 #include "Hazel/Scene/Entity.h"
 #include "Hazel/Scene/Scene.h"
 
+#include <glm/gtc/type_ptr.hpp>
+
 namespace Hazel
 {
 	class SceneHierarchyPanel
@@ -15,6 +17,9 @@ namespace Hazel
 	private :
 		void drawEntityNode(Entity entity);
 		void drawComponents(Entity entity);
+
+		void drawVec3Control(const std::string& lable, glm::vec3& values,
+			float resetValues = 0.0f, float columnWidth = 100.f);
 
 		Ref<Scene> m_Context;
 		Entity m_SelectedEntity;

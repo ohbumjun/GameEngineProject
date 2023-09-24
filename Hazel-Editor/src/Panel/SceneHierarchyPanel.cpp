@@ -4,78 +4,10 @@
 #include "Hazel/Scene/Component.h"
 
 #include <imgui/imgui.h>
-#include <glm/gtc/type_ptr.hpp>
 
 namespace Hazel
 {
-	static void DrawVec3Control(const std::string& lable, glm::vec3& values, 
-		float resetValues = 0.0f, float columnWidth = 100.f)
-	{
-		ImGui::PushID(lable.c_str());
-
-		ImGui::Columns(2);
-		ImGui::SetColumnWidth(0, columnWidth);
-		ImGui::Text(lable.c_str());
-		ImGui::NextColumn();
-
-		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 1.f, 0 });
-
-		// ImGui::PushItemWidth(3, ImGui::CalcItemWidth());
-		// float lineHeight = ImGui::GetTextLineHeightWithSpacing();
-		float lineHeight = ImGui::GetFontSize() + 2.f * ImGui::GetStyle().FramePadding.y;
-		ImVec2 buttonSize = { lineHeight + 4.f, lineHeight};
-
-		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.1f, 0.15f, 1.0f));
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.8f, 0.3f, 0.15f, 1.0f));
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.8f, 0.5f, 0.15f, 1.0f));
-
-		if (ImGui::Button("X", buttonSize)) {
-			values.x = resetValues;
-		}
-		ImGui::PopStyleColor(3);
-
-		ImGui::SameLine();
-		// ImGui::PushItemWidth(lineHeight * 4.0f); // Adjust the width as needed
-		ImGui::PushItemWidth(lineHeight * 4.0f); // Adjust the width as needed
-		ImGui::DragFloat("##X", &values.x, 0.1f);
-		ImGui::PopItemWidth();
-		ImGui::SameLine();
-
-		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.1f, 0.8f, 0.15f, 1.0f));
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.1f, 0.8f, 0.3f, 1.0f));
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.7f, 0.5f, 1.0f));
-
-		if (ImGui::Button("Y", buttonSize)) {
-			values.y = resetValues;
-		}
-		ImGui::PopStyleColor(3);
-
-		ImGui::SameLine();
-		ImGui::PushItemWidth(lineHeight * 4.0f); // Adjust the width as needed
-		ImGui::DragFloat("##Y", &values.y, 0.1f);
-		ImGui::PopItemWidth();
-		ImGui::SameLine();
-
-
-		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.1f, 0.1f, 0.8f, 1.0f));
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.1f, 0.8f, 1.0f));
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.1f, 0.8f, 1.0f));
-		if (ImGui::Button("Z", buttonSize)) {
-			values.z = resetValues;
-		}
-		ImGui::PopStyleColor(3);
-
-		ImGui::SameLine();
-		ImGui::PushItemWidth(lineHeight * 4.0f); // Adjust the width as needed
-		ImGui::DragFloat("##Z", &values.z, 0.1f);
-		ImGui::PopItemWidth();
-
-		ImGui::PopStyleVar();
-
-		ImGui::Columns(1);
-
-		ImGui::PopID();
-	}
+	
 
 	SceneHierarchyPanel::SceneHierarchyPanel(const Ref<Scene>& scene) :
 		m_Context(scene)
@@ -228,27 +160,66 @@ namespace Hazel
 		if (entity.HasComponent<TransformComponent>())
 		{
 			// 해당 영역을 선택해서 열어야만 조정 가능하다
-			if (ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(),
-				treeNodeFlag, "Transform"))
+			bool opened = ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(),
+				treeNodeFlag, "Transform");
+
+			ImGui::SameLine();
+
+			bool removeComponent = false;
+
+			if (ImGui::Button("+"))
+				ImGui::OpenPopup("ComponentSettings");
+
+			if (ImGui::BeginPopup("ComponentSettings"))
+			{
+				if (ImGui::MenuItem("Remove Component"))
+					removeComponent = true;
+
+				ImGui::EndPopup();
+			}
+
+			if (opened)
 			{
 				// transform 조정
 				auto& transformComp = entity.GetComponent<TransformComponent>();
 
-				DrawVec3Control("Translation", transformComp.Translation);
+				drawVec3Control("Translation", transformComp.Translation);
 				glm::vec3 degree = glm::degrees(transformComp.Rotation);
-				DrawVec3Control("Rotation", degree);
+				drawVec3Control("Rotation", degree);
 				transformComp.Rotation = glm::radians(degree);
-				DrawVec3Control("Scale", transformComp.Scale);
+				drawVec3Control("Scale", transformComp.Scale);
 
 				ImGui::TreePop();
+			}
+
+			if (removeComponent)
+			{
+				entity.RemoveComponent<TransformComponent>();
 			}
 		}
 
 		if (entity.HasComponent<CameraComponent>())
 		{
 			// 해당 영역을 선택해서 열어야만 조정 가능하다
-			if (ImGui::TreeNodeEx((void*)typeid(CameraComponent).hash_code(),
-				treeNodeFlag, "Camera"))
+			bool opened = ImGui::TreeNodeEx((void*)typeid(CameraComponent).hash_code(),
+				treeNodeFlag, "Camera");
+
+			ImGui::SameLine();
+
+			bool removeComponent = false;
+
+			if (ImGui::Button("+"))
+				ImGui::OpenPopup("ComponentSettings");
+
+			if (ImGui::BeginPopup("ComponentSettings"))
+			{
+				if (ImGui::MenuItem("Remove Component"))
+					removeComponent = true;
+
+				ImGui::EndPopup();
+			}
+
+			if (opened)
 			{
 				// transform 조정
 				auto& cameraComp = entity.GetComponent<CameraComponent>();
@@ -327,13 +298,35 @@ namespace Hazel
 
 				ImGui::TreePop();
 			}
+
+			if (removeComponent)
+			{
+				entity.RemoveComponent<CameraComponent>();
+			}
 		}
 
 		if (entity.HasComponent<SpriteRenderComponent>())
 		{
 			// 해당 영역을 선택해서 열어야만 조정 가능하다
-			if (ImGui::TreeNodeEx((void*)typeid(SpriteRenderComponent).hash_code(),
-				treeNodeFlag, "Sprite Color"))
+			bool opened = ImGui::TreeNodeEx((void*)typeid(SpriteRenderComponent).hash_code(),
+				treeNodeFlag, "Sprite Color");
+
+			ImGui::SameLine();
+
+			bool removeComponent = false;
+
+			if (ImGui::Button("+"))
+				ImGui::OpenPopup("ComponentSettings");
+
+			if (ImGui::BeginPopup("ComponentSettings"))
+			{
+				if (ImGui::MenuItem("Remove Component"))
+					removeComponent = true;
+
+				ImGui::EndPopup();
+			}
+
+			if (opened)
 			{
 				// transform 조정
 				auto& sprite = entity.GetComponent<SpriteRenderComponent>();
@@ -342,7 +335,79 @@ namespace Hazel
 
 				ImGui::TreePop();
 			}
+
+			if (removeComponent)
+			{
+				entity.RemoveComponent<SpriteRenderComponent>();
+			}
 		}
+	}
+	void SceneHierarchyPanel::drawVec3Control(const std::string& lable, glm::vec3& values, float resetValues, float columnWidth)
+	{
+		ImGui::PushID(lable.c_str());
+
+		ImGui::Columns(2);
+		ImGui::SetColumnWidth(0, columnWidth);
+		ImGui::Text(lable.c_str());
+		ImGui::NextColumn();
+
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 1.f, 0 });
+
+		// ImGui::PushItemWidth(3, ImGui::CalcItemWidth());
+		// float lineHeight = ImGui::GetTextLineHeightWithSpacing();
+		float lineHeight = ImGui::GetFontSize() + 2.f * ImGui::GetStyle().FramePadding.y;
+		ImVec2 buttonSize = { lineHeight + 4.f, lineHeight };
+
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.1f, 0.15f, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.8f, 0.3f, 0.15f, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.8f, 0.5f, 0.15f, 1.0f));
+
+		if (ImGui::Button("X", buttonSize)) {
+			values.x = resetValues;
+		}
+		ImGui::PopStyleColor(3);
+
+		ImGui::SameLine();
+		// ImGui::PushItemWidth(lineHeight * 4.0f); // Adjust the width as needed
+		ImGui::PushItemWidth(lineHeight * 4.0f); // Adjust the width as needed
+		ImGui::DragFloat("##X", &values.x, 0.1f);
+		ImGui::PopItemWidth();
+		ImGui::SameLine();
+
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.1f, 0.8f, 0.15f, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.1f, 0.8f, 0.3f, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.7f, 0.5f, 1.0f));
+
+		if (ImGui::Button("Y", buttonSize)) {
+			values.y = resetValues;
+		}
+		ImGui::PopStyleColor(3);
+
+		ImGui::SameLine();
+		ImGui::PushItemWidth(lineHeight * 4.0f); // Adjust the width as needed
+		ImGui::DragFloat("##Y", &values.y, 0.1f);
+		ImGui::PopItemWidth();
+		ImGui::SameLine();
+
+
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.1f, 0.1f, 0.8f, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.1f, 0.8f, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.1f, 0.8f, 1.0f));
+		if (ImGui::Button("Z", buttonSize)) {
+			values.z = resetValues;
+		}
+		ImGui::PopStyleColor(3);
+
+		ImGui::SameLine();
+		ImGui::PushItemWidth(lineHeight * 4.0f); // Adjust the width as needed
+		ImGui::DragFloat("##Z", &values.z, 0.1f);
+		ImGui::PopItemWidth();
+
+		ImGui::PopStyleVar();
+
+		ImGui::Columns(1);
+
+		ImGui::PopID();
 	}
 }
 
