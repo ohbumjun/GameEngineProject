@@ -244,15 +244,15 @@ namespace Hazel
 			ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
 			ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 
-			if (m_SquareEntity)
-			{
-				ImGui::Separator();
-				auto& name = m_SquareEntity.GetComponent<NameComponent>().name;
-				ImGui::Text("%s", name.c_str());
-				auto& squareColor = m_SquareEntity.GetComponent<SpriteRenderComponent>().color;
-				ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
-				ImGui::Separator();
-			}
+			// if (m_SquareEntity)
+			// {
+			// 	ImGui::Separator();
+			// 	auto& name = m_SquareEntity.GetComponent<NameComponent>().name;
+			// 	ImGui::Text("%s", name.c_str());
+			// 	auto& squareColor = m_SquareEntity.GetComponent<SpriteRenderComponent>().color;
+			// 	ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
+			// 	ImGui::Separator();
+			// }
 
 			ImGui::DragFloat3("Camera Transform",
 				glm::value_ptr(m_CameraEntity.GetComponent<TransformComponent>().Translation));

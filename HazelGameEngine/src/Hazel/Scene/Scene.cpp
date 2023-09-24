@@ -133,6 +133,11 @@ namespace Hazel
 		return entity;
 	}
 
+	void Scene::DestroyEntity(const Entity& entity)
+	{
+		m_Registry.destroy(entity);
+	}
+
 	void Scene::OnViewportResize(uint32_t width, uint32_t height)
 	{
 		m_ViewportWidth = width;

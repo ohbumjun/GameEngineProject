@@ -22,6 +22,7 @@ namespace Hazel
 		virtual ~Scene();
 
 		Entity CreateEntity(const std::string& name = "Entity");
+		void DestroyEntity(const Entity& entity);
 		void OnViewportResize(uint32_t width, uint32_t height);
 		void OnUpdate(const Timestep& ts);
 

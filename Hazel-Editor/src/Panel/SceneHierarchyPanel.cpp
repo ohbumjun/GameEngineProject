@@ -11,6 +11,8 @@ namespace Hazel
 	static void DrawVec3Control(const std::string& lable, glm::vec3& values, 
 		float resetValues = 0.0f, float columnWidth = 100.f)
 	{
+		ImGui::PushID(lable.c_str());
+
 		ImGui::Columns(2);
 		ImGui::SetColumnWidth(0, columnWidth);
 		ImGui::Text(lable.c_str());
@@ -71,6 +73,8 @@ namespace Hazel
 		ImGui::PopStyleVar();
 
 		ImGui::Columns(1);
+
+		ImGui::PopID();
 	}
 
 	SceneHierarchyPanel::SceneHierarchyPanel(const Ref<Scene>& scene) :
@@ -96,8 +100,21 @@ namespace Hazel
 					drawEntityNode(entity);
 				});
 
+			if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
+				m_SelectedEntity = {};
+
+			// Right Click on Black Space
+			if (ImGui::BeginPopupContextWindow(0, 1 | ImGuiPopupFlags_NoOpenOverItems))
+			{
+				if (ImGui::MenuItem("Create Empty Entity"))
+					m_Context->CreateEntity();
+		
+				ImGui::EndPopup();
+			}
+
 			ImGui::End();
 		}
+
 
 		{
 			// Property
@@ -125,10 +142,19 @@ namespace Hazel
 			ImGuiTreeNodeFlags_OpenOnArrow;
 		
 		bool isOpened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entity, flags, name.c_str());
-		
+		bool entityDeleted = false;
+
 		if (ImGui::IsItemClicked())
 		{
 			m_SelectedEntity = entity;
+		}
+
+		if (ImGui::BeginPopupContextItem())
+		{
+			if (ImGui::MenuItem("Delete Entity"))
+				entityDeleted = true;
+
+			ImGui::EndPopup();
 		}
 		
 		if (isOpened)
@@ -146,6 +172,16 @@ namespace Hazel
 			}
 
 			ImGui::TreePop();
+		}
+
+		if (entityDeleted)
+		{
+			m_Context->DestroyEntity(entity);
+
+			// m_SelectedEntity ? == 현재 클릭된 Entity 의 Component 목록을 보고 있었다는 의미
+			// m_SelectedEntity 정보를 비워준다.
+			if (m_SelectedEntity == entity)
+				m_SelectedEntity = {};
 		}
 	}
 
@@ -175,8 +211,11 @@ namespace Hazel
 				// transform 조정
 				auto& transformComp = entity.GetComponent<TransformComponent>();
 
-				// ImGui::DragFloat3("Position", glm::value_ptr(transformComp.Translation), 0.1f);
 				DrawVec3Control("Translation", transformComp.Translation);
+				glm::vec3 degree = glm::degrees(transformComp.Rotation);
+				DrawVec3Control("Rotation", degree);
+				transformComp.Rotation = glm::radians(degree);
+				DrawVec3Control("Scale", transformComp.Scale);
 
 				ImGui::TreePop();
 			}
