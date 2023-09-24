@@ -123,6 +123,26 @@ namespace Hazel
 			if (m_SelectedEntity)
 			{
 				drawComponents(m_SelectedEntity);
+			
+				if (ImGui::Button("Add Component"))
+					ImGui::OpenPopup("AddComponent");
+
+				if (ImGui::BeginPopup("AddComponent"))
+				{
+					if (ImGui::MenuItem("Camera"))
+					{
+						m_SelectedEntity.AddComponent<CameraComponent>();
+						ImGui::CloseCurrentPopup();
+					}
+
+					if (ImGui::MenuItem("SpriteRenderer"))
+					{
+						m_SelectedEntity.AddComponent<SpriteRenderComponent>();
+						ImGui::CloseCurrentPopup();
+					}
+
+					ImGui::EndPopup();
+				}
 			}
 
 			ImGui::End();
@@ -202,11 +222,14 @@ namespace Hazel
 			}
 		}
 
+		const ImGuiTreeNodeFlags treeNodeFlag = ImGuiTreeNodeFlags_DefaultOpen |
+			ImGuiTreeNodeFlags_AllowItemOverlap;
+
 		if (entity.HasComponent<TransformComponent>())
 		{
 			// 해당 영역을 선택해서 열어야만 조정 가능하다
 			if (ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(),
-				ImGuiTreeNodeFlags_DefaultOpen, "Transform"))
+				treeNodeFlag, "Transform"))
 			{
 				// transform 조정
 				auto& transformComp = entity.GetComponent<TransformComponent>();
@@ -225,7 +248,7 @@ namespace Hazel
 		{
 			// 해당 영역을 선택해서 열어야만 조정 가능하다
 			if (ImGui::TreeNodeEx((void*)typeid(CameraComponent).hash_code(),
-				ImGuiTreeNodeFlags_DefaultOpen, "Camera"))
+				treeNodeFlag, "Camera"))
 			{
 				// transform 조정
 				auto& cameraComp = entity.GetComponent<CameraComponent>();
@@ -310,7 +333,7 @@ namespace Hazel
 		{
 			// 해당 영역을 선택해서 열어야만 조정 가능하다
 			if (ImGui::TreeNodeEx((void*)typeid(SpriteRenderComponent).hash_code(),
-				ImGuiTreeNodeFlags_DefaultOpen, "Sprite Color"))
+				treeNodeFlag, "Sprite Color"))
 			{
 				// transform 조정
 				auto& sprite = entity.GetComponent<SpriteRenderComponent>();
