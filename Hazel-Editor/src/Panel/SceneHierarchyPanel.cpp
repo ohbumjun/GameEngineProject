@@ -23,9 +23,15 @@ namespace Hazel
 		float lineHeight = ImGui::GetFontSize() + 2.f * ImGui::GetStyle().FramePadding.y;
 		ImVec2 buttonSize = { lineHeight + 4.f, lineHeight};
 
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.1f, 0.15f, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.8f, 0.3f, 0.15f, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.8f, 0.5f, 0.15f, 1.0f));
+
 		if (ImGui::Button("X", buttonSize)) {
 			values.x = resetValues;
 		}
+		ImGui::PopStyleColor(3);
+
 		ImGui::SameLine();
 		// ImGui::PushItemWidth(lineHeight * 4.0f); // Adjust the width as needed
 		ImGui::PushItemWidth(lineHeight * 4.0f); // Adjust the width as needed
@@ -33,18 +39,30 @@ namespace Hazel
 		ImGui::PopItemWidth();
 		ImGui::SameLine();
 
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.1f, 0.8f, 0.15f, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.1f, 0.8f, 0.3f, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.7f, 0.5f, 1.0f));
+
 		if (ImGui::Button("Y", buttonSize)) {
 			values.y = resetValues;
 		}
+		ImGui::PopStyleColor(3);
+
 		ImGui::SameLine();
 		ImGui::PushItemWidth(lineHeight * 4.0f); // Adjust the width as needed
 		ImGui::DragFloat("##Y", &values.y, 0.1f);
 		ImGui::PopItemWidth();
 		ImGui::SameLine();
 
+
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.1f, 0.1f, 0.8f, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.1f, 0.8f, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.1f, 0.8f, 1.0f));
 		if (ImGui::Button("Z", buttonSize)) {
 			values.z = resetValues;
 		}
+		ImGui::PopStyleColor(3);
+
 		ImGui::SameLine();
 		ImGui::PushItemWidth(lineHeight * 4.0f); // Adjust the width as needed
 		ImGui::DragFloat("##Z", &values.z, 0.1f);
