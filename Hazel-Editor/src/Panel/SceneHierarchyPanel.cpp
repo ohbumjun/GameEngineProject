@@ -8,6 +8,53 @@
 
 namespace Hazel
 {
+	static void DrawVec3Control(const std::string& lable, glm::vec3& values, 
+		float resetValues = 0.0f, float columnWidth = 100.f)
+	{
+		ImGui::Columns(2);
+		ImGui::SetColumnWidth(0, columnWidth);
+		ImGui::Text(lable.c_str());
+		ImGui::NextColumn();
+
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 1.f, 0 });
+
+		// ImGui::PushItemWidth(3, ImGui::CalcItemWidth());
+		// float lineHeight = ImGui::GetTextLineHeightWithSpacing();
+		float lineHeight = ImGui::GetFontSize() + 2.f * ImGui::GetStyle().FramePadding.y;
+		ImVec2 buttonSize = { lineHeight + 4.f, lineHeight};
+
+		if (ImGui::Button("X", buttonSize)) {
+			values.x = resetValues;
+		}
+		ImGui::SameLine();
+		// ImGui::PushItemWidth(lineHeight * 4.0f); // Adjust the width as needed
+		ImGui::PushItemWidth(lineHeight * 4.0f); // Adjust the width as needed
+		ImGui::DragFloat("##X", &values.x, 0.1f);
+		ImGui::PopItemWidth();
+		ImGui::SameLine();
+
+		if (ImGui::Button("Y", buttonSize)) {
+			values.y = resetValues;
+		}
+		ImGui::SameLine();
+		ImGui::PushItemWidth(lineHeight * 4.0f); // Adjust the width as needed
+		ImGui::DragFloat("##Y", &values.y, 0.1f);
+		ImGui::PopItemWidth();
+		ImGui::SameLine();
+
+		if (ImGui::Button("Z", buttonSize)) {
+			values.z = resetValues;
+		}
+		ImGui::SameLine();
+		ImGui::PushItemWidth(lineHeight * 4.0f); // Adjust the width as needed
+		ImGui::DragFloat("##Z", &values.z, 0.1f);
+		ImGui::PopItemWidth();
+
+		ImGui::PopStyleVar();
+
+		ImGui::Columns(1);
+	}
+
 	SceneHierarchyPanel::SceneHierarchyPanel(const Ref<Scene>& scene) :
 		m_Context(scene)
 	{
@@ -110,7 +157,8 @@ namespace Hazel
 				// transform 조정
 				auto& transformComp = entity.GetComponent<TransformComponent>();
 
-				ImGui::DragFloat3("Position", glm::value_ptr(transformComp.Translation), 0.1f);
+				// ImGui::DragFloat3("Position", glm::value_ptr(transformComp.Translation), 0.1f);
+				DrawVec3Control("Translation", transformComp.Translation);
 
 				ImGui::TreePop();
 			}
