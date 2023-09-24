@@ -24,6 +24,7 @@ namespace Hazel
 		void End();
 
 		void BlockEvents(bool block);
+		void SetDarkThemeColor();
 
 		/*
 		#include "backends/imgui_impl_opengl3.h"
