@@ -7,7 +7,136 @@
 
 namespace Hazel
 {
-	
+
+	static void DrawVec3Control(const std::string& lable, glm::vec3& values, 
+		float resetValues = 0.0f, float columnWidth = 100.f)
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		auto boldFont = io.Fonts->Fonts[1];
+
+
+		ImGui::PushID(lable.c_str());
+
+		ImGui::Columns(2);
+		ImGui::SetColumnWidth(0, columnWidth);
+		ImGui::Text(lable.c_str());
+		ImGui::NextColumn();
+
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 1.f, 0 });
+
+		// ImGui::PushItemWidth(3, ImGui::CalcItemWidth());
+		// float lineHeight = ImGui::GetTextLineHeightWithSpacing();
+		float lineHeight = ImGui::GetFontSize() + 2.f * ImGui::GetStyle().FramePadding.y;
+		ImVec2 buttonSize = { lineHeight + 2.f, lineHeight };
+
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.1f, 0.15f, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.8f, 0.3f, 0.15f, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.8f, 0.5f, 0.15f, 1.0f));
+
+		ImGui::PushFont(boldFont);
+		if (ImGui::Button("X", buttonSize)) {
+			values.x = resetValues;
+		}
+		ImGui::PopFont();
+		ImGui::PopStyleColor(3);
+
+		ImGui::SameLine();
+		// ImGui::PushItemWidth(lineHeight * 4.0f); // Adjust the width as needed
+		ImGui::PushItemWidth(lineHeight * 4.0f); // Adjust the width as needed
+		ImGui::DragFloat("##X", &values.x, 0.1f);
+		ImGui::PopItemWidth();
+		ImGui::SameLine();
+
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.1f, 0.8f, 0.15f, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.1f, 0.8f, 0.3f, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.7f, 0.5f, 1.0f));
+
+		ImGui::PushFont(boldFont);
+		if (ImGui::Button("Y", buttonSize)) {
+			values.y = resetValues;
+		}
+		ImGui::PopFont();
+		ImGui::PopStyleColor(3);
+
+		ImGui::SameLine();
+		ImGui::PushItemWidth(lineHeight * 4.0f); // Adjust the width as needed
+		ImGui::DragFloat("##Y", &values.y, 0.1f);
+		ImGui::PopItemWidth();
+		ImGui::SameLine();
+
+
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.1f, 0.1f, 0.8f, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.1f, 0.8f, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.1f, 0.8f, 1.0f));
+
+		ImGui::PushFont(boldFont);
+		if (ImGui::Button("Z", buttonSize)) {
+			values.z = resetValues;
+		}
+		ImGui::PopFont();
+		ImGui::PopStyleColor(3);
+
+		ImGui::SameLine();
+		ImGui::PushItemWidth(lineHeight * 4.0f); // Adjust the width as needed
+		ImGui::DragFloat("##Z", &values.z, 0.1f);
+		ImGui::PopItemWidth();
+
+		ImGui::PopStyleVar();
+
+		ImGui::Columns(1);
+
+		ImGui::PopID();
+	}
+	template<typename T, typename UFunction>
+	static void DrawComponent(const std::string& name, Entity entity, UFunction uFunc)
+	{
+		const ImGuiTreeNodeFlags treeNodeFlag = ImGuiTreeNodeFlags_DefaultOpen |
+			ImGuiTreeNodeFlags_AllowItemOverlap;
+
+		float lineHeight = ImGui::GetFontSize() + 2.f * ImGui::GetStyle().FramePadding.y;
+		ImVec2 buttonSize = { lineHeight, lineHeight };
+
+		if (entity.HasComponent<T>())
+		{
+			// transform 조정
+			auto& component = entity.GetComponent<T>();
+
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 2.f, 2.f });
+
+			// 해당 영역을 선택해서 열어야만 조정 가능하다
+			bool opened = ImGui::TreeNodeEx((void*)typeid(T).hash_code(),
+				treeNodeFlag, name.c_str());
+
+			ImGui::SameLine(ImGui::GetWindowWidth() - 45.f);
+
+			bool removeComponent = false;
+
+			if (ImGui::Button("+", buttonSize))
+				ImGui::OpenPopup("ComponentSettings");
+
+			ImGui::PopStyleVar();
+
+			if (ImGui::BeginPopup("ComponentSettings"))
+			{
+				if (ImGui::MenuItem("Remove Component"))
+					removeComponent = true;
+
+				ImGui::EndPopup();
+			}
+
+			if (opened)
+			{
+				uFunc(component);
+
+				ImGui::TreePop();
+			}
+
+			if (removeComponent)
+			{
+				entity.RemoveComponent<T>();
+			}
+		}
+	}
 
 	SceneHierarchyPanel::SceneHierarchyPanel(const Ref<Scene>& scene) :
 		m_Context(scene)
@@ -92,6 +221,8 @@ namespace Hazel
 		ImGuiTreeNodeFlags flags = 
 			(m_SelectedEntity == entity ?  ImGuiTreeNodeFlags_Selected : 0) |
 			ImGuiTreeNodeFlags_OpenOnArrow;
+
+		flags |= ImGuiTreeNodeFlags_SpanAvailWidth;
 		
 		bool isOpened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entity, flags, name.c_str());
 		bool entityDeleted = false;
@@ -115,7 +246,7 @@ namespace Hazel
 				// Tree 안에 Tree Node 가 보일 수 있게 한다.
 				ImGuiTreeNodeFlags flags = (m_SelectedEntity == entity ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow;
 				bool isOpened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entity, flags, name.c_str());
-
+				flags |= ImGuiTreeNodeFlags_SpanAvailWidth;
 				if (isOpened)
 				{
 
@@ -154,275 +285,95 @@ namespace Hazel
 			}
 		}
 
-		const ImGuiTreeNodeFlags treeNodeFlag = ImGuiTreeNodeFlags_DefaultOpen |
-			ImGuiTreeNodeFlags_AllowItemOverlap;
+		DrawComponent<TransformComponent>("Transform", entity, [](auto& component) {
+			DrawVec3Control("Translation", component.Translation);
+			glm::vec3 degree = glm::degrees(component.Rotation);
+			DrawVec3Control("Rotation", degree);
+			component.Rotation = glm::radians(degree);
+			DrawVec3Control("Scale", component.Scale);
+		});
 
-		if (entity.HasComponent<TransformComponent>())
-		{
-			// 해당 영역을 선택해서 열어야만 조정 가능하다
-			bool opened = ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(),
-				treeNodeFlag, "Transform");
+		DrawComponent<CameraComponent>("Sprite", entity, [](auto& component) {
+			auto& camera = component.camera;
 
-			ImGui::SameLine();
+			ImGui::Checkbox("Primary", &component.isPrimary);
 
-			bool removeComponent = false;
+			const char* projectionTypeStrings[] = { "Projection", "Orthographic" };
+			const char* currentProjectionTypeString = projectionTypeStrings[(int)camera.GetProjectionType()];
 
-			if (ImGui::Button("+"))
-				ImGui::OpenPopup("ComponentSettings");
-
-			if (ImGui::BeginPopup("ComponentSettings"))
+			if (ImGui::BeginCombo("Projection", currentProjectionTypeString))
 			{
-				if (ImGui::MenuItem("Remove Component"))
-					removeComponent = true;
-
-				ImGui::EndPopup();
-			}
-
-			if (opened)
-			{
-				// transform 조정
-				auto& transformComp = entity.GetComponent<TransformComponent>();
-
-				drawVec3Control("Translation", transformComp.Translation);
-				glm::vec3 degree = glm::degrees(transformComp.Rotation);
-				drawVec3Control("Rotation", degree);
-				transformComp.Rotation = glm::radians(degree);
-				drawVec3Control("Scale", transformComp.Scale);
-
-				ImGui::TreePop();
-			}
-
-			if (removeComponent)
-			{
-				entity.RemoveComponent<TransformComponent>();
-			}
-		}
-
-		if (entity.HasComponent<CameraComponent>())
-		{
-			// 해당 영역을 선택해서 열어야만 조정 가능하다
-			bool opened = ImGui::TreeNodeEx((void*)typeid(CameraComponent).hash_code(),
-				treeNodeFlag, "Camera");
-
-			ImGui::SameLine();
-
-			bool removeComponent = false;
-
-			if (ImGui::Button("+"))
-				ImGui::OpenPopup("ComponentSettings");
-
-			if (ImGui::BeginPopup("ComponentSettings"))
-			{
-				if (ImGui::MenuItem("Remove Component"))
-					removeComponent = true;
-
-				ImGui::EndPopup();
-			}
-
-			if (opened)
-			{
-				// transform 조정
-				auto& cameraComp = entity.GetComponent<CameraComponent>();
-				auto& camera = cameraComp.camera;
-
-				ImGui::Checkbox("Primary", &cameraComp.isPrimary);
-
-				const char* projectionTypeStrings[] = { "Projection", "Orthographic" };
-				const char* currentProjectionTypeString = projectionTypeStrings[(int)camera.GetProjectionType()];
-
-				if (ImGui::BeginCombo("Projection", currentProjectionTypeString))
+				for (int i = 0; i < 2; ++i)
 				{
-					for (int i = 0; i < 2; ++i)
+					bool isSelected = currentProjectionTypeString == projectionTypeStrings[i];
+
+					if (ImGui::Selectable(projectionTypeStrings[i], isSelected))
 					{
-						bool isSelected = currentProjectionTypeString == projectionTypeStrings[i];
-
-						if (ImGui::Selectable(projectionTypeStrings[i], isSelected))
-						{
-							currentProjectionTypeString = projectionTypeStrings[i];
-							camera.SetProjectionType((SceneCamera::ProjectionType)i);
-						}
-
-						if (isSelected)
-						{
-							ImGui::SetItemDefaultFocus();
-						}
+						currentProjectionTypeString = projectionTypeStrings[i];
+						camera.SetProjectionType((SceneCamera::ProjectionType)i);
 					}
 
-					ImGui::EndCombo();
-				};
-
-				if (camera.GetProjectionType() == SceneCamera::ProjectionType::Projective)
-				{
-					float perspectiveFov = glm::degrees(camera.GetPerspectiveFov());
-					float perspectiveNear = camera.GetPerspectiveNear();
-					float perspectiveFar = camera.GetPerspectiveFar();
-
-					if (ImGui::DragFloat("Fov", &perspectiveFov))
+					if (isSelected)
 					{
-						camera.SetPerspectiveFov(glm::radians(perspectiveFov));
-					}
-
-					if (ImGui::DragFloat("Near", &perspectiveNear))
-					{
-						camera.SetPerspectiveNearClip(perspectiveNear);
-					}
-
-					if (ImGui::DragFloat("Far", &perspectiveFar))
-					{
-						camera.SetPerspectiveFarClip(perspectiveFar);
-					}
-				}
-				else if (camera.GetProjectionType() == SceneCamera::ProjectionType::Orthographic)
-				{
-					float orthoSize		= camera.GetOrthoGraphicSize();
-					float orthoNear		= camera.GetOrthographicNear();
-					float orthoFar			= camera.GetOrthographicFar();
-
-					if (ImGui::DragFloat("Size", &orthoSize))
-					{
-						camera.SetOrthoGraphicSize(orthoSize);
-					}
-
-					if (ImGui::DragFloat("Near", &orthoNear))
-					{
-						camera.SetOrthographicNearClip(orthoNear);
-					}
-
-					if (ImGui::DragFloat("Far", &orthoFar))
-					{
-						camera.SetOrthographicFarClip(orthoFar);
+						ImGui::SetItemDefaultFocus();
 					}
 				}
 
-				ImGui::Checkbox("Fixed Aspect Ratio", &cameraComp.isFixedAspectRatio);
+				ImGui::EndCombo();
+			};
 
-				ImGui::TreePop();
-			}
-
-			if (removeComponent)
+			if (camera.GetProjectionType() == SceneCamera::ProjectionType::Projective)
 			{
-				entity.RemoveComponent<CameraComponent>();
+				float perspectiveFov = glm::degrees(camera.GetPerspectiveFov());
+				float perspectiveNear = camera.GetPerspectiveNear();
+				float perspectiveFar = camera.GetPerspectiveFar();
+
+				if (ImGui::DragFloat("Fov", &perspectiveFov))
+				{
+					camera.SetPerspectiveFov(glm::radians(perspectiveFov));
+				}
+
+				if (ImGui::DragFloat("Near", &perspectiveNear))
+				{
+					camera.SetPerspectiveNearClip(perspectiveNear);
+				}
+
+				if (ImGui::DragFloat("Far", &perspectiveFar))
+				{
+					camera.SetPerspectiveFarClip(perspectiveFar);
+				}
 			}
-		}
-
-		if (entity.HasComponent<SpriteRenderComponent>())
-		{
-			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4.f, 4.f });
-			// 해당 영역을 선택해서 열어야만 조정 가능하다
-			bool opened = ImGui::TreeNodeEx((void*)typeid(SpriteRenderComponent).hash_code(),
-				treeNodeFlag, "Sprite Color");
-
-			ImGui::SameLine(ImGui::GetWindowWidth() - 25.f);
-
-			bool removeComponent = false;
-
-			if (ImGui::Button("+"))
-				ImGui::OpenPopup("ComponentSettings");
-
-			ImGui::PopStyleVar();
-
-			if (ImGui::BeginPopup("ComponentSettings"))
+			else if (camera.GetProjectionType() == SceneCamera::ProjectionType::Orthographic)
 			{
-				if (ImGui::MenuItem("Remove Component"))
-					removeComponent = true;
+				float orthoSize = camera.GetOrthoGraphicSize();
+				float orthoNear = camera.GetOrthographicNear();
+				float orthoFar = camera.GetOrthographicFar();
 
-				ImGui::EndPopup();
+				if (ImGui::DragFloat("Size", &orthoSize))
+				{
+					camera.SetOrthoGraphicSize(orthoSize);
+				}
+
+				if (ImGui::DragFloat("Near", &orthoNear))
+				{
+					camera.SetOrthographicNearClip(orthoNear);
+				}
+
+				if (ImGui::DragFloat("Far", &orthoFar))
+				{
+					camera.SetOrthographicFarClip(orthoFar);
+				}
 			}
 
-			if (opened)
-			{
-				// transform 조정
-				auto& sprite = entity.GetComponent<SpriteRenderComponent>();
+			ImGui::Checkbox("Fixed Aspect Ratio", &component.isFixedAspectRatio);
+		});
 
-				ImGui::ColorEdit4("Color", glm::value_ptr(sprite.color));
+		DrawComponent<SpriteRenderComponent>("Sprite", entity, [](auto& component) {
+			ImGui::ColorEdit4("Color", glm::value_ptr(component.color));
+		});
 
-				ImGui::TreePop();
-			}
-
-			if (removeComponent)
-			{
-				entity.RemoveComponent<SpriteRenderComponent>();
-			}
-		}
 	}
-	void SceneHierarchyPanel::drawVec3Control(const std::string& lable, glm::vec3& values, float resetValues, float columnWidth)
-	{
-		ImGuiIO& io = ImGui::GetIO();
-		auto boldFont = io.Fonts->Fonts[1];
-		
 
-		ImGui::PushID(lable.c_str());
-
-		ImGui::Columns(2);
-		ImGui::SetColumnWidth(0, columnWidth);
-		ImGui::Text(lable.c_str());
-		ImGui::NextColumn();
-
-		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 1.f, 0 });
-
-		// ImGui::PushItemWidth(3, ImGui::CalcItemWidth());
-		// float lineHeight = ImGui::GetTextLineHeightWithSpacing();
-		float lineHeight = ImGui::GetFontSize() + 2.f * ImGui::GetStyle().FramePadding.y;
-		ImVec2 buttonSize = { lineHeight + 4.f, lineHeight };
-
-		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.1f, 0.15f, 1.0f));
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.8f, 0.3f, 0.15f, 1.0f));
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.8f, 0.5f, 0.15f, 1.0f));
-
-		ImGui::PushFont(boldFont);
-		if (ImGui::Button("X", buttonSize)) {
-			values.x = resetValues;
-		}
-		ImGui::PopFont();
-		ImGui::PopStyleColor(3);
-
-		ImGui::SameLine();
-		// ImGui::PushItemWidth(lineHeight * 4.0f); // Adjust the width as needed
-		ImGui::PushItemWidth(lineHeight * 4.0f); // Adjust the width as needed
-		ImGui::DragFloat("##X", &values.x, 0.1f);
-		ImGui::PopItemWidth();
-		ImGui::SameLine();
-
-		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.1f, 0.8f, 0.15f, 1.0f));
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.1f, 0.8f, 0.3f, 1.0f));
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.7f, 0.5f, 1.0f));
-
-		ImGui::PushFont(boldFont);
-		if (ImGui::Button("Y", buttonSize)) {
-			values.y = resetValues;
-		}
-		ImGui::PopFont();
-		ImGui::PopStyleColor(3);
-
-		ImGui::SameLine();
-		ImGui::PushItemWidth(lineHeight * 4.0f); // Adjust the width as needed
-		ImGui::DragFloat("##Y", &values.y, 0.1f);
-		ImGui::PopItemWidth();
-		ImGui::SameLine();
-
-
-		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.1f, 0.1f, 0.8f, 1.0f));
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.1f, 0.8f, 1.0f));
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.1f, 0.8f, 1.0f));
-
-		ImGui::PushFont(boldFont);
-		if (ImGui::Button("Z", buttonSize)) {
-			values.z = resetValues;
-		}
-		ImGui::PopFont();
-		ImGui::PopStyleColor(3);
-
-		ImGui::SameLine();
-		ImGui::PushItemWidth(lineHeight * 4.0f); // Adjust the width as needed
-		ImGui::DragFloat("##Z", &values.z, 0.1f);
-		ImGui::PopItemWidth();
-
-		ImGui::PopStyleVar();
-
-		ImGui::Columns(1);
-
-		ImGui::PopID();
-	}
 }
 
 

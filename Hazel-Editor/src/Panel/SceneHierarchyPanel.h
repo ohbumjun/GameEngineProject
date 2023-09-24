@@ -17,10 +17,6 @@ namespace Hazel
 	private :
 		void drawEntityNode(Entity entity);
 		void drawComponents(Entity entity);
-
-		void drawVec3Control(const std::string& lable, glm::vec3& values,
-			float resetValues = 0.0f, float columnWidth = 100.f);
-
 		Ref<Scene> m_Context;
 		Entity m_SelectedEntity;
 
