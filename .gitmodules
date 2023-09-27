@@ -10,3 +10,6 @@
 [submodule "HazelGameEngine/vendor/glm"]
 	path = HazelGameEngine/vendor/glm
 	url = https://github.com/g-truc/glm.git
+[submodule "HazelGameEngine/vender/yaml-cpp"]
+	path = yaml-cpp
+	url = https://github.com/TheCherno/yaml-cpp.git

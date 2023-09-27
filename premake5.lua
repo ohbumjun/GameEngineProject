@@ -20,6 +20,7 @@ IncludeDir["ImGui"] = "HazelGameEngine/vendor/imgui"
 IncludeDir["glm"] = "HazelGameEngine/vendor/glm"
 IncludeDir["stb_image"] = "HazelGameEngine/vendor/stb_image"
 IncludeDir["entt"] = "HazelGameEngine/vendor/entt/include"
+IncludeDir["yaml_cpp"] = "HazelGameEngine/vendor/yaml-cpp/include"
 
 -- 해당 경로 내의 premake.lua 파일을 include => 그대로 복사붙여넣기 한다는 것이다. 여기 lua file 에
 -- 관찰한 바, 아래의 include 파일들을 통해서 해당 프로젝트들이 솔루션에 추가된다.
@@ -27,6 +28,7 @@ group "Dependencies"
     include "HazelGameEngine/vendor/GLFW"
     include "HazelGameEngine/vendor/Glad"
     include "HazelGameEngine/vendor/imgui"
+    include "HazelGameEngine/vendor/yaml-cpp"
 -- include "HazelGameEngine/vendor/glm" 오직 header only library 이므로 별도의 lua file 이 존재하지 않는다.
 
 group ""
@@ -71,7 +73,8 @@ project "HazelGameEngine"       --프로젝트 이름
         "%{IncludeDir.ImGui}",
         "%{IncludeDir.glm}",
         "%{IncludeDir.stb_image}",
-        "%{IncludeDir.entt}"
+        "%{IncludeDir.entt}",
+        "%{IncludeDir.yaml_cpp}"
     }
 
     -- static library 를 link 시킨다.
@@ -80,6 +83,7 @@ project "HazelGameEngine"       --프로젝트 이름
         "GLFW",
         "Glad",
         "ImGui",
+        "yaml-cpp",
         "opengl32.lib"
     }
 
