@@ -3,6 +3,8 @@
 #include "imgui/imgui.h"
 #include <glm/gtc/type_ptr.hpp>
 
+#include "Hazel/Scene/SceneSerializer.h"
+
 // 24 wide map
 static const uint32_t s_mapWidth = 24;
 static const char* s_MapTiles = 
@@ -99,6 +101,9 @@ namespace Hazel
 		// Panels
 		m_SceneHierachyPanel = CreateRef<SceneHierarchyPanel>();
 		m_SceneHierachyPanel->SetContext(m_ActiveScene);
+
+		SceneSerializer serializer(m_ActiveScene);
+		// serializer.SerializeText("assets/scenes/Example.scene");
 	}
 
 	void EditorLayer::OnDetach()
@@ -137,11 +142,6 @@ namespace Hazel
 		if (m_VieportInteracted)
 		{
 			m_CameraController.OnUpdate(ts);
-		}
-
-		// Scene update
-		{
-			// m_ActiveScene->OnUpdate(ts);
 		}
 
 		// Reset

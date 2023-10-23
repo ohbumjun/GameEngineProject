@@ -10,6 +10,9 @@
     <Filter Include="src\Hazel\Core">
       <UniqueIdentifier>{48D253A8-34A0-47AE-1D34-B8D409A12313}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Hazel\Core\Reflection">
+      <UniqueIdentifier>{028CA5A0-6E4E-D92A-B7FE-67B72300B208}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Hazel\Debug">
       <UniqueIdentifier>{6676DAB2-D201-4877-DB12-CB6B471DA477}</UniqueIdentifier>
     </Filter>
@@ -93,6 +96,21 @@
     <ClInclude Include="src\Hazel\Core\MouseButtonCodes.h">
       <Filter>src\Hazel\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Hazel\Core\Reflection\FieldInfo.h">
+      <Filter>src\Hazel\Core\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Core\Reflection\Reflection.h">
+      <Filter>src\Hazel\Core\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Core\Reflection\TypeId.h">
+      <Filter>src\Hazel\Core\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Core\Reflection\TypeUtils.h">
+      <Filter>src\Hazel\Core\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Core\Reflection\VariableId.h">
+      <Filter>src\Hazel\Core\Reflection</Filter>
+    </ClInclude>
     <ClInclude Include="src\Hazel\Core\TimeStep.h">
       <Filter>src\Hazel\Core</Filter>
     </ClInclude>
@@ -127,6 +145,9 @@
       <Filter>src\Hazel\Scene</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\Scene\SceneCamera.h">
+      <Filter>src\Hazel\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Scene\SceneSerializer.h">
       <Filter>src\Hazel\Scene</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\Scene\ScriptableEntity.h">
@@ -1469,6 +1490,15 @@
     <ClCompile Include="src\Hazel\Core\Log.cpp">
       <Filter>src\Hazel\Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\Hazel\Core\Reflection\Reflection.cpp">
+      <Filter>src\Hazel\Core\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\Core\Reflection\TypeUtils.cpp">
+      <Filter>src\Hazel\Core\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\Core\Reflection\VariableId.cpp">
+      <Filter>src\Hazel\Core\Reflection</Filter>
+    </ClCompile>
     <ClCompile Include="src\Hazel\Core\Window.cpp">
       <Filter>src\Hazel\Core</Filter>
     </ClCompile>
@@ -1485,6 +1515,9 @@
       <Filter>src\Hazel\Scene</Filter>
     </ClCompile>
     <ClCompile Include="src\Hazel\Scene\SceneCamera.cpp">
+      <Filter>src\Hazel\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\Scene\SceneSerializer.cpp">
       <Filter>src\Hazel\Scene</Filter>
     </ClCompile>
     <ClCompile Include="src\Hazel\Scene\ScriptableEntity.cpp">
