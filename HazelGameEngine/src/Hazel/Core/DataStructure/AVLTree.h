@@ -4,9 +4,9 @@ template <typename KEY, typename VALUE>
 class AVLTreeNode
 {
 	template <typename KEY, typename VALUE>
-	friend class CAVLTree;
+	friend class AVLTree;
 	template <typename KEY, typename VALUE>
-	friend class CAVLTreeIterator;
+	friend class AVLTreeIterator;
 
 private:
 	AVLTreeNode() :
@@ -34,7 +34,7 @@ public:
 	VALUE	second;
 
 public:
-	bool IsParent()	const
+	bool HasParent()	const
 	{
 		return m_Parent != nullptr;
 	}
@@ -49,7 +49,7 @@ public:
 		return m_Parent->second;
 	}
 
-	bool IsLeft()	const
+	bool HasLeft()	const
 	{
 		return m_Left != nullptr;
 	}
@@ -64,7 +64,7 @@ public:
 		return m_Left->second;
 	}
 
-	bool IsRight()	const
+	bool HasRight()	const
 	{
 		return m_Right != nullptr;
 	}
@@ -81,18 +81,18 @@ public:
 };
 
 template <typename KEY, typename VALUE>
-class CAVLTreeIterator
+class AVLTreeIterator
 {
 	template <typename KEY, typename VALUE>
-	friend class CAVLTree;
+	friend class AVLTree;
 
 public:
-	CAVLTreeIterator() :
+	AVLTreeIterator() :
 		m_Node(nullptr)
 	{
 	}
 
-	~CAVLTreeIterator()
+	~AVLTreeIterator()
 	{
 	}
 
@@ -101,12 +101,12 @@ private:
 
 public:
 	// iterator끼리 서로 가지고 있는 노드가 같을 경우 같다고 판단한다.
-	bool operator == (const CAVLTreeIterator<KEY, VALUE>& iter)	const
+	bool operator == (const AVLTreeIterator<KEY, VALUE>& iter)	const
 	{
 		return m_Node == iter.m_Node;
 	}
 
-	bool operator != (const CAVLTreeIterator<KEY, VALUE>& iter)	const
+	bool operator != (const AVLTreeIterator<KEY, VALUE>& iter)	const
 	{
 		return m_Node != iter.m_Node;
 	}
@@ -152,22 +152,25 @@ public:
 // 그래서 탐색을 할때는 Key타입으로 한다.
 // 만약 Key타입이 문자열이라면 문자열로 탐색을 할 수 있는 것이다.
 template <typename KEY, typename VALUE>
-class CAVLTree
+class AVLTree
 {
+	typedef AVLTreeNode<KEY, VALUE>		NODE;
+	typedef AVLTreeIterator<KEY, VALUE>	iterator;
+	typedef AVLTreeNode<KEY, VALUE>* PNODE;
 public:
-	CAVLTree()
+	AVLTree()
 	{
 		m_Root = nullptr;
 		m_Size = 0;
 
 		m_Begin = new NODE;
-		m_End = new NODE;
+		m_End    = new NODE;
 
 		m_Begin->m_Next = m_End;
 		m_End->m_Prev = m_Begin;
 	}
 
-	~CAVLTree()
+	~AVLTree()
 	{
 		PNODE	DeleteNode = m_Begin;
 
@@ -181,18 +184,6 @@ public:
 		}
 	}
 
-private:
-	typedef AVLTreeNode<KEY, VALUE>		NODE;
-	typedef AVLTreeNode<KEY, VALUE>* PNODE;
-
-public:
-	typedef CAVLTreeIterator<KEY, VALUE>	iterator;
-
-private:
-	PNODE	m_Root;
-	PNODE	m_Begin;
-	PNODE	m_End;
-	int		m_Size;
 
 public:
 	void insert(const KEY& key, const VALUE& value)
@@ -202,14 +193,15 @@ public:
 		{
 			m_Root = new NODE;
 
-			m_Root->first = key;
+			m_Root->first     = key;
 			m_Root->second = value;
 
+			// begin -> root -> end 구조
 			m_Begin->m_Next = m_Root;
 			m_Root->m_Prev = m_Begin;
 
 			m_Root->m_Next = m_End;
-			m_End->m_Prev = m_Root;
+			m_End->m_Prev  = m_Root;
 		}
 
 		else
@@ -454,15 +446,15 @@ public:
 	}
 
 private:
-	PNODE insert(const KEY& key, const VALUE& value, PNODE Node)
+	PNODE insert(const KEY& key, const VALUE& value, PNODE ParentNode)
 	{
 		// 기준노드보다 작다면 왼쪽이다.
-		if (Node->first > key)
+		if (ParentNode->first > key)
 		{
 			// 만약 기준노드의 왼쪽 자식노드가 있다면 그 왼쪽 자식노드를
 			// 기준노드로 하여 다시 탐색을 하게 한다.
-			if (Node->m_Left)
-				return insert(key, value, Node->m_Left);
+			if (ParentNode->m_Left)
+				return insert(key, value, ParentNode->m_Left);
 
 			// 더이상 왼쪽 자식노드가 없을 경우 이 위치에 새로 노드를 생성하여
 			// 추가해주어야 한다.
@@ -472,19 +464,19 @@ private:
 			NewNode->second = value;
 
 			// 기준노드의 왼쪽 자식노드로 지정한다.
-			Node->m_Left = NewNode;
-			NewNode->m_Parent = Node;
+			ParentNode->m_Left = NewNode;
+			NewNode->m_Parent = ParentNode;
 
 			// 왼쪽으로 배치가 된다는것은 부모노드보다 작다는 것이다.
 			// 그러므로 부모노드의 이전노드와 부모노드 사이에 새로 생성된
 			// 노드를 리스트로 연결해주도록 한다.
-			PNODE	Prev = Node->m_Prev;
+			PNODE	Prev = ParentNode->m_Prev;
 
 			Prev->m_Next = NewNode;
 			NewNode->m_Prev = Prev;
 
 			NewNode->m_Next = Node;
-			Node->m_Prev = NewNode;
+			ParentNode->m_Prev = NewNode;
 
 			ReBalance(NewNode);
 
@@ -622,7 +614,9 @@ private:
 		// 그러므로 기준노드의 자리에 RightChild가 오게되므로 루트노드를
 		// RightChild로 교체해주어야 한다.
 		else
+		{
 			m_Root = RightChild;
+		}
 
 		// 바뀐 기준노드를 반환한다.
 		return RightChild;
@@ -694,6 +688,7 @@ private:
 
 		int	Height = Left > Right ? Left : Right;
 
+		// +1 ? 마지막 leaf 노드는 높이가 1 이 되게 한다.
 		return Height + 1;
 	}
 
@@ -708,6 +703,7 @@ private:
 			return;
 
 		// 왼쪽과 오른쪽의 높이차이를 구해준다.
+		// 왼쪽 높이 - 오른쪽 높이
 		int	Factor = BalanceFactor(Node);
 
 		// 오른쪽으로 균형이 무너졌을 경우
@@ -715,6 +711,7 @@ private:
 		{
 			int	RightFactor = BalanceFactor(Node->m_Right);
 
+			// RR
 			// 음수라면 오른쪽 오른쪽으로 균형이 무너졌을 경우이다.
 			if (RightFactor <= 0)
 			{
@@ -722,6 +719,7 @@ private:
 				Node = RotationLeft(Node);
 			}
 
+			// RL => 1) R 회전 2) L 회전
 			// 오른쪽 왼쪽으로 균형이 무너졌을 경우이다.
 			else
 			{
@@ -758,5 +756,10 @@ private:
 
 		ReBalance(Node->m_Parent);
 	}
+private:
+	PNODE	m_Root;
+	PNODE	m_Begin;
+	PNODE	m_End;
+	int		m_Size;
 };
 

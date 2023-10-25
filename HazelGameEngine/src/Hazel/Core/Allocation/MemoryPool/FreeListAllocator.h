@@ -3,6 +3,7 @@
 #include "MemoryPoolInfo.h"
 #include "MemoryPoolAllocator.h"
 #include "Hazel/Core/DataStructure/SinglyLinkedList.h"
+#include "Hazel/Core/DataStructure/AVLTree.h"
 
 class FreeListAllocator :
     public MemoryPoolAllocator

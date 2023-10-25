@@ -5,7 +5,7 @@ enum class MemoryPoolType
     Pool,
     Stack,
     FreeList,
-    Sequential
+    Sequential // ?
 };
 
 struct MemoryPoolInfo
@@ -16,5 +16,6 @@ struct MemoryPoolInfo
 enum class FreeListAllocatorPlacementPolicy
 {
     FIND_FIRST,
-    FIND_BEST
+    FIND_BEST,
+    FIND_BALANCE
 };
