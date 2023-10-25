@@ -1476,6 +1476,16 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
+    <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\MemoryPoolAllocator.h" />
+    <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\MemoryPoolManager.h" />
+    <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\MemoryPool.h" />
+    <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\PoolAllocator.h" />
+    <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\StackAllocator.h" />
+    <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\FreeListAllocator.h" />
+    <ClInclude Include="src\Hazel\Utils\EngineUtil.h" />
+    <ClInclude Include="src\Hazel\Core\DataStructure\StackLinkedList.h" />
+    <ClInclude Include="src\Hazel\Core\DataStructure\SinglyLinkedList.h" />
+    <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\MemoryPoolInfo.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Core\Application.cpp">
@@ -1598,5 +1608,12 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
+    <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\MemoryPoolAllocator.cpp" />
+    <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\MemoryPoolManager.cpp" />
+    <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\MemoryPool.cpp" />
+    <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\PoolAllocator.cpp" />
+    <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\StackAllocator.cpp" />
+    <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\FreeListAllocator.cpp" />
+    <ClCompile Include="src\Hazel\Utils\EngineUtil.cpp" />
   </ItemGroup>
 </Project>

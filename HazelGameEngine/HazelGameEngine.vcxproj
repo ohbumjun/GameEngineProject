@@ -140,7 +140,16 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\MemoryPoolInfo.h" />
+    <ClInclude Include="src\Hazel\Core\DataStructure\SinglyLinkedList.h" />
+    <ClInclude Include="src\Hazel\Core\DataStructure\StackLinkedList.h" />
+    <ClInclude Include="src\Hazel\Utils\EngineUtil.h" />
+    <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\FreeListAllocator.h" />
+    <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\PoolAllocator.h" />
+    <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\MemoryPool.h" />
+    <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\MemoryPoolAllocator.h" />
     <ClInclude Include="src\Hazel.h" />
+    <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\MemoryPoolManager.h" />
     <ClInclude Include="src\Hazel\Core\Application.h" />
     <ClInclude Include="src\Hazel\Core\Core.h" />
     <ClInclude Include="src\Hazel\Core\EntryPoint.h" />
@@ -193,6 +202,7 @@
     <ClInclude Include="src\Renderer\Texture.h" />
     <ClInclude Include="src\Renderer\VertexArray.h" />
     <ClInclude Include="src\hzpch.h" />
+    <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\StackAllocator.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_features.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_fixes.hpp" />
@@ -612,6 +622,12 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Hazel\Utils\EngineUtil.cpp" />
+    <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\FreeListAllocator.cpp" />
+    <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\PoolAllocator.cpp" />
+    <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\MemoryPool.cpp" />
+    <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\MemoryPoolManager.cpp" />
+    <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\MemoryPoolAllocator.cpp" />
     <ClCompile Include="src\Hazel\Core\Application.cpp" />
     <ClCompile Include="src\Hazel\Core\Layer.cpp" />
     <ClCompile Include="src\Hazel\Core\LayerStack.cpp" />
@@ -653,6 +669,7 @@
     <ClCompile Include="src\hzpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\StackAllocator.cpp" />
     <ClCompile Include="vendor\stb_image\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
