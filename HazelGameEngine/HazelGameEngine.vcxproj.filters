@@ -1486,6 +1486,7 @@
     <ClInclude Include="src\Hazel\Core\DataStructure\StackLinkedList.h" />
     <ClInclude Include="src\Hazel\Core\DataStructure\SinglyLinkedList.h" />
     <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\MemoryPoolInfo.h" />
+    <ClInclude Include="src\Hazel\Core\DataStructure\AVLTree.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Core\Application.cpp">

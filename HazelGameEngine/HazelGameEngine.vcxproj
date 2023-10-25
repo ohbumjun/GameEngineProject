@@ -143,6 +143,7 @@
     <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\MemoryPoolInfo.h" />
     <ClInclude Include="src\Hazel\Core\DataStructure\SinglyLinkedList.h" />
     <ClInclude Include="src\Hazel\Core\DataStructure\StackLinkedList.h" />
+    <ClInclude Include="src\Hazel\Core\DataStructure\AVLTree.h" />
     <ClInclude Include="src\Hazel\Utils\EngineUtil.h" />
     <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\FreeListAllocator.h" />
     <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\PoolAllocator.h" />
