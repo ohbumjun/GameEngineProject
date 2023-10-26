@@ -7,7 +7,7 @@
 
 FreeListAllocator::FreeListAllocator(const size_t totalSize, FreeListAllocatorPlacementPolicy Policy)
 	: MemoryPoolAllocator(totalSize),
-	m_Policy(Policy)
+		m_Policy(Policy)
 {
 }
 
@@ -31,7 +31,7 @@ void* FreeListAllocator::Allocate(const size_t allocSize, const size_t alignment
 	std::size_t padding;
 	Node* affectedNode = nullptr, * prevNode = nullptr;
 
-	Find(allocSize, alignment, padding, prevNode, affectedNode);
+	find(allocSize, alignment, padding, prevNode, affectedNode);
 
 	// 부족할시 메모리 추가할당하기 
 	assert(affectedNode != nullptr && "Not Enough Memory");
@@ -61,6 +61,7 @@ void* FreeListAllocator::Allocate(const size_t allocSize, const size_t alignment
 	FreeListAllocator::AllocationHeader* HeaderPtr = (FreeListAllocator::AllocationHeader*)headerAddress;
 
 	HeaderPtr->blockSize = requiredSize;
+
 	// headerAddress 로부터, padding 만큼 이전에 가면
 	// 가장 마지막에 할당된 datablock 의 끝 위치가 나온다는 의미
 	HeaderPtr->padding = alignmentPadding;
@@ -80,8 +81,25 @@ void FreeListAllocator::Free(void* ptr)
 
 	const FreeListAllocator::AllocationHeader* allocHeader((FreeListAllocator::AllocationHeader*)headerAddress);
 
+	/*
 	Node* freeNode = (Node*)(headerAddress);
 	freeNode->data.blockSize = allocHeader->blockSize + allocHeader->padding;
+	*/
+	Node* freeNode = (Node*)(headerAddress);
+	Node* freeNode = (Node*)((std::size_t)headerAddress - allocHeader->padding);
+	freeNode->data.blockSize = allocHeader->blockSize;
+
+	// freeNode->data.blockSize = allocHeader->blockSize - allocHeader->padding; // + 가 아니라, - 아닌가 ?
+	//     32 (HeaderAddress)
+	//     AlignMentPadding : 4
+	//     allocSize : 42
+	//     padding   : 4 + 8 (HeaderSize) == 12
+	//     [alignmentPadding == 4][HeaderSize == 8][dataSize == 42]
+	//     28					  32			   40			  82
+	//     ptr : 40 (실제 data 의 시작주소는 40) == currentAddress
+	//     m_StartPtr : 28
+	//     allocHeader.blockSize == 54
+	//     padding               == 4
 	freeNode->next = nullptr;
 
 	Node* iter = m_FreeList.m_Head;
@@ -101,7 +119,7 @@ void FreeListAllocator::Free(void* ptr)
 	m_Used -= freeNode->data.blockSize;
 
 	// Merge Contiguous Nodes
-	Coalescene(iterPrev, freeNode);
+	coalescene(iterPrev, freeNode);
 }
 
 void FreeListAllocator::Init()
@@ -127,7 +145,7 @@ void FreeListAllocator::Reset()
 	m_FreeList.insert(nullptr, firstNode);
 }
 
-void FreeListAllocator::Coalescene(Node* prevBlock, Node* freeBlock)
+void FreeListAllocator::coalescene(Node* prevBlock, Node* freeBlock)
 {
 	if (freeBlock->next != nullptr &&
 		(std::size_t)freeBlock + freeBlock->data.blockSize == (size_t)freeBlock->next)
@@ -144,24 +162,24 @@ void FreeListAllocator::Coalescene(Node* prevBlock, Node* freeBlock)
 	}
 }
 
-void FreeListAllocator::Find(const size_t allocSize, const size_t alignment, size_t& padding, Node*& prevNode, Node*& foundNode)
+void FreeListAllocator::find(const size_t allocSize, const size_t alignment, size_t& padding, Node*& prevNode, Node*& foundNode)
 {
 	switch (m_Policy)
 	{
 	case FreeListAllocatorPlacementPolicy::FIND_FIRST:
 	{
-		FindFirst(allocSize, alignment, padding, prevNode, foundNode);
+		findFirst(allocSize, alignment, padding, prevNode, foundNode);
 	}
 	break;
 	case FreeListAllocatorPlacementPolicy::FIND_BEST:
 	{
-		FindBest(allocSize, alignment, padding, prevNode, foundNode);
+		findBest(allocSize, alignment, padding, prevNode, foundNode);
 	}
 	break;
 	}
 }
 
-void FreeListAllocator::FindBest(const size_t allocSize, const size_t alignment, size_t& padding, Node*& prevNode, Node*& foundNode)
+void FreeListAllocator::findBest(const size_t allocSize, const size_t alignment, size_t& padding, Node*& prevNode, Node*& foundNode)
 {
 	size_t smallestDiff = (size_t)INF;
 
@@ -191,15 +209,14 @@ void FreeListAllocator::FindBest(const size_t allocSize, const size_t alignment,
 	foundNode = bestBlock;
 }
 
-void FreeListAllocator::FindFirst(const size_t allocSize, const size_t alignment, size_t& padding, Node*& prevNode, Node*& foundNode)
+void FreeListAllocator::findFirst(const size_t allocSize, const size_t alignment, size_t& padding, Node*& prevNode, Node*& foundNode)
 {
 	Node* iter = m_FreeList.m_Head;
 	Node* iterPrev = nullptr;
 
 	while (iter != nullptr)
 	{
-		padding = EngineUtil::CalculatePaddingWithHeader((size_t)iter, alignment,
-			sizeof(FreeListAllocator::AllocationHeader));
+		padding = EngineUtil::CalculatePaddingWithHeader((size_t)iter, alignment, sizeof(FreeListAllocator::AllocationHeader));
 
 		const size_t requiredSpace = allocSize + padding;
 

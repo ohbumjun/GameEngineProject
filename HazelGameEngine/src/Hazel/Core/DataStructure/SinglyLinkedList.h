@@ -12,16 +12,9 @@ public:
 	Node* m_Head;
 
 public:
-	SinglyLinkedList();
-
 	void insert(Node* prevNode, Node*& newNode);
 	void remove(Node* prevNode, Node*& deleteNode);
 };
-
-template<typename T>
-inline SinglyLinkedList<T>::SinglyLinkedList()
-{
-}
 
 template<typename T>
 inline void SinglyLinkedList<T>::insert(Node* prevNode,
@@ -31,6 +24,9 @@ inline void SinglyLinkedList<T>::insert(Node* prevNode,
 	{
 		// 만약 현재 newNode 가 첫번째 Node 라면
 		newNode->next = m_Head;
+
+		// newNode (= new Head) -> old Head
+		// inserting to 'front'
 		m_Head = newNode;
 	}
 	else
@@ -69,6 +65,8 @@ inline void SinglyLinkedList<T>::remove(Node* prevNode,
 	}
 	else
 	{
+		// prevNode -> deleteNode -> Next
+		// => (prevNode -> Next)
 		prevNode->next = deleteNode->next;
 	}
 }
