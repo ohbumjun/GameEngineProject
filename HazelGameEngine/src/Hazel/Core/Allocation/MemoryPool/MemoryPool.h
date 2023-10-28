@@ -35,7 +35,9 @@ protected:
     MemoryPool();
     virtual ~MemoryPool();
     int m_Alignment;
-    int m_AllocNumber; // ��� Object �� �Ҵ��� ���ΰ�
+    int m_AllocNumber; 
+
+    // Pool Allocator Only ?
     size_t m_SingleDataSize;
     class MemoryPoolAllocator* m_Allocator;
     MemoryPoolType m_AllocatorType;
@@ -49,7 +51,7 @@ protected:
     {
         size_t AllocTotalSize = (size_t)(TotalNumber * sizeof(T));
 
-        m_Allocator = new CPoolAllocator(AllocTotalSize, sizeof(T));
+        m_Allocator = new PoolAllocator(AllocTotalSize, sizeof(T));
 
         m_AllocatorType = MemoryPoolType::Pool;
 
