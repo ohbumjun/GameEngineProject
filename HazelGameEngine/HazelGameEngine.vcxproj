@@ -141,6 +141,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\MemoryPoolInfo.h" />
+    <ClInclude Include="src\Hazel\Core\DataStructure\DoublyLinkedList.h" />
     <ClInclude Include="src\Hazel\Core\DataStructure\SinglyLinkedList.h" />
     <ClInclude Include="src\Hazel\Core\DataStructure\StackLinkedList.h" />
     <ClInclude Include="src\Hazel\Core\DataStructure\AVLTree.h" />
