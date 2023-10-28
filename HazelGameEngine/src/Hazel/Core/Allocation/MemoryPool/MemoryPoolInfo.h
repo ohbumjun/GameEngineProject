@@ -17,5 +17,5 @@ enum class FreeListAllocatorPlacementPolicy
 {
     FIND_FIRST,
     FIND_BEST,
-    FIND_BALANCE
+    FIND_SPEED
 };

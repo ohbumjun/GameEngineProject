@@ -23,7 +23,7 @@ inline void DoublyLinkedList<T>::insert(Node* prevNode,
 {
 	if (prevNode == nullptr)
 	{
-		// ¸¸¾à ÇöÀç newNode °¡ Ã¹¹øÂ° Node ¶ó¸é
+		// ë§Œì•½ í˜„ì¬ newNode ê°€ ì²«ë²ˆì§¸ Node ë¼ë©´
 		newNode->next = m_Head;
 
 		if (m_Head)
@@ -37,7 +37,7 @@ inline void DoublyLinkedList<T>::insert(Node* prevNode,
 	}
 	else
 	{
-		// prevNode ´ÙÀ½¿¡ newNode ¸¦ ³ÖÀ» °ÍÀÌ´Ù.
+		// prevNode ë‹¤ìŒì— newNode ë¥¼ ë„£ì„ ê²ƒì´ë‹¤.
 		if (prevNode->next == nullptr)
 		{
 			prevNode->next = newNode;
@@ -47,45 +47,48 @@ inline void DoublyLinkedList<T>::insert(Node* prevNode,
 		}
 		else
 		{
-			// newNode  ~ prev->next ¿¬°á
+			// newNode  ~ prev->next ì—°ê²°
 			newNode->next = prevNode->next;
 			prevNode->next->prev = newNode;
 
-			// prev ~ newNode ¿¬°á
+			// prev ~ newNode ì—°ê²°
 			prevNode->next = newNode;
 			newNode->prev = prevNode;
 		}
 	}
 }
 
-// deleteNode ¸¦ List »ó¿¡¼­ Áö¿öÁÖ´Â È¿°úÀÌ´Ù.
+// deleteNode ë¥¼ List ìƒì—ì„œ ì§€ì›Œì£¼ëŠ” íš¨ê³¼ì´ë‹¤.
 template<typename T>
 inline void DoublyLinkedList<T>::remove(Node* prevNode,
 	Node*& deleteNode)
 {
 	if (prevNode == nullptr)
 	{
-		// List °¡ ¿ÀÁ÷ ÇÏ³ªÀÇ ¿ø¼Ò¸¸À» Áö´Ï°í ÀÖ´Ù´Â ÀÇ¹Ì
+		// List ê°€ ì˜¤ì§ í•˜ë‚˜ì˜ ì›ì†Œë§Œì„ ì§€ë‹ˆê³  ìˆë‹¤ëŠ” ì˜ë¯¸
 		if (deleteNode->next == nullptr)
 		{
-			// ¿©±â¿¡¼­´Â »ç½Ç»ó deleteNode == m_Head ¿´´ø °Í
+			// ì—¬ê¸°ì—ì„œëŠ” ì‚¬ì‹¤ìƒ deleteNode == m_Head ì˜€ë˜ ê²ƒ
 			m_Head = nullptr;
 		}
 		else
 		{
-			// List °¡ ¿©·¯°³ÀÇ ¿ø¼Ò¸¦ °¡Áö°í ÀÖ´Ù´Â ÀÇ¹Ì 
-			// ±×¸®°í list »óÀÇ °¡Àå Ã¹¹øÂ° ³ëµå¸¦ Áö¿ì°í ÀÖ´Â °æ¿ì¿¡ ÇØ´çÇÑ´Ù.
-			deleteNode->prev = nullptr;
-			
+			// List ê°€ ì—¬ëŸ¬ê°œì˜ ì›ì†Œë¥¼ ê°€ì§€ê³  ìˆë‹¤ëŠ” ì˜ë¯¸ 
+			// ê·¸ë¦¬ê³  list ìƒì˜ ê°€ì¥ ì²«ë²ˆì§¸ ë…¸ë“œë¥¼ ì§€ìš°ê³  ìˆëŠ” ê²½ìš°ì— í•´ë‹¹í•œë‹¤.
+			deleteNode->next->prev = nullptr;
 			m_Head = deleteNode->next;
-			
 		}
 	}
 	else
 	{
 		// prevNode -> deleteNode -> Next
 		// => (prevNode -> Next)
-		prevNode->next = deleteNode->next;
-		deleteNode->next->prev = prevNode;
+		Node* nextNode = deleteNode->next;
+		prevNode->next = nextNode;
+
+		if (nextNode)
+		{
+			nextNode->prev = prevNode;
+		}
 	}
 }

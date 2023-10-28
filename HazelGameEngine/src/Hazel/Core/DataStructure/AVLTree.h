@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include <cassert>
 
 template <typename KEY, typename VALUE>
@@ -22,21 +22,6 @@ private:
 	~AVLTreeNode()
 	{
 	}
-
-private:
-	AVLTreeNode<KEY, VALUE>* m_Left = nullptr;
-	AVLTreeNode<KEY, VALUE>* m_Right = nullptr;
-	AVLTreeNode<KEY, VALUE>* m_Parent = nullptr;
-	AVLTreeNode<KEY, VALUE>* m_Next = nullptr;
-	AVLTreeNode<KEY, VALUE>* m_Prev = nullptr;
-
-	// 같은 KEY 가 들어올 경우, 연결리스트 형태로 모아둔다.
-	AVLTreeNode<KEY, VALUE>* m_NextInList = nullptr;
-	AVLTreeNode<KEY, VALUE>* m_PrevInList = nullptr;
-
-public:
-	KEY		first;
-	VALUE	second;
 
 public:
 	bool HasParent()	const
@@ -83,6 +68,21 @@ public:
 	{
 		return m_Right->second;
 	}
+
+	KEY		first;
+	VALUE	second;
+
+private:
+	AVLTreeNode<KEY, VALUE>* m_Left = nullptr;
+	AVLTreeNode<KEY, VALUE>* m_Right = nullptr;
+	AVLTreeNode<KEY, VALUE>* m_Parent = nullptr;
+	AVLTreeNode<KEY, VALUE>* m_Next = nullptr;
+	AVLTreeNode<KEY, VALUE>* m_Prev = nullptr;
+
+	// 같은 KEY 가 들어올 경우, 연결리스트 형태로 모아둔다.
+	AVLTreeNode<KEY, VALUE>* m_NextInList = nullptr;
+	AVLTreeNode<KEY, VALUE>* m_PrevInList = nullptr;
+
 };
 
 template <typename KEY, typename VALUE>
@@ -169,7 +169,7 @@ public:
 		m_Size = 0;
 
 		m_Begin = new NODE;
-		m_End    = new NODE;
+		m_End = new NODE;
 
 		m_Begin->m_Next = m_End;
 		m_End->m_Prev = m_Begin;
@@ -198,7 +198,7 @@ public:
 		{
 			m_Root = new NODE;
 
-			m_Root->first     = key;
+			m_Root->first = key;
 			m_Root->second = value;
 
 			// begin -> root -> end 구조
@@ -206,7 +206,7 @@ public:
 			m_Root->m_Prev = m_Begin;
 
 			m_Root->m_Next = m_End;
-			m_End->m_Prev  = m_Root;
+			m_End->m_Prev = m_Root;
 		}
 
 		else
@@ -246,7 +246,7 @@ public:
 	// 원하는 데이터를 찾는 로직을 적용한다.
 	iterator Find(const KEY& key, const VALUE& value)	const
 	{
-		return find(key, value,  m_Root);
+		return find(key, value, m_Root);
 	}
 
 	void Clear()
@@ -663,7 +663,7 @@ private:
 		{
 			// 같은 key 를 모아둔 연결리스트를 뒤져서 원하는 데이터를 찾는다.
 			PNODE searchNode = Node;
-			
+
 			while (searchNode)
 			{
 				if (searchNode->second == value)
@@ -935,10 +935,10 @@ private:
 		if (isFirstNodeInList)
 		{
 			// nextNode 가 이제 list 상의 첫번째 노드가 되는 것이다.
-			PNODE nextNode   = Node->m_Next;
-			PNODE prevNode   = Node->m_Prev;
-			PNODE leftNode		 = Node->m_Left;
-			PNODE rightNode   = Node->m_Right;
+			PNODE nextNode = Node->m_Next;
+			PNODE prevNode = Node->m_Prev;
+			PNODE leftNode = Node->m_Left;
+			PNODE rightNode = Node->m_Right;
 			PNODE parentNode = Node->m_Parent;
 
 			if (!parentNode)

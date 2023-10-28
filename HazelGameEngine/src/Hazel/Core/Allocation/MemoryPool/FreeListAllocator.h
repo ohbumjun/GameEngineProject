@@ -2,13 +2,13 @@
 
 #include "MemoryPoolInfo.h"
 #include "MemoryPoolAllocator.h"
-#include "Hazel/Core/DataStructure/SinglyLinkedList.h"
+#include "Hazel/Core/DataStructure/DoublyLinkedList.h"
 #include "Hazel/Core/DataStructure/AVLTree.h"
 
 class FreeListAllocator :
     public MemoryPoolAllocator
 {
-    friend class CMemoryPool;
+    friend class MemoryPool;
 
     struct FreeHeader
     {
@@ -20,15 +20,16 @@ class FreeListAllocator :
     struct AllocationHeader
     {
         size_t blockSize;
-        char padding;
+        char padding;    // 1byte -> 8 bit -> 256 까지 표현가능
     };
 
     typedef unsigned char byte;
-    typedef SinglyLinkedList<FreeHeader>::Node Node;
+    // typedef SinglyLinkedList<FreeHeader>::Node Node;
+    typedef DoublyLinkedList<FreeHeader>::Node Node;
 
 public:
     FreeListAllocator(const size_t totalSize, FreeListAllocatorPlacementPolicy Policy);
-    ~FreeListAllocator();    
+    ~FreeListAllocator();
     void SetFreeListAllocatorPlacementPolicy(FreeListAllocatorPlacementPolicy Policy)
     {
         m_Policy = Policy;
@@ -38,16 +39,19 @@ public:
     virtual void Free(void* ptr);
     virtual void Init();
     void Reset();
-    
+
 private:
     void coalescene(Node* prevBlock, Node* freeBlock);
     void find(const size_t allocSize, const size_t alignment, size_t& padding, Node*& prevNode, Node*& foundNode);
     void findBest(const size_t allocSize, const size_t alignment, size_t& padding, Node*& prevNode, Node*& foundNode);
     void findFirst(const size_t allocSize, const size_t alignment, size_t& padding, Node*& prevNode, Node*& foundNode);
-
+    void findSpeed(const size_t allocSize, const size_t alignment, size_t& padding, Node*& prevNode, Node*& foundNode);
+    void insertNode(Node* prev, Node* current);
+    void removeNode(Node* prev, Node* current);
     byte* m_StartPtr = nullptr;
-    // FreeHeader -> 각 Block 의 시작점 주소 ?? 가 Node * 형태로 들어간다...?
-    SinglyLinkedList<FreeHeader> m_FreeList;
+    // FreeList 내 노드들은, 즉 노드포인터들은, 사실상 각 Block 의 시작 주소와 동일하다. 
+    // SinglyLinkedList<FreeHeader> m_FreeList;
+    DoublyLinkedList<FreeHeader> m_FreeList;
     FreeListAllocatorPlacementPolicy m_Policy;
+    AVLTree<size_t, void*> m_SizeAVLTree;
 };
-
