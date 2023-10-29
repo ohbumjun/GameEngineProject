@@ -145,6 +145,10 @@
     <ClInclude Include="src\Hazel\Core\DataStructure\SinglyLinkedList.h" />
     <ClInclude Include="src\Hazel\Core\DataStructure\StackLinkedList.h" />
     <ClInclude Include="src\Hazel\Core\DataStructure\AVLTree.h" />
+    <ClInclude Include="src\Hazel\Core\GC\GC.h" />
+    <ClInclude Include="src\Hazel\Core\GC\GCAllocator.h" />
+    <ClInclude Include="src\Hazel\Core\GC\GCInfo.h" />
+    <ClInclude Include="src\Hazel\Core\GC\GCObject.h" />
     <ClInclude Include="src\Hazel\Utils\EngineUtil.h" />
     <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\FreeListAllocator.h" />
     <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\PoolAllocator.h" />
@@ -624,6 +628,9 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Hazel\Core\GC\GC.cpp" />
+    <ClCompile Include="src\Hazel\Core\GC\GCAllocator.cpp" />
+    <ClCompile Include="src\Hazel\Core\GC\GCObject.cpp" />
     <ClCompile Include="src\Hazel\Utils\EngineUtil.cpp" />
     <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\FreeListAllocator.cpp" />
     <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\PoolAllocator.cpp" />
@@ -684,6 +691,9 @@
     <ProjectReference Include="vendor\imgui\ImGui.vcxproj">
       <Project>{C0FF640D-2C14-8DBE-F595-301E616989EF}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="src\Hazel\Core\GC\텍스트.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

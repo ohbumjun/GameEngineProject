@@ -1488,6 +1488,10 @@
     <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\MemoryPoolInfo.h" />
     <ClInclude Include="src\Hazel\Core\DataStructure\AVLTree.h" />
     <ClInclude Include="src\Hazel\Core\DataStructure\DoublyLinkedList.h" />
+    <ClInclude Include="src\Hazel\Core\GC\GC.h" />
+    <ClInclude Include="src\Hazel\Core\GC\GCAllocator.h" />
+    <ClInclude Include="src\Hazel\Core\GC\GCInfo.h" />
+    <ClInclude Include="src\Hazel\Core\GC\GCObject.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Core\Application.cpp">
@@ -1617,5 +1621,11 @@
     <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\StackAllocator.cpp" />
     <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\FreeListAllocator.cpp" />
     <ClCompile Include="src\Hazel\Utils\EngineUtil.cpp" />
+    <ClCompile Include="src\Hazel\Core\GC\GC.cpp" />
+    <ClCompile Include="src\Hazel\Core\GC\GCAllocator.cpp" />
+    <ClCompile Include="src\Hazel\Core\GC\GCObject.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="src\Hazel\Core\GC\텍스트.txt" />
   </ItemGroup>
 </Project>
