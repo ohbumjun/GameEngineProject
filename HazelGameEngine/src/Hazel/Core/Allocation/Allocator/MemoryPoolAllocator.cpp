@@ -15,11 +15,3 @@ void* MemoryPoolAllocator::Allocate(const size_t allocationSize, const size_t al
 {
     return nullptr;
 }
-
-void MemoryPoolAllocator::Init()
-{
-}
-
-void MemoryPoolAllocator::Free(void* ptr)
-{
-}

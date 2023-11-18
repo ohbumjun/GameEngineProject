@@ -1,36 +1,58 @@
 #pragma once
 #include "MemoryPoolInfo.h"
-#include "MemoryPool.h"
+#include "FixedMemoryPool.h"
+#include "VariantMemoryPool.h"
 
+// 전역으로 사용하는 MemoryPool
 class MemoryPoolManager
 {
-	friend class CScene;
-	friend class CGameObjectFactory;
-protected:
+public :
 	MemoryPoolManager();
 	virtual ~MemoryPoolManager();
-private:
-	// std::unordered_map<size_t, CMemoryPool*> m_mapPoolAllocPool;
-	std::unordered_map<std::string, MemoryPool*> m_mapPoolAllocPool;
-	MemoryPool* m_StackMemoryPool;
-	MemoryPool* m_FreeListMemoryPool;
-	class CScene* m_Scene;
-private:
-	// CMemoryPool* FindPoolAllocMemoryPool(const size_t ObjectTypeID);
-	MemoryPool* FindPoolAllocMemoryPool(const std::string& TypeName);
-	MemoryPool* FindMemoryPool(MemoryPoolType Type);
-
 	template<typename T>
-	void CreatePoolAllocMemoryPool(const char* Name, int initNum, MemoryPoolType Type)
+	void Allocate();
+	template<typename T>
+	void Free(void* dataPtr);
+	void SetFixedSize(uint size)
 	{
-		MemoryPool* NewMemoryPool = new MemoryPool;
-
-		NewMemoryPool->SetName(Name);
-
-		NewMemoryPool->InitPoolAlloc<T>(initNum, Type);
-
-		// m_mapPoolAllocPool.insert(std::make_pair(typeid(T).hash_code(), NewMemoryPool));
-		m_mapPoolAllocPool.insert(std::make_pair(typeid(T).name(), NewMemoryPool));
+		m_FixedSize = size;
 	}
+private :
+	FixedMemoryPool* m_FixedPool;
+	VariantMemoryPool* m_VariantPool;
+	uint m_FixedSize = 256;
 };
 
+template<typename T>
+inline void MemoryPoolManager::Allocate()
+{
+	// 256 이하라면, Pool Allocator 에서 할당
+	// 그 이상이라면, FreeList
+	const uint dataSize = sizeof(T);
+
+	if (dataSize <= m_FixedSize)
+	{
+		m_FixedPool->Allocate(dataSize);
+	}
+	else
+	{
+		m_VariantPool->Allocate(dataSize);
+	}
+}
+
+template<typename T>
+inline void MemoryPoolManager::Free(void* dataPtr)
+{
+	// 256 이하라면, Pool Allocator 에서 할당
+	// 그 이상이라면, FreeList
+	const uint dataSize = sizeof(T);
+
+	if (dataSize <= m_FixedSize)
+	{
+		m_FixedPool->Free(dataPtr);
+	}
+	else
+	{
+		m_VariantPool->Free(dataPtr);
+	}
+}

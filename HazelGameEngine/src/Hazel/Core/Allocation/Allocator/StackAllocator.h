@@ -21,8 +21,8 @@ public:
     StackAllocator(size_t totalSize);
     ~StackAllocator();
     virtual void* Allocate(const size_t allocSize, const size_t alignment) override;
-    virtual void Free(void* ptr) override;
-    virtual void Init() override;
+    virtual void Free(void* ptr) ;
+    virtual void Init() ;
     void Reset();
     void ResizeAlloc();
 private:

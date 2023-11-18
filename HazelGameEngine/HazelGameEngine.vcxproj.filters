@@ -1476,12 +1476,12 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\MemoryPoolAllocator.h" />
+    <ClInclude Include="src\Hazel\Core\Allocation\Allocator\MemoryPoolAllocator.h" />
     <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\MemoryPoolManager.h" />
-    <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\MemoryPool.h" />
-    <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\PoolAllocator.h" />
-    <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\StackAllocator.h" />
-    <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\FreeListAllocator.h" />
+    <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\BaseMemoryPool.h" />
+    <ClInclude Include="src\Hazel\Core\Allocation\Allocator\PoolAllocator.h" />
+    <ClInclude Include="src\Hazel\Core\Allocation\Allocator\StackAllocator.h" />
+    <ClInclude Include="src\Hazel\Core\Allocation\Allocator\FreeListAllocator.h" />
     <ClInclude Include="src\Hazel\Utils\EngineUtil.h" />
     <ClInclude Include="src\Hazel\Core\DataStructure\StackLinkedList.h" />
     <ClInclude Include="src\Hazel\Core\DataStructure\SinglyLinkedList.h" />
@@ -1489,9 +1489,10 @@
     <ClInclude Include="src\Hazel\Core\DataStructure\AVLTree.h" />
     <ClInclude Include="src\Hazel\Core\DataStructure\DoublyLinkedList.h" />
     <ClInclude Include="src\Hazel\Core\GC\GC.h" />
-    <ClInclude Include="src\Hazel\Core\GC\GCAllocator.h" />
     <ClInclude Include="src\Hazel\Core\GC\GCInfo.h" />
     <ClInclude Include="src\Hazel\Core\GC\GCObject.h" />
+    <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\FixedMemoryPool.h" />
+    <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\VariantMemoryPool.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Core\Application.cpp">
@@ -1614,16 +1615,17 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\MemoryPoolAllocator.cpp" />
+    <ClCompile Include="src\Hazel\Core\Allocation\Allocator\MemoryPoolAllocator.cpp" />
     <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\MemoryPoolManager.cpp" />
-    <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\MemoryPool.cpp" />
-    <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\PoolAllocator.cpp" />
-    <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\StackAllocator.cpp" />
-    <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\FreeListAllocator.cpp" />
+    <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\BaseMemoryPool.cpp" />
+    <ClCompile Include="src\Hazel\Core\Allocation\Allocator\PoolAllocator.cpp" />
+    <ClCompile Include="src\Hazel\Core\Allocation\Allocator\StackAllocator.cpp" />
+    <ClCompile Include="src\Hazel\Core\Allocation\Allocator\FreeListAllocator.cpp" />
     <ClCompile Include="src\Hazel\Utils\EngineUtil.cpp" />
     <ClCompile Include="src\Hazel\Core\GC\GC.cpp" />
-    <ClCompile Include="src\Hazel\Core\GC\GCAllocator.cpp" />
     <ClCompile Include="src\Hazel\Core\GC\GCObject.cpp" />
+    <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\FixedMemoryPool.cpp" />
+    <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\VariantMemoryPool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\Hazel\Core\GC\텍스트.txt" />

@@ -12,7 +12,5 @@ protected:
 	virtual ~MemoryPoolAllocator();
 	virtual void* Allocate(const size_t allocationSize,
 		const size_t alignment = 0);
-	virtual void Init() = 0;
-	virtual void Free(void* ptr) = 0;
 };
 

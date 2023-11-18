@@ -7,7 +7,6 @@
 class PoolAllocator :
     public MemoryPoolAllocator
 {
-    friend class CMemoryPool;
 private:
     struct FreeHeader {};
     typedef StackLinkedList<FreeHeader>::Node Node;
@@ -21,8 +20,8 @@ public:
     virtual ~PoolAllocator();
     virtual void* Allocate(const size_t allocateSize,
         const size_t alignment);
-    virtual void Free(void* ptr) override;
-    virtual void Init() override;
+    virtual void Free(void* ptr) ;
+    virtual void Init() ;
     virtual void Reset();
 };
 

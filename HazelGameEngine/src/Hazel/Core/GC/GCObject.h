@@ -3,21 +3,21 @@
 #include "../Reflection/Reflection.h"
 #include "GCInfo.h"
 
-struct TypeInfo;
+struct Reflection::TypeInfo;
 
 class GCObject
 {
 public :
-	GCObject(void* data, GCAllocationHeader* header, TypeInfo* pTypeInfo);
+	GCObject(void* data, GCAllocationHeader* header, Reflection::TypeInfo* pTypeInfo);
 	
 	void SetIsRoot(bool isRoot);
 	void SetVisit(bool visit);
 	void AddRef();
 	void SetNext(GCObject* current, GCObject* next);
-	// nullptr ÀÎÁö È¤Àº Dangling ÀÎÁö¸¦ °Ë»çÇÏ´Â ÇÔ¼ö
+	// nullptr ì¸ì§€ í˜¹ì€ Dangling ì¸ì§€ë¥¼ ê²€ì‚¬í•˜ëŠ” í•¨ìˆ˜
 	bool IsValid();
 	
-	inline TypeInfo* GetTypeInfo() const { return m_TypeInfo; }
+	inline Reflection::TypeInfo* GetTypeInfo() const { return m_TypeInfo; }
 	inline GCObject* GetNext() const { return m_Next; }
 	inline void* GetDataPtr() const { return m_DataPtr; }
 	inline bool IsVisited() { return false; }
@@ -25,24 +25,24 @@ public :
 	inline int   GetRefCount() { return 0; }
 	inline TypeId GetType() { return m_TypeInfo->m_Type; };
 private:
-	// _object_db_rec_ µéÀ» ¿¬°á¸®½ºÆ® ÇüÅÂ·Î °ü¸®ÇÒ °ÍÀÌ´Ù.
-	// ±× ´ÙÀ½ ³ëµå¿¡ ´ëÇÑ Æ÷ÀÎÅÍ
+	// _object_db_rec_ ë“¤ì„ ì—°ê²°ë¦¬ìŠ¤íŠ¸ í˜•íƒœë¡œ ê´€ë¦¬í•  ê²ƒì´ë‹¤.
+	// ê·¸ ë‹¤ìŒ ë…¸ë“œì— ëŒ€í•œ í¬ì¸í„°
 	GCObject* m_Next;
 
-	// ÇÒ´çÇÑ object ÀÇ ¸Ş¸ğ¸® ÁÖ¼Ò 
-	// _object_db_ ¿¡¼­ ÇØ´ç object_rec ¸¦ Ã£´Â key ·Î »ç¿ëÇÒ °ÍÀÌ´Ù.
+	// í• ë‹¹í•œ object ì˜ ë©”ëª¨ë¦¬ ì£¼ì†Œ 
+	// _object_db_ ì—ì„œ í•´ë‹¹ object_rec ë¥¼ ì°¾ëŠ” key ë¡œ ì‚¬ìš©í•  ê²ƒì´ë‹¤.
 	void* m_DataPtr;
 
-	// ¶ÇÇÑ HeaderAddress µµ °¡Áö°í ÀÖÀ» ¼ö ÀÖ°Ô ÇØ¾ß ÇÑ´Ù.
+	// ë˜í•œ HeaderAddress ë„ ê°€ì§€ê³  ìˆì„ ìˆ˜ ìˆê²Œ í•´ì•¼ í•œë‹¤.
 	// void* headerAddr;
 	GCAllocationHeader* m_HeaderAddr;
 
-	// ÇØ´ç object °¡ ¼ÓÇÑ structure_db_rec °´Ã¼¸¦ °¡¸®Å°´Â Æ÷ÀÎÅÍ
-	// xalloc ½Ã µé¾î¿Â "string" °ªÀ» ÀÌ¿ëÇÏ¿© struct_db ¿¡¼­ Ã£¾Æ³»¼­ ¸µÅ©½ÃÄÑÁÖ±â
+	// í•´ë‹¹ object ê°€ ì†í•œ structure_db_rec ê°ì²´ë¥¼ ê°€ë¦¬í‚¤ëŠ” í¬ì¸í„°
+	// xalloc ì‹œ ë“¤ì–´ì˜¨ "string" ê°’ì„ ì´ìš©í•˜ì—¬ struct_db ì—ì„œ ì°¾ì•„ë‚´ì„œ ë§í¬ì‹œì¼œì£¼ê¸°
 	// struct_db_rec_t* struct_rec;
-	TypeInfo* m_TypeInfo;
+	Reflection::TypeInfo* m_TypeInfo;
 
-	// ¾Æ·¡ Á¤º¸µéÀº Header ÂÊ¿¡ ¹èÄ¡ÇØº¸ÀÚ.
+	// ì•„ë˜ ì •ë³´ë“¤ì€ Header ìª½ì— ë°°ì¹˜í•´ë³´ì.
 	// bool is_visited; /*Used for Graph traversal*/
 	// bool is_root;
 	// int   refCount;  /*Used for Graph traversal*/

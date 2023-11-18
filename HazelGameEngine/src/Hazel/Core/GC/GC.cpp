@@ -1,5 +1,6 @@
+﻿
+#include "hzpch.h"
 #include "GC.h"
-#include "GCAllocator.h"
 #include "GCObject.h"
 #include "../Reflection/Reflection.h"
 
@@ -8,7 +9,8 @@ GC::GC()
 	// 인자로 TotalSize 는 사실 의미에 맞지 않는다.
 	// GCAllocator 안에 PoolAllocator , freeList Allocator
 	// 2개가 있는데 이 중에서 FreeList 만 사용하는 size 이다.
-	m_GCAllocator = new GCAllocator(4096 * 2000);
+    m_GCAllocator = new MemoryPoolManager();
+    m_GCAllocator->SetFixedSize(sizeof(GCObject));
 }
 
 GC::~GC()
@@ -46,12 +48,13 @@ GCObject* GC::FindGCObject(void* dataPtr)
 template<typename T>
 void  GC::Allocate(bool isRoot)
 {
-	m_GCAllocator->Allocate<T>(isRoot);
+    // isRoot 은 GCObject 를 리턴받고 세팅해줄 것이다.
+    m_GCAllocator->Allocate<T>();
 }
 
 void GC::Free(GCObject* gcObject)
 {
-	m_GCAllocator->Free(gcObject);
+    m_GCAllocator->Free<GCObject>(static_cast<void*>(gcObject));
 }
 
 void GC::reset()
@@ -123,7 +126,7 @@ void GC::sweep()
             }
 
             // 메모리 해제해주기
-            m_GCAllocator->Free(prevObject);
+            m_GCAllocator->Free<GCObject>(prevObject);
 
             // list 상에서 지워주기 
             iter = m_CollectTargets.erase(iter);
@@ -173,7 +176,7 @@ void GC::markRecursively(GCObject* parentObject)
     FieldInfo* field_info = NULL;
 
     GCObject* child_object = NULL;
-    TypeInfo* parentTypeInfo = parentObject->GetTypeInfo();
+    Reflection::TypeInfo* parentTypeInfo = parentObject->GetTypeInfo();
 
     /*Parent object must have already visited*/
     assert(parentObject->IsVisited());

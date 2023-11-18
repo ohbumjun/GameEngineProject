@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MemoryPoolInfo.h"
+#include "../MemoryPool/MemoryPoolInfo.h"
 #include "MemoryPoolAllocator.h"
 #include "Hazel/Core/DataStructure/DoublyLinkedList.h"
 #include "Hazel/Core/DataStructure/AVLTree.h"
@@ -37,7 +37,7 @@ public:
     virtual void* Allocate(const size_t allocSize,
         const size_t alignment);
     virtual void Free(void* ptr);
-    virtual void Init();
+    void Init();
     void Reset();
 
 private:

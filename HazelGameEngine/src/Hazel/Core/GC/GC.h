@@ -1,10 +1,11 @@
 #pragma once
 
 #include "hzpch.h"
+#include "../Allocation/MemoryPool/MemoryPoolManager.h"
+#include "GCObject.h"
 
 class TypeInfo;
 class GCAllocator;
-class GCObject;
 
 // Single ton 객체를 활용할 것이다.
 class GC
@@ -20,13 +21,14 @@ public :
 	void AddCollectTarget(GCObject* object);
 	GCObject* FindGCObject(void* dataPtr);
 private :
+	uint fixedSize = sizeof(GCObject);
 	void reset();
 	void mark();
 	void sweep();
 	void markRecursively(GCObject* object);
 	GCObject* getFirstRootObject();
 	GCObject* getNextRootObject(GCObject* curGCObject);
-	GCAllocator* m_GCAllocator;
+	class MemoryPoolManager* m_GCAllocator;
 	std::list<GCObject*> m_CollectTargets;
 	std::mutex m_Mutex;
 };
