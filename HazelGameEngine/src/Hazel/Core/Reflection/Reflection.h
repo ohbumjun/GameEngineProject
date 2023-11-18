@@ -148,9 +148,9 @@ public :
 
 		std::set<FieldInfo> m_fieldInfos;
 
-		uint32 pointerCount;
+		uint32 m_PointerCount;
 
-		std::vector<TypeId> subTypes;
+		std::vector<TypeId> m_SubTypes;
 
 		TypeId m_Type;
 
@@ -216,7 +216,7 @@ public :
 
 	static const FieldInfo* GetFieldInfo(TypeId id, const std::string& FieldName);
 
-	static bool IsChildType(TypeId baseType, TypeId childType);
+	static bool IsDerivedClass(TypeId baseType, TypeId childType);
 private :
 
 	class StaticContainerData

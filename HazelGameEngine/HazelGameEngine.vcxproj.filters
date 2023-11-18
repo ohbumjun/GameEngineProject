@@ -1493,6 +1493,8 @@
     <ClInclude Include="src\Hazel\Core\GC\GCObject.h" />
     <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\FixedMemoryPool.h" />
     <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\VariantMemoryPool.h" />
+    <ClInclude Include="src\Hazel\Core\Serialization\SerializeTarget.h" />
+    <ClInclude Include="src\Hazel\Core\Serialization\Serializer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Core\Application.cpp">
@@ -1626,6 +1628,8 @@
     <ClCompile Include="src\Hazel\Core\GC\GCObject.cpp" />
     <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\FixedMemoryPool.cpp" />
     <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\VariantMemoryPool.cpp" />
+    <ClCompile Include="src\Hazel\Core\Serialization\Serializer.cpp" />
+    <ClCompile Include="src\Hazel\Core\Serialization\SerializeTarget.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\Hazel\Core\GC\텍스트.txt" />

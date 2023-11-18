@@ -125,7 +125,7 @@ const FieldInfo* Reflection::GetFieldInfo(TypeId classId, const std::string& Fie
 	return nullptr;
 }
 
-bool Reflection::IsChildType(TypeId baseType, TypeId childType)
+bool Reflection::IsDerivedClass(TypeId baseType, TypeId childType)
 {
 	if (baseType == childType)
 	{
@@ -140,7 +140,7 @@ bool Reflection::IsChildType(TypeId baseType, TypeId childType)
 
 	const TypeInfo* baseInfo = GetTypeInfo(baseType);
 
-	bool foundResult = std::find(baseInfo->subTypes.begin(), baseInfo->subTypes.end(), childType) != baseInfo->subTypes.end();
+	bool foundResult = std::find(baseInfo->m_SubTypes.begin(), baseInfo->m_SubTypes.end(), childType) != baseInfo->m_SubTypes.end();
 
 	return foundResult;
 }
@@ -212,11 +212,11 @@ void Reflection::RegisterBase(TypeId baseType, TypeId subType)
 {
 	TypeInfo* baseTypeInfo = GetTypeInfo(baseType);
 
-	bool contain = std::find(baseTypeInfo->subTypes.begin(), baseTypeInfo->subTypes.end(), subType) != baseTypeInfo->subTypes.end();
+	bool contain = std::find(baseTypeInfo->m_SubTypes.begin(), baseTypeInfo->m_SubTypes.end(), subType) != baseTypeInfo->m_SubTypes.end();
 
 	if (contain) return;
 
-	baseTypeInfo->subTypes.push_back(subType);
+	baseTypeInfo->m_SubTypes.push_back(subType);
 }
 
 uint32 Reflection::GetTypeSize(const TypeId& id)

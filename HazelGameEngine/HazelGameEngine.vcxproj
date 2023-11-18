@@ -140,6 +140,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Hazel\Core\Serialization\Serializer.h" />
     <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\FixedMemoryPool.h" />
     <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\MemoryPoolInfo.h" />
     <ClInclude Include="src\Hazel\Core\DataStructure\DoublyLinkedList.h" />
@@ -149,6 +150,7 @@
     <ClInclude Include="src\Hazel\Core\GC\GC.h" />
     <ClInclude Include="src\Hazel\Core\GC\GCInfo.h" />
     <ClInclude Include="src\Hazel\Core\GC\GCObject.h" />
+    <ClInclude Include="src\Hazel\Core\Serialization\SerializeTarget.h" />
     <ClInclude Include="src\Hazel\Utils\EngineUtil.h" />
     <ClInclude Include="src\Hazel\Core\Allocation\Allocator\FreeListAllocator.h" />
     <ClInclude Include="src\Hazel\Core\Allocation\Allocator\PoolAllocator.h" />
@@ -632,6 +634,8 @@
     <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\FixedMemoryPool.cpp" />
     <ClCompile Include="src\Hazel\Core\GC\GC.cpp" />
     <ClCompile Include="src\Hazel\Core\GC\GCObject.cpp" />
+    <ClCompile Include="src\Hazel\Core\Serialization\Serializer.cpp" />
+    <ClCompile Include="src\Hazel\Core\Serialization\SerializeTarget.cpp" />
     <ClCompile Include="src\Hazel\Utils\EngineUtil.cpp" />
     <ClCompile Include="src\Hazel\Core\Allocation\Allocator\FreeListAllocator.cpp" />
     <ClCompile Include="src\Hazel\Core\Allocation\Allocator\PoolAllocator.cpp" />
