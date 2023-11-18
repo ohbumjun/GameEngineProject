@@ -1,0 +1,179 @@
+﻿
+#pragma region Token
+
+enum class TokenDataType
+{
+	NONE,
+	DOUBLE,
+	STRING,
+	INT,
+	UINT,
+	BOOL,
+	BEGINSEQ,
+	ENDSEQ,
+	NIL, // OBJECT Pointer
+	BEGINMAP,
+	ENDMAP,
+	KEY,
+};
+
+struct TokenValue
+{
+	bool isString = false;
+
+	union
+	{
+		bool m_BoolVal;
+		void* m_NullVal;
+		int64 m_IntVal;
+		uint64 m_UintVal;
+		double m_DoubleVal;
+		std::string* m_StringVal;
+	};
+
+	TokenValue(int v) : isString(false), m_IntVal(v) { }
+	TokenValue(uint32 v) : isString(false), m_UintVal(v) { }
+	TokenValue(int64 v) : isString(false), m_IntVal(v) { }
+	TokenValue(uint64 v) : isString(false), m_UintVal(v) { }
+	TokenValue(double v) : isString(false), m_DoubleVal(v) { }
+	TokenValue(bool v) : isString(false), m_BoolVal(v) { }
+	TokenValue(void* v) : isString(false), m_NullVal(v) { }
+	TokenValue() : isString(false), m_NullVal(nullptr) {};
+
+	TokenValue(const std::string& v) : isString(true)
+	{
+		m_StringVal = new std::string(v);
+	}
+
+	TokenValue(std::string&& v) : isString(true)
+	{
+		m_StringVal = new  std::string(std::move(v));
+	}
+
+	~TokenValue()
+	{
+		releaseMemory();
+	}
+
+	void SetInt(const TokenValue& o)
+	{
+		releaseMemory();
+
+		isString = o.isString;
+		m_IntVal = o.m_IntVal;
+	}
+	void SetUint(const TokenValue& o)
+	{
+		releaseMemory();
+
+		isString = o.isString;
+		m_UintVal = o.m_UintVal;
+	}
+	void SetDouble(const TokenValue& o)
+	{
+		releaseMemory();
+
+		isString = o.isString;
+		m_DoubleVal = o.m_DoubleVal;
+	}
+	void SetBool(const TokenValue& o)
+	{
+		releaseMemory();
+
+		isString = o.isString;
+		m_BoolVal = o.m_BoolVal;
+	}
+	void SetNil(const TokenValue& o)
+	{
+		releaseMemory();
+
+		isString = o.isString;
+		m_NullVal = o.m_NullVal;
+	}
+	void SetString(const TokenValue& o)
+	{
+		if (this != &o)
+		{
+			releaseMemory();
+
+			isString = o.isString;
+			m_StringVal = new std::string(*(o.m_StringVal));
+		}
+	}
+	void SetString(TokenValue&& o)
+	{
+		if (this != &o)
+		{
+			releaseMemory();
+			isString = o.isString;
+			m_StringVal = std::move(o.m_StringVal);
+
+			o.isString = false;
+			o.m_StringVal = nullptr;
+		}
+	}
+
+private:
+	void releaseMemory()
+	{
+		if (isString)
+		{
+			delete m_StringVal;
+			m_StringVal = nullptr;
+		}
+	}
+};
+
+struct JsonToken
+{
+	TokenDataType m_TokenType;
+
+	// 각 Token 이 가지고 있는 실제 Value
+	TokenValue m_Value;
+
+	size_t m_ElementCnt;
+
+	template<typename T>
+	JsonToken(TokenDataType type, T&& t)
+		: m_TokenType(type)
+		, m_Value(std::forward<T>(t))
+	{}
+
+	JsonToken()
+		: m_TokenType(TokenDataType::NONE)
+		, m_Value(nullptr)
+	{}
+
+	JsonToken(const JsonToken& o)
+		: m_TokenType(o.m_TokenType)
+		, m_ElementCnt(o.m_ElementCnt)
+	{
+		switch (m_TokenType)
+		{
+		case TokenDataType::BOOL:
+			m_Value.SetBool(o.m_Value);
+			break;
+		case TokenDataType::DOUBLE:
+			m_Value.SetDouble(o.m_Value);
+			break;
+		case TokenDataType::STRING:
+		case TokenDataType::KEY:
+			m_Value.SetString(o.m_Value);
+			break;
+		case TokenDataType::NIL:
+			m_Value.SetNil(o.m_Value);
+			break;
+		case TokenDataType::INT:
+			m_Value.SetInt(o.m_Value);
+			break;
+		case TokenDataType::UINT:
+			m_Value.SetUint(o.m_Value);
+			break;
+		default:
+			m_Value.SetBool(o.m_Value);
+			break;
+		}
+	}
+};
+
+#pragma endregion

@@ -10,8 +10,29 @@
     <Filter Include="src\Hazel\Core">
       <UniqueIdentifier>{48D253A8-34A0-47AE-1D34-B8D409A12313}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Hazel\Core\Allocation">
+      <UniqueIdentifier>{1D3104F7-89F3-3781-D2A3-C60D3EA5105F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Hazel\Core\Allocation\Allocator">
+      <UniqueIdentifier>{AD043AE7-19BE-A491-A21D-BF6B0ED65A01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Hazel\Core\Allocation\MemoryPool">
+      <UniqueIdentifier>{9F1570E0-8BFC-31D8-344D-98F52013AB3E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Hazel\Core\DataStructure">
+      <UniqueIdentifier>{429BBD6B-2E56-AD17-D70D-2662C3A7F7A7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Hazel\Core\GC">
+      <UniqueIdentifier>{A1DEC29E-0DF5-C034-566C-4C56C2C191BC}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Hazel\Core\Layer">
+      <UniqueIdentifier>{146503BA-00F4-8C83-A912-A17E95809D29}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Hazel\Core\Reflection">
       <UniqueIdentifier>{028CA5A0-6E4E-D92A-B7FE-67B72300B208}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Hazel\Core\Serialization">
+      <UniqueIdentifier>{D588303F-C143-20EB-6AFB-983556956A7B}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Hazel\Debug">
       <UniqueIdentifier>{6676DAB2-D201-4877-DB12-CB6B471DA477}</UniqueIdentifier>
@@ -21,6 +42,9 @@
     </Filter>
     <Filter Include="src\Hazel\ImGui">
       <UniqueIdentifier>{1AE138B3-866C-A677-8F7D-296CFB870278}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Hazel\Input">
+      <UniqueIdentifier>{EF1B3AB3-5BA7-A777-64B8-2A6CD0C20378}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Hazel\Scene">
       <UniqueIdentifier>{0DD9E8B3-7964-5678-8275-D96CEE7FB278}</UniqueIdentifier>
@@ -69,32 +93,68 @@
     <ClInclude Include="src\Hazel.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\Hazel\Core\Allocation\Allocator\FreeListAllocator.h">
+      <Filter>src\Hazel\Core\Allocation\Allocator</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Core\Allocation\Allocator\MemoryPoolAllocator.h">
+      <Filter>src\Hazel\Core\Allocation\Allocator</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Core\Allocation\Allocator\PoolAllocator.h">
+      <Filter>src\Hazel\Core\Allocation\Allocator</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Core\Allocation\Allocator\StackAllocator.h">
+      <Filter>src\Hazel\Core\Allocation\Allocator</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\BaseMemoryPool.h">
+      <Filter>src\Hazel\Core\Allocation\MemoryPool</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\FixedMemoryPool.h">
+      <Filter>src\Hazel\Core\Allocation\MemoryPool</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\MemoryPoolInfo.h">
+      <Filter>src\Hazel\Core\Allocation\MemoryPool</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\MemoryPoolManager.h">
+      <Filter>src\Hazel\Core\Allocation\MemoryPool</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\VariantMemoryPool.h">
+      <Filter>src\Hazel\Core\Allocation\MemoryPool</Filter>
+    </ClInclude>
     <ClInclude Include="src\Hazel\Core\Application.h">
       <Filter>src\Hazel\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\Core\Core.h">
       <Filter>src\Hazel\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Hazel\Core\DataStructure\AVLTree.h">
+      <Filter>src\Hazel\Core\DataStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Core\DataStructure\DoublyLinkedList.h">
+      <Filter>src\Hazel\Core\DataStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Core\DataStructure\SinglyLinkedList.h">
+      <Filter>src\Hazel\Core\DataStructure</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Core\DataStructure\StackLinkedList.h">
+      <Filter>src\Hazel\Core\DataStructure</Filter>
+    </ClInclude>
     <ClInclude Include="src\Hazel\Core\EntryPoint.h">
       <Filter>src\Hazel\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hazel\Core\Input.h">
-      <Filter>src\Hazel\Core</Filter>
+    <ClInclude Include="src\Hazel\Core\GC\GC.h">
+      <Filter>src\Hazel\Core\GC</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hazel\Core\KeyCodes.h">
-      <Filter>src\Hazel\Core</Filter>
+    <ClInclude Include="src\Hazel\Core\GC\GCInfo.h">
+      <Filter>src\Hazel\Core\GC</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hazel\Core\Layer.h">
-      <Filter>src\Hazel\Core</Filter>
+    <ClInclude Include="src\Hazel\Core\GC\GCObject.h">
+      <Filter>src\Hazel\Core\GC</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hazel\Core\LayerStack.h">
-      <Filter>src\Hazel\Core</Filter>
+    <ClInclude Include="src\Hazel\Core\Layer\Layer.h">
+      <Filter>src\Hazel\Core\Layer</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hazel\Core\Log.h">
-      <Filter>src\Hazel\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Hazel\Core\MouseButtonCodes.h">
-      <Filter>src\Hazel\Core</Filter>
+    <ClInclude Include="src\Hazel\Core\Layer\LayerStack.h">
+      <Filter>src\Hazel\Core\Layer</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\Core\Reflection\FieldInfo.h">
       <Filter>src\Hazel\Core\Reflection</Filter>
@@ -111,8 +171,14 @@
     <ClInclude Include="src\Hazel\Core\Reflection\VariableId.h">
       <Filter>src\Hazel\Core\Reflection</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hazel\Core\TimeStep.h">
-      <Filter>src\Hazel\Core</Filter>
+    <ClInclude Include="src\Hazel\Core\Serialization\JsonSerializer.h">
+      <Filter>src\Hazel\Core\Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Core\Serialization\SerializeTarget.h">
+      <Filter>src\Hazel\Core\Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Core\Serialization\Serializer.h">
+      <Filter>src\Hazel\Core\Serialization</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\Core\Window.h">
       <Filter>src\Hazel\Core</Filter>
@@ -135,6 +201,15 @@
     <ClInclude Include="src\Hazel\ImGui\ImGuiLayer.h">
       <Filter>src\Hazel\ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="src\Hazel\Input\Input.h">
+      <Filter>src\Hazel\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Input\KeyCodes.h">
+      <Filter>src\Hazel\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Input\MouseButtonCodes.h">
+      <Filter>src\Hazel\Input</Filter>
+    </ClInclude>
     <ClInclude Include="src\Hazel\Scene\Component.h">
       <Filter>src\Hazel\Scene</Filter>
     </ClInclude>
@@ -153,7 +228,19 @@
     <ClInclude Include="src\Hazel\Scene\ScriptableEntity.h">
       <Filter>src\Hazel\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="src\Hazel\Utils\Encoder.h">
+      <Filter>src\Hazel\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Utils\EngineUtil.h">
+      <Filter>src\Hazel\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Utils\Log.h">
+      <Filter>src\Hazel\Utils</Filter>
+    </ClInclude>
     <ClInclude Include="src\Hazel\Utils\Random.h">
+      <Filter>src\Hazel\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Utils\TimeStep.h">
       <Filter>src\Hazel\Utils</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h">
@@ -1476,38 +1563,46 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hazel\Core\Allocation\Allocator\MemoryPoolAllocator.h" />
-    <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\MemoryPoolManager.h" />
-    <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\BaseMemoryPool.h" />
-    <ClInclude Include="src\Hazel\Core\Allocation\Allocator\PoolAllocator.h" />
-    <ClInclude Include="src\Hazel\Core\Allocation\Allocator\StackAllocator.h" />
-    <ClInclude Include="src\Hazel\Core\Allocation\Allocator\FreeListAllocator.h" />
-    <ClInclude Include="src\Hazel\Utils\EngineUtil.h" />
-    <ClInclude Include="src\Hazel\Core\DataStructure\StackLinkedList.h" />
-    <ClInclude Include="src\Hazel\Core\DataStructure\SinglyLinkedList.h" />
-    <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\MemoryPoolInfo.h" />
-    <ClInclude Include="src\Hazel\Core\DataStructure\AVLTree.h" />
-    <ClInclude Include="src\Hazel\Core\DataStructure\DoublyLinkedList.h" />
-    <ClInclude Include="src\Hazel\Core\GC\GC.h" />
-    <ClInclude Include="src\Hazel\Core\GC\GCInfo.h" />
-    <ClInclude Include="src\Hazel\Core\GC\GCObject.h" />
-    <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\FixedMemoryPool.h" />
-    <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\VariantMemoryPool.h" />
-    <ClInclude Include="src\Hazel\Core\Serialization\SerializeTarget.h" />
-    <ClInclude Include="src\Hazel\Core\Serialization\Serializer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Hazel\Core\Allocation\Allocator\FreeListAllocator.cpp">
+      <Filter>src\Hazel\Core\Allocation\Allocator</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\Core\Allocation\Allocator\MemoryPoolAllocator.cpp">
+      <Filter>src\Hazel\Core\Allocation\Allocator</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\Core\Allocation\Allocator\PoolAllocator.cpp">
+      <Filter>src\Hazel\Core\Allocation\Allocator</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\Core\Allocation\Allocator\StackAllocator.cpp">
+      <Filter>src\Hazel\Core\Allocation\Allocator</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\BaseMemoryPool.cpp">
+      <Filter>src\Hazel\Core\Allocation\MemoryPool</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\FixedMemoryPool.cpp">
+      <Filter>src\Hazel\Core\Allocation\MemoryPool</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\MemoryPoolManager.cpp">
+      <Filter>src\Hazel\Core\Allocation\MemoryPool</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\VariantMemoryPool.cpp">
+      <Filter>src\Hazel\Core\Allocation\MemoryPool</Filter>
+    </ClCompile>
     <ClCompile Include="src\Hazel\Core\Application.cpp">
       <Filter>src\Hazel\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\Hazel\Core\Layer.cpp">
-      <Filter>src\Hazel\Core</Filter>
+    <ClCompile Include="src\Hazel\Core\GC\GC.cpp">
+      <Filter>src\Hazel\Core\GC</Filter>
     </ClCompile>
-    <ClCompile Include="src\Hazel\Core\LayerStack.cpp">
-      <Filter>src\Hazel\Core</Filter>
+    <ClCompile Include="src\Hazel\Core\GC\GCObject.cpp">
+      <Filter>src\Hazel\Core\GC</Filter>
     </ClCompile>
-    <ClCompile Include="src\Hazel\Core\Log.cpp">
-      <Filter>src\Hazel\Core</Filter>
+    <ClCompile Include="src\Hazel\Core\Layer\Layer.cpp">
+      <Filter>src\Hazel\Core\Layer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\Core\Layer\LayerStack.cpp">
+      <Filter>src\Hazel\Core\Layer</Filter>
     </ClCompile>
     <ClCompile Include="src\Hazel\Core\Reflection\Reflection.cpp">
       <Filter>src\Hazel\Core\Reflection</Filter>
@@ -1517,6 +1612,15 @@
     </ClCompile>
     <ClCompile Include="src\Hazel\Core\Reflection\VariableId.cpp">
       <Filter>src\Hazel\Core\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\Core\Serialization\JsonSerializer.cpp">
+      <Filter>src\Hazel\Core\Serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\Core\Serialization\SerializeTarget.cpp">
+      <Filter>src\Hazel\Core\Serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\Core\Serialization\Serializer.cpp">
+      <Filter>src\Hazel\Core\Serialization</Filter>
     </ClCompile>
     <ClCompile Include="src\Hazel\Core\Window.cpp">
       <Filter>src\Hazel\Core</Filter>
@@ -1541,6 +1645,12 @@
     </ClCompile>
     <ClCompile Include="src\Hazel\Scene\ScriptableEntity.cpp">
       <Filter>src\Hazel\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\Utils\EngineUtil.cpp">
+      <Filter>src\Hazel\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\Utils\Log.cpp">
+      <Filter>src\Hazel\Utils</Filter>
     </ClCompile>
     <ClCompile Include="src\Hazel\Utils\Random.cpp">
       <Filter>src\Hazel\Utils</Filter>
@@ -1617,21 +1727,8 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Hazel\Core\Allocation\Allocator\MemoryPoolAllocator.cpp" />
-    <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\MemoryPoolManager.cpp" />
-    <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\BaseMemoryPool.cpp" />
-    <ClCompile Include="src\Hazel\Core\Allocation\Allocator\PoolAllocator.cpp" />
-    <ClCompile Include="src\Hazel\Core\Allocation\Allocator\StackAllocator.cpp" />
-    <ClCompile Include="src\Hazel\Core\Allocation\Allocator\FreeListAllocator.cpp" />
-    <ClCompile Include="src\Hazel\Utils\EngineUtil.cpp" />
-    <ClCompile Include="src\Hazel\Core\GC\GC.cpp" />
-    <ClCompile Include="src\Hazel\Core\GC\GCObject.cpp" />
-    <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\FixedMemoryPool.cpp" />
-    <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\VariantMemoryPool.cpp" />
-    <ClCompile Include="src\Hazel\Core\Serialization\Serializer.cpp" />
-    <ClCompile Include="src\Hazel\Core\Serialization\SerializeTarget.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="src\Hazel\Core\GC\텍스트.txt" />
+    <Text Include="JsonSample.txt" />
   </ItemGroup>
 </Project>

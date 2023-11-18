@@ -1,7 +1,7 @@
-#pragma once
+﻿#pragma once
 
 #include "entt.hpp"
-#include "Hazel/Core/TimeStep.h"
+#include "Hazel/Utils/TimeStep.h"
 
 namespace Hazel
 {

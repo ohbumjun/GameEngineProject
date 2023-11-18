@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "hzpch.h"
 #include "../Reflection/Reflection.h"
@@ -108,8 +108,8 @@ protected:
 	virtual void onSave(const float data) = 0;
 	virtual void onSave(const double data) = 0;
 	virtual void onSave(const std::string& data) = 0;
-	virtual void onSave(const char* data) {}
-	virtual void onSave(const unsigned char* data) {}
+	virtual void onSave(const char* data) = 0;
+	virtual void onSave(const unsigned char* data) = 0;
 	virtual void onSaveRaw(void* buffer, size_t size) = 0;
 	virtual void onBeginSaveSeq(uint64 arrayLength) = 0;
 	virtual void onBeginSaveSeq(TypeId type, uint64 arrayLength) = 0;

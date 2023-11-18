@@ -20,6 +20,7 @@ IncludeDir["ImGui"] = "HazelGameEngine/vendor/imgui"
 IncludeDir["glm"] = "HazelGameEngine/vendor/glm"
 IncludeDir["stb_image"] = "HazelGameEngine/vendor/stb_image"
 IncludeDir["entt"] = "HazelGameEngine/vendor/entt/include"
+IncludeDir["rapidJson"] = "HazelGameEngine/vendor/RapidJson"
 
 -- 해당 경로 내의 premake.lua 파일을 include => 그대로 복사붙여넣기 한다는 것이다. 여기 lua file 에
 -- 관찰한 바, 아래의 include 파일들을 통해서 해당 프로젝트들이 솔루션에 추가된다.
@@ -71,7 +72,8 @@ project "HazelGameEngine"       --프로젝트 이름
         "%{IncludeDir.ImGui}",
         "%{IncludeDir.glm}",
         "%{IncludeDir.stb_image}",
-        "%{IncludeDir.entt}"
+        "%{IncludeDir.entt}",
+        "%{IncludeDir.rapidJson}"
     }
 
     -- static library 를 link 시킨다.
@@ -139,7 +141,8 @@ project "ApplicationProject"
         "HazelGameEngine/src",
         "HazelGameEngine/vendor",
         "%{IncludeDir.glm}",
-        "%{IncludeDir.entt}"
+        "%{IncludeDir.entt}",
+        "%{IncludeDir.rapidJson}"
     }
     
     links
@@ -193,7 +196,8 @@ project "Hazel-Editor"
         "HazelGameEngine/src",
         "HazelGameEngine/vendor",
         "%{IncludeDir.glm}",
-        "%{IncludeDir.entt}"
+        "%{IncludeDir.entt}",
+        "%{IncludeDir.rapidJson}"
     }
     
     links

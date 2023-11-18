@@ -1,14 +1,14 @@
-#pragma once
+﻿#pragma once
 
 #include "Hazel/Core/Core.h"
 #include "Hazel/Event/Event.h"
 #include "Window.h"
 #include "Hazel/Event/ApplicationEvent.h"
-#include "LayerStack.h"
+#include "Hazel/Core/Layer/LayerStack.h"
 #include "Hazel/ImGui/ImGuiLayer.h"
 
 #include "Renderer/Shader.h"
-#include "Hazel/Core/TimeStep.h"
+#include "Hazel/Utils/TimeStep.h"
 
 
 // Application 의 실행을 Application Project 가 아니라

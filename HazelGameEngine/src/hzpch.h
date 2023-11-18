@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 
 // Standard
@@ -36,7 +36,7 @@
 #include <unordered_set>
 #include <tuple>
 
-#include "Hazel/Core/Log.h"
+#include "Hazel/Utils/Log.h"
 #include "Hazel/Debug/Instrumentor.h"
 
 #ifdef HZ_PLATFORM_WINDOWS
