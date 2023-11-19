@@ -42,6 +42,25 @@ std::string JsonSerializer::GetFinalResult()
 	return StringBuffer->GetString();
 }
 
+void JsonSerializer::init(const char* json)
+{
+
+	Document* doc = new Document;
+	doc = new Document;
+
+	// Parsing JSON string into a rapidjson::Value
+	doc->Parse(json);
+
+	if (doc->HasParseError())
+	{
+		assert(false);
+	}
+
+	m_Document = doc;
+}
+
+#pragma region WRITE
+
 void JsonSerializer::onBeginSaveMap()
 {
 	JsonWriter* writer = (JsonWriter*)m_JsonWriter;
@@ -182,6 +201,9 @@ void JsonSerializer::onEndSaveMap()
 	JsonWriter* writer = (JsonWriter*)m_JsonWriter;
 	writer->EndObject();
 }
+
+
+#pragma endregion 
 
 #pragma region READ
 
@@ -675,20 +697,5 @@ void* JsonSerializer::getValue(JsonRecord& prevRecord)
 	return v;
 }
 
-void JsonSerializer::init(const char* json)
-{
-
-	Document* doc = new Document;
-	doc = new Document;
-
-	// Parsing JSON string into a rapidjson::Value
-	doc->Parse(json);
-
-	if (doc->HasParseError())
-	{
-		assert(false);
-	}
-
-	m_Document = doc;
-}
+#pragma endregion 
 

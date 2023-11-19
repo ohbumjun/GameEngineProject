@@ -28,5 +28,5 @@ public:
 	size_t GetDataLength() const override;
 
 private:
-	HANDLE m_File;
+	HANDLE m_FileHandle;
 };

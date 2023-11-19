@@ -2,6 +2,8 @@
 
 #include "hzpch.h"
 
+#define INVALID_HANDLE ((HANDLE)(LONG_PTR)-1)
+
 enum class FileAccessMode
 {
 	READ_ONLY,	

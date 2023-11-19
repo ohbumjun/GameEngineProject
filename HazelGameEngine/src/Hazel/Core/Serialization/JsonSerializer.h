@@ -68,7 +68,10 @@ private:
 	struct JsonRecord
 	{
 		void* value = nullptr;
-		size_t m_ArrayElemNum = 0;   // ?
+
+		// Record 가 Array 일 경우 해당 숫자를 증가시켜가면서 array 
+		// 내의 원소를 읽어간다.
+		size_t m_ArrayElemNum = 0; 
 
 		JsonRecord() = default;
 		JsonRecord(void* value) : value(value) {}

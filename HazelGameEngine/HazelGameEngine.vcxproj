@@ -176,10 +176,14 @@
     <ClInclude Include="src\Hazel\Event\Event.h" />
     <ClInclude Include="src\Hazel\Event\KeyEvent.h" />
     <ClInclude Include="src\Hazel\Event\MouseEvent.h" />
+    <ClInclude Include="src\Hazel\FileSystem\DirectorySystem.h" />
+    <ClInclude Include="src\Hazel\FileSystem\FileChannel.h" />
+    <ClInclude Include="src\Hazel\FileSystem\FileInfo.h" />
     <ClInclude Include="src\Hazel\ImGui\ImGuiLayer.h" />
     <ClInclude Include="src\Hazel\Input\Input.h" />
     <ClInclude Include="src\Hazel\Input\KeyCodes.h" />
     <ClInclude Include="src\Hazel\Input\MouseButtonCodes.h" />
+    <ClInclude Include="src\Hazel\Core\Memory\Channel.h" />
     <ClInclude Include="src\Hazel\Scene\Component.h" />
     <ClInclude Include="src\Hazel\Scene\Entity.h" />
     <ClInclude Include="src\Hazel\Scene\Scene.h" />
@@ -190,6 +194,7 @@
     <ClInclude Include="src\Hazel\Utils\EngineUtil.h" />
     <ClInclude Include="src\Hazel\Utils\Log.h" />
     <ClInclude Include="src\Hazel\Utils\Random.h" />
+    <ClInclude Include="src\Hazel\Utils\StringUtil.h" />
     <ClInclude Include="src\Hazel\Utils\TimeStep.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
@@ -653,6 +658,8 @@
     <ClCompile Include="src\Hazel\Core\Serialization\SerializeTarget.cpp" />
     <ClCompile Include="src\Hazel\Core\Serialization\Serializer.cpp" />
     <ClCompile Include="src\Hazel\Core\Window.cpp" />
+    <ClCompile Include="src\Hazel\FileSystem\DirectorySystem.cpp" />
+    <ClCompile Include="src\Hazel\FileSystem\FileChannel.cpp" />
     <ClCompile Include="src\Hazel\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\Hazel\ImGui\ImGuilBuild.cpp" />
     <ClCompile Include="src\Hazel\Scene\Entity.cpp" />
@@ -663,6 +670,7 @@
     <ClCompile Include="src\Hazel\Utils\EngineUtil.cpp" />
     <ClCompile Include="src\Hazel\Utils\Log.cpp" />
     <ClCompile Include="src\Hazel\Utils\Random.cpp" />
+    <ClCompile Include="src\Hazel\Utils\StringUtil.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLFrameBuffer.cpp" />
