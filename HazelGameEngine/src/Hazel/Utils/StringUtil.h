@@ -374,10 +374,6 @@ public:
 
     static void ReplaceStrToDst(char* dest, char const* const src, char const* const pattern, char const* const replace);
 
-    // static void pr_strscat(char* dest, const char* src, size_t destinationSize);
-
-    // static size_t pr_strscpy(char* d, const char* s, size_t destinationSize);
-
     /*
     * non-ascii 문자를 가지고 있는 utf-8 문자열이 필요한 추가 length 를 계산한다.
     */

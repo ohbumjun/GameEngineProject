@@ -3,6 +3,8 @@
 #include "hzpch.h"
 
 #define INVALID_HANDLE ((HANDLE)(LONG_PTR)-1)
+#define DIRECTORY_SEPARATOR_WCHAR L'\\'
+#define DIRECTORY_SEPARATOR_CHAR '\\'
 
 enum class FileAccessMode
 {

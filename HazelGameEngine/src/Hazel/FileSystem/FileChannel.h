@@ -23,6 +23,8 @@ public:
 
 	void DeserializeData(void* ptr, size_t size) override;
 
+	void FlushToFile() const;
+
 	void CloseChannel() override;
 
 	size_t GetDataLength() const override;
