@@ -2,4 +2,5 @@
 bin/
 bin-int/
 ApplicationProject/HazelProfile-Runtime.json
+Hazel-Editor/HazelProfile-Runtime.json
 HazelGameEngine/src/Hazel/FileSystem/
