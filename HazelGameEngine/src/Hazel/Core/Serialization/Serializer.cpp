@@ -259,6 +259,10 @@ void Serializer::Save(const char* key, const uint64 data)
 	onSave(data);
 }
 
+void Serializer::Save(const char* key, const glm::vec3& data)
+{
+}
+
 void Serializer::Save(const char* key, const float data)
 {
 	SaveKey(key);
@@ -474,6 +478,14 @@ void Serializer::Load(const TypeId type, void* data)
 	m_Record.recentKey = "";
 }
 
+void Serializer::Load(const char* key, void* data)
+{
+}
+
+void Serializer::Load(const char* key, const TypeId type, void* data)
+{
+}
+
 void Serializer::Load(const char* key, SerializeTarget* data)
 {
 	LoadKey(key);
@@ -544,6 +556,13 @@ void Serializer::Load(const char* key, uint64& data)
 	m_Record.recentKey = "";
 }
 
+void Serializer::Load(const char* key, glm::vec3& data)
+{
+	LoadKey(key);
+	onLoad(data);
+	m_Record.recentKey = "";
+}
+
 void Serializer::Load(const char* key, float& data)
 {
 	LoadKey(key);
@@ -575,6 +594,24 @@ void Serializer::LoadBuffer(const char* key, void* buffer, size_t size)
 void Serializer::LoadBuffer(void* buffer, size_t size)
 {
 	onLoadBuffer(buffer, size);
+}
+
+void Serializer::EndLoadMap()
+{
+	if (m_Record.datas.empty() == false)
+	{
+		m_Record.datas.pop_back();
+	}
+
+	onEndLoadSeq();
+
+	int lastRecordIdx = m_Record.datas.size() - 1;
+
+	if (m_Record.datas.empty() == false && m_Record.datas[lastRecordIdx].recordIndex > -1)
+	{
+		m_Record.datas[lastRecordIdx].recordIndex += 1;
+	}
+
 }
 
 #pragma endregion

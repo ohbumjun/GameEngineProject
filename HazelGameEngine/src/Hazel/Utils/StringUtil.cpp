@@ -1,4 +1,5 @@
-﻿#include "StringUtil.h"
+﻿#include "hzpch.h"
+#include "StringUtil.h"
 
 void StringUtil::CopyStr(char* const dst, size_t dstSize, const char* src)
 {
@@ -375,7 +376,7 @@ std::string StringUtil::pr_str_system_to_utf8(const char* cp)
 
 	if (!pr_str_is_utf8(cp))
 	{
-		MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, cp, -1, (LPWSTR)buffer.c_str(), static_cast<int>(cpSize + pr_str_utf8_extra_length(cp)));
+		MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, cp, -1, (LPWSTR)buffer.c_str(), static_cast<int>(cpSize + CalculateUTF8ExtraLength(cp)));
 	}
 
 	// Normalize.

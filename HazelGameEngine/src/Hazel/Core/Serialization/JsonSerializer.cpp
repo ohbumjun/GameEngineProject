@@ -132,6 +132,10 @@ void JsonSerializer::onSave(const uint64 data)
 	writer->Uint64(data);
 }
 
+void JsonSerializer::onSave(const glm::vec3& data)
+{
+}
+
 void JsonSerializer::onSave(const float data)
 {
 	JsonWriter* writer = (JsonWriter*)m_JsonWriter;
@@ -483,6 +487,10 @@ void JsonSerializer::onLoad(uint64& data)
 	}
 
 	data = val->GetUint();
+}
+
+void JsonSerializer::onLoad(glm::vec3& data)
+{
 }
 
 void JsonSerializer::onLoad(float& data)

@@ -1565,9 +1565,10 @@
     </ClInclude>
     <ClInclude Include="src\Hazel\Core\Memory\Channel.h" />
     <ClInclude Include="src\Hazel\FileSystem\FileChannel.h" />
-    <ClInclude Include="src\Hazel\FileSystem\FileInfo.h" />
+    <ClInclude Include="src\Hazel\FileSystem\FileModes.h" />
     <ClInclude Include="src\Hazel\FileSystem\DirectorySystem.h" />
     <ClInclude Include="src\Hazel\Utils\StringUtil.h" />
+    <ClInclude Include="src\Hazel\Scene\BaseObject.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Core\Allocation\Allocator\FreeListAllocator.cpp">
@@ -1735,6 +1736,8 @@
     <ClCompile Include="src\Hazel\FileSystem\FileChannel.cpp" />
     <ClCompile Include="src\Hazel\FileSystem\DirectorySystem.cpp" />
     <ClCompile Include="src\Hazel\Utils\StringUtil.cpp" />
+    <ClCompile Include="src\Hazel\Scene\BaseObject.cpp" />
+    <ClCompile Include="src\Hazel\Scene\Component.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="JsonSample.txt" />

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "OrthographicCamera.h"
 #include "Texture.h"

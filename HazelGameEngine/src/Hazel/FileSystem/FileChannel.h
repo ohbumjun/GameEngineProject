@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "FileInfo.h"
+#include "FileModes.h"
 #include "Hazel/Core/Memory/Channel.h"
 
 class FileChannel : public BaseChannel

@@ -1,8 +1,8 @@
-#include "hzpch.h"
+﻿#include "hzpch.h"
 #include "SceneSerializer.h"
 #include "Entity.h"
 #include "Component.h"
-
+#include "Hazel/Core/Serialization/JsonSerializer.h"
 #include <fstream>
 
 namespace Hazel
@@ -34,6 +34,9 @@ namespace Hazel
 		// 
 		// std::ofstream fout(filePath);
 		// fout << out.c_str();
+		JsonSerializer writer;
+
+		m_Scene->Serialize(writer);
 	}
 
 	void SceneSerializer::SerializeBinary(const std::string& filePath)
@@ -42,6 +45,8 @@ namespace Hazel
 
 	bool SceneSerializer::DeserializeText(const std::string& filePath)
 	{
+		JsonSerializer reader;
+
 		return false;
 	}
 

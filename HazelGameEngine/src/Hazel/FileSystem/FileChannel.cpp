@@ -1,7 +1,7 @@
 ﻿#include "hzpch.h"
 #include "FileChannel.h"
-#include "FileInfo.h"
 #include "DirectorySystem.h"
+
 FileChannel::FileChannel(HANDLE file) : 
 	m_FileHandle(file)
 {
@@ -101,14 +101,14 @@ void FileChannel::DeserializeData(void* ptr, size_t size)
 	while (totalReadSize < size)
 	{
 		//currentReadSize = fread(movePointer, 1, leftOverReadSize, _file.handle);
-		currentReadSize = FileSystem::pr_file_read(m_File, movePointer, leftOverReadSize);
+		currentReadSize = DirectorySystem::ReadFromFile(m_FileHandle, movePointer, leftOverReadSize);
 		totalReadSize += currentReadSize;
 		if (totalReadSize >= size) break;
 
 		movePointer += currentReadSize;
 		leftOverReadSize -= currentReadSize;
 
-		if (/*feof(_file.handle)*/ FileSystem::pr_file_eof(m_File) || currentReadSize <= 0)
+		if (/*feof(_file.handle)*/ DirectorySystem::IsFileEOF(m_FileHandle) || currentReadSize <= 0)
 		{
 			// Fail to read for some problems
 			break;
@@ -122,20 +122,20 @@ void FileChannel::DeserializeData(void* ptr, size_t size)
 		const int errorCode = errno;
 		if (errorCode != 0)
 		{
-			THROW("File read failed Code = %i : %s", errorCode, pr_print_errno(errorCode));
+			THROW("File read failed Code = %i : %s", errorCode, DirectorySystem::PrintError(errorCode));
 		}
 	}
 }
 
 void FileChannel::FlushToFile() const
 {
-	FileSystem::pr_file_flush(m_File);
+	DirectorySystem::FlushFile(m_FileHandle);
 }
 
 void FileChannel::CloseChannel()
 {
-	FileSystem::pr_file_close(m_File);
-	m_File.nativeHandle = LV_INVALID_HANDLE;
+	DirectorySystem::CloseFile(m_FileHandle);
+	m_FileHandle = INVALID_HANDLE;
 }
 
 size_t FileChannel::GetDataLength() const

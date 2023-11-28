@@ -140,6 +140,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Hazel\Scene\BaseObject.h" />
     <ClInclude Include="src\Hazel.h" />
     <ClInclude Include="src\Hazel\Core\Allocation\Allocator\FreeListAllocator.h" />
     <ClInclude Include="src\Hazel\Core\Allocation\Allocator\MemoryPoolAllocator.h" />
@@ -178,7 +179,7 @@
     <ClInclude Include="src\Hazel\Event\MouseEvent.h" />
     <ClInclude Include="src\Hazel\FileSystem\DirectorySystem.h" />
     <ClInclude Include="src\Hazel\FileSystem\FileChannel.h" />
-    <ClInclude Include="src\Hazel\FileSystem\FileInfo.h" />
+    <ClInclude Include="src\Hazel\FileSystem\FileModes.h" />
     <ClInclude Include="src\Hazel\ImGui\ImGuiLayer.h" />
     <ClInclude Include="src\Hazel\Input\Input.h" />
     <ClInclude Include="src\Hazel\Input\KeyCodes.h" />
@@ -638,6 +639,7 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Hazel\Scene\BaseObject.cpp" />
     <ClCompile Include="src\Hazel\Core\Allocation\Allocator\FreeListAllocator.cpp" />
     <ClCompile Include="src\Hazel\Core\Allocation\Allocator\MemoryPoolAllocator.cpp" />
     <ClCompile Include="src\Hazel\Core\Allocation\Allocator\PoolAllocator.cpp" />
@@ -662,6 +664,7 @@
     <ClCompile Include="src\Hazel\FileSystem\FileChannel.cpp" />
     <ClCompile Include="src\Hazel\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\Hazel\ImGui\ImGuilBuild.cpp" />
+    <ClCompile Include="src\Hazel\Scene\Component.cpp" />
     <ClCompile Include="src\Hazel\Scene\Entity.cpp" />
     <ClCompile Include="src\Hazel\Scene\Scene.cpp" />
     <ClCompile Include="src\Hazel\Scene\SceneCamera.cpp" />

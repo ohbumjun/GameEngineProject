@@ -1,4 +1,4 @@
-#include "hzpch.h"
+﻿#include "hzpch.h"
 #include "Scene.h"
 #include "Component.h"
 #include "Renderer/Renderer2D.h"
@@ -121,8 +121,32 @@ namespace Hazel
 			Renderer2D::EndScene();
 		}
 		
-	};
+	}
+	void Scene::Serialize(Serializer& serializer)
+	{
+		serializer.BeginSaveMap(Reflection::GetTypeID<Scene>(), this);
 
+		m_Registry.each([&](auto entityID)
+		{
+			Entity entity = { entityID, this};
+		
+			if (!entity) return;
+		
+			serializeEntity(serializer, entity);
+
+		});
+
+		serializer.EndSaveMap();
+	}
+	void Scene::Deserialize(Serializer& serializer)
+	{
+	}
+	void Scene::serializeEntity(Serializer& serializer, Entity entity)
+	{
+	}
+	void Scene::deserializeEntity(Serializer& serializer, Entity entity)
+	{
+	}
 	Entity Scene::CreateEntity(const std::string& name)
 	{
 		Entity entity{ m_Registry.create(), this };
@@ -132,12 +156,10 @@ namespace Hazel
 
 		return entity;
 	}
-
 	void Scene::DestroyEntity(const Entity& entity)
 	{
 		m_Registry.destroy(entity);
 	}
-
 	void Scene::OnViewportResize(uint32_t width, uint32_t height)
 	{
 		m_ViewportWidth = width;
@@ -157,14 +179,11 @@ namespace Hazel
 			}
 		}
 	}
-
-
 	template<typename T>
 	void Scene::OnComponentAdded(Entity entity, T& component)
 	{
 		static_assert(false);
 	}
-
 	template<>
 	void Scene::OnComponentAdded<TransformComponent>(Entity entity, TransformComponent& component)
 	{

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 // remove_all_pointers 라는 구조체는 member "Type" 에 template 인자로 들어온 "T" type 을 세팅한다. 
 template <typename T>
