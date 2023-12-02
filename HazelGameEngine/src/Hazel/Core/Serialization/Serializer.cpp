@@ -202,7 +202,7 @@ void Serializer::Save(const TypeId type, void* data)
 void Serializer::Save(const char* key, const SerializeTarget* data )
 {
 	SaveKey(key);
-	const_cast<SerializeTarget&>(*data).Serialize(*this);
+	const_cast<SerializeTarget&>(*data).Serialize(this);
 }
 
 void Serializer::Save(const char* key, const bool data)
@@ -503,7 +503,7 @@ void Serializer::Load(const char* key, const TypeId type, void* data)
 void Serializer::Load(const char* key, SerializeTarget* data)
 {
 	LoadKey(key);
-	(*data).Deserialize(*this);
+	(*data).Deserialize(this);
 	m_Record.recentKey = "";
 }
 

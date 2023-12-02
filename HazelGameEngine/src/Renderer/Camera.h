@@ -3,6 +3,8 @@
 #include <glm/glm.hpp>
 #include "Hazel/Core/Serialization/SerializeTarget.h"
 
+class Serializer;
+
 namespace Hazel
 {
 	class Camera : public SerializeTarget
@@ -13,8 +15,8 @@ namespace Hazel
 			m_ProjectionMatrix(projection) {}
 		virtual ~Camera() = default;
 
-		virtual void Serialize(Serializer& serializer);
-		virtual void Deserialize(Serializer& serializer);
+		virtual void Serialize(Serializer* serializer);
+		virtual void Deserialize(Serializer* serializer);
 
 		glm::mat4& GetProjection() { return m_ProjectionMatrix; }
 		const glm::mat4& GetProjection() const { return m_ProjectionMatrix; }

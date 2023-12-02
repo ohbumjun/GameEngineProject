@@ -1,7 +1,8 @@
-#pragma once
+﻿#pragma once
 
 #include "entt.hpp"
 #include "Scene.h"
+#include "Component/Component.h"
 
 namespace Hazel
 {
@@ -55,7 +56,7 @@ namespace Hazel
 		{
 			return !(*this == other);
 		}
-
+		std::vector<Component*> GetComponents();
 	private:
 		entt::entity m_EntityHandle{ entt::null };
 

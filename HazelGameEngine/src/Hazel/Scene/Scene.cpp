@@ -1,6 +1,10 @@
 ﻿#include "hzpch.h"
 #include "Scene.h"
-#include "Component.h"
+#include "Component/SpriteRenderComponent.h"
+#include "Component/CameraComponent.h"
+#include "Component/TransformComponent.h"
+#include "Component/NativeScriptComponent.h"
+#include "Component/NameComponent.h"
 #include "Renderer/Renderer2D.h"
 #include <glm/glm.hpp>
 #include "Entity.h"
@@ -126,7 +130,7 @@ namespace Hazel
 	{
 		serializer.BeginSaveMap(Reflection::GetTypeID<Scene>(), this);
 
-		m_Registry.each([&](auto entityID)
+		m_Registry.storage<Entity>().each([&](auto entityID)
 		{
 			Entity entity = { entityID, this};
 		
@@ -143,9 +147,33 @@ namespace Hazel
 	}
 	void Scene::serializeEntity(Serializer& serializer, Entity entity)
 	{
+		serializer.BeginSaveMap(Reflection::GetTypeID<Entity>(), this);
+
+		std::vector<Component*> components = entity.GetComponents();
+
+		// type 정보들 저장하기 
+		serializer.SaveKey("types");
+		serializer.BeginSaveSeq(components.size());
+
+		for (Component* comp : components)
+		{
+		}
+
+		for (Component* comp : components)
+		{
+			comp->Serialize(serializer);
+		}
+
+		serializer.EndSaveMap();
 	}
 	void Scene::deserializeEntity(Serializer& serializer, Entity entity)
 	{
+		std::vector<Component*> components = entity.GetComponents();
+
+		for (Component* comp : components)
+		{
+			comp->Deserialize(serializer);
+		}
 	}
 	Entity Scene::CreateEntity(const std::string& name)
 	{

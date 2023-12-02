@@ -1,5 +1,7 @@
 ﻿#include "hzpch.h"
 #include "SceneCamera.h"
+#include "Hazel/Core/Reflection/Reflection.h"
+#include "Hazel/Core/Serialization/Serializer.h"
 #include <glm/gtc/matrix_transform.hpp>
 
 Hazel::SceneCamera::SceneCamera()
@@ -11,42 +13,42 @@ Hazel::SceneCamera::~SceneCamera()
 {
 }
 
-void Hazel::SceneCamera::Serialize(Serializer& serializer)
+void Hazel::SceneCamera::Serialize(Serializer* serializer)
 {
-	serializer.BeginSaveMap(Reflection::GetTypeID<SceneCamera>(), this);
+	serializer->BeginSaveMap(Reflection::GetTypeID<SceneCamera>(), this);
 
-	serializer.Save("OrthographicSize", m_OrthographicSize);
-	serializer.Save("OrthographicNear", m_OrthographicNear);
-	serializer.Save("OrthographicFar", m_OrthographicFar);
-	serializer.Save("PerspectiveFov", m_PerspectiveFov);
-	serializer.Save("PerspectiveNear", m_PerspectiveNear);
-	serializer.Save("PerspectiveFar", m_PerspectiveFar);
-	serializer.Save("AspectRatio", m_AspectRatio);
+	serializer->Save("OrthographicSize", m_OrthographicSize);
+	serializer->Save("OrthographicNear", m_OrthographicNear);
+	serializer->Save("OrthographicFar", m_OrthographicFar);
+	serializer->Save("PerspectiveFov", m_PerspectiveFov);
+	serializer->Save("PerspectiveNear", m_PerspectiveNear);
+	serializer->Save("PerspectiveFar", m_PerspectiveFar);
+	serializer->Save("AspectRatio", m_AspectRatio);
 
 	int projectionType = (int)m_ProjectionType;
-	serializer.Save("ProjectionType", projectionType);
+	serializer->Save("ProjectionType", projectionType);
 
-	serializer.EndSaveMap();
+	serializer->EndSaveMap();
 }
 
-void Hazel::SceneCamera::Deserialize(Serializer& serializer)
+void Hazel::SceneCamera::Deserialize(Serializer* serializer)
 {
-	serializer.BeginLoadMap(Reflection::GetTypeID<SceneCamera>(), this);
+	serializer->BeginLoadMap(Reflection::GetTypeID<SceneCamera>(), this);
 	
-	serializer.Load("OrthographicSize", m_OrthographicSize);
-	serializer.Load("OrthographicNear", m_OrthographicNear);
-	serializer.Load("OrthographicFar", m_OrthographicFar);
-	serializer.Load("PerspectiveFov", m_PerspectiveFov);
-	serializer.Load("PerspectiveNear", m_PerspectiveNear);
-	serializer.Load("PerspectiveFar", m_PerspectiveFar);
-	serializer.Load("AspectRatio", m_AspectRatio);
+	serializer->Load("OrthographicSize", m_OrthographicSize);
+	serializer->Load("OrthographicNear", m_OrthographicNear);
+	serializer->Load("OrthographicFar", m_OrthographicFar);
+	serializer->Load("PerspectiveFov", m_PerspectiveFov);
+	serializer->Load("PerspectiveNear", m_PerspectiveNear);
+	serializer->Load("PerspectiveFar", m_PerspectiveFar);
+	serializer->Load("AspectRatio", m_AspectRatio);
 
 	int projectionType = 0;
-	serializer.Load("ProjectionType", projectionType);
+	serializer->Load("ProjectionType", projectionType);
 
 	m_ProjectionType = (ProjectionType)projectionType;
 
-	serializer.EndLoadMap();
+	serializer->EndLoadMap();
 }
 
 void Hazel::SceneCamera::SetOrthographic(float size, float nearDis, float farDis)

@@ -210,9 +210,6 @@
     <ClInclude Include="src\Hazel\Input\MouseButtonCodes.h">
       <Filter>src\Hazel\Input</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hazel\Scene\Component.h">
-      <Filter>src\Hazel\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="src\Hazel\Scene\Entity.h">
       <Filter>src\Hazel\Scene</Filter>
     </ClInclude>
@@ -1569,6 +1566,12 @@
     <ClInclude Include="src\Hazel\FileSystem\DirectorySystem.h" />
     <ClInclude Include="src\Hazel\Utils\StringUtil.h" />
     <ClInclude Include="src\Hazel\Scene\BaseObject.h" />
+    <ClInclude Include="src\Hazel\Scene\Component\Component.h" />
+    <ClInclude Include="src\Hazel\Scene\Component\TransformComponent.h" />
+    <ClInclude Include="src\Hazel\Scene\Component\SpriteRenderComponent.h" />
+    <ClInclude Include="src\Hazel\Scene\Component\NameComponent.h" />
+    <ClInclude Include="src\Hazel\Scene\Component\CameraComponent.h" />
+    <ClInclude Include="src\Hazel\Scene\Component\NativeScriptComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Core\Allocation\Allocator\FreeListAllocator.cpp">
@@ -1737,7 +1740,12 @@
     <ClCompile Include="src\Hazel\FileSystem\DirectorySystem.cpp" />
     <ClCompile Include="src\Hazel\Utils\StringUtil.cpp" />
     <ClCompile Include="src\Hazel\Scene\BaseObject.cpp" />
-    <ClCompile Include="src\Hazel\Scene\Component.cpp" />
+    <ClCompile Include="src\Hazel\Scene\Component\Component.cpp" />
+    <ClCompile Include="src\Hazel\Scene\Component\TransformComponent.cpp" />
+    <ClCompile Include="src\Hazel\Scene\Component\SpriteRenderComponent.cpp" />
+    <ClCompile Include="src\Hazel\Scene\Component\NameComponent.cpp" />
+    <ClCompile Include="src\Hazel\Scene\Component\CameraComponent.cpp" />
+    <ClCompile Include="src\Hazel\Scene\Component\NativeScriptComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="JsonSample.txt" />

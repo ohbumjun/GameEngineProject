@@ -1,7 +1,6 @@
 ﻿#include "hzpch.h"
 #include "SceneSerializer.h"
 #include "Entity.h"
-#include "Component.h"
 #include "Hazel/Core/Serialization/JsonSerializer.h"
 #include <fstream>
 
