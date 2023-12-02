@@ -134,6 +134,35 @@ void JsonSerializer::onSave(const uint64 data)
 
 void JsonSerializer::onSave(const glm::vec3& data)
 {
+	JsonWriter* writer = (JsonWriter*)m_JsonWriter;
+
+	for (int i = 0; i < 3; ++i)
+	{
+		writer->Double(data[i]);
+	}
+}
+
+void JsonSerializer::onSave(const glm::vec4& data)
+{
+	JsonWriter* writer = (JsonWriter*)m_JsonWriter;
+
+	for (int i = 0; i < 4; ++i)
+	{
+		writer->Double(data[i]);
+	}
+}
+
+void JsonSerializer::onSave(const glm::mat4& data)
+{
+	JsonWriter* writer = (JsonWriter*)m_JsonWriter;
+
+	for (int r = 0; r < 4; ++r)
+	{
+		for (int c = 0; c < 4; ++c)
+		{
+			writer->Double(data[r][c]);
+		}
+	}
 }
 
 void JsonSerializer::onSave(const float data)
@@ -156,10 +185,8 @@ void JsonSerializer::onSave(const std::string& data)
 
 void JsonSerializer::onSave(const char* data)
 {
-}
-
-void JsonSerializer::onSave(const unsigned char* data)
-{
+	JsonWriter* writer = (JsonWriter*)m_JsonWriter;
+	writer->String(data);
 }
 
 void JsonSerializer::onSaveRaw(void* buffer, size_t size)
@@ -491,6 +518,92 @@ void JsonSerializer::onLoad(uint64& data)
 
 void JsonSerializer::onLoad(glm::vec3& data)
 {
+	rapidjson::Value* val = nullptr;
+
+	if (m_ReadRecord.empty())
+	{
+		return;
+	}
+
+	//부모 얻어옮
+	JsonRecord& prevRecord = m_ReadRecord.back();
+
+	for (int i = 0; i < 3; ++i)
+	{
+		//get next value
+		val = static_cast<rapidjson::Value*>(getValue(prevRecord));
+
+		//set Data
+		if (nullptr == val || val->IsFloat() == false)
+		{
+			assert(false);
+			return;
+		}
+
+		// data = val->GetFloat();
+		data[i] = val->GetFloat();
+	}
+}
+
+void JsonSerializer::onLoad(glm::vec4& data)
+{
+	rapidjson::Value* val = nullptr;
+
+	if (m_ReadRecord.empty())
+	{
+		return;
+	}
+
+	//부모 얻어옮
+	JsonRecord& prevRecord = m_ReadRecord.back();
+
+	for (int i = 0; i < 4; ++i)
+	{
+		//get next value
+		val = static_cast<rapidjson::Value*>(getValue(prevRecord));
+
+		//set Data
+		if (nullptr == val || val->IsFloat() == false)
+		{
+			assert(false);
+			return;
+		}
+
+		// data = val->GetFloat();
+		data[i] = val->GetFloat();
+	}
+}
+
+void JsonSerializer::onLoad(glm::mat4& data)
+{
+	rapidjson::Value* val = nullptr;
+
+	if (m_ReadRecord.empty())
+	{
+		return;
+	}
+
+	//부모 얻어옮
+	JsonRecord& prevRecord = m_ReadRecord.back();
+
+	for (int r = 0; r < 4; ++r)
+	{
+		for (int c = 0; c < 4; ++c)
+		{
+			//get next value
+			val = static_cast<rapidjson::Value*>(getValue(prevRecord));
+
+			//set Data
+			if (nullptr == val || val->IsFloat() == false)
+			{
+				assert(false);
+				return;
+			}
+
+			// data = val->GetFloat();
+			data[r][c] = val->GetFloat();
+		}
+	}
 }
 
 void JsonSerializer::onLoad(float& data)
@@ -587,10 +700,6 @@ void JsonSerializer::onLoad(char* data)
 
 	const char* str = val->GetString();
 	strcpy_s(data, sizeof(char), str);
-}
-
-void JsonSerializer::onLoad(unsigned char* data)
-{
 }
 
 void JsonSerializer::onLoadBuffer(void* buffer, size_t size)

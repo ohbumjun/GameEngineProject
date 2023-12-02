@@ -14,19 +14,33 @@ void Hazel::NameComponent::Serialize(Serializer& serializer)
 
 void Hazel::NameComponent::Deserialize(Serializer& serializer)
 {
+	serializer.BeginLoadMap(Reflection::GetTypeID<NameComponent>(), this);
+
+	serializer.Load("Name", name);
+
+	serializer.EndLoadMap();
 }
 
 void Hazel::TransformComponent::Serialize(Serializer& serializer)
 {
 	serializer.BeginSaveMap(Reflection::GetTypeID<TransformComponent>(), this);
 
-	// serializer.Save("Translation", name);
+	serializer.Save("Translation", Translation);
+	serializer.Save("Rotation", Rotation);
+	serializer.Save("Scale", Scale);
 
 	serializer.EndSaveMap();
 }
 
 void Hazel::TransformComponent::Deserialize(Serializer& serializer)
 {
+	serializer.BeginLoadMap(Reflection::GetTypeID<TransformComponent>(), this);
+
+	serializer.Load("Translation", Translation);
+	serializer.Load("Rotation", Rotation);
+	serializer.Load("Scale", Scale);
+
+	serializer.EndLoadMap();
 }
 
 glm::mat4 Hazel::TransformComponent::GetTransform() const
@@ -46,21 +60,46 @@ void Hazel::SpriteRenderComponent::Serialize(Serializer& serializer)
 {
 	serializer.BeginSaveMap(Reflection::GetTypeID<SpriteRenderComponent>(), this);
 
+	serializer.Save("color", color);
+
 	serializer.EndSaveMap();
 }
 
 void Hazel::SpriteRenderComponent::Deserialize(Serializer& serializer)
 {
+	serializer.BeginLoadMap(Reflection::GetTypeID<SpriteRenderComponent>(), this);
+
+	serializer.Load("color", color);
+
+	serializer.EndLoadMap();
 }
 
 void Hazel::CameraComponent::Serialize(Serializer& serializer)
 {
 	serializer.BeginSaveMap(Reflection::GetTypeID<CameraComponent>(), this);
 
+	serializer.SaveKey("Camera");
+	camera.Serialize(serializer);
+
+	serializer.Save("isPrimary", isPrimary);
+
+	serializer.Save("isFixedAspectRatio", isFixedAspectRatio);
+
 	serializer.EndSaveMap();
 }
 
 void Hazel::CameraComponent::Deserialize(Serializer& serializer)
 {
+	serializer.BeginLoadMap(Reflection::GetTypeID<CameraComponent>(), this);
+
+	serializer.SaveKey("Camera");
+
+	camera.Deserialize(serializer);
+
+	serializer.Load("isPrimary", isPrimary);
+
+	serializer.Load("isFixedAspectRatio", isFixedAspectRatio);
+
+	serializer.EndLoadMap();
 }
 

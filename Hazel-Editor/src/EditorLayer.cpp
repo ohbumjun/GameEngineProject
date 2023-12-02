@@ -1,4 +1,4 @@
-#include "EditorLayer.h"
+﻿#include "EditorLayer.h"
 #include "Platform/OpenGL/OpenGLShader.h"
 #include "imgui/imgui.h"
 #include <glm/gtc/type_ptr.hpp>
@@ -73,7 +73,7 @@ namespace Hazel
 
 		m_SecondCameraEntity = m_ActiveScene->CreateEntity("Second Camera Entity");
 		auto& secCc = m_SecondCameraEntity.AddComponent<CameraComponent>(glm::ortho(-1.f, 1.f, -1.f, 1.f, -1.f, 1.f));
-		secCc.isPrimary = false;
+		secCc.SetPrimary(false);
 
 		m_CameraController.SetZoomLevel(0.25f);
 
@@ -252,12 +252,12 @@ namespace Hazel
 
 			{
 				auto& cameraComp = m_SecondCameraEntity.GetComponent<CameraComponent>();
-				auto& camera = cameraComp.camera;
+				auto& camera = cameraComp.GetCamera();
 				float orthoSize = camera.GetOrthoGraphicSize();
 
 				if (ImGui::DragFloat("Second Camera Ortho Size", &orthoSize))
 				{
-					camera.SetOrthoGraphicSize(orthoSize);
+					const_cast<SceneCamera&>(camera).SetOrthoGraphicSize(orthoSize);
 				}
 			}
 

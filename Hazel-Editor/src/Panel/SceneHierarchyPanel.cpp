@@ -1,4 +1,4 @@
-#include "hzpch.h"
+﻿#include "hzpch.h"
 #include "SceneHierarchyPanel.h"
 
 #include "Hazel/Scene/Component.h"
@@ -201,7 +201,8 @@ namespace Hazel
 	// draw selectable list of entities
 	void SceneHierarchyPanel::drawEntityNode(Entity entity)
 	{
-		auto& name = entity.GetComponent<NameComponent>().name;
+		std::string& name = const_cast<std::string&>(
+			entity.GetComponent<NameComponent>().GetName());
 
 		// ImGuiTreeNodeFlags_OpenOnArrow : arrow 를 클릭해야만 해당 내용 모두 펼쳐서 볼 수 있다.
 		//	ImGuiTreeNodeFlags_Selected			: selected 된 채로 보이게 된다.
@@ -260,7 +261,8 @@ namespace Hazel
 		if (entity.HasComponent<NameComponent>())
 		{
 			// 여기서 name 을 수정할 수 있게 한다.
-			auto& name = entity.GetComponent<NameComponent>().name;
+			std::string& name = const_cast<std::string&>(
+				entity.GetComponent<NameComponent>().GetName());
 
 			char buffer[256];
 			memset(buffer, 0, sizeof(buffer));
@@ -300,17 +302,19 @@ namespace Hazel
 		ImGui::PopItemWidth();
 
 		DrawComponent<TransformComponent>("Transform", entity, [](auto& component) {
-			DrawVec3Control("Translation", component.Translation);
-			glm::vec3 degree = glm::degrees(component.Rotation);
+			DrawVec3Control("Translation", component.GetTranslationRef());
+			glm::vec3 degree = glm::degrees(component.GetRotationRef());
 			DrawVec3Control("Rotation", degree);
-			component.Rotation = glm::radians(degree);
-			DrawVec3Control("Scale", component.Scale);
+			// component.Rotation = glm::radians(degree);
+			component.SetRotation(glm::radians(degree));
+			DrawVec3Control("Scale", component.GetScaleRef());
 		});
 
 		DrawComponent<CameraComponent>("Sprite", entity, [](auto& component) {
-			auto& camera = component.camera;
+			SceneCamera& camera = const_cast<SceneCamera&>(
+				component.GetCamera());
 
-			ImGui::Checkbox("Primary", &component.isPrimary);
+			ImGui::Checkbox("Primary", &component.GetPrimaryRef());
 
 			const char* projectionTypeStrings[] = { "Projection", "Orthographic" };
 			const char* currentProjectionTypeString = projectionTypeStrings[(int)camera.GetProjectionType()];
@@ -379,11 +383,11 @@ namespace Hazel
 				}
 			}
 
-			ImGui::Checkbox("Fixed Aspect Ratio", &component.isFixedAspectRatio);
+			ImGui::Checkbox("Fixed Aspect Ratio", &component.GetFixedAspectRatioRef());
 		});
 
 		DrawComponent<SpriteRenderComponent>("Sprite", entity, [](auto& component) {
-			ImGui::ColorEdit4("Color", glm::value_ptr(component.color));
+			ImGui::ColorEdit4("Color", glm::value_ptr(component.GetColorRef()));
 		});
 
 	}

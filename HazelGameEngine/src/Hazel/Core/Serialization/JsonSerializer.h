@@ -26,12 +26,12 @@ private:
 	virtual void onSave(const int64 data) override;
 	virtual void onSave(const uint64 data) override;
 	virtual void onSave(const glm::vec3& data)  override;
+	virtual void onSave(const glm::vec4& data)  override;
+	virtual void onSave(const glm::mat4& mat4)  override;
 	virtual void onSave(const float data) override;
 	virtual void onSave(const double data) override;
 	virtual void onSave(const std::string& data) override;
 	virtual void onSave(const char* data) override;
-	virtual void onSave(const unsigned char* data) override;
-	// virtual void write(const LvDynamicObject& object) ;
 	virtual void onSaveRaw(void* buffer, size_t size) override;
 	virtual void onBeginSaveSeq(uint64 arrayLength);
 	virtual void onBeginSaveSeq(TypeId type, uint64 arrayLength);
@@ -54,11 +54,12 @@ private:
 	virtual void onLoad(int64& data) override;
 	virtual void onLoad(uint64& data) override;
 	virtual void onLoad(glm::vec3& data) override;
+	virtual void onLoad(glm::vec4& data) override;
+	virtual void onLoad(glm::mat4& data) override;
 	virtual void onLoad(float& data) override;
 	virtual void onLoad(double& data) override;
 	virtual void onLoad(std::string& data) override;
 	virtual void onLoad(char* data) override;
-	virtual void onLoad(unsigned char* data) override;
 	virtual void onLoadBuffer(void* buffer, size_t size) override;
 
 	virtual size_t onBeginLoadSeq() override;

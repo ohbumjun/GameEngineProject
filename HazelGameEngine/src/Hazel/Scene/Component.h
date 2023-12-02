@@ -20,7 +20,7 @@ namespace Hazel
 
 		operator const std::string& () const { return name; }
 		operator std::string& () { return name; }
-
+		const std::string& GetName () { return name; }
 
 		virtual void Serialize(Serializer& serializer);
 		virtual void Deserialize(Serializer& serializer) ;
@@ -44,6 +44,18 @@ namespace Hazel
 		virtual void Deserialize(Serializer& serializer) ;
 
 		glm::mat4 GetTransform() const;
+
+		const glm::vec3& GetTranslation() { return Translation; }
+		const glm::vec3& GetRotation() { return Rotation; }
+		const glm::vec3& GetScale() { return Scale; }
+
+		glm::vec3& GetTranslationRef() { return Translation; }
+		glm::vec3& GetRotationRef() { return Rotation; }
+		glm::vec3& GetScaleRef() { return Scale; }
+		
+		void SetRotation(const glm::vec3& rot) { Rotation = rot; }
+		void SetTranslation(const glm::vec3& trans) { Translation = trans; }
+		void SetScale(const glm::vec3& scale) { Scale = scale; }
 	private:
 		glm::vec3 Translation = { 0.f, 0.f, 0.f };
 		glm::vec3 Rotation = { 0.f, 0.f, 0.f };
@@ -66,6 +78,9 @@ namespace Hazel
 		operator const glm::vec4& () const { return color; }
 		operator glm::vec4& () { return color; }
 
+		const glm::vec4& GetColor() { return color; }
+		glm::vec4& GetColorRef() { return color; }
+
 	private :
 		glm::vec4 color = { 1.f, 1.f, 1.f, 1.f };
 	};
@@ -82,6 +97,14 @@ namespace Hazel
 
 		virtual void Serialize(Serializer& serializer);
 		virtual void Deserialize(Serializer& serializer) ;
+
+		const SceneCamera& GetCamera() { return camera; }
+		bool& GetFixedAspectRatioRef() { return isFixedAspectRatio; }
+
+		SceneCamera& GetCameraRef() { return camera; }
+		bool& GetPrimaryRef() { return isPrimary; }
+
+		void SetPrimary(bool primary) { isPrimary = primary; }
 
 	private :
 		SceneCamera camera;

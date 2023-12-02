@@ -75,6 +75,8 @@ public:
 	void Save(const char* key, const int64 data);
 	void Save(const char* key, const uint64 data);
 	void Save(const char* key, const glm::vec3& data);
+	void Save(const char* key, const glm::vec4& data);
+	void Save(const char* key, const glm::mat4& data);
 	void Save(const char* key, const float data);
 	void Save(const char* key, const double data);
 	void Save(const char* key, const std::string& data);
@@ -108,11 +110,12 @@ protected:
 	virtual void onSave(const int64 data) = 0;
 	virtual void onSave(const uint64 data) = 0;
 	virtual void onSave (const glm::vec3& data) = 0;
+	virtual void onSave (const glm::vec4& data) = 0;
+	virtual void onSave (const glm::mat4& data) = 0;
 	virtual void onSave(const float data) = 0;
 	virtual void onSave(const double data) = 0;
 	virtual void onSave(const std::string& data) = 0;
 	virtual void onSave(const char* data) = 0;
-	virtual void onSave(const unsigned char* data) = 0;
 	virtual void onSaveRaw(void* buffer, size_t size) = 0;
 	virtual void onBeginSaveSeq(uint64 arrayLength) = 0;
 	virtual void onBeginSaveSeq(TypeId type, uint64 arrayLength) = 0;
@@ -158,6 +161,8 @@ public:
 	void Load(const char* key, int64& data);
 	void Load(const char* key, uint64& data);
 	void Load(const char* key, glm::vec3& data);
+	void Load(const char* key, glm::vec4& data);
+	void Load(const char* key, glm::mat4& data);
 	void Load(const char* key, float& data);
 	void Load(const char* key, double& data);
 	void Load(const char* key, std::string& data);
@@ -208,11 +213,12 @@ public:
 	virtual void onLoad(int64& data) = 0;
 	virtual void onLoad(uint64& data) = 0;
 	virtual void onLoad(glm::vec3& data) = 0;
+	virtual void onLoad(glm::vec4& data) = 0;
+	virtual void onLoad(glm::mat4& data) = 0;
 	virtual void onLoad(float& data) = 0;
 	virtual void onLoad(double& data) = 0;
 	virtual void onLoad(std::string& data) = 0;
 	virtual void onLoad(char* data) {}
-	virtual void onLoad(unsigned char* data) {}
 	virtual void onLoadBuffer(void* buffer, size_t size) = 0;
 	
 	virtual size_t onBeginLoadSeq() = 0;

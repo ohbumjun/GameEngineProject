@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Renderer/Camera.h"
 
@@ -12,6 +12,9 @@ namespace Hazel
 		SceneCamera();
 		SceneCamera(const glm::mat4& projection) : Camera(projection) {}
 		~SceneCamera();
+
+		virtual void Serialize(Serializer& serializer);
+		virtual void Deserialize(Serializer& serializer);
 
 		void SetOrthographic(float size, float nearDis, float farDis);
 		void SetPerspective(float fov, float nearDis, float farDis);
