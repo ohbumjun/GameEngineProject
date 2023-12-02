@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "Hazel/Core/Reflection/TypeId.h"
+#include "Hazel/Core/Reflection/Reflection.h"
 #include "Hazel/Core/Serialization/SerializeTarget.h"
 
 namespace Hazel
@@ -11,6 +12,9 @@ namespace Hazel
 		virtual void Serialize(Serializer& serializer) {}
 		virtual void Deserialize(Serializer& serializer) {}
 
-		const TypeId GetType() const;
+		virtual const TypeId GetType() const = 0
+		{
+			return Reflection::GetTypeID<Component>();
+		}
 	};
 }

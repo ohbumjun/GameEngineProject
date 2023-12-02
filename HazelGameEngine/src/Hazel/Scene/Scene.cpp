@@ -130,7 +130,7 @@ namespace Hazel
 	{
 		serializer.BeginSaveMap(Reflection::GetTypeID<Scene>(), this);
 
-		m_Registry.storage<Entity>().each([&](auto entityID)
+		m_Registry.each([&](auto entityID)
 		{
 			Entity entity = { entityID, this};
 		

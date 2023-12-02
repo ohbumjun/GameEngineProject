@@ -18,3 +18,8 @@ void Hazel::SpriteRenderComponent::Deserialize(Serializer& serializer)
 
 	serializer.EndLoadMap();
 }
+
+const TypeId Hazel::SpriteRenderComponent::GetType() const
+{
+	return Reflection::GetTypeID<SpriteRenderComponent>();
+}

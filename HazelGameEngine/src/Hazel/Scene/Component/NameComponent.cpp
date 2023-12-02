@@ -18,3 +18,8 @@ void Hazel::NameComponent::Deserialize(Serializer* serializer)
 
 	serializer->EndLoadMap();
 }
+
+const TypeId Hazel::NameComponent::GetType() const
+{
+	return Reflection::GetTypeID<NameComponent>();
+}

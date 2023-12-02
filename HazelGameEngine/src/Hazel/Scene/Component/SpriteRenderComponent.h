@@ -24,6 +24,7 @@ namespace Hazel
 		const glm::vec4& GetColor() { return color; }
 		glm::vec4& GetColorRef() { return color; }
 
+		virtual const TypeId GetType() const;
 	private:
 		glm::vec4 color = { 1.f, 1.f, 1.f, 1.f };
 	};

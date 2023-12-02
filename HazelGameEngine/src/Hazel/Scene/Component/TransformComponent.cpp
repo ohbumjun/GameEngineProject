@@ -37,3 +37,8 @@ glm::mat4 Hazel::TransformComponent::GetTransform() const
 		* rotation
 		* glm::scale(glm::mat4(1.f), Scale);
 }
+
+const TypeId Hazel::TransformComponent::GetType() const
+{
+	return Reflection::GetTypeID<TransformComponent>();
+}

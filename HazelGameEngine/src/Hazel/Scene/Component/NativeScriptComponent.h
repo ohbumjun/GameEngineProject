@@ -30,6 +30,8 @@ namespace Hazel
 
 		virtual void Serialize(Serializer& serializer) {}
 		virtual void Deserialize(Serializer& serializer) {}
+
+		virtual const TypeId GetType() const;
 	private:
 		ScriptableEntity* m_Instance = nullptr;
 

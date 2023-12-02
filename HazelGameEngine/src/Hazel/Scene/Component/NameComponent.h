@@ -21,6 +21,8 @@ namespace Hazel
 
 		virtual void Serialize(Serializer* serializer);
 		virtual void Deserialize(Serializer* serializer);
+	
+		virtual const TypeId GetType() const;
 	private:
 		std::string name = "";
 	};

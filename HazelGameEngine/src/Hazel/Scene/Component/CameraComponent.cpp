@@ -32,3 +32,8 @@ void Hazel::CameraComponent::Deserialize(Serializer* serializer)
 	serializer->EndLoadMap();
 }
 
+const TypeId Hazel::CameraComponent::GetType() const
+{
+	return Reflection::GetTypeID<CameraComponent>();
+}
+

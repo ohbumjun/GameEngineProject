@@ -34,6 +34,8 @@ namespace Hazel
 		void SetRotation(const glm::vec3& rot) { Rotation = rot; }
 		void SetTranslation(const glm::vec3& trans) { Translation = trans; }
 		void SetScale(const glm::vec3& scale) { Scale = scale; }
+	
+		virtual const TypeId GetType() const;
 	private:
 		glm::vec3 Translation = { 0.f, 0.f, 0.f };
 		glm::vec3 Rotation = { 0.f, 0.f, 0.f };

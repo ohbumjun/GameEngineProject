@@ -26,6 +26,7 @@ namespace Hazel
 
 		void SetPrimary(bool primary) { isPrimary = primary; }
 
+		virtual const TypeId GetType() const;
 	private:
 		SceneCamera camera;
 
