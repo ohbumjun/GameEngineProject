@@ -26,6 +26,7 @@ namespace Hazel
 			KeyEvent(keycode), m_RepeatCount(repeatCount){}
 		
 		inline int GetKeyCode() const { return m_KeyCode; }
+		inline int GetRepeatCount() const { return m_RepeatCount; }
 		
 		std::string ToString() const override
 		{

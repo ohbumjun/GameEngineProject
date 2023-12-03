@@ -20,20 +20,24 @@ namespace Hazel
 	void OrthographicCameraController::OnUpdate(Timestep ts)
     {
 		/*Pos*/
-		if (Input::IsKeyPressed(HZ_KEY_A))
+		// if (Input::IsKeyPressed(HZ_KEY_A))
+		if (Input::IsKeyPressed(Hazel::Key::A))
 		{
 			m_CameraPos.x -= m_CameraMoveSpeed * ts;
 		}
-		else if (Input::IsKeyPressed(HZ_KEY_D))
+		// else if (Input::IsKeyPressed(HZ_KEY_D))
+		else if (Input::IsKeyPressed(Hazel::Key::D))
 		{
 			m_CameraPos.x += m_CameraMoveSpeed * ts;
 		}
 
-		if (Input::IsKeyPressed(HZ_KEY_W))
+		// if (Input::IsKeyPressed(HZ_KEY_W))
+		if (Input::IsKeyPressed(Hazel::Key::W))
 		{
 			m_CameraPos.y += m_CameraMoveSpeed * ts;
 		}
-		else if (Input::IsKeyPressed(HZ_KEY_S))
+		// else if (Input::IsKeyPressed(HZ_KEY_S))
+		else if (Input::IsKeyPressed(Hazel::Key::S))
 		{
 			m_CameraPos.y -= m_CameraMoveSpeed * ts;
 		}
@@ -46,11 +50,13 @@ namespace Hazel
 		/*Rot*/
 		if (m_Rotation)
 		{
-			if (Input::IsKeyPressed(HZ_KEY_Q))
+			// if (Input::IsKeyPressed(HZ_KEY_Q))
+			if (Input::IsKeyPressed(Hazel::Key::Q))
 			{
 				m_CameraRot += m_CameraRotSpeed;
 			}
-			else if (Input::IsKeyPressed(HZ_KEY_E))
+			// else if (Input::IsKeyPressed(HZ_KEY_E))
+			else if (Input::IsKeyPressed(Hazel::Key::E))
 			{
 				m_CameraRot -= m_CameraRotSpeed;
 			}

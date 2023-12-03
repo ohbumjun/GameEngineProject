@@ -13,8 +13,8 @@ namespace Hazel
 		// runtime
 		void SerializeBinary(const std::string& filePath);
 
-		void DeserializeText();
-		bool DeserializeBinary(const std::string& filePath);
+		void DeserializeText(const std::string& filePath);
+		void DeserializeBinary(const std::string& filePath);
 	protected :
 		bool deserializeText(const std::string& filePath);
 		Ref<Scene> m_Scene;

@@ -29,25 +29,22 @@ namespace Hazel
 	{
 	}
 
-	bool SceneSerializer::deserializeText(const std::string& filePath)
+	void SceneSerializer::DeserializeText(const std::string& filePath)
 	{
-		JsonSerializer writer;
-		m_Scene->Serialize(&writer);
-		const std::string& result = writer.GetFinalResult();
-
 		// 해당 경로의 파일은 항상 생성하는 방향으로 진행할 것이다.
 		FileMemory fileMemory(filePath.c_str(), FileOpenMode::OPEN);
 
-		fileMemory.SerializeData(result.c_str(), result.length());
-		fileMemory.FlushToFile();
-		fileMemory.End();
+		std::string jsonData;
+		fileMemory.DeserializeData(jsonData.data(), fileMemory.GetDataLength());
+		
+		JsonSerializer reader(jsonData.c_str());
+		m_Scene->Deserialize(&reader);
 
-		return true;
+
 	}
 
-	bool SceneSerializer::DeserializeBinary(const std::string& filePath)
+	void SceneSerializer::DeserializeBinary(const std::string& filePath)
 	{
-		return true;
 	}
 };
 

@@ -19,6 +19,13 @@ namespace HazelEditor
 		virtual void OnImGuiRender() override;
 
 	private:
+	private:
+		bool OnKeyPressed(Hazel::KeyPressedEvent& e);
+
+		void NewScene();
+		void OpenScene();
+		void SaveSceneAs();
+
 		// Temp
 		Hazel::OrthographicCameraController m_CameraController;
 
