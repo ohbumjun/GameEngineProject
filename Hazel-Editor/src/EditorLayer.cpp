@@ -56,7 +56,7 @@ namespace HazelEditor
 		m_TextureMap['W'] = Hazel::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 11, 11 }, { 128, 128 });
 
 		m_MapWidth = s_mapWidth;
-		m_MapHeight = strlen(s_MapTiles) / s_mapWidth;
+		m_MapHeight = (uint32_t)strlen(s_MapTiles) / s_mapWidth;
 
 		Hazel::FrameBufferSpecification fbSpec{};
 		fbSpec.Width = 1280;
@@ -241,7 +241,7 @@ namespace HazelEditor
 					Hazel::SceneSerializer serializer(m_ActiveScene);
 					serializer.SerializeText("assets/scenes/Example.hazel");
 				}
-				if (ImGui::MenuItem("Open...", "Ctrl+O"))
+				if (ImGui::MenuItem("Open Scene...", "Ctrl+O"))
 				{
 					OpenScene();
 				}
@@ -250,8 +250,10 @@ namespace HazelEditor
 					Hazel::SceneSerializer serializer(m_ActiveScene);
 					// serializer.DeserializeText("assets/scenes/Example.hazel");
 				}
-				if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S"))
+				if (ImGui::MenuItem("Save Scene As...", "Ctrl+Shift+S"))
+				{
 					SaveSceneAs();
+				}
 					
 					ImGui::EndMenu();
 				}
@@ -393,21 +395,24 @@ namespace HazelEditor
 			break;
 		}
 		}
+
+		return true;
 	}
 
 	void EditorLayer::NewScene()
 	{
-		m_ActiveScene = Hazel::CreateRef<Scene>();
+		m_ActiveScene = Hazel::CreateRef<Hazel::Scene>("Scene");
 		m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 		m_SceneHierachyPanel->SetContext(m_ActiveScene);
 	}
 
 	void EditorLayer::OpenScene()
 	{
-		std::string filepath = Hazel::FileChooser::OpenFile("Hazel Scene (*.hazel)\0*.hazel\0");
+		// std::string filepath = Hazel::FileChooser::OpenFile("Hazel Scene (*.hazel)\0*.hazel\0");
+		std::string filepath = Hazel::FileChooser::OpenFile("Hazel Scene (*.scene)\0*.scene\0");
 		if (!filepath.empty())
 		{
-			m_ActiveScene = Hazel::CreateRef<Scene>();
+			m_ActiveScene = Hazel::CreateRef<Hazel::Scene>();
 			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 			m_SceneHierachyPanel->SetContext(m_ActiveScene);
 
@@ -418,7 +423,8 @@ namespace HazelEditor
 
 	void EditorLayer::SaveSceneAs()
 	{
-		std::string filepath = Hazel::FileChooser::SaveFile("Hazel Scene (*.hazel)\0*.hazel\0");
+		// std::string filepath = Hazel::FileChooser::SaveFile("Hazel Scene (*.hazel)\0*.hazel\0");
+		std::string filepath = Hazel::FileChooser::SaveFile("Hazel Scene (*.scene)\0*.scene\0");
 		if (!filepath.empty())
 		{
 			Hazel::SceneSerializer serializer(m_ActiveScene);

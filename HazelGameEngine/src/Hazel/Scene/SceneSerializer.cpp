@@ -32,15 +32,13 @@ namespace Hazel
 	void SceneSerializer::DeserializeText(const std::string& filePath)
 	{
 		// 해당 경로의 파일은 항상 생성하는 방향으로 진행할 것이다.
-		FileMemory fileMemory(filePath.c_str(), FileOpenMode::OPEN);
+		FileMemory fileMemory(filePath.c_str(), FileOpenMode::OPEN, FileAccessMode::READ_ONLY);
 
 		std::string jsonData;
 		fileMemory.DeserializeData(jsonData.data(), fileMemory.GetDataLength());
 		
 		JsonSerializer reader(jsonData.c_str());
 		m_Scene->Deserialize(&reader);
-
-
 	}
 
 	void SceneSerializer::DeserializeBinary(const std::string& filePath)

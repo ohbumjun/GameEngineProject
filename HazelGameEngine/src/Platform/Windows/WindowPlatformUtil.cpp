@@ -37,7 +37,8 @@ namespace Hazel
 			return ofn.lpstrFile;
 		}
 
-		assert(false);
+		// 아무것도 클릭안하고, 그냥 창을 닫으면 여기에 걸린다.
+		// assert(false);
 
 		return std::string();
 	}
@@ -60,7 +61,8 @@ namespace Hazel
 			return ofn.lpstrFile;
 		}
 
-		assert(false);
+		// 아무것도 클릭안하고, 그냥 창을 닫으면 여기에 걸린다.
+		// assert(false);
 		return std::string();
 	}
 }

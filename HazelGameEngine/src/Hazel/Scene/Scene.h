@@ -25,6 +25,7 @@ namespace Hazel
 		friend class SceneSerializer;
 	public :
 		Scene(std::string_view name);
+		Scene() {};
 		virtual ~Scene();
 
 		Entity CreateEntity(const std::string& name = "Entity");

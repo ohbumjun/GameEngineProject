@@ -131,6 +131,8 @@ namespace Hazel
 	{
 		serializer->BeginSaveMap(Reflection::GetTypeID<Scene>(), this);
 
+		serializer->Save("SceneName", m_Name);
+
 		serializer->SaveKey("Entities");
 
 		const size_t numActiveEntities = m_Registry.alive();

@@ -1,4 +1,5 @@
 {
+    "SceneName": "ActiveScene",
     "Entities": [{
             "ID": "3",
             "types": [{

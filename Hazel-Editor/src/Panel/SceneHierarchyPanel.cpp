@@ -160,7 +160,7 @@ namespace Hazel
 	{
 		m_Context = scene;
 
-		m_SelectionContext = {};
+		m_SelectedEntity = {};
 	}
 
 	void SceneHierarchyPanel::OnImGuiRender()
@@ -168,6 +168,26 @@ namespace Hazel
 		{
 			// Scene Hierarchy
 			ImGui::Begin("SceneHierarchy");
+
+			// Scene Name
+			{
+				// 여기서 name 을 수정할 수 있게 한다.
+				const std::string& name = m_Context->GetName();
+
+				char buffer[256];
+				memset(buffer, 0, sizeof(buffer));
+				strcpy_s(buffer, sizeof(buffer), name.c_str());
+
+				ImGui::Text("SceneName");
+
+				ImGui::SameLine();
+
+				if (ImGui::InputText("##Name", buffer, sizeof(buffer)))
+				{
+					m_Context->SetName(std::string(buffer));
+				}
+			}
+		
 
 			m_Context->m_Registry.each([&](auto entityID)
 				{

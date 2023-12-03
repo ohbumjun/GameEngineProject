@@ -7,7 +7,7 @@
 #include "File/FileManager.h"
 #include "EditorLayer.h"
 
-namespace HazelEditor
+namespace Hazel
 {
 	class EditorApplication : public Hazel::Application
 	{
