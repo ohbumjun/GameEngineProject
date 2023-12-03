@@ -126,52 +126,78 @@ namespace Hazel
 		}
 		
 	}
-	void Scene::Serialize(Serializer& serializer)
+	void Scene::Serialize(Serializer* serializer)
 	{
-		serializer.BeginSaveMap(Reflection::GetTypeID<Scene>(), this);
+		serializer->BeginSaveMap(Reflection::GetTypeID<Scene>(), this);
+
+		serializer->SaveKey("Entities");
+
+		const size_t numActiveEntities = m_Registry.alive();
+
+		serializer->BeginSaveSeq(numActiveEntities);
 
 		m_Registry.each([&](auto entityID)
 		{
 			Entity entity = { entityID, this};
 		
 			if (!entity) return;
-		
+
 			serializeEntity(serializer, entity);
 
 		});
 
-		serializer.EndSaveMap();
-	}
-	void Scene::Deserialize(Serializer& serializer)
-	{
-	}
-	void Scene::serializeEntity(Serializer& serializer, Entity entity)
-	{
-		serializer.BeginSaveMap(Reflection::GetTypeID<Entity>(), this);
+		serializer->EndSaveSeq();
 
-		std::vector<Component*> components = entity.GetComponents();
+		serializer->EndSaveMap();
+	}
+
+	void Scene::Deserialize(Serializer* serializer)
+	{
+	}
+
+	void Scene::serializeEntity(Serializer* serializer, Entity entity)
+	{
+		serializer->BeginSaveMap(Reflection::GetTypeID<Entity>(), this);
+
+		uint32 entityIDUInt = entity;
+		std::string entityIDStr = std::to_string(entityIDUInt);
+		serializer->Save("ID", entityIDStr.c_str());
+
+		std::vector<const Component*> components = entity.GetComponents();
 
 		// type 정보들 저장하기 
-		serializer.SaveKey("types");
-		serializer.BeginSaveSeq(components.size());
+		serializer->SaveKey("types");
+		serializer->BeginSaveSeq(components.size());
 
-		for (Component* comp : components)
+		for (const Component* constComp : components)
 		{
+			Component* comp = const_cast<Component*>(constComp);
+			Reflection::TypeInfo* compTypeInfo = Reflection::GetTypeInfo(comp->GetType());
+			serializer->Save(compTypeInfo->m_Name.c_str(), comp->GetType());
 		}
 
-		for (Component* comp : components)
+		serializer->EndSaveSeq();
+
+		// Data 들 저장하기 
+		serializer->SaveKey("compDatas");
+		serializer->BeginSaveSeq(components.size());
+
+		for (const Component* constComp : components)
 		{
+			Component* comp = const_cast<Component*>(constComp);
 			comp->Serialize(serializer);
 		}
+		serializer->EndSaveSeq();
 
-		serializer.EndSaveMap();
+		serializer->EndSaveMap();
 	}
-	void Scene::deserializeEntity(Serializer& serializer, Entity entity)
+	void Scene::deserializeEntity(Serializer* serializer, Entity entity)
 	{
-		std::vector<Component*> components = entity.GetComponents();
+		std::vector<const Component*> components = entity.GetComponents();
 
-		for (Component* comp : components)
+		for (const Component* constComp : components)
 		{
+			Component* comp = const_cast<Component*>(constComp);
 			comp->Deserialize(serializer);
 		}
 	}

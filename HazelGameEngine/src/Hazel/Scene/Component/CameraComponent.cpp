@@ -3,6 +3,11 @@
 #include "Hazel/Core/Reflection/Reflection.h"
 #include "Hazel/Core/Serialization/Serializer.h"
 
+Hazel::CameraComponent::CameraComponent()
+{
+	Reflection::RegistType<CameraComponent>();
+}
+
 void Hazel::CameraComponent::Serialize(Serializer* serializer)
 {
 	serializer->BeginSaveMap(Reflection::GetTypeID<CameraComponent>(), this);

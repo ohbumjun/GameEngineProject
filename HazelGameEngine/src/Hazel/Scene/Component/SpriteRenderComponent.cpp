@@ -1,6 +1,11 @@
 ﻿#include "hzpch.h"
 #include "SpriteRenderComponent.h"
 
+Hazel::SpriteRenderComponent::SpriteRenderComponent()
+{
+	Reflection::RegistType<SpriteRenderComponent>();
+}
+
 void Hazel::SpriteRenderComponent::Serialize(Serializer& serializer)
 {
 	serializer.BeginSaveMap(Reflection::GetTypeID<SpriteRenderComponent>(), this);

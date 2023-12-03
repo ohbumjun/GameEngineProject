@@ -1,6 +1,11 @@
 ﻿#include "hzpch.h"
 #include "NameComponent.h"
 
+Hazel::NameComponent::NameComponent()
+{
+	Reflection::RegistType<NameComponent>();
+}
+
 void Hazel::NameComponent::Serialize(Serializer* serializer)
 {
 	serializer->BeginSaveMap(Reflection::GetTypeID<NameComponent>(), this);

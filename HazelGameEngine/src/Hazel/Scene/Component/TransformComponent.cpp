@@ -3,6 +3,11 @@
 #include "Hazel/Core/Reflection/Reflection.h"
 #include "Hazel/Core/Serialization/Serializer.h"
 
+Hazel::TransformComponent::TransformComponent()
+{
+	Reflection::RegistType<TransformComponent>();
+}
+
 void Hazel::TransformComponent::Serialize(Serializer* serializer)
 {
 	serializer->BeginSaveMap(Reflection::GetTypeID<TransformComponent>(), this);

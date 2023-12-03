@@ -4,6 +4,8 @@
 #include "Hazel/Utils/TimeStep.h"
 #include "Hazel/Core/Serialization/SerializeTarget.h"
 
+class Scene;
+
 namespace Hazel
 {
 	class Practice
@@ -30,8 +32,8 @@ namespace Hazel
 		void OnViewportResize(uint32_t width, uint32_t height);
 		void OnUpdate(const Timestep& ts);
 
-		virtual void Serialize(Serializer& serializer);
-		virtual void Deserialize(Serializer& serializer);
+		virtual void Serialize(Serializer* serializer) override;
+		virtual void Deserialize(Serializer* serializer) override;
 		
 		// Component 추가시 호출되는 함수
 		template<typename T>
@@ -39,8 +41,8 @@ namespace Hazel
 
 	private :
 
-		void serializeEntity(Serializer& serializer, Entity entity);
-		void deserializeEntity(Serializer& serializer, Entity entity);
+		void serializeEntity(Serializer* serializer, Entity entity);
+		void deserializeEntity(Serializer* serializer, Entity entity);
 
 		/*
 		* ecs 내 모든 component data + entity id 정보를 담는 container

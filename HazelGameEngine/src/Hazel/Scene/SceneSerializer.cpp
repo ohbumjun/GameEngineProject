@@ -13,29 +13,8 @@ namespace Hazel
 
 	void SceneSerializer::SerializeText(const std::string& filePath)
 	{
-		// YAML::Emitter out;
-		// 
-		// out << YAML::BeginMap;
-		// out << YAML::Key << "Scene" << YAML::Value << "Untitied";
-		// out << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
-		// 
-		// m_Scene->m_Registry.each([&](auto entityID)
-		// 	{
-		// 		Entity entity = { entityID, m_Scene.get()};
-		// 
-		// 		if (!entity) return;
-		// 
-		// 		SerializeEntityText(out, entity);
-		// 	});
-		// 
-		// out << YAML::EndSeq;
-		// out << YAML::EndMap;
-		// 
-		// std::ofstream fout(filePath);
-		// fout << out.c_str();
 		JsonSerializer writer;
-
-		m_Scene->Serialize(writer);
+		m_Scene->Serialize(&writer);
 	}
 
 	void SceneSerializer::SerializeBinary(const std::string& filePath)

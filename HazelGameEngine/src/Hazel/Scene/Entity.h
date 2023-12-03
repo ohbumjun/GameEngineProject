@@ -56,7 +56,7 @@ namespace Hazel
 		{
 			return !(*this == other);
 		}
-		std::vector<Component*> GetComponents();
+		std::vector<const Component*> GetComponents();
 	private:
 		entt::entity m_EntityHandle{ entt::null };
 

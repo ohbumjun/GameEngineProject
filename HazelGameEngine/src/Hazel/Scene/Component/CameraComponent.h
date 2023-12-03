@@ -9,7 +9,7 @@ namespace Hazel
 	{
 		friend class Scene;
 	public:
-		CameraComponent() = default;
+		CameraComponent();
 		CameraComponent(const CameraComponent& other) :
 			camera(other.camera) {};
 		CameraComponent(const glm::mat4& projection) :

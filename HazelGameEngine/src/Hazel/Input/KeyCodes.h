@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 /*
 아래의 header 파일을 작성해주는 이유는

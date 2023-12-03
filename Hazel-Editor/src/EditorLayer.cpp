@@ -101,13 +101,12 @@ namespace Hazel
 		// Panels
 		m_SceneHierachyPanel = CreateRef<SceneHierarchyPanel>();
 		m_SceneHierachyPanel->SetContext(m_ActiveScene);
-
-		SceneSerializer serializer(m_ActiveScene);
-		// serializer.SerializeText("assets/scenes/Example.scene");
-	}
+}
 
 	void EditorLayer::OnDetach()
 	{
+		SceneSerializer serializer(m_ActiveScene);
+		serializer.SerializeText("assets/scenes/Example.scene");
 	}
 
 	void EditorLayer::OnUpdate(Hazel::Timestep ts)

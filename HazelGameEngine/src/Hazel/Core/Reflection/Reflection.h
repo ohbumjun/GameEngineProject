@@ -287,6 +287,12 @@ inline TypeId Reflection::GetTypeID()
 	if (typeID == (uint64_t)0)
 	{
 		typeID = createTypeID<T>();
+
+		//  등록이 안되어 있는 타입이라면 Register 시켜준다.
+		if (IsRegistered<T>() == false)
+		{
+			RegisterType<T>();
+		}
 	}
 
 	return typeID;

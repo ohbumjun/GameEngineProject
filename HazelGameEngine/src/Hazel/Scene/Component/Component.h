@@ -4,13 +4,15 @@
 #include "Hazel/Core/Reflection/Reflection.h"
 #include "Hazel/Core/Serialization/SerializeTarget.h"
 
+class Serializer;
+
 namespace Hazel
 {
 	class Component : public SerializeTarget
 	{
 	public:
-		virtual void Serialize(Serializer& serializer) {}
-		virtual void Deserialize(Serializer& serializer) {}
+		virtual void Serialize(Serializer* serializer) override {}
+		virtual void Deserialize(Serializer* serializer) override {}
 
 		virtual const TypeId GetType() const = 0
 		{
