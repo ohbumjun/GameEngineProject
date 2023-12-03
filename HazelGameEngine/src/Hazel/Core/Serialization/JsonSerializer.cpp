@@ -28,6 +28,17 @@ JsonSerializer::JsonSerializer(const char* json) :
 
 JsonSerializer::~JsonSerializer()
 {
+
+	if (m_StringBuffer)
+	{
+		delete m_StringBuffer;
+	}
+
+	if (m_JsonWriter)
+	{
+		delete m_JsonWriter;
+	}
+
 	Document* doc = reinterpret_cast<Document*>(m_Document);
 
 	if (doc)
@@ -136,25 +147,33 @@ void JsonSerializer::onSave(const glm::vec3& data)
 {
 	JsonWriter* writer = (JsonWriter*)m_JsonWriter;
 
+	writer->StartArray();
 	for (int i = 0; i < 3; ++i)
 	{
 		writer->Double(data[i]);
 	}
+	writer->EndArray();
 }
 
 void JsonSerializer::onSave(const glm::vec4& data)
 {
 	JsonWriter* writer = (JsonWriter*)m_JsonWriter;
 
+	writer->StartArray();
+
 	for (int i = 0; i < 4; ++i)
 	{
 		writer->Double(data[i]);
 	}
+
+	writer->EndArray();
 }
 
 void JsonSerializer::onSave(const glm::mat4& data)
 {
 	JsonWriter* writer = (JsonWriter*)m_JsonWriter;
+
+	writer->StartArray();
 
 	for (int r = 0; r < 4; ++r)
 	{
@@ -163,6 +182,8 @@ void JsonSerializer::onSave(const glm::mat4& data)
 			writer->Double(data[r][c]);
 		}
 	}
+
+	writer->EndArray();
 }
 
 void JsonSerializer::onSave(const float data)

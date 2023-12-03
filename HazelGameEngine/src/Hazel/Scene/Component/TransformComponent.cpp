@@ -6,9 +6,6 @@
 Hazel::TransformComponent::TransformComponent()
 {
 	Reflection::RegistType<TransformComponent>();
-
-	size_t glmSize = sizeof(glm::vec3);
-	bool h = true;
 }
 
 void Hazel::TransformComponent::Serialize(Serializer* serializer)

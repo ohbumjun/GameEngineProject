@@ -140,6 +140,8 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Hazel\FileSystem\FileManager.h" />
+    <ClInclude Include="src\Hazel\FileSystem\PathInfo.h" />
     <ClInclude Include="src\Hazel\Scene\Component\NativeScriptComponent.h" />
     <ClInclude Include="src\Hazel\Scene\Component\CameraComponent.h" />
     <ClInclude Include="src\Hazel\Scene\Component\NameComponent.h" />
@@ -183,7 +185,7 @@
     <ClInclude Include="src\Hazel\Event\KeyEvent.h" />
     <ClInclude Include="src\Hazel\Event\MouseEvent.h" />
     <ClInclude Include="src\Hazel\FileSystem\DirectorySystem.h" />
-    <ClInclude Include="src\Hazel\FileSystem\FileChannel.h" />
+    <ClInclude Include="src\Hazel\FileSystem\FileMemory.h" />
     <ClInclude Include="src\Hazel\FileSystem\FileModes.h" />
     <ClInclude Include="src\Hazel\ImGui\ImGuiLayer.h" />
     <ClInclude Include="src\Hazel\Input\Input.h" />
@@ -644,6 +646,7 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Hazel\FileSystem\FileManager.cpp" />
     <ClCompile Include="src\Hazel\Scene\Component\NativeScriptComponent.cpp" />
     <ClCompile Include="src\Hazel\Scene\Component\CameraComponent.cpp" />
     <ClCompile Include="src\Hazel\Scene\Component\NameComponent.cpp" />
@@ -671,7 +674,7 @@
     <ClCompile Include="src\Hazel\Core\Serialization\Serializer.cpp" />
     <ClCompile Include="src\Hazel\Core\Window.cpp" />
     <ClCompile Include="src\Hazel\FileSystem\DirectorySystem.cpp" />
-    <ClCompile Include="src\Hazel\FileSystem\FileChannel.cpp" />
+    <ClCompile Include="src\Hazel\FileSystem\FileMemory.cpp" />
     <ClCompile Include="src\Hazel\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\Hazel\ImGui\ImGuilBuild.cpp" />
     <ClCompile Include="src\Hazel\Scene\Entity.cpp" />

@@ -88,7 +88,7 @@ private : // Write
 	uint m_KeyCnt	= 0;
 
 private : // Read
-	void* m_Document;
+	void* m_Document = nullptr;
 	std::vector<JsonRecord> m_ReadRecord;
 	std::stack<const char*> m_KeyRecord;
 };

@@ -106,7 +106,8 @@ namespace Hazel
 	void EditorLayer::OnDetach()
 	{
 		SceneSerializer serializer(m_ActiveScene);
-		serializer.SerializeText("assets/scenes/Example.scene");
+		// serializer.SerializeText("assets/scene/Example.scene");
+		serializer.SerializeText("TestObjectSample.scene");
 	}
 
 	void EditorLayer::OnUpdate(Hazel::Timestep ts)
