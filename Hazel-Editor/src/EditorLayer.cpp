@@ -1,8 +1,9 @@
 ﻿#include "EditorLayer.h"
 #include "Platform/OpenGL/OpenGLShader.h"
 #include "imgui/imgui.h"
+#include "File/PathInfo.h"
 #include <glm/gtc/type_ptr.hpp>
-
+#include "Hazel/FileSystem/DirectorySystem.h"
 #include "Hazel/Scene/SceneSerializer.h"
 
 // 24 wide map
@@ -107,7 +108,8 @@ namespace Hazel
 	{
 		SceneSerializer serializer(m_ActiveScene);
 		// serializer.SerializeText("assets/scene/Example.scene");
-		serializer.SerializeText("TestObjectSample.scene");
+		std::string targetPath = DirectorySystem::CombinePath(PathInfo::GetAssetPath(AssetPathEnum::Scene).c_str(), "ExampleScene.scene");
+		serializer.SerializeText(targetPath);
 	}
 
 	void EditorLayer::OnUpdate(Hazel::Timestep ts)

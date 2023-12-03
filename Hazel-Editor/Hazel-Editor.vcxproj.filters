@@ -11,6 +11,8 @@
       <Filter>Panel</Filter>
     </ClInclude>
     <ClInclude Include="src\ParticleSystem.h" />
+    <ClInclude Include="src\File\PathInfo.h" />
+    <ClInclude Include="src\File\FileManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EditorLayer.cpp" />
@@ -19,5 +21,7 @@
       <Filter>Panel</Filter>
     </ClCompile>
     <ClCompile Include="src\ParticleSystem.cpp" />
+    <ClCompile Include="src\File\FileManager.cpp" />
+    <ClCompile Include="src\File\PathInfo.cpp" />
   </ItemGroup>
 </Project>

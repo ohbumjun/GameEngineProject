@@ -128,11 +128,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\EditorLayer.h" />
+    <ClInclude Include="src\File\FileManager.h" />
+    <ClInclude Include="src\File\PathInfo.h" />
     <ClInclude Include="src\Panel\SceneHierarchyPanel.h" />
     <ClInclude Include="src\ParticleSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EditorLayer.cpp" />
+    <ClCompile Include="src\File\FileManager.cpp" />
+    <ClCompile Include="src\File\PathInfo.cpp" />
     <ClCompile Include="src\HazelEditorApp.cpp" />
     <ClCompile Include="src\Panel\SceneHierarchyPanel.cpp" />
     <ClCompile Include="src\ParticleSystem.cpp" />

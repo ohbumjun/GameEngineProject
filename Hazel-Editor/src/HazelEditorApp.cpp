@@ -4,7 +4,7 @@
 따라서main app 이 있는 곳으로 include 처리한다.
 */
 #include "Hazel/Core/EntryPoint.h"
-
+#include "File/FileManager.h"
 #include "EditorLayer.h"
 
 namespace Hazel
@@ -22,7 +22,7 @@ namespace Hazel
 			// Engine 측 Application 에서 추가하게 할 것이다.
 			// PushOverlay(new Hazel::ImGuiLayer());
 
-
+			FileManager::Initialize();
 		}
 
 		~HazelEditor()

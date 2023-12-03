@@ -1572,8 +1572,6 @@
     <ClInclude Include="src\Hazel\Scene\Component\NameComponent.h" />
     <ClInclude Include="src\Hazel\Scene\Component\CameraComponent.h" />
     <ClInclude Include="src\Hazel\Scene\Component\NativeScriptComponent.h" />
-    <ClInclude Include="src\Hazel\FileSystem\PathInfo.h" />
-    <ClInclude Include="src\Hazel\FileSystem\FileManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Core\Allocation\Allocator\FreeListAllocator.cpp">
@@ -1748,7 +1746,6 @@
     <ClCompile Include="src\Hazel\Scene\Component\NameComponent.cpp" />
     <ClCompile Include="src\Hazel\Scene\Component\CameraComponent.cpp" />
     <ClCompile Include="src\Hazel\Scene\Component\NativeScriptComponent.cpp" />
-    <ClCompile Include="src\Hazel\FileSystem\FileManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="JsonSample.txt" />

@@ -80,6 +80,6 @@ void ParticleSystem::Emit(const ParticleProps& particleProps)
 	// m_PoolIndex : uint32 이기 때문에 음수가 되지 않는다.
 	bool h = false;
 	--m_PoolIndex;
-	m_PoolIndex = m_PoolIndex >= m_ParticlePool.size() ? m_ParticlePool.size() - 1 : m_PoolIndex;
+	m_PoolIndex = m_PoolIndex >= m_ParticlePool.size() ? (uint32_t)m_ParticlePool.size() - 1 : m_PoolIndex;
 	bool h2 = true;
 }

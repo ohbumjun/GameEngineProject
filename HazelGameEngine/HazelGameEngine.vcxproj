@@ -140,8 +140,6 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Hazel\FileSystem\FileManager.h" />
-    <ClInclude Include="src\Hazel\FileSystem\PathInfo.h" />
     <ClInclude Include="src\Hazel\Scene\Component\NativeScriptComponent.h" />
     <ClInclude Include="src\Hazel\Scene\Component\CameraComponent.h" />
     <ClInclude Include="src\Hazel\Scene\Component\NameComponent.h" />
@@ -646,7 +644,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Hazel\FileSystem\FileManager.cpp" />
     <ClCompile Include="src\Hazel\Scene\Component\NativeScriptComponent.cpp" />
     <ClCompile Include="src\Hazel\Scene\Component\CameraComponent.cpp" />
     <ClCompile Include="src\Hazel\Scene\Component\NameComponent.cpp" />
