@@ -18,6 +18,8 @@ JsonSerializer::JsonSerializer() :
 	rapidjson::StringBuffer* sbWriter = (rapidjson::StringBuffer*)m_StringBuffer;
 
 	m_JsonWriter = new JsonWriter(*sbWriter);
+
+	static_cast<JsonWriter*>(m_JsonWriter)->SetFormatOptions(rapidjson::kFormatSingleLineArray);
 }
 
 JsonSerializer::JsonSerializer(const char* json) :

@@ -1,46 +1,22 @@
 {
-    "Entities": [
-        {
+    "Entities": [{
             "ID": "3",
-            "types": [
-                {
+            "types": [{
                     "class Hazel::TransformComponent": 13729283319516192586
-                },
-                {
+                }, {
                     "class Hazel::NameComponent": 15567495072973413409
-                },
-                {
+                }, {
                     "class Hazel::CameraComponent": 6780415662489155265
-                },
-                {
+                }, {
                     "class Hazel::NativeScriptComponent": 18416320287627121272
-                }
-            ],
-            "compDatas": [
-                "class Hazel::TransformComponent",
-                {
-                    "Translation": [
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "Rotation": [
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "Scale": [
-                        1.0,
-                        1.0,
-                        1.0
-                    ]
-                },
-                "class Hazel::NameComponent",
-                {
+                }],
+            "compDatas": ["class Hazel::TransformComponent", {
+                    "Translation": [0.0, 0.0, 0.0],
+                    "Rotation": [0.0, 0.0, 0.0],
+                    "Scale": [1.0, 1.0, 1.0]
+                }, "class Hazel::NameComponent", {
                     "Name": "Second Camera Entity"
-                },
-                "class Hazel::CameraComponent",
-                {
+                }, "class Hazel::CameraComponent", {
                     "Camera": {
                         "OrthographicSize": 10.0,
                         "OrthographicNear": -1.0,
@@ -53,48 +29,23 @@
                     },
                     "isPrimary": false,
                     "isFixedAspectRatio": false
-                },
-                "class Hazel::NativeScriptComponent"
-            ]
-        },
-        {
+                }, "class Hazel::NativeScriptComponent"]
+        }, {
             "ID": "2",
-            "types": [
-                {
+            "types": [{
                     "class Hazel::TransformComponent": 13729283319516192586
-                },
-                {
+                }, {
                     "class Hazel::NameComponent": 15567495072973413409
-                },
-                {
+                }, {
                     "class Hazel::CameraComponent": 6780415662489155265
-                }
-            ],
-            "compDatas": [
-                "class Hazel::TransformComponent",
-                {
-                    "Translation": [
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "Rotation": [
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "Scale": [
-                        1.0,
-                        1.0,
-                        1.0
-                    ]
-                },
-                "class Hazel::NameComponent",
-                {
+                }],
+            "compDatas": ["class Hazel::TransformComponent", {
+                    "Translation": [0.0, 0.0, 0.0],
+                    "Rotation": [0.0, 0.0, 0.0],
+                    "Scale": [1.0, 1.0, 1.0]
+                }, "class Hazel::NameComponent", {
                     "Name": "Main Camera Entity"
-                },
-                "class Hazel::CameraComponent",
-                {
+                }, "class Hazel::CameraComponent", {
                     "Camera": {
                         "OrthographicSize": 10.0,
                         "OrthographicNear": -1.0,
@@ -107,86 +58,38 @@
                     },
                     "isPrimary": true,
                     "isFixedAspectRatio": false
-                }
-            ]
-        },
-        {
+                }]
+        }, {
             "ID": "1",
-            "types": [
-                {
+            "types": [{
                     "class Hazel::TransformComponent": 13729283319516192586
-                },
-                {
+                }, {
                     "class Hazel::NameComponent": 15567495072973413409
-                },
-                {
+                }, {
                     "class Hazel::SpriteRenderComponent": 8364620273459969071
-                }
-            ],
-            "compDatas": [
-                "class Hazel::TransformComponent",
-                {
-                    "Translation": [
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "Rotation": [
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "Scale": [
-                        1.0,
-                        1.0,
-                        1.0
-                    ]
-                },
-                "class Hazel::NameComponent",
-                {
+                }],
+            "compDatas": ["class Hazel::TransformComponent", {
+                    "Translation": [0.0, 0.0, 0.0],
+                    "Rotation": [0.0, 0.0, 0.0],
+                    "Scale": [1.0, 1.0, 1.0]
+                }, "class Hazel::NameComponent", {
                     "Name": "Second Square Entity"
-                },
-                "class Hazel::SpriteRenderComponent"
-            ]
-        },
-        {
+                }, "class Hazel::SpriteRenderComponent"]
+        }, {
             "ID": "0",
-            "types": [
-                {
+            "types": [{
                     "class Hazel::TransformComponent": 13729283319516192586
-                },
-                {
+                }, {
                     "class Hazel::NameComponent": 15567495072973413409
-                },
-                {
+                }, {
                     "class Hazel::SpriteRenderComponent": 8364620273459969071
-                }
-            ],
-            "compDatas": [
-                "class Hazel::TransformComponent",
-                {
-                    "Translation": [
-                        2.200000047683716,
-                        0.0,
-                        0.0
-                    ],
-                    "Rotation": [
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "Scale": [
-                        1.0,
-                        1.0,
-                        1.0
-                    ]
-                },
-                "class Hazel::NameComponent",
-                {
+                }],
+            "compDatas": ["class Hazel::TransformComponent", {
+                    "Translation": [0.0, 0.0, 0.0],
+                    "Rotation": [0.0, 0.0, 0.0],
+                    "Scale": [1.0, 1.0, 1.0]
+                }, "class Hazel::NameComponent", {
                     "Name": "Square Entity"
-                },
-                "class Hazel::SpriteRenderComponent"
-            ]
-        }
-    ]
+                }, "class Hazel::SpriteRenderComponent"]
+        }]
 }
