@@ -16,7 +16,10 @@ namespace Hazel
 		TransformComponent();
 		TransformComponent(const TransformComponent& other) = default;
 		TransformComponent(const glm::vec3& translation) :
-			Translation(translation) {}
+			Translation(translation) 
+		{
+			TransformComponent();
+		}
 
 		virtual void Serialize(Serializer* serializer);
 		virtual void Deserialize(Serializer* serializer);

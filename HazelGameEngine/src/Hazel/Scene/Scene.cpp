@@ -161,7 +161,7 @@ namespace Hazel
 
 		uint32 entityIDUInt = entity;
 		std::string entityIDStr = std::to_string(entityIDUInt);
-		serializer->Save("ID", entityIDStr.c_str());
+		serializer->Save("ID", entityIDStr);
 
 		std::vector<const Component*> components = entity.GetComponents();
 
@@ -171,9 +171,11 @@ namespace Hazel
 
 		for (const Component* constComp : components)
 		{
+			serializer->BeginSaveMap();
 			Component* comp = const_cast<Component*>(constComp);
 			Reflection::TypeInfo* compTypeInfo = Reflection::GetTypeInfo(comp->GetType());
 			serializer->Save(compTypeInfo->m_Name.c_str(), comp->GetType());
+			serializer->EndSaveMap();
 		}
 
 		serializer->EndSaveSeq();
@@ -185,6 +187,8 @@ namespace Hazel
 		for (const Component* constComp : components)
 		{
 			Component* comp = const_cast<Component*>(constComp);
+			Reflection::TypeInfo* compTypeInfo = Reflection::GetTypeInfo(comp->GetType());
+			serializer->SaveKey(compTypeInfo->m_Name.c_str());
 			comp->Serialize(serializer);
 		}
 		serializer->EndSaveSeq();

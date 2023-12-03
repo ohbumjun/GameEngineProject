@@ -295,6 +295,12 @@ void Serializer::Save(const char* key, const std::string& data)
 	onSave(data);
 }
 
+void Serializer::Save(const char* key, const char* data)
+{
+	SaveKey(key);
+	onSave(data);
+}
+
 void Serializer::SaveRaw(const char* key, void* buffer, size_t size)
 {
 	SaveKey(key);

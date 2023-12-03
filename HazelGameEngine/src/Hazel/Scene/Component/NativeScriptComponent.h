@@ -10,6 +10,8 @@ namespace Hazel
 	{
 		friend class Scene;
 	public:
+		NativeScriptComponent();
+
 		void(*OnDestroyScript)(NativeScriptComponent*);
 
 		// std::function<void(ScriptableEntity*)> OnCreateFunction;

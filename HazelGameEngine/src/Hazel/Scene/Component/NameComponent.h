@@ -11,9 +11,15 @@ namespace Hazel
 	public:
 		NameComponent();
 		NameComponent(const NameComponent& other) :
-			name(other.name) {};
+			name(other.name)
+		{
+			NameComponent();
+		}
 		NameComponent(const std::string& name) :
-			name(name) {}
+			name(name) 
+		{
+			NameComponent();
+		}
 
 		operator const std::string& () const { return name; }
 		operator std::string& () { return name; }

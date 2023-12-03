@@ -80,6 +80,7 @@ public:
 	void Save(const char* key, const float data);
 	void Save(const char* key, const double data);
 	void Save(const char* key, const std::string& data);
+	void Save(const char* key, const char* data);
 	void SaveRaw(const char* key, void* buffer, size_t size);
 
 	template<typename T>
@@ -244,7 +245,7 @@ public:
 
 		void* m_ValuePointer = nullptr;
 
-		RecordData(TypeId type, void* ptr, const std::string& property = nullptr, int32 index = -1);
+		RecordData(TypeId type, void* ptr, const std::string& key = "", int32 index = -1);
 	};
 
 	struct Record

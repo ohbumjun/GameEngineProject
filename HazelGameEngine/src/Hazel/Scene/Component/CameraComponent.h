@@ -10,10 +10,8 @@ namespace Hazel
 		friend class Scene;
 	public:
 		CameraComponent();
-		CameraComponent(const CameraComponent& other) :
-			camera(other.camera) {};
-		CameraComponent(const glm::mat4& projection) :
-			camera(projection) {}
+		CameraComponent(const CameraComponent& other) = default;
+		CameraComponent(const glm::mat4& projection);
 
 		virtual void Serialize(Serializer* serializer);
 		virtual void Deserialize(Serializer* serializer);

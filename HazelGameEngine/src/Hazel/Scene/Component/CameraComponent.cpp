@@ -8,6 +8,12 @@ Hazel::CameraComponent::CameraComponent()
 	Reflection::RegistType<CameraComponent>();
 }
 
+Hazel::CameraComponent::CameraComponent(const glm::mat4& projection)
+	: camera(projection)
+{
+	Reflection::RegistType<CameraComponent>();
+}
+
 void Hazel::CameraComponent::Serialize(Serializer* serializer)
 {
 	serializer->BeginSaveMap(Reflection::GetTypeID<CameraComponent>(), this);
