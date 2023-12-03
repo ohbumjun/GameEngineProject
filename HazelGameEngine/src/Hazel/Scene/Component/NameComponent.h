@@ -9,7 +9,7 @@ namespace Hazel
 	{
 		friend class Scene;
 	public:
-		NameComponent() = default;
+		NameComponent();
 		NameComponent(const NameComponent& other) :
 			name(other.name) {};
 		NameComponent(const std::string& name) :

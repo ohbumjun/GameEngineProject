@@ -5,6 +5,12 @@
 #include "FieldInfo.h"
 #include "TypeUtils.h"
 
+// ex) 
+// Transform Component 의 size 를 정상적으로 계산하기 
+// 위해서 glm type 관련 header 파일 include
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 #pragma region >> example
 
 #if 0
@@ -277,7 +283,7 @@ inline TypeId Reflection::RegistType()
 	}
 
 	return typeId;
-}
+};
 
 template<typename T>
 inline TypeId Reflection::GetTypeID()
@@ -287,12 +293,6 @@ inline TypeId Reflection::GetTypeID()
 	if (typeID == (uint64_t)0)
 	{
 		typeID = createTypeID<T>();
-
-		//  등록이 안되어 있는 타입이라면 Register 시켜준다.
-		if (IsRegistered<T>() == false)
-		{
-			RegisterType<T>();
-		}
 	}
 
 	return typeID;
@@ -398,7 +398,7 @@ inline Reflection::TypeInfo Reflection::createTypeInfo()
 
 	TypeInfo info{};
 
-	info.m_Name = GetTypeName<T>();
+	info.m_Name = createTypeName<T>();
 	info.m_Type = typeId;
 	info.m_Align = 0;
 	info.m_Size = 0;
@@ -442,9 +442,9 @@ inline Reflection::TypeInfo Reflection::createTypeInfo()
 	using StrippedType = std::remove_cv_t<Type_RemovedPtrs_And_Refs>;
 
 	// 몇개의 pointer 가 있는지 계산한다.
-	info.pointerCount = TypeUtils::CountPointers<Type_RemovedRefs>();
+	info.m_PointerCount = TypeUtils::CountPointers<Type_RemovedRefs>();
 
-	if (info.pointerCount > 0)
+	if (info.m_PointerCount > 0)
 	{
 		info.m_OriginalType = GetTypeID<Type_RemovedPtrs_And_Refs>();
 	}

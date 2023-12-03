@@ -13,7 +13,7 @@ namespace Hazel
 
 
 	public:
-		TransformComponent() = default;
+		TransformComponent();
 		TransformComponent(const TransformComponent& other) = default;
 		TransformComponent(const glm::vec3& translation) :
 			Translation(translation) {}

@@ -11,6 +11,7 @@ namespace Hazel
 	class Component : public SerializeTarget
 	{
 	public:
+		Component();
 		virtual void Serialize(Serializer* serializer) override {}
 		virtual void Deserialize(Serializer* serializer) override {}
 

@@ -1,4 +1,4 @@
-#include "hzpch.h"
+﻿#include "hzpch.h"
 #include "Reflection.h"
 #include "TypeUtils.h"
 
@@ -151,7 +151,6 @@ bool Reflection::IsDerivedClass(TypeId baseType, TypeId childType)
 
 std::string Reflection::GetTypeName(const TypeId& id)
 {
-	// TODO: 여기에 return 문을 삽입합니다.
 	const TypeInfo& typeInfo = *GetTypeInfo(id);
 
 	return typeInfo.m_Name;
