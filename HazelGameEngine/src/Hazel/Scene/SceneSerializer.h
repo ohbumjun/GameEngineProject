@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Scene.h"
 
@@ -13,9 +13,10 @@ namespace Hazel
 		// runtime
 		void SerializeBinary(const std::string& filePath);
 
-		bool DeserializeText(const std::string& filePath);
+		void DeserializeText();
 		bool DeserializeBinary(const std::string& filePath);
-	private :
+	protected :
+		bool deserializeText(const std::string& filePath);
 		Ref<Scene> m_Scene;
 	};
 }

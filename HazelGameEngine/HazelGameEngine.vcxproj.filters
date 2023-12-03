@@ -28,6 +28,9 @@
     <Filter Include="src\Hazel\Core\Layer">
       <UniqueIdentifier>{146503BA-00F4-8C83-A912-A17E95809D29}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Hazel\Core\Memory">
+      <UniqueIdentifier>{B02807FD-1C95-C2F7-E588-5A5551B4E45F}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Hazel\Core\Reflection">
       <UniqueIdentifier>{028CA5A0-6E4E-D92A-B7FE-67B72300B208}</UniqueIdentifier>
     </Filter>
@@ -40,6 +43,9 @@
     <Filter Include="src\Hazel\Event">
       <UniqueIdentifier>{41EDF5B2-AD78-6377-B689-E66B2294BF77}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Hazel\FileSystem">
+      <UniqueIdentifier>{0444DFD8-F0D2-68A2-99F1-7C9D855F7948}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Hazel\ImGui">
       <UniqueIdentifier>{1AE138B3-866C-A677-8F7D-296CFB870278}</UniqueIdentifier>
     </Filter>
@@ -48,6 +54,9 @@
     </Filter>
     <Filter Include="src\Hazel\Scene">
       <UniqueIdentifier>{0DD9E8B3-7964-5678-8275-D96CEE7FB278}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Hazel\Scene\Component">
+      <UniqueIdentifier>{AF253390-1BE8-661A-6498-F5A6D0993FF8}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Hazel\Utils">
       <UniqueIdentifier>{506D16B4-BCF8-8378-C509-076D3114E078}</UniqueIdentifier>
@@ -156,6 +165,9 @@
     <ClInclude Include="src\Hazel\Core\Layer\LayerStack.h">
       <Filter>src\Hazel\Core\Layer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Hazel\Core\Memory\Channel.h">
+      <Filter>src\Hazel\Core\Memory</Filter>
+    </ClInclude>
     <ClInclude Include="src\Hazel\Core\Reflection\FieldInfo.h">
       <Filter>src\Hazel\Core\Reflection</Filter>
     </ClInclude>
@@ -198,6 +210,15 @@
     <ClInclude Include="src\Hazel\Event\MouseEvent.h">
       <Filter>src\Hazel\Event</Filter>
     </ClInclude>
+    <ClInclude Include="src\Hazel\FileSystem\DirectorySystem.h">
+      <Filter>src\Hazel\FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\FileSystem\FileMemory.h">
+      <Filter>src\Hazel\FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\FileSystem\FileModes.h">
+      <Filter>src\Hazel\FileSystem</Filter>
+    </ClInclude>
     <ClInclude Include="src\Hazel\ImGui\ImGuiLayer.h">
       <Filter>src\Hazel\ImGui</Filter>
     </ClInclude>
@@ -209,6 +230,27 @@
     </ClInclude>
     <ClInclude Include="src\Hazel\Input\MouseButtonCodes.h">
       <Filter>src\Hazel\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Scene\BaseObject.h">
+      <Filter>src\Hazel\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Scene\Component\CameraComponent.h">
+      <Filter>src\Hazel\Scene\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Scene\Component\Component.h">
+      <Filter>src\Hazel\Scene\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Scene\Component\NameComponent.h">
+      <Filter>src\Hazel\Scene\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Scene\Component\NativeScriptComponent.h">
+      <Filter>src\Hazel\Scene\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Scene\Component\SpriteRenderComponent.h">
+      <Filter>src\Hazel\Scene\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Scene\Component\TransformComponent.h">
+      <Filter>src\Hazel\Scene\Component</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\Scene\Entity.h">
       <Filter>src\Hazel\Scene</Filter>
@@ -235,6 +277,9 @@
       <Filter>src\Hazel\Utils</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\Utils\Random.h">
+      <Filter>src\Hazel\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Utils\StringUtil.h">
       <Filter>src\Hazel\Utils</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\Utils\TimeStep.h">
@@ -1560,18 +1605,8 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hazel\Core\Memory\Channel.h" />
-    <ClInclude Include="src\Hazel\FileSystem\FileMemory.h" />
-    <ClInclude Include="src\Hazel\FileSystem\FileModes.h" />
-    <ClInclude Include="src\Hazel\FileSystem\DirectorySystem.h" />
-    <ClInclude Include="src\Hazel\Utils\StringUtil.h" />
-    <ClInclude Include="src\Hazel\Scene\BaseObject.h" />
-    <ClInclude Include="src\Hazel\Scene\Component\Component.h" />
-    <ClInclude Include="src\Hazel\Scene\Component\TransformComponent.h" />
-    <ClInclude Include="src\Hazel\Scene\Component\SpriteRenderComponent.h" />
-    <ClInclude Include="src\Hazel\Scene\Component\NameComponent.h" />
-    <ClInclude Include="src\Hazel\Scene\Component\CameraComponent.h" />
-    <ClInclude Include="src\Hazel\Scene\Component\NativeScriptComponent.h" />
+    <ClInclude Include="src\Hazel\Utils\PlatformUtils.h" />
+    <ClInclude Include="src\Platform\Windows\WindowPlatformUtil.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Core\Allocation\Allocator\FreeListAllocator.cpp">
@@ -1634,11 +1669,38 @@
     <ClCompile Include="src\Hazel\Core\Window.cpp">
       <Filter>src\Hazel\Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\Hazel\FileSystem\DirectorySystem.cpp">
+      <Filter>src\Hazel\FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\FileSystem\FileMemory.cpp">
+      <Filter>src\Hazel\FileSystem</Filter>
+    </ClCompile>
     <ClCompile Include="src\Hazel\ImGui\ImGuiLayer.cpp">
       <Filter>src\Hazel\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="src\Hazel\ImGui\ImGuilBuild.cpp">
       <Filter>src\Hazel\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\Scene\BaseObject.cpp">
+      <Filter>src\Hazel\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\Scene\Component\CameraComponent.cpp">
+      <Filter>src\Hazel\Scene\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\Scene\Component\Component.cpp">
+      <Filter>src\Hazel\Scene\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\Scene\Component\NameComponent.cpp">
+      <Filter>src\Hazel\Scene\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\Scene\Component\NativeScriptComponent.cpp">
+      <Filter>src\Hazel\Scene\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\Scene\Component\SpriteRenderComponent.cpp">
+      <Filter>src\Hazel\Scene\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\Scene\Component\TransformComponent.cpp">
+      <Filter>src\Hazel\Scene\Component</Filter>
     </ClCompile>
     <ClCompile Include="src\Hazel\Scene\Entity.cpp">
       <Filter>src\Hazel\Scene</Filter>
@@ -1662,6 +1724,9 @@
       <Filter>src\Hazel\Utils</Filter>
     </ClCompile>
     <ClCompile Include="src\Hazel\Utils\Random.cpp">
+      <Filter>src\Hazel\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\Utils\StringUtil.cpp">
       <Filter>src\Hazel\Utils</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp">
@@ -1736,18 +1801,6 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Hazel\FileSystem\FileMemory.cpp" />
-    <ClCompile Include="src\Hazel\FileSystem\DirectorySystem.cpp" />
-    <ClCompile Include="src\Hazel\Utils\StringUtil.cpp" />
-    <ClCompile Include="src\Hazel\Scene\BaseObject.cpp" />
-    <ClCompile Include="src\Hazel\Scene\Component\Component.cpp" />
-    <ClCompile Include="src\Hazel\Scene\Component\TransformComponent.cpp" />
-    <ClCompile Include="src\Hazel\Scene\Component\SpriteRenderComponent.cpp" />
-    <ClCompile Include="src\Hazel\Scene\Component\NameComponent.cpp" />
-    <ClCompile Include="src\Hazel\Scene\Component\CameraComponent.cpp" />
-    <ClCompile Include="src\Hazel\Scene\Component\NativeScriptComponent.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="JsonSample.txt" />
+    <ClCompile Include="src\Platform\Windows\WindowPlatformUtil.cpp" />
   </ItemGroup>
 </Project>

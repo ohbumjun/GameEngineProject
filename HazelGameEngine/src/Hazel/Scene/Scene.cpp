@@ -61,7 +61,8 @@ namespace Hazel
 		}
 	}
 
-	Scene::Scene()
+	Scene::Scene(std::string_view name) :
+		m_Name(name)
 	{
 	}
 	Scene::~Scene()

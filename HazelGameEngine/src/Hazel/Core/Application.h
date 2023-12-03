@@ -51,6 +51,7 @@ namespace Hazel
 		LayerStack m_LayerStack;
 		Timestep m_Timestep;
 		float m_LastFrameTime = 0.f;
+
 	private :
 		static Application* s_Instance;
 	};

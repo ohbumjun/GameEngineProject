@@ -7,34 +7,34 @@
 #include "File/FileManager.h"
 #include "EditorLayer.h"
 
-namespace Hazel
+namespace HazelEditor
 {
-	class HazelEditor : public Application
+	class EditorApplication : public Hazel::Application
 	{
 	public:
-		HazelEditor() :
+		EditorApplication() :
 			Application("Hazel Editor")
 		{
 			// PushLayer(new ExampleLayer());
-			PushLayer(new EditorLayer());
+			PushLayer(new HazelEditor::EditorLayer());
 
 			// Client 측에서 ImGuiLayer 를 세팅하게 해주고 싶지 않다.
 			// Engine 측 Application 에서 추가하게 할 것이다.
 			// PushOverlay(new Hazel::ImGuiLayer());
 
-			FileManager::Initialize();
+			HazelEditor::FileManager::Initialize();
 		}
 
-		~HazelEditor()
+		~EditorApplication()
 		{
 
 		}
 
 	};
 
-	Application* CreateApplication()
+	Hazel::Application* CreateApplication()
 	{
-		return new HazelEditor();
+		return new EditorApplication();
 	}
 }
 

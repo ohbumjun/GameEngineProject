@@ -2,7 +2,10 @@
 #include "FileManager.h"
 
 
-void FileManager::Initialize()
+namespace HazelEditor
 {
-	PathInfo::initializeAssetPath();
+	void FileManager::Initialize()
+	{
+		PathManager::initialize();
+	}
 }

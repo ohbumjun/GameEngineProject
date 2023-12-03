@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Hazel/Core/Window.h"
 
@@ -49,6 +49,8 @@ namespace Hazel
 		};
 
 		WindowData m_Data;
+
+		HINSTANCE m_hInstance;
 	};
 
 }

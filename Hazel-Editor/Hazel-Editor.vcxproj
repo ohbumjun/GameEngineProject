@@ -79,7 +79,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>HZ_PLATFORM_WINDOWS;HZ_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\HazelGameEngine\vendor\spdlog\include;..\HazelGameEngine\src;..\HazelGameEngine\vendor;..\HazelGameEngine\vendor\glm;..\HazelGameEngine\vendor\entt\include;..\HazelGameEngine\vendor\RapidJson;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\HazelGameEngine\vendor\spdlog\include;..\HazelGameEngine\src;src;..\HazelGameEngine\vendor;..\HazelGameEngine\vendor\glm;..\HazelGameEngine\vendor\entt\include;..\HazelGameEngine\vendor\RapidJson;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -95,7 +95,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>HZ_PLATFORM_WINDOWS;HZ_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\HazelGameEngine\vendor\spdlog\include;..\HazelGameEngine\src;..\HazelGameEngine\vendor;..\HazelGameEngine\vendor\glm;..\HazelGameEngine\vendor\entt\include;..\HazelGameEngine\vendor\RapidJson;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\HazelGameEngine\vendor\spdlog\include;..\HazelGameEngine\src;src;..\HazelGameEngine\vendor;..\HazelGameEngine\vendor\glm;..\HazelGameEngine\vendor\entt\include;..\HazelGameEngine\vendor\RapidJson;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -111,7 +111,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>HZ_PLATFORM_WINDOWS;HZ_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\HazelGameEngine\vendor\spdlog\include;..\HazelGameEngine\src;..\HazelGameEngine\vendor;..\HazelGameEngine\vendor\glm;..\HazelGameEngine\vendor\entt\include;..\HazelGameEngine\vendor\RapidJson;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\HazelGameEngine\vendor\spdlog\include;..\HazelGameEngine\src;src;..\HazelGameEngine\vendor;..\HazelGameEngine\vendor\glm;..\HazelGameEngine\vendor\entt\include;..\HazelGameEngine\vendor\RapidJson;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -129,14 +129,14 @@
   <ItemGroup>
     <ClInclude Include="src\EditorLayer.h" />
     <ClInclude Include="src\File\FileManager.h" />
-    <ClInclude Include="src\File\PathInfo.h" />
+    <ClInclude Include="src\File\PathManager.h" />
     <ClInclude Include="src\Panel\SceneHierarchyPanel.h" />
     <ClInclude Include="src\ParticleSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EditorLayer.cpp" />
     <ClCompile Include="src\File\FileManager.cpp" />
-    <ClCompile Include="src\File\PathInfo.cpp" />
+    <ClCompile Include="src\File\PathManager.cpp" />
     <ClCompile Include="src\HazelEditorApp.cpp" />
     <ClCompile Include="src\Panel\SceneHierarchyPanel.cpp" />
     <ClCompile Include="src\ParticleSystem.cpp" />

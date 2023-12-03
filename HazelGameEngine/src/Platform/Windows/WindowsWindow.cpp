@@ -1,4 +1,4 @@
-#include "hzpch.h"
+﻿#include "hzpch.h"
 #include "WindowsWindow.h"
 #include "Hazel/Event/MouseEvent.h"
 #include "Hazel/Event/ApplicationEvent.h"
@@ -86,10 +86,12 @@ namespace Hazel
 
 		{
 			HZ_PROFILE_SCOPE("glfwCreateWindow");
+			
 			m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(),
 				nullptr, nullptr);
 		}
-		
+
+		m_hInstance = GetModuleHandle(NULL);
 
 		m_Context = new OpenGLContext(m_Window);
 		m_Context->Init();

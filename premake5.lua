@@ -194,6 +194,7 @@ project "Hazel-Editor"
     {
         "HazelGameEngine/vendor/spdlog/include",
         "HazelGameEngine/src",
+        "Hazel-Editor/src",
         "HazelGameEngine/vendor",
         "%{IncludeDir.glm}",
         "%{IncludeDir.entt}",

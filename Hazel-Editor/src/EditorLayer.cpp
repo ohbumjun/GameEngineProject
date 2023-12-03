@@ -1,7 +1,7 @@
 ﻿#include "EditorLayer.h"
 #include "Platform/OpenGL/OpenGLShader.h"
 #include "imgui/imgui.h"
-#include "File/PathInfo.h"
+#include "File/PathManager.h"
 #include <glm/gtc/type_ptr.hpp>
 #include "Hazel/FileSystem/DirectorySystem.h"
 #include "Hazel/Scene/SceneSerializer.h"
@@ -34,7 +34,7 @@ static const char* s_MapTiles =
 "WWWWWWWWWWWWWWWWWWWWWWWW"
 "WWWWWWWWWWWWWWWWWWWWWWWW";
 
-namespace Hazel
+namespace HazelEditor
 {
 	EditorLayer::EditorLayer()
 		: Layer("EditorLayer"),
@@ -62,23 +62,23 @@ namespace Hazel
 		fbSpec.Height = 720;
 		m_FrameBuffer = Hazel::FrameBuffer::Create(fbSpec);
 
-		m_ActiveScene = CreateRef<Scene>();
+		m_ActiveScene = Hazel::CreateRef<Hazel::Scene>("ActiveScene");
 		m_SquareEntity = m_ActiveScene->CreateEntity("Square Entity");
-		m_SquareEntity.AddComponent<SpriteRenderComponent>(glm::vec4{ 0.f, 1.f, 0.f, 1.f });
+		m_SquareEntity.AddComponent<Hazel::SpriteRenderComponent>(glm::vec4{ 0.f, 1.f, 0.f, 1.f });
 	
 		auto secondSquareEntity = m_ActiveScene->CreateEntity("Second Square Entity");
-		secondSquareEntity.AddComponent<SpriteRenderComponent>(glm::vec4{ 1.f, 0.f, 0.f, 1.f });
+		secondSquareEntity.AddComponent<Hazel::SpriteRenderComponent>(glm::vec4{ 1.f, 0.f, 0.f, 1.f });
 
 		m_CameraEntity = m_ActiveScene->CreateEntity("Main Camera Entity");
-		m_CameraEntity.AddComponent<CameraComponent>(glm::ortho(-16.f, 16.f, -9.f, 9.f, -1.f, 1.f));
+		m_CameraEntity.AddComponent<Hazel::CameraComponent>(glm::ortho(-16.f, 16.f, -9.f, 9.f, -1.f, 1.f));
 
 		m_SecondCameraEntity = m_ActiveScene->CreateEntity("Second Camera Entity");
-		auto& secCc = m_SecondCameraEntity.AddComponent<CameraComponent>(glm::ortho(-1.f, 1.f, -1.f, 1.f, -1.f, 1.f));
+		auto& secCc = m_SecondCameraEntity.AddComponent<Hazel::CameraComponent>(glm::ortho(-1.f, 1.f, -1.f, 1.f, -1.f, 1.f));
 		secCc.SetPrimary(false);
 
 		m_CameraController.SetZoomLevel(0.25f);
 
-		class CameraTestController : public ScriptableEntity
+		class CameraTestController : public Hazel::ScriptableEntity
 		{
 		public :
 			void OnCreate()
@@ -86,7 +86,7 @@ namespace Hazel
 				bool h = true;
 
 			}
-			void OnUpdate(Timestep ts)
+			void OnUpdate(Hazel::Timestep ts)
 			{
 				bool h = true;
 
@@ -97,19 +97,15 @@ namespace Hazel
 			}
 		};
 
-		m_SecondCameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraTestController>();
+		m_SecondCameraEntity.AddComponent<Hazel::NativeScriptComponent>().Bind<CameraTestController>();
 	
 		// Panels
-		m_SceneHierachyPanel = CreateRef<SceneHierarchyPanel>();
+		m_SceneHierachyPanel = Hazel::CreateRef<Hazel::SceneHierarchyPanel>();
 		m_SceneHierachyPanel->SetContext(m_ActiveScene);
 }
 
 	void EditorLayer::OnDetach()
 	{
-		SceneSerializer serializer(m_ActiveScene);
-		// serializer.SerializeText("assets/scene/Example.scene");
-		std::string targetPath = DirectorySystem::CombinePath(PathInfo::GetAssetPath(AssetPathEnum::Scene).c_str(), "ExampleScene.scene");
-		serializer.SerializeText(targetPath);
 	}
 
 	void EditorLayer::OnUpdate(Hazel::Timestep ts)
@@ -228,7 +224,22 @@ namespace Hazel
 					// which we can't undo at the moment without finer window depth/z control.
 					//ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen_persistant);
 
-					if (ImGui::MenuItem("Exit")) Hazel::Application::Get().Close();
+					if (ImGui::MenuItem("Exit")) 
+					{
+						Hazel::Application::Get().Close();
+					}
+					if (ImGui::MenuItem("Save Scene"))
+					{
+						Hazel::SceneSerializer serializer(m_ActiveScene);
+						std::string fileName = m_ActiveScene->GetName() + PathInfo::GetAssetExt(AssetExt::Scene);
+						std::string targetPath = DirectorySystem::CombinePath(PathInfo::GetAssetPath(AssetPathEnum::Scene).c_str(), fileName.c_str());
+						serializer.SerializeText(targetPath);
+					}
+					if (ImGui::MenuItem("Load Scene"))
+					{
+
+					}
+					
 					ImGui::EndMenu();
 				}
 
@@ -253,13 +264,13 @@ namespace Hazel
 			ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 
 			{
-				auto& cameraComp = m_SecondCameraEntity.GetComponent<CameraComponent>();
+				auto& cameraComp = m_SecondCameraEntity.GetComponent<Hazel::CameraComponent>();
 				auto& camera = cameraComp.GetCamera();
 				float orthoSize = camera.GetOrthoGraphicSize();
 
 				if (ImGui::DragFloat("Second Camera Ortho Size", &orthoSize))
 				{
-					const_cast<SceneCamera&>(camera).SetOrthoGraphicSize(orthoSize);
+					const_cast<Hazel::SceneCamera&>(camera).SetOrthoGraphicSize(orthoSize);
 				}
 			}
 
@@ -318,7 +329,7 @@ namespace Hazel
 			m_VieportInteracted = m_ViewportHovered || viewPortFocusedNow;
 
 			// Application::Get().GetImGuiLayer()->BlockEvents(!m_ViewportFocused || !m_ViewportHovered);
-			Application::Get().GetImGuiLayer()->BlockEvents(!m_VieportInteracted);
+			Hazel::Application::Get().GetImGuiLayer()->BlockEvents(!m_VieportInteracted);
 
 			ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "hzpch.h"
 
@@ -13,6 +13,7 @@ namespace Hazel
 		std::string Title;
 		uint32_t Width;
 		uint32_t Height;
+		HINSTANCE m_Inst;
 
 		WindowProps(const std::string& title = "Hazel Engine",
 			uint32_t width = 1200,

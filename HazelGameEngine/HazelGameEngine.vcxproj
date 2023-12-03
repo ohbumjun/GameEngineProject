@@ -140,12 +140,6 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Hazel\Scene\Component\NativeScriptComponent.h" />
-    <ClInclude Include="src\Hazel\Scene\Component\CameraComponent.h" />
-    <ClInclude Include="src\Hazel\Scene\Component\NameComponent.h" />
-    <ClInclude Include="src\Hazel\Scene\Component\SpriteRenderComponent.h" />
-    <ClInclude Include="src\Hazel\Scene\Component\Component.h" />
-    <ClInclude Include="src\Hazel\Scene\BaseObject.h" />
     <ClInclude Include="src\Hazel.h" />
     <ClInclude Include="src\Hazel\Core\Allocation\Allocator\FreeListAllocator.h" />
     <ClInclude Include="src\Hazel\Core\Allocation\Allocator\MemoryPoolAllocator.h" />
@@ -168,6 +162,7 @@
     <ClInclude Include="src\Hazel\Core\GC\GCObject.h" />
     <ClInclude Include="src\Hazel\Core\Layer\Layer.h" />
     <ClInclude Include="src\Hazel\Core\Layer\LayerStack.h" />
+    <ClInclude Include="src\Hazel\Core\Memory\Channel.h" />
     <ClInclude Include="src\Hazel\Core\Reflection\FieldInfo.h" />
     <ClInclude Include="src\Hazel\Core\Reflection\Reflection.h" />
     <ClInclude Include="src\Hazel\Core\Reflection\TypeId.h" />
@@ -189,7 +184,13 @@
     <ClInclude Include="src\Hazel\Input\Input.h" />
     <ClInclude Include="src\Hazel\Input\KeyCodes.h" />
     <ClInclude Include="src\Hazel\Input\MouseButtonCodes.h" />
-    <ClInclude Include="src\Hazel\Core\Memory\Channel.h" />
+    <ClInclude Include="src\Hazel\Scene\BaseObject.h" />
+    <ClInclude Include="src\Hazel\Scene\Component\CameraComponent.h" />
+    <ClInclude Include="src\Hazel\Scene\Component\Component.h" />
+    <ClInclude Include="src\Hazel\Scene\Component\NameComponent.h" />
+    <ClInclude Include="src\Hazel\Scene\Component\NativeScriptComponent.h" />
+    <ClInclude Include="src\Hazel\Scene\Component\SpriteRenderComponent.h" />
+    <ClInclude Include="src\Hazel\Scene\Component\TransformComponent.h" />
     <ClInclude Include="src\Hazel\Scene\Entity.h" />
     <ClInclude Include="src\Hazel\Scene\Scene.h" />
     <ClInclude Include="src\Hazel\Scene\SceneCamera.h" />
@@ -198,6 +199,7 @@
     <ClInclude Include="src\Hazel\Utils\Encoder.h" />
     <ClInclude Include="src\Hazel\Utils\EngineUtil.h" />
     <ClInclude Include="src\Hazel\Utils\Log.h" />
+    <ClInclude Include="src\Hazel\Utils\PlatformUtils.h" />
     <ClInclude Include="src\Hazel\Utils\Random.h" />
     <ClInclude Include="src\Hazel\Utils\StringUtil.h" />
     <ClInclude Include="src\Hazel\Utils\TimeStep.h" />
@@ -224,7 +226,6 @@
     <ClInclude Include="src\Renderer\Texture.h" />
     <ClInclude Include="src\Renderer\VertexArray.h" />
     <ClInclude Include="src\hzpch.h" />
-    <ClInclude Include="src\Hazel\Scene\Component\TransformComponent.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_features.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_fixes.hpp" />
@@ -642,14 +643,9 @@
     <ClInclude Include="vendor\glm\glm\vec4.hpp" />
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp" />
     <ClInclude Include="vendor\stb_image\stb_image.h" />
+    <ClInclude Include="src\Platform\Windows\WindowPlatformUtil.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Hazel\Scene\Component\NativeScriptComponent.cpp" />
-    <ClCompile Include="src\Hazel\Scene\Component\CameraComponent.cpp" />
-    <ClCompile Include="src\Hazel\Scene\Component\NameComponent.cpp" />
-    <ClCompile Include="src\Hazel\Scene\Component\SpriteRenderComponent.cpp" />
-    <ClCompile Include="src\Hazel\Scene\Component\Component.cpp" />
-    <ClCompile Include="src\Hazel\Scene\BaseObject.cpp" />
     <ClCompile Include="src\Hazel\Core\Allocation\Allocator\FreeListAllocator.cpp" />
     <ClCompile Include="src\Hazel\Core\Allocation\Allocator\MemoryPoolAllocator.cpp" />
     <ClCompile Include="src\Hazel\Core\Allocation\Allocator\PoolAllocator.cpp" />
@@ -674,6 +670,13 @@
     <ClCompile Include="src\Hazel\FileSystem\FileMemory.cpp" />
     <ClCompile Include="src\Hazel\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\Hazel\ImGui\ImGuilBuild.cpp" />
+    <ClCompile Include="src\Hazel\Scene\BaseObject.cpp" />
+    <ClCompile Include="src\Hazel\Scene\Component\CameraComponent.cpp" />
+    <ClCompile Include="src\Hazel\Scene\Component\Component.cpp" />
+    <ClCompile Include="src\Hazel\Scene\Component\NameComponent.cpp" />
+    <ClCompile Include="src\Hazel\Scene\Component\NativeScriptComponent.cpp" />
+    <ClCompile Include="src\Hazel\Scene\Component\SpriteRenderComponent.cpp" />
+    <ClCompile Include="src\Hazel\Scene\Component\TransformComponent.cpp" />
     <ClCompile Include="src\Hazel\Scene\Entity.cpp" />
     <ClCompile Include="src\Hazel\Scene\Scene.cpp" />
     <ClCompile Include="src\Hazel\Scene\SceneCamera.cpp" />
@@ -708,8 +711,8 @@
     <ClCompile Include="src\hzpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\Hazel\Scene\Component\TransformComponent.cpp" />
     <ClCompile Include="vendor\stb_image\stb_image.cpp" />
+    <ClCompile Include="src\Platform\Windows\WindowPlatformUtil.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="vendor\GLFW\GLFW.vcxproj">
@@ -721,9 +724,6 @@
     <ProjectReference Include="vendor\imgui\ImGui.vcxproj">
       <Project>{C0FF640D-2C14-8DBE-F595-301E616989EF}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="JsonSample.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

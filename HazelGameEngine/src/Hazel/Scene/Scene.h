@@ -24,7 +24,7 @@ namespace Hazel
 		friend class SceneHierarchyPanel;
 		friend class SceneSerializer;
 	public :
-		Scene();
+		Scene(std::string_view name);
 		virtual ~Scene();
 
 		Entity CreateEntity(const std::string& name = "Entity");
@@ -39,6 +39,15 @@ namespace Hazel
 		template<typename T>
 		void OnComponentAdded(Entity entity, T& component);
 
+		const std::string& GetName()
+		{
+			return m_Name;
+		}
+
+		void SetName(std::string_view name)
+		{
+			m_Name = name;
+		}
 	private :
 
 		void serializeEntity(Serializer* serializer, Entity entity);
@@ -52,6 +61,7 @@ namespace Hazel
 		uint32_t m_ViewportWidth = 0;
 		uint32_t m_ViewportHeight = 0;
 
+		std::string m_Name;
 	};
 }
 
