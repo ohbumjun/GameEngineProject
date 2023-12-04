@@ -6,22 +6,28 @@ Hazel::SpriteRenderComponent::SpriteRenderComponent()
 	Reflection::RegistType<SpriteRenderComponent>();
 }
 
-void Hazel::SpriteRenderComponent::Serialize(Serializer& serializer)
+void Hazel::SpriteRenderComponent::Serialize(Serializer* serializer)
 {
-	serializer.BeginSaveMap(Reflection::GetTypeID<SpriteRenderComponent>(), this);
+	serializer->BeginSaveMap(Reflection::GetTypeID<SpriteRenderComponent>(), this);
 
-	serializer.Save("color", color);
+	Reflection::TypeInfo* compTypeInfo = Reflection::GetTypeInfo(GetType());
+	serializer->Save("compName", compTypeInfo->m_Name.c_str());
 
-	serializer.EndSaveMap();
+	serializer->Save("color", color);
+
+	serializer->EndSaveMap();
 }
 
-void Hazel::SpriteRenderComponent::Deserialize(Serializer& serializer)
+void Hazel::SpriteRenderComponent::Deserialize(Serializer* serializer)
 {
-	serializer.BeginLoadMap(Reflection::GetTypeID<SpriteRenderComponent>(), this);
+	serializer->BeginLoadMap(Reflection::GetTypeID<SpriteRenderComponent>(), this);
+	
+	std::string compName;
+	serializer->Load("compName", compName);
 
-	serializer.Load("color", color);
+	serializer->Load("color", color);
 
-	serializer.EndLoadMap();
+	serializer->EndLoadMap();
 }
 
 const TypeId Hazel::SpriteRenderComponent::GetType() const

@@ -285,6 +285,8 @@ void JsonSerializer::onBeginLoadMap()
 	}
 
 	v = val;
+
+	m_ReadRecord.push_back(JsonRecord(v));
 }
 
 void JsonSerializer::onBeginLoadMap(TypeId type)
@@ -531,30 +533,44 @@ void JsonSerializer::onLoad(uint64& data)
 	val = static_cast<rapidjson::Value*>(getValue(prevRecord));
 
 	//set Data
-	if (nullptr == val || val->IsUint() == false)
+	if (nullptr == val || val->IsUint64() == false)
 	{
 		return;
 	}
 
-	data = val->GetUint();
+	data = val->GetUint64();
 }
 
 void JsonSerializer::onLoad(glm::vec3& data)
 {
-	rapidjson::Value* val = nullptr;
+	//부모 얻어옴
+	JsonRecord& prevRecord = m_ReadRecord.back();
+
+	// '[' 와 같은 array 의 시작 데이터를 읽는다.
+	rapidjson::Value* arrayValue = static_cast<rapidjson::Value*>(getValue(prevRecord));
+
+	if ((nullptr != arrayValue && arrayValue->IsArray()) == false)
+	{
+		assert(false);
+	}
 
 	if (m_ReadRecord.empty())
 	{
 		return;
 	}
 
-	//부모 얻어옮
-	JsonRecord& prevRecord = m_ReadRecord.back();
+	m_ReadRecord.push_back(JsonRecord(arrayValue));
+
+	JsonRecord& prevArrayRecord = m_ReadRecord.back();
 
 	for (int i = 0; i < 3; ++i)
 	{
 		//get next value
-		val = static_cast<rapidjson::Value*>(getValue(prevRecord));
+		Value* val = nullptr;
+		Value* prevValue = static_cast<Value*>(arrayValue);
+
+		// Array 상에서 특정 index 에 있는 값을 가져온다.
+		val = &prevValue->operator[](static_cast<SizeType>(prevArrayRecord.m_ArrayElemNum++));
 
 		//set Data
 		if (nullptr == val || val->IsFloat() == false)
@@ -563,27 +579,41 @@ void JsonSerializer::onLoad(glm::vec3& data)
 			return;
 		}
 
-		// data = val->GetFloat();
 		data[i] = val->GetFloat();
 	}
+
+	m_ReadRecord.pop_back();
 }
 
 void JsonSerializer::onLoad(glm::vec4& data)
 {
-	rapidjson::Value* val = nullptr;
+	JsonRecord& prevRecord = m_ReadRecord.back();
+
+	// '[' 와 같은 array 의 시작 데이터를 읽는다.
+	rapidjson::Value* arrayValue = static_cast<rapidjson::Value*>(getValue(prevRecord));
+
+	if ((nullptr != arrayValue && arrayValue->IsArray()) == false)
+	{
+		assert(false);
+	}
 
 	if (m_ReadRecord.empty())
 	{
 		return;
 	}
 
-	//부모 얻어옮
-	JsonRecord& prevRecord = m_ReadRecord.back();
+	m_ReadRecord.push_back(JsonRecord(arrayValue));
+
+	JsonRecord& prevArrayRecord = m_ReadRecord.back();
 
 	for (int i = 0; i < 4; ++i)
 	{
 		//get next value
-		val = static_cast<rapidjson::Value*>(getValue(prevRecord));
+		Value* val = nullptr;
+		Value* prevValue = static_cast<Value*>(arrayValue);
+
+		// Array 상에서 특정 index 에 있는 값을 가져온다.
+		val = &prevValue->operator[](static_cast<SizeType>(prevArrayRecord.m_ArrayElemNum++));
 
 		//set Data
 		if (nullptr == val || val->IsFloat() == false)
@@ -592,9 +622,10 @@ void JsonSerializer::onLoad(glm::vec4& data)
 			return;
 		}
 
-		// data = val->GetFloat();
 		data[i] = val->GetFloat();
 	}
+
+	m_ReadRecord.pop_back();
 }
 
 void JsonSerializer::onLoad(glm::mat4& data)
@@ -800,7 +831,7 @@ void JsonSerializer::onEndLoadSeq()
 }
 
 void* JsonSerializer::getValue(JsonRecord& prevRecord)
-{
+{ 
 	/*
 	rapidjson::Value is a versatile class that represents a JSON value.
 	JSON values can be of various types, including objects, arrays, strings, numbers, booleans, and null.

@@ -376,21 +376,27 @@ namespace HazelEditor
 		case Hazel::Key::N:
 		{
 			if (control)
+			{
 				NewScene();
+			}
 
 			break;
 		}
 		case Hazel::Key::O:
 		{
 			if (control)
+			{
 				OpenScene();
+			}
 
 			break;
 		}
 		case Hazel::Key::S:
 		{
 			if (control && shift)
+			{
 				SaveSceneAs();
+			}
 
 			break;
 		}
@@ -410,14 +416,25 @@ namespace HazelEditor
 	{
 		// std::string filepath = Hazel::FileChooser::OpenFile("Hazel Scene (*.hazel)\0*.hazel\0");
 		std::string filepath = Hazel::FileChooser::OpenFile("Hazel Scene (*.scene)\0*.scene\0");
+		
 		if (!filepath.empty())
 		{
+			// 기존  Scene 을 지운다.
 			m_ActiveScene = Hazel::CreateRef<Hazel::Scene>();
 			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 			m_SceneHierachyPanel->SetContext(m_ActiveScene);
-
 			Hazel::SceneSerializer serializer(m_ActiveScene);
 			serializer.DeserializeText(filepath.c_str());
+
+			// int activeSceneRefCnt = m_ActiveScene.use_count();
+			// 
+			// Hazel::Ref<Hazel::Scene> loadedScene = Hazel::CreateRef<Hazel::Scene>();
+			// loadedScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+			// m_SceneHierachyPanel->SetContext(loadedScene);
+			// Hazel::SceneSerializer serializer(loadedScene);
+			// serializer.DeserializeText(filepath.c_str());
+			// 
+			// activeSceneRefCnt = loadedScene.use_count();
 		}
 	}
 

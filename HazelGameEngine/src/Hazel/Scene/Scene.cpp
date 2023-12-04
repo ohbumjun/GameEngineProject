@@ -67,6 +67,16 @@ namespace Hazel
 	}
 	Scene::~Scene()
 	{
+		m_Registry.each([this](entt::entity entity) {
+			if (m_Registry.valid(entity))
+			{
+				m_Registry.destroy(entity);
+			}
+			else
+			{
+				assert(false);
+			}
+		});
 	}
 	void Scene::OnUpdate(const Timestep& ts)
 	{
@@ -156,15 +166,28 @@ namespace Hazel
 
 	void Scene::Deserialize(Serializer* serializer)
 	{
+		serializer->BeginLoadMap(Reflection::GetTypeID<Scene>(), this);
+
+		serializer->Load("SceneName", m_Name);
+
+		serializer->LoadKey("Entities");
+
+		size_t numActiveEntities = serializer->BeginLoadSeq();
+
+		for (size_t i = 0; i < numActiveEntities; ++i)
+		{
+			Entity entity{ m_Registry.create(), this };
+
+			deserializeEntity(serializer, entity);
+		}
+		serializer->EndLoadSeq();
+
+		serializer->EndLoadMap();
 	}
 
 	void Scene::serializeEntity(Serializer* serializer, Entity entity)
 	{
 		serializer->BeginSaveMap(Reflection::GetTypeID<Entity>(), this);
-
-		uint32 entityIDUInt = entity;
-		std::string entityIDStr = std::to_string(entityIDUInt);
-		serializer->Save("ID", entityIDStr);
 
 		std::vector<const Component*> components = entity.GetComponents();
 
@@ -174,11 +197,8 @@ namespace Hazel
 
 		for (const Component* constComp : components)
 		{
-			serializer->BeginSaveMap();
-			Component* comp = const_cast<Component*>(constComp);
-			Reflection::TypeInfo* compTypeInfo = Reflection::GetTypeInfo(comp->GetType());
-			serializer->Save(compTypeInfo->m_Name.c_str(), comp->GetType());
-			serializer->EndSaveMap();
+			Reflection::TypeInfo* compTypeInfo = Reflection::GetTypeInfo(constComp->GetType());
+			serializer->Save(compTypeInfo->m_Type.GetId());
 		}
 
 		serializer->EndSaveSeq();
@@ -190,8 +210,6 @@ namespace Hazel
 		for (const Component* constComp : components)
 		{
 			Component* comp = const_cast<Component*>(constComp);
-			Reflection::TypeInfo* compTypeInfo = Reflection::GetTypeInfo(comp->GetType());
-			serializer->SaveKey(compTypeInfo->m_Name.c_str());
 			comp->Serialize(serializer);
 		}
 		serializer->EndSaveSeq();
@@ -200,13 +218,61 @@ namespace Hazel
 	}
 	void Scene::deserializeEntity(Serializer* serializer, Entity entity)
 	{
-		std::vector<const Component*> components = entity.GetComponents();
+		serializer->BeginLoadMap(Reflection::GetTypeID<Entity>(), this);
 
-		for (const Component* constComp : components)
+		// types
+		serializer->LoadKey("types");
+		size_t componentCnt = serializer->BeginLoadSeq();
+
+		std::vector<Component*> vecComponents;
+		vecComponents.reserve(componentCnt);
+
+		for (size_t i = 0; i < componentCnt; ++i)
 		{
-			Component* comp = const_cast<Component*>(constComp);
-			comp->Deserialize(serializer);
+			uint64 typeId;
+			serializer->Load(typeId);
+			Component* newComponent = addComponentOnDeserialize(TypeId(typeId), entity);
+			vecComponents.push_back(newComponent);
 		}
+		serializer->EndLoadSeq();
+
+		// compDatas
+		serializer->LoadKey("compDatas");
+		componentCnt = serializer->BeginLoadSeq();
+
+		for (size_t i = 0; i < componentCnt; ++i)
+		{
+			vecComponents[i]->Deserialize(serializer);
+		}
+
+		serializer->EndLoadSeq();
+
+		serializer->EndLoadMap();
+	}
+	Component* Scene::addComponentOnDeserialize(TypeId type, Entity entity)
+	{
+		if (type == Reflection::GetTypeID<NameComponent>())
+		{
+			return &entity.AddComponent<NameComponent>();
+		}
+		else if (type == Reflection::GetTypeID<CameraComponent>())
+		{
+			return &entity.AddComponent<CameraComponent>();
+		}
+		else if (type == Reflection::GetTypeID<SpriteRenderComponent>())
+		{
+			return &entity.AddComponent<SpriteRenderComponent>();
+		}
+		else if (type == Reflection::GetTypeID<TransformComponent>())
+		{
+			return &entity.AddComponent<TransformComponent>();
+		}
+		else if (type == Reflection::GetTypeID<NativeScriptComponent>())
+		{
+			return &entity.AddComponent<NativeScriptComponent>();
+		}
+
+		assert(false);
 	}
 	Entity Scene::CreateEntity(const std::string& name)
 	{

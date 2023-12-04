@@ -3,6 +3,8 @@
 #include "Component.h"
 #include "Hazel/Core/Serialization/Serializer.h"
 
+class Serializer;
+
 namespace Hazel
 {
 	class SpriteRenderComponent : public Component
@@ -20,8 +22,8 @@ namespace Hazel
 			SpriteRenderComponent();
 		}
 
-		virtual void Serialize(Serializer& serializer);
-		virtual void Deserialize(Serializer& serializer);
+		virtual void Serialize(Serializer* serializer);
+		virtual void Deserialize(Serializer* serializer);
 
 		operator const glm::vec4& () const { return color; }
 		operator glm::vec4& () { return color; }

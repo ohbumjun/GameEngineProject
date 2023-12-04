@@ -2,20 +2,21 @@
 
 #include "entt.hpp"
 #include "Hazel/Utils/TimeStep.h"
+#include "Hazel/Core/Reflection/TypeId.h"
 #include "Hazel/Core/Serialization/SerializeTarget.h"
 
-class Scene;
 
 namespace Hazel
 {
+	class Scene;
+	class Component;
+
 	class Practice
 	{
 		Practice();
 
 		entt::registry m_Registry;
 	};
-
-	class Entity;
 
 	class Scene : public SerializeTarget
 	{
@@ -54,6 +55,7 @@ namespace Hazel
 		void serializeEntity(Serializer* serializer, Entity entity);
 		void deserializeEntity(Serializer* serializer, Entity entity);
 
+		Component* addComponentOnDeserialize(TypeId type, Entity entity);
 		/*
 		* ecs 내 모든 component data + entity id 정보를 담는 container
 		* entity : component  들이 어디에 속하는지에 대한 id 정보일 뿐이다.
@@ -61,8 +63,9 @@ namespace Hazel
 		entt::registry m_Registry;
 		uint32_t m_ViewportWidth = 0;
 		uint32_t m_ViewportHeight = 0;
-
 		std::string m_Name;
+
+		
 	};
 }
 

@@ -150,13 +150,13 @@ namespace Hazel
 		}
 	}
 
-	SceneHierarchyPanel::SceneHierarchyPanel(const Ref<Scene>& scene) :
+	SceneHierarchyPanel::SceneHierarchyPanel(const  std::weak_ptr<Scene>& scene) :
 		m_Context(scene)
 	{
 		// SetContext(scene);
 	}
 
-	void SceneHierarchyPanel::SetContext(const Ref<Scene>& scene)
+	void SceneHierarchyPanel::SetContext(const  std::weak_ptr<Scene>& scene)
 	{
 		m_Context = scene;
 
@@ -165,6 +165,13 @@ namespace Hazel
 
 	void SceneHierarchyPanel::OnImGuiRender()
 	{
+		Ref<Scene> sceneContext = m_Context.lock();
+
+		if (!sceneContext)
+		{
+			assert(false);
+		}
+
 		{
 			// Scene Hierarchy
 			ImGui::Begin("SceneHierarchy");
@@ -172,7 +179,7 @@ namespace Hazel
 			// Scene Name
 			{
 				// 여기서 name 을 수정할 수 있게 한다.
-				const std::string& name = m_Context->GetName();
+				const std::string& name = sceneContext->GetName();
 
 				char buffer[256];
 				memset(buffer, 0, sizeof(buffer));
@@ -184,14 +191,14 @@ namespace Hazel
 
 				if (ImGui::InputText("##Name", buffer, sizeof(buffer)))
 				{
-					m_Context->SetName(std::string(buffer));
+					sceneContext->SetName(std::string(buffer));
 				}
 			}
 		
 
-			m_Context->m_Registry.each([&](auto entityID)
+			sceneContext->m_Registry.each([&](auto entityID)
 				{
-					Entity entity{ entityID, m_Context.get() };
+					Entity entity{ entityID, m_Context.lock().get()};
 					drawEntityNode(entity);
 				});
 
@@ -202,7 +209,7 @@ namespace Hazel
 			if (ImGui::BeginPopupContextWindow(0, 1 | ImGuiPopupFlags_NoOpenOverItems))
 			{
 				if (ImGui::MenuItem("Create Empty Entity"))
-					m_Context->CreateEntity();
+					sceneContext->CreateEntity();
 		
 				ImGui::EndPopup();
 			}
@@ -228,6 +235,13 @@ namespace Hazel
 	// draw selectable list of entities
 	void SceneHierarchyPanel::drawEntityNode(Entity entity)
 	{
+		Ref<Scene> sceneContext = m_Context.lock();
+
+		if (!sceneContext)
+		{
+			assert(false);
+		}
+
 		std::string& name = const_cast<std::string&>(
 			entity.GetComponent<NameComponent>().GetName());
 
@@ -274,7 +288,7 @@ namespace Hazel
 
 		if (entityDeleted)
 		{
-			m_Context->DestroyEntity(entity);
+			sceneContext->DestroyEntity(entity);
 
 			// m_SelectedEntity ? == 현재 클릭된 Entity 의 Component 목록을 보고 있었다는 의미
 			// m_SelectedEntity 정보를 비워준다.

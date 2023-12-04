@@ -13,14 +13,16 @@ namespace Hazel
 	class SceneHierarchyPanel
 	{
 	public :
-		SceneHierarchyPanel() : m_Context(nullptr) {};
-		SceneHierarchyPanel(const Ref<Scene>& scene);
-		void SetContext(const Ref<Scene>& scene);
+		SceneHierarchyPanel() {};
+		// SceneHierarchyPanel(const Ref<Scene>& scene);
+		SceneHierarchyPanel(const std::weak_ptr<Scene>& scene);
+		// void SetContext(const Ref<Scene>& scene);
+		void SetContext(const  std::weak_ptr<Scene>& scene);
 		void OnImGuiRender();
 	private :
 		void drawEntityNode(Entity entity);
 		void drawComponents(Entity entity);
-		Ref<Scene> m_Context;
+		std::weak_ptr<Scene> m_Context;
 		Entity m_SelectedEntity;
 
 		friend class Scene;

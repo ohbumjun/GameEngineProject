@@ -15,8 +15,8 @@ namespace Hazel
 
 		void DeserializeText(const std::string& filePath);
 		void DeserializeBinary(const std::string& filePath);
-	protected :
-		bool deserializeText(const std::string& filePath);
+
+	private:
 		Ref<Scene> m_Scene;
 	};
 }

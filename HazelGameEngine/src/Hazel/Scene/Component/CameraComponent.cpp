@@ -18,6 +18,9 @@ void Hazel::CameraComponent::Serialize(Serializer* serializer)
 {
 	serializer->BeginSaveMap(Reflection::GetTypeID<CameraComponent>(), this);
 
+	Reflection::TypeInfo* compTypeInfo = Reflection::GetTypeInfo(GetType());
+	serializer->Save("compName", compTypeInfo->m_Name.c_str());
+
 	serializer->SaveKey("Camera");
 	camera.Serialize(serializer);
 
@@ -32,7 +35,10 @@ void Hazel::CameraComponent::Deserialize(Serializer* serializer)
 {
 	serializer->BeginLoadMap(Reflection::GetTypeID<CameraComponent>(), this);
 
-	serializer->SaveKey("Camera");
+	std::string compName;
+	serializer->Load("compName", compName);
+
+	serializer->LoadKey("Camera");
 
 	camera.Deserialize(serializer);
 

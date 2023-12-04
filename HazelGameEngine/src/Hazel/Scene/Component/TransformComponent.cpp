@@ -12,6 +12,9 @@ void Hazel::TransformComponent::Serialize(Serializer* serializer)
 {
 	serializer->BeginSaveMap(Reflection::GetTypeID<TransformComponent>(), this);
 
+	Reflection::TypeInfo* compTypeInfo = Reflection::GetTypeInfo(GetType());
+	serializer->Save("compName", compTypeInfo->m_Name.c_str());
+
 	serializer->Save("Translation", Translation);
 	serializer->Save("Rotation", Rotation);
 	serializer->Save("Scale", Scale);
@@ -22,6 +25,9 @@ void Hazel::TransformComponent::Serialize(Serializer* serializer)
 void Hazel::TransformComponent::Deserialize(Serializer* serializer)
 {
 	serializer->BeginLoadMap(Reflection::GetTypeID<TransformComponent>(), this);
+
+	std::string compName;
+	serializer->Load("compName", compName);
 
 	serializer->Load("Translation", Translation);
 	serializer->Load("Rotation", Rotation);
