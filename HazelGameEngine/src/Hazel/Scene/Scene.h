@@ -41,6 +41,8 @@ namespace Hazel
 		template<typename T>
 		void OnComponentAdded(Entity entity, T& component);
 
+		Entity GetEntityByName(std::string_view name);
+
 		const std::string& GetName()
 		{
 			return m_Name;

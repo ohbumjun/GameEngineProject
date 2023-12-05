@@ -8,6 +8,14 @@ Hazel::NativeScriptComponent::NativeScriptComponent()
 	Reflection::RegistType<NativeScriptComponent>();
 }
 
+void Hazel::NativeScriptComponent::Serialize(Serializer* serializer)
+{
+}
+
+void Hazel::NativeScriptComponent::Deserialize(Serializer* serializer)
+{
+}
+
 const TypeId Hazel::NativeScriptComponent::GetType() const
 {
 	return Reflection::GetTypeID<NativeScriptComponent>();

@@ -35,6 +35,28 @@ static const char* s_MapTiles =
 "WWWWWWWWWWWWWWWWWWWWWWWW"
 "WWWWWWWWWWWWWWWWWWWWWWWW";
 
+// 임시 코드
+static std::string secondCameraName = "Second Camera Entity";
+
+class CameraTestController : public Hazel::ScriptableEntity
+{
+public:
+	void OnCreate()
+	{
+		bool h = true;
+
+	}
+	void OnUpdate(Hazel::Timestep ts)
+	{
+		bool h = true;
+
+	}
+	void OnDestroy()
+	{
+		bool h = true;
+	}
+};
+
 namespace HazelEditor
 {
 	EditorLayer::EditorLayer()
@@ -64,41 +86,21 @@ namespace HazelEditor
 		m_FrameBuffer = Hazel::FrameBuffer::Create(fbSpec);
 
 		m_ActiveScene = Hazel::CreateRef<Hazel::Scene>("ActiveScene");
-		m_SquareEntity = m_ActiveScene->CreateEntity("Square Entity");
-		m_SquareEntity.AddComponent<Hazel::SpriteRenderComponent>(glm::vec4{ 0.f, 1.f, 0.f, 1.f });
+		auto squareEntity = m_ActiveScene->CreateEntity("Square Entity");
+		squareEntity.AddComponent<Hazel::SpriteRenderComponent>(glm::vec4{ 0.f, 1.f, 0.f, 1.f });
 	
 		auto secondSquareEntity = m_ActiveScene->CreateEntity("Second Square Entity");
 		secondSquareEntity.AddComponent<Hazel::SpriteRenderComponent>(glm::vec4{ 1.f, 0.f, 0.f, 1.f });
 
-		m_CameraEntity = m_ActiveScene->CreateEntity("Main Camera Entity");
-		m_CameraEntity.AddComponent<Hazel::CameraComponent>(glm::ortho(-16.f, 16.f, -9.f, 9.f, -1.f, 1.f));
+		auto cameraEntity = m_ActiveScene->CreateEntity("Main Camera Entity");
+		cameraEntity.AddComponent<Hazel::CameraComponent>(glm::ortho(-16.f, 16.f, -9.f, 9.f, -1.f, 1.f));
 
-		m_SecondCameraEntity = m_ActiveScene->CreateEntity("Second Camera Entity");
-		auto& secCc = m_SecondCameraEntity.AddComponent<Hazel::CameraComponent>(glm::ortho(-1.f, 1.f, -1.f, 1.f, -1.f, 1.f));
+		auto secondCameraEntity = m_ActiveScene->CreateEntity(secondCameraName);
+		auto& secCc = secondCameraEntity.AddComponent<Hazel::CameraComponent>(glm::ortho(-1.f, 1.f, -1.f, 1.f, -1.f, 1.f));
 		secCc.SetPrimary(false);
 
 		m_CameraController.SetZoomLevel(0.25f);
-
-		class CameraTestController : public Hazel::ScriptableEntity
-		{
-		public :
-			void OnCreate()
-			{
-				bool h = true;
-
-			}
-			void OnUpdate(Hazel::Timestep ts)
-			{
-				bool h = true;
-
-			}
-			void OnDestroy()
-			{
-				bool h = true;
-			}
-		};
-
-		m_SecondCameraEntity.AddComponent<Hazel::NativeScriptComponent>().Bind<CameraTestController>();
+		secondCameraEntity.AddComponent<Hazel::NativeScriptComponent>().Bind<CameraTestController>();
 	
 		// Panels
 		m_SceneHierachyPanel = Hazel::CreateRef<Hazel::SceneHierarchyPanel>();
@@ -279,14 +281,14 @@ namespace HazelEditor
 			ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 
 			{
-				auto& cameraComp = m_SecondCameraEntity.GetComponent<Hazel::CameraComponent>();
-				auto& camera = cameraComp.GetCamera();
-				float orthoSize = camera.GetOrthoGraphicSize();
-
-				if (ImGui::DragFloat("Second Camera Ortho Size", &orthoSize))
-				{
-					const_cast<Hazel::SceneCamera&>(camera).SetOrthoGraphicSize(orthoSize);
-				}
+				// auto& cameraComp = m_SecondCameraEntity.GetComponent<Hazel::CameraComponent>();
+				// auto& camera = cameraComp.GetCamera();
+				// float orthoSize = camera.GetOrthoGraphicSize();
+				// 
+				// if (ImGui::DragFloat("Second Camera Ortho Size", &orthoSize))
+				// {
+				// 	const_cast<Hazel::SceneCamera&>(camera).SetOrthoGraphicSize(orthoSize);
+				// }
 			}
 
 			ImGui::End();
@@ -426,15 +428,7 @@ namespace HazelEditor
 			Hazel::SceneSerializer serializer(m_ActiveScene);
 			serializer.DeserializeText(filepath.c_str());
 
-			// int activeSceneRefCnt = m_ActiveScene.use_count();
-			// 
-			// Hazel::Ref<Hazel::Scene> loadedScene = Hazel::CreateRef<Hazel::Scene>();
-			// loadedScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-			// m_SceneHierachyPanel->SetContext(loadedScene);
-			// Hazel::SceneSerializer serializer(loadedScene);
-			// serializer.DeserializeText(filepath.c_str());
-			// 
-			// activeSceneRefCnt = loadedScene.use_count();
+			ResetEditorLayer(m_ActiveScene);
 		}
 	}
 
@@ -447,5 +441,11 @@ namespace HazelEditor
 			Hazel::SceneSerializer serializer(m_ActiveScene);
 			serializer.SerializeText(filepath);
 		}
+	}
+	void EditorLayer::ResetEditorLayer(std::weak_ptr<Hazel::Scene> scene)
+	{
+		Hazel::Entity secondCameraEntity = scene.lock().get()->GetEntityByName(secondCameraName);
+
+		secondCameraEntity.GetComponent<Hazel::NativeScriptComponent>().Bind<CameraTestController>();
 	}
 }

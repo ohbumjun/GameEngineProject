@@ -19,12 +19,13 @@ namespace HazelEditor
 		virtual void OnImGuiRender() override;
 
 	private:
-	private:
 		bool OnKeyPressed(Hazel::KeyPressedEvent& e);
 
 		void NewScene();
 		void OpenScene();
 		void SaveSceneAs();
+
+		void ResetEditorLayer(std::weak_ptr<Hazel::Scene> scene);
 
 		// Temp
 		Hazel::OrthographicCameraController m_CameraController;
@@ -39,9 +40,9 @@ namespace HazelEditor
 
 		Hazel::Ref<Hazel::Scene> m_ActiveScene;
 
-		Hazel::Entity m_SquareEntity;
-		Hazel::Entity m_CameraEntity;
-		Hazel::Entity m_SecondCameraEntity;
+		// Hazel::Entity m_SquareEntity;
+		// Hazel::Entity m_CameraEntity;
+		// Hazel::Entity m_SecondCameraEntity;
 
 		bool m_PrimaryCamera = false;
 

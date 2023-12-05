@@ -1,41 +1,36 @@
 {
     "SceneName": "ActiveScene",
     "Entities": [{
-            "types": [13729283319516192586, 15567495072973413409, 6780415662489155265, 18416320287627121272],
+            "types": [13729283319516192586, 15567495072973413409, 8364620273459969071],
             "compDatas": [{
                     "compName": "class Hazel::TransformComponent",
-                    "Translation": [0.0, 0.0, 0.0],
+                    "Translation": [1.899999976158142, 0.0, 0.0],
                     "Rotation": [0.0, 0.0, 0.0],
                     "Scale": [1.0, 1.0, 1.0]
                 }, {
                     "compName": "class Hazel::NameComponent",
-                    "Name": "Second Camera Entity"
+                    "Name": "Square Entity"
                 }, {
-                    "compName": "class Hazel::CameraComponent",
-                    "Camera": {
-                        "OrthographicSize": 10.0,
-                        "OrthographicNear": -1.0,
-                        "OrthographicFar": 1.0,
-                        "PerspectiveFov": 0.7853981852531433,
-                        "PerspectiveNear": 0.009999999776482582,
-                        "PerspectiveFar": 1000.0,
-                        "AspectRatio": 0.6220238208770752,
-                        "ProjectionType": 1
-                    },
-                    "isPrimary": false,
-                    "isFixedAspectRatio": false
+                    "compName": "class Hazel::SpriteRenderComponent",
+                    "color": [0.0, 1.0, 0.0, 1.0]
                 }]
         }, {
-            "types": [13729283319516192586, 15567495072973413409, 6780415662489155265],
+            "types": [13729283319516192586, 15567495072973413409, 8364620273459969071],
             "compDatas": [{
                     "compName": "class Hazel::TransformComponent",
-                    "Translation": [0.0, 0.0, 0.0],
+                    "Translation": [0.0, 1.899999976158142, 0.0],
                     "Rotation": [0.0, 0.0, 0.0],
                     "Scale": [1.0, 1.0, 1.0]
                 }, {
                     "compName": "class Hazel::NameComponent",
-                    "Name": "Main Camera Entity"
+                    "Name": "Second Square Entity"
                 }, {
+                    "compName": "class Hazel::SpriteRenderComponent",
+                    "color": [1.0, 0.0, 0.0, 1.0]
+                }]
+        }, {
+            "types": [6780415662489155265, 13729283319516192586, 15567495072973413409],
+            "compDatas": [{
                     "compName": "class Hazel::CameraComponent",
                     "Camera": {
                         "OrthographicSize": 10.0,
@@ -49,34 +44,39 @@
                     },
                     "isPrimary": true,
                     "isFixedAspectRatio": false
-                }]
-        }, {
-            "types": [13729283319516192586, 15567495072973413409, 8364620273459969071],
-            "compDatas": [{
+                }, {
                     "compName": "class Hazel::TransformComponent",
                     "Translation": [0.0, 0.0, 0.0],
                     "Rotation": [0.0, 0.0, 0.0],
                     "Scale": [1.0, 1.0, 1.0]
                 }, {
                     "compName": "class Hazel::NameComponent",
-                    "Name": "Second Square Entity"
-                }, {
-                    "compName": "class Hazel::SpriteRenderComponent",
-                    "color": [1.0, 0.0, 0.0, 1.0]
+                    "Name": "Main Camera Entity"
                 }]
         }, {
-            "types": [13729283319516192586, 15567495072973413409, 8364620273459969071],
+            "types": [6780415662489155265, 13729283319516192586, 15567495072973413409, 18416320287627121272],
             "compDatas": [{
+                    "compName": "class Hazel::CameraComponent",
+                    "Camera": {
+                        "OrthographicSize": 10.0,
+                        "OrthographicNear": -1.0,
+                        "OrthographicFar": 1.0,
+                        "PerspectiveFov": 0.7853981852531433,
+                        "PerspectiveNear": 0.009999999776482582,
+                        "PerspectiveFar": 1000.0,
+                        "AspectRatio": 0.6220238208770752,
+                        "ProjectionType": 1
+                    },
+                    "isPrimary": false,
+                    "isFixedAspectRatio": false
+                }, {
                     "compName": "class Hazel::TransformComponent",
                     "Translation": [0.0, 0.0, 0.0],
                     "Rotation": [0.0, 0.0, 0.0],
                     "Scale": [1.0, 1.0, 1.0]
                 }, {
                     "compName": "class Hazel::NameComponent",
-                    "Name": "Square Entity"
-                }, {
-                    "compName": "class Hazel::SpriteRenderComponent",
-                    "color": [0.0, 1.0, 0.0, 1.0]
+                    "Name": "Second Camera Entity"
                 }]
         }]
 }

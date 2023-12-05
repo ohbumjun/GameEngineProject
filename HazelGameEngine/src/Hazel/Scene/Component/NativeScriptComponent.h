@@ -12,7 +12,7 @@ namespace Hazel
 	public:
 		NativeScriptComponent();
 
-		void(*OnDestroyScript)(NativeScriptComponent*);
+		void(*OnDestroyScript)(NativeScriptComponent*) = nullptr;
 
 		// std::function<void(ScriptableEntity*)> OnCreateFunction;
 		// std::function<void(ScriptableEntity*)> OnDestroyFunction;
@@ -30,8 +30,8 @@ namespace Hazel
 			// OnUpdateFunction = [&](ScriptableEntity* instance, Timestep ts) {((T*)instance)->OnUpdate(ts); };
 		}
 
-		virtual void Serialize(Serializer& serializer) {}
-		virtual void Deserialize(Serializer& serializer) {}
+		virtual void Serialize(Serializer* serializer) override;
+		virtual void Deserialize(Serializer* serializer) override;
 
 		virtual const TypeId GetType() const;
 	private:

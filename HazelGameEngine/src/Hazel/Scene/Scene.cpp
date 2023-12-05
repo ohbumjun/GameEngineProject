@@ -185,6 +185,31 @@ namespace Hazel
 		serializer->EndLoadMap();
 	}
 
+	Entity Scene::GetEntityByName(std::string_view name)
+	{
+		entt::entity foundEntity;
+		bool found = false;
+
+		m_Registry.view<NameComponent>().each(
+			[&found,&foundEntity, name, this]
+		(auto entity, const auto& nameComponent) 
+		{
+				if (nameComponent.name == name)
+				{
+					foundEntity = entity;
+					found = true;
+				}
+			}
+		);
+
+		if (!found)
+		{
+			assert(false);
+		}
+
+		return Entity{ foundEntity, this };
+	}
+
 	void Scene::serializeEntity(Serializer* serializer, Entity entity)
 	{
 		serializer->BeginSaveMap(Reflection::GetTypeID<Entity>(), this);
