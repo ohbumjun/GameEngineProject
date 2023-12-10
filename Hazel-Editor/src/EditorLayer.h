@@ -27,6 +27,12 @@ namespace HazelEditor
 
 		void ResetEditorLayer(std::weak_ptr<Hazel::Scene> scene);
 
+		void prepareDockSpace();
+		void drawMenuBar();
+		void drawPanels();
+		void drawSetting();
+		void drawViewPort();
+
 		// Temp
 		Hazel::OrthographicCameraController m_CameraController;
 
