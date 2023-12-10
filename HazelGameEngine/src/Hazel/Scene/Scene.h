@@ -4,6 +4,8 @@
 #include "Hazel/Utils/TimeStep.h"
 #include "Hazel/Core/Reflection/TypeId.h"
 #include "Hazel/Core/Serialization/SerializeTarget.h"
+#include "Renderer/EditorCamera.h"
+#include "entt.hpp"
 
 
 namespace Hazel
@@ -32,8 +34,18 @@ namespace Hazel
 		Entity CreateEntity(const std::string& name = "Entity");
 		void DestroyEntity(const Entity& entity);
 		void OnViewportResize(uint32_t width, uint32_t height);
-		void OnUpdate(const Timestep& ts);
+		/*
+		1) runtime update function
+		2) update function called from editor side
 
+		update 로직은 engine 과 editor 가 완전히 다르게
+		수행되어야 한다.
+		
+		editor 에서는 추가적으로 imgui 등을 그리고 싶을 수
+		있기 때문이다.
+		*/
+		void OnUpdateRuntime(const Timestep& ts);
+		void OnUpdateEditor(Timestep ts, EditorCamera& camera);
 		virtual void Serialize(Serializer* serializer) override;
 		virtual void Deserialize(Serializer* serializer) override;
 

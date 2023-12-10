@@ -3,6 +3,8 @@
 #include <Hazel.h>
 #include "ParticleSystem.h"
 #include "Panel/SceneHierarchyPanel.h"
+#include "Renderer/EditorCamera.h"
+
 
 namespace HazelEditor
 {
@@ -66,6 +68,8 @@ namespace HazelEditor
 
 		ParticleProps m_Particle;
 		ParticleSystem m_ParticleSystem;
+		Hazel::EditorCamera m_EditorCamera;
+
 
 		int m_GizmoType = -1;
 

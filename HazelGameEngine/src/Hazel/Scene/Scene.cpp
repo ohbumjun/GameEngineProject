@@ -78,7 +78,7 @@ namespace Hazel
 			}
 		});
 	}
-	void Scene::OnUpdate(const Timestep& ts)
+	void Scene::OnUpdateRuntime(const Timestep& ts)
 	{
 		{
 			// Native Sript Update
@@ -136,6 +136,20 @@ namespace Hazel
 			Renderer2D::EndScene();
 		}
 		
+	}
+	void Scene::OnUpdateEditor(Timestep ts, EditorCamera& camera)
+	{
+		Renderer2D::BeginScene(camera);
+
+		auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRenderComponent>);
+		for (auto entity : group)
+		{
+			auto [transform, sprite] = group.get<TransformComponent, SpriteRenderComponent>(entity);
+
+			Renderer2D::DrawQuad(transform.GetTransform(), sprite.color);
+		}
+
+		Renderer2D::EndScene();
 	}
 	void Scene::Serialize(Serializer* serializer)
 	{

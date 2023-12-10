@@ -168,11 +168,7 @@ namespace Hazel
 		s_Data.TextureShader->SetMat4(
 			"u_ViewProjection", viewProj);
 
-		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
-		s_Data.QuadIndexCount = 0;
-
-		// 0 
-		s_Data.TextureSlotIndex = 1;
+		StartBatch();
 	}
 
 	void Renderer2D::BeginScene(const OrthographicCamera& camera)
@@ -183,12 +179,21 @@ namespace Hazel
 		s_Data.TextureShader->SetMat4(
 			"u_ViewProjection", const_cast<OrthographicCamera&>(camera).GetViewProjectionMatrix());
 	
-		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
-		s_Data.QuadIndexCount = 0;
-
-		// 0 
-		s_Data.TextureSlotIndex = 1;
+		StartBatch();
 	}
+
+	void Renderer2D::BeginScene(const EditorCamera& camera)
+	{
+		HZ_PROFILE_FUNCTION();
+
+		glm::mat4 viewProj = camera.GetViewProjection();
+
+		s_Data.TextureShader->Bind();
+		s_Data.TextureShader->SetMat4("u_ViewProjection", viewProj);
+
+		StartBatch();
+	}
+
 
 	void Renderer2D::EndScene()
 	{
@@ -213,6 +218,20 @@ namespace Hazel
 		s_Data.QuadIndexCount = 0;
 		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
 		s_Data.TextureSlotIndex = 1;
+	}
+
+	void Renderer2D::StartBatch()
+	{
+		s_Data.QuadIndexCount = 0;
+		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
+
+		s_Data.TextureSlotIndex = 1;
+	}
+
+	void Renderer2D::NextBatch()
+	{
+		Flush();
+		StartBatch();
 	}
 
 
@@ -308,7 +327,8 @@ namespace Hazel
 
 		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
 		{
-			FlushAndReset();
+			// FlushAndReset();
+			NextBatch();
 		}
 
 		constexpr glm::vec4 color = { 1.f, 1.f, 1.f, 1.f };
@@ -407,7 +427,8 @@ namespace Hazel
 
 		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
 		{
-			FlushAndReset();
+			// FlushAndReset();
+			NextBatch();
 		}
 
 		constexpr glm::vec2 textureCoords[] = { {0.f, 0.f}, {1.f, 0.f} ,{1.f, 1.f}, {0.f, 1.f} };
@@ -447,7 +468,8 @@ namespace Hazel
 
 		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
 		{
-			FlushAndReset();
+			// FlushAndReset();
+			NextBatch();
 		}
 
 		constexpr glm::vec4 color = { 1.f, 1.f, 1.f, 1.f };
@@ -509,7 +531,8 @@ namespace Hazel
 
 		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
 		{
-			FlushAndReset();
+			// FlushAndReset();
+			NextBatch();
 		}
 		constexpr glm::vec2 textureCoords[] = { {0.f, 0.f}, {1.f, 0.f} ,{1.f, 1.f}, {0.f, 1.f} };
 

@@ -11,6 +11,7 @@
 #include "Hazel/Scene/Component/CameraComponent.h"
 #include "Hazel/Scene/Component/TransformComponent.h"
 #include "Hazel/Utils/PlatformUtils.h"
+#include "Renderer/EditorCamera.h"
 
 // 24 wide map
 static const uint32_t s_mapWidth = 24;
@@ -90,6 +91,7 @@ namespace HazelEditor
 		fbSpec.Height = 720;
 		m_FrameBuffer = Hazel::FrameBuffer::Create(fbSpec);
 
+		m_EditorCamera = Hazel::EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
 		m_ActiveScene = Hazel::CreateRef<Hazel::Scene>("ActiveScene");
 		auto squareEntity = m_ActiveScene->CreateEntity("Square Entity");
 		squareEntity.AddComponent<Hazel::SpriteRenderComponent>(glm::vec4{ 0.f, 1.f, 0.f, 1.f });
@@ -110,7 +112,7 @@ namespace HazelEditor
 		// Panels
 		m_SceneHierachyPanel = Hazel::CreateRef<Hazel::SceneHierarchyPanel>();
 		m_SceneHierachyPanel->SetContext(m_ActiveScene);
-}
+	}
 
 	void EditorLayer::OnDetach()
 	{
@@ -124,7 +126,8 @@ namespace HazelEditor
 		{
 			Hazel::FrameBufferSpecification spec = m_FrameBuffer->GetSpecification();
 
-			if (spec.Width != m_ViewportSize.x || spec.Height != m_ViewportSize.y)
+			if (m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f && // zero sized framebuffer is invalid
+				(spec.Width != m_ViewportSize.x || spec.Height != m_ViewportSize.y))
 			{
 				/*
 				FrameBuffer 에 그려진 내용은 CameraController 의 Camera 로 부터
@@ -137,7 +140,9 @@ namespace HazelEditor
 				
 				// CameraController 의 Camera Projection Matrix 정보 다시 세팅
 				m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
-				
+			
+				m_EditorCamera.SetViewportSize(m_ViewportSize.x, m_ViewportSize.y);
+
 				// Scene 에 있는 모든 CameraComponent 의 Camera 정보 다시 세팅
 				m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 			}
@@ -150,6 +155,8 @@ namespace HazelEditor
 			m_CameraController.OnUpdate(ts);
 		}
 
+		m_EditorCamera.OnUpdate(ts);
+
 		// Reset
 		Hazel::Renderer2D::ResetStats();
 		m_FrameBuffer->Bind();
@@ -157,7 +164,8 @@ namespace HazelEditor
 		Hazel::RenderCommand::Clear();
 
 		// Render
-		m_ActiveScene->OnUpdate(ts);
+		// m_ActiveScene->OnUpdate(ts);
+		m_ActiveScene->OnUpdateEditor(ts, m_EditorCamera);
 
 		m_FrameBuffer->UnBind();
 	}
@@ -166,6 +174,7 @@ namespace HazelEditor
 	{
 		m_CameraController.OnEvent(event);
 
+		m_EditorCamera.OnEvent(event);
 		Hazel::EventDispatcher dispatcher(event);
 		dispatcher.Dispatch<Hazel::KeyPressedEvent>(HZ_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
 
@@ -486,13 +495,15 @@ namespace HazelEditor
 			ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
 
 			// Camera
-			auto cameraEntity = m_ActiveScene->GetPrimaryCameraEntity();
-			const auto& camera = cameraEntity.GetComponent<Hazel::CameraComponent>().GetCamera();
-			const glm::mat4& cameraProjection = camera.GetProjection();
+			// Runtime camera from entity
+			// auto cameraEntity = m_ActiveScene->GetPrimaryCameraEntity();
+			// const auto& camera = cameraEntity.GetComponent<CameraComponent>().Camera;
+			// const glm::mat4& cameraProjection = camera.GetProjection();
+			// glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
 
-			// cameraView : inverse transform of camera world transform
-			glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<Hazel::TransformComponent>().GetTransform());
-
+			// Editor camera
+			const glm::mat4& cameraProjection = m_EditorCamera.GetProjection();
+			glm::mat4 cameraView = m_EditorCamera.GetViewMatrix();
 			// Entity transform
 			auto& tc = selectedEntity.GetComponent<Hazel::TransformComponent>();
 			glm::mat4 transform = tc.GetTransform();
@@ -503,14 +514,19 @@ namespace HazelEditor
 
 			// Snap to 45 degrees for rotation
 			if (m_GizmoType == ImGuizmo::OPERATION::ROTATE)
+			{
 				snapValue = 45.0f;
+			}
 
 			float snapValues[3] = { snapValue, snapValue, snapValue };
 
 			// Guizmo 를 Render 하는 함수
-			ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection),
+			if (false == ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection),
 				(ImGuizmo::OPERATION)m_GizmoType, ImGuizmo::LOCAL, glm::value_ptr(transform),
-				nullptr, snap ? snapValues : nullptr);
+				nullptr, snap ? snapValues : nullptr))
+			{
+				bool h = true;
+			}
 
 			if (ImGuizmo::IsUsing())
 			{

@@ -4,6 +4,7 @@
 #include "Texture.h"
 #include "SubTexture2D.h"
 #include "Renderer/Camera.h"
+#include "Renderer/EditorCamera.h"
 
 namespace Hazel
 {
@@ -17,6 +18,7 @@ namespace Hazel
 		static void ShutDown();
 		static void BeginScene(const Camera& camera, const glm::mat4& transform);
 		static void BeginScene(const OrthographicCamera& camera);
+		static void BeginScene(const EditorCamera& camera);
 		static void EndScene();
 		static void Flush();
 
@@ -82,6 +84,10 @@ namespace Hazel
 
 	private :
 		static void FlushAndReset();
+
+
+		static void StartBatch();
+		static void NextBatch();
 	};
 };
 

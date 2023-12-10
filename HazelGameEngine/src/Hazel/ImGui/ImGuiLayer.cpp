@@ -102,7 +102,7 @@ namespace Hazel {
 			//   ex) ImGui 에 마우스를 올리면  io.WantCaptureMouse 변수는 true, 아니면 false
 			// - 만약 e.m_Handled 가 되면, 	void Application::OnEvent(Event& e) 에서 ImGuiLayer 가 해당
 			//   이벤트를 처리한 것으로 인식하고, 다른 Layer 들은 결과적으로 해당 이벤트를 처리하지 않게 된다.
-			e.m_Handled |= e.IsInCategory(EventCategoryMouse) & io.WantCaptureMouse;
+ 			e.m_Handled |= e.IsInCategory(EventCategoryMouse) & io.WantCaptureMouse;
 			e.m_Handled |= e.IsInCategory(EventCategoryKeyBoard) & io.WantCaptureKeyboard;
 		}
 	}
