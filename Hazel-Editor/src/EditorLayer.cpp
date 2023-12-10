@@ -102,13 +102,6 @@ namespace HazelEditor
 		auto cameraEntity = m_ActiveScene->CreateEntity("Main Camera Entity");
 		cameraEntity.AddComponent<Hazel::CameraComponent>(glm::ortho(-16.f, 16.f, -9.f, 9.f, -1.f, 1.f));
 
-		auto secondCameraEntity = m_ActiveScene->CreateEntity(secondCameraName);
-		auto& secCc = secondCameraEntity.AddComponent<Hazel::CameraComponent>(glm::ortho(-1.f, 1.f, -1.f, 1.f, -1.f, 1.f));
-		secCc.SetPrimary(false);
-
-		m_CameraController.SetZoomLevel(0.25f);
-		secondCameraEntity.AddComponent<Hazel::NativeScriptComponent>().Bind<CameraTestController>();
-	
 		// Panels
 		m_SceneHierachyPanel = Hazel::CreateRef<Hazel::SceneHierarchyPanel>();
 		m_SceneHierachyPanel->SetContext(m_ActiveScene);
@@ -285,9 +278,8 @@ namespace HazelEditor
 	}
 	void EditorLayer::ResetEditorLayer(std::weak_ptr<Hazel::Scene> scene)
 	{
-		Hazel::Entity secondCameraEntity = scene.lock().get()->GetEntityByName(secondCameraName);
-
-		secondCameraEntity.GetComponent<Hazel::NativeScriptComponent>().Bind<CameraTestController>();
+		// Hazel::Entity secondCameraEntity = scene.lock().get()->GetEntityByName(secondCameraName);
+		// secondCameraEntity.GetComponent<Hazel::NativeScriptComponent>().Bind<CameraTestController>();
 	}
 	void EditorLayer::prepareDockSpace()
 	{
@@ -521,6 +513,7 @@ namespace HazelEditor
 			float snapValues[3] = { snapValue, snapValue, snapValue };
 
 			// Guizmo 를 Render 하는 함수
+			// Imgui 의 좌표계는 Editor 카메라기준으로 보이게 될 것이다.
 			if (false == ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection),
 				(ImGuizmo::OPERATION)m_GizmoType, ImGuizmo::LOCAL, glm::value_ptr(transform),
 				nullptr, snap ? snapValues : nullptr))
