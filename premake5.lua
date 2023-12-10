@@ -21,6 +21,7 @@ IncludeDir["glm"] = "HazelGameEngine/vendor/glm"
 IncludeDir["stb_image"] = "HazelGameEngine/vendor/stb_image"
 IncludeDir["entt"] = "HazelGameEngine/vendor/entt/include"
 IncludeDir["rapidJson"] = "HazelGameEngine/vendor/RapidJson"
+IncludeDir["ImGuizmo"] = "HazelGameEngine/vendor/ImGuizmo"
 
 -- 해당 경로 내의 premake.lua 파일을 include => 그대로 복사붙여넣기 한다는 것이다. 여기 lua file 에
 -- 관찰한 바, 아래의 include 파일들을 통해서 해당 프로젝트들이 솔루션에 추가된다.
@@ -54,7 +55,8 @@ project "HazelGameEngine"       --프로젝트 이름
         "%{prj.name}/vendor/stb_image/**.cpp",
         "%{prj.name}/vendor/stb_image/**.h",
         "%{prj.name}/vendor/glm/glm/**.hpp", -- glm 라이브러리의 각종 hpp, inl 파일들을 솔루션 탐색기상에서 볼 수 있게 하고 싶다.
-        "%{prj.name}/vendor/glm/glm/**.inl"
+        "%{prj.name}/vendor/ImGuizmo/ImGuizmo.h",
+        "%{prj.name}/vendor/ImGuizmo/ImGuizmo.cpp"
 
     }
 
@@ -73,7 +75,9 @@ project "HazelGameEngine"       --프로젝트 이름
         "%{IncludeDir.glm}",
         "%{IncludeDir.stb_image}",
         "%{IncludeDir.entt}",
-        "%{IncludeDir.rapidJson}"
+        "%{IncludeDir.rapidJson}",
+		"%{IncludeDir.ImGuizmo}"
+
     }
 
     -- static library 를 link 시킨다.
@@ -84,6 +88,12 @@ project "HazelGameEngine"       --프로젝트 이름
         "ImGui",
         "opengl32.lib"
     }
+
+    -- 아래 두 줄을 통해서 해당 경로에 있는 모든 cpp 파일들을 pch 를 사용하지 않을 것이라고 하는 것이다
+    -- 그러면 hazel engine 은 현재 hzpch.cpp 를 무조건 모든 cpp 파일에서 include 하게 해놨는데
+    -- 이것을 imgui 코드들은 하지 않도록 하는 것이다.
+    filter "HazelGameEngine/vendor/ImGuizmo/**.cpp"
+	flags { "NoPCH" }
 
     filter "system:windows"     -- 특정환경에 대한 설정 (ex window환경 )
         systemversion "latest"   --윈도우버전을 최신으로 설정
@@ -198,13 +208,20 @@ project "Hazel-Editor"
         "HazelGameEngine/vendor",
         "%{IncludeDir.glm}",
         "%{IncludeDir.entt}",
-        "%{IncludeDir.rapidJson}"
+        "%{IncludeDir.rapidJson}",
+		"%{IncludeDir.ImGuizmo}"
     }
     
     links
     {
         "HazelGameEngine"
     }
+
+    -- 아래 두 줄을 통해서 해당 경로에 있는 모든 cpp 파일들을 pch 를 사용하지 않을 것이라고 하는 것이다
+    -- 그러면 hazel engine 은 현재 hzpch.cpp 를 무조건 모든 cpp 파일에서 include 하게 해놨는데
+    -- 이것을 imgui 코드들은 하지 않도록 하는 것이다.
+    filter "%{prj.name}/vendor/ImGuizmo/**.cpp"
+	flags { "NoPCH" }
 
     filter "system:windows"
         systemversion "latest"

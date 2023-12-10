@@ -36,7 +36,8 @@ namespace Hazel
 
 		virtual void Serialize(Serializer* serializer) override;
 		virtual void Deserialize(Serializer* serializer) override;
-		
+
+		Entity GetPrimaryCameraEntity();
 		// Component 추가시 호출되는 함수
 		template<typename T>
 		void OnComponentAdded(Entity entity, T& component);

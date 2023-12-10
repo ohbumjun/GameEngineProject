@@ -19,6 +19,10 @@ namespace Hazel
 		// void SetContext(const Ref<Scene>& scene);
 		void SetContext(const  std::weak_ptr<Scene>& scene);
 		void OnImGuiRender();
+		Entity GetSelectedEntity() const
+		{
+			return m_SelectedEntity;
+		}
 	private :
 		void drawEntityNode(Entity entity);
 		void drawComponents(Entity entity);

@@ -351,7 +351,7 @@ namespace Hazel
 			DrawVec3Control("Scale", component.GetScaleRef());
 		});
 
-		DrawComponent<CameraComponent>("Sprite", entity, [](auto& component) {
+		DrawComponent<CameraComponent>("Camera", entity, [](auto& component) {
 			SceneCamera& camera = const_cast<SceneCamera&>(
 				component.GetCamera());
 

@@ -184,6 +184,21 @@ namespace Hazel
 
 		serializer->EndLoadMap();
 	}
+	Entity Scene::GetPrimaryCameraEntity()
+	{
+		auto view = m_Registry.view<CameraComponent>();
+		
+		for (auto entity : view)
+		{
+			const auto& camera = view.get<CameraComponent>(entity);
+			
+			if (camera.isPrimary)
+			{
+				return Entity{ entity, this };
+			}
+		}
+		return {};
+	}
 
 	Entity Scene::GetEntityByName(std::string_view name)
 	{

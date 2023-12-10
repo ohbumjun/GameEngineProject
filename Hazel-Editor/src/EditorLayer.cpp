@@ -1,10 +1,15 @@
 ﻿#include "EditorLayer.h"
 #include "Platform/OpenGL/OpenGLShader.h"
 #include "imgui/imgui.h"
+#include "ImGuizmo.h"
 #include "File/PathManager.h"
+#include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "Hazel/FileSystem/DirectorySystem.h"
 #include "Hazel/Scene/SceneSerializer.h"
+#include "Hazel/Math/Math.h"
+#include "Hazel/Scene/Component/CameraComponent.h"
+#include "Hazel/Scene/Component/TransformComponent.h"
 #include "Hazel/Utils/PlatformUtils.h"
 
 // 24 wide map
@@ -346,15 +351,76 @@ namespace HazelEditor
 			m_VieportInteracted = m_ViewportHovered || viewPortFocusedNow;
 
 			// Application::Get().GetImGuiLayer()->BlockEvents(!m_ViewportFocused || !m_ViewportHovered);
-			Hazel::Application::Get().GetImGuiLayer()->BlockEvents(!m_VieportInteracted);
+			// Hazel::Application::Get().GetImGuiLayer()->BlockEvents(!m_VieportInteracted);
+			Hazel::Application::Get().GetImGuiLayer()->BlockEvents(!m_ViewportFocused && !m_ViewportHovered);
 
 			ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 
 			m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
 
 			uint32_t textureID = m_FrameBuffer->GetColorAttachmentRendererID();
+			
 			// uint32_t textureID = m_CheckerboardTexture->GetRendererID();
 			ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+			
+			// Gizmos
+			Hazel::Entity selectedEntity = m_SceneHierachyPanel.get()->GetSelectedEntity();
+
+			if (selectedEntity && m_GizmoType != -1)
+			{
+				ImGuizmo::SetOrthographic(false);
+				ImGuizmo::SetDrawlist();
+
+				// Set ViewPort
+				float windowWidth = (float)ImGui::GetWindowWidth();
+				float windowHeight = (float)ImGui::GetWindowHeight();
+				ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
+
+				// Camera
+				auto cameraEntity = m_ActiveScene->GetPrimaryCameraEntity();
+				const auto& camera = cameraEntity.GetComponent<Hazel::CameraComponent>().GetCamera();
+				const glm::mat4& cameraProjection = camera.GetProjection();
+				
+				// cameraView : inverse transform of camera world transform
+				glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<Hazel::TransformComponent>().GetTransform());
+
+				// Entity transform
+				auto& tc = selectedEntity.GetComponent<Hazel::TransformComponent>();
+				glm::mat4 transform = tc.GetTransform();
+
+				// Snapping
+				bool snap = Hazel::Input::IsKeyPressed(Hazel::Key::LeftControl);
+				float snapValue = 0.5f; // Snap to 0.5m for translation/scale
+
+				// Snap to 45 degrees for rotation
+				if (m_GizmoType == ImGuizmo::OPERATION::ROTATE)
+					snapValue = 45.0f;
+
+				float snapValues[3] = { snapValue, snapValue, snapValue };
+
+				// Guizmo 를 Render 하는 함수
+				ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection),
+					(ImGuizmo::OPERATION)m_GizmoType, ImGuizmo::LOCAL, glm::value_ptr(transform),
+					nullptr, snap ? snapValues : nullptr);
+
+				if (ImGuizmo::IsUsing())
+				{
+					// 실제 ImGuizom 화살표 등이 나와서 우리가 사용할 때만
+					// transformation  정보들을 update 해주고자 한다.
+
+					glm::vec3 translation, rotation, scale;
+					Hazel::Math::DecomposeTransform(transform, translation, rotation, scale);
+				
+					glm::vec3 deltaRotation = rotation - tc.GetRotation();
+					tc.SetTranslation(translation);
+					tc.SetRotation(tc.GetRotation() + deltaRotation);
+					tc.SetScale(scale);
+					// tc.Translation = translation;
+					// tc.Rotation += deltaRotation;
+					// tc.Scale = scale;
+				}
+			}
+			
 			ImGui::End();
 			ImGui::PopStyleVar();
 
@@ -402,6 +468,19 @@ namespace HazelEditor
 
 			break;
 		}
+		// Gizmos
+		case Hazel::Key::Q:
+			m_GizmoType = -1;
+			break;
+		case Hazel::Key::W:
+			m_GizmoType = ImGuizmo::OPERATION::TRANSLATE;
+			break;
+		case Hazel::Key::E:
+			m_GizmoType = ImGuizmo::OPERATION::ROTATE;
+			break;
+		case Hazel::Key::R:
+			m_GizmoType = ImGuizmo::OPERATION::SCALE;
+			break;
 		}
 
 		return true;

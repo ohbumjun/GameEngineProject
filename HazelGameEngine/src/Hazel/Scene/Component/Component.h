@@ -4,6 +4,10 @@
 #include "Hazel/Core/Reflection/Reflection.h"
 #include "Hazel/Core/Serialization/SerializeTarget.h"
 
+
+#define GLM_ENABLE_EXPERIMENTAL
+// #include <glm/gtx/quarternion.hpp>
+
 class Serializer;
 
 namespace Hazel

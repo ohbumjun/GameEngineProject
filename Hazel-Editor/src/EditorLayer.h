@@ -61,6 +61,8 @@ namespace HazelEditor
 		ParticleProps m_Particle;
 		ParticleSystem m_ParticleSystem;
 
+		int m_GizmoType = -1;
+
 		// Panels
 		Hazel::Ref<Hazel::SceneHierarchyPanel> m_SceneHierachyPanel;
 	};

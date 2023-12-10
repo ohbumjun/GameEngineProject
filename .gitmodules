@@ -13,3 +13,6 @@
 [submodule "HazelGameEngine/vender/yaml-cpp"]
 	path = yaml-cpp
 	url = https://github.com/TheCherno/yaml-cpp.git
+[submodule "HazelGameEngine/vendor/ImGuizmo"]
+	path = HazelGameEngine/vendor/ImGuizmo
+	url = https://github.com/TheCherno/ImGuizmo.git
