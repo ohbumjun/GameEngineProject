@@ -3,8 +3,8 @@
 #include "VertexArray.h"
 #include "RendererAPI.h"
 #include "RenderCommand.h"
-#include "OrthographicCamera.h"
-#include "Shader.h"
+#include "Camera/OrthographicCamera.h"
+#include "Shader/Shader.h"
 
 namespace Hazel
 {

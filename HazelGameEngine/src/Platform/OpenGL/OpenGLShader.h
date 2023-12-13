@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "Renderer/Shader.h"
+#include "Renderer/Shader/Shader.h"
 #include <glm/glm.hpp>
 
 // TODO Remove

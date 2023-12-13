@@ -41,13 +41,13 @@
 #include "Renderer/Renderer.h"
 #include "Renderer/Renderer2D.h"
 #include "Renderer/RenderCommand.h"
-#include "Renderer/Buffer.h"
-#include "Renderer/Shader.h"
-#include "Renderer/FrameBuffer.h"
+#include "Renderer/Buffer/Buffer.h"
+#include "Renderer/Shader/Shader.h"
+#include "Renderer/Buffer/FrameBuffer.h"
 #include "Renderer/VertexArray.h"
-#include "Renderer/Texture.h"
-#include "Renderer/SubTexture2D.h"
+#include "Renderer/Texture/Texture.h"
+#include "Renderer/Texture/SubTexture2D.h"
 
 /*Camera*/
-#include "Renderer/OrthographicCameraController.h"
+#include "Renderer/Camera/OrthographicCameraController.h"
 

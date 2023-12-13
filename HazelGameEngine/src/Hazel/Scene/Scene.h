@@ -4,7 +4,7 @@
 #include "Hazel/Utils/TimeStep.h"
 #include "Hazel/Core/Reflection/TypeId.h"
 #include "Hazel/Core/Serialization/SerializeTarget.h"
-#include "Renderer/EditorCamera.h"
+#include "Renderer/Camera/EditorCamera.h"
 #include "entt.hpp"
 
 

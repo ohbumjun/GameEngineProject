@@ -140,7 +140,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Renderer\EditorCamera.h" />
+    <ClInclude Include="src\Renderer\Camera\EditorCamera.h" />
     <ClInclude Include="src\Hazel.h" />
     <ClInclude Include="src\Hazel\Core\Allocation\Allocator\FreeListAllocator.h" />
     <ClInclude Include="src\Hazel\Core\Allocation\Allocator\MemoryPoolAllocator.h" />
@@ -214,19 +214,19 @@
     <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h" />
     <ClInclude Include="src\Platform\Windows\WindowPlatformUtil.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
-    <ClInclude Include="src\Renderer\Buffer.h" />
-    <ClInclude Include="src\Renderer\Camera.h" />
-    <ClInclude Include="src\Renderer\FrameBuffer.h" />
+    <ClInclude Include="src\Renderer\Buffer\Buffer.h" />
+    <ClInclude Include="src\Renderer\Camera\Camera.h" />
+    <ClInclude Include="src\Renderer\Buffer\FrameBuffer.h" />
     <ClInclude Include="src\Renderer\GraphicsContext.h" />
-    <ClInclude Include="src\Renderer\OrthographicCamera.h" />
-    <ClInclude Include="src\Renderer\OrthographicCameraController.h" />
+    <ClInclude Include="src\Renderer\Camera\OrthographicCamera.h" />
+    <ClInclude Include="src\Renderer\Camera\OrthographicCameraController.h" />
     <ClInclude Include="src\Renderer\RenderCommand.h" />
     <ClInclude Include="src\Renderer\Renderer.h" />
     <ClInclude Include="src\Renderer\Renderer2D.h" />
     <ClInclude Include="src\Renderer\RendererAPI.h" />
-    <ClInclude Include="src\Renderer\Shader.h" />
-    <ClInclude Include="src\Renderer\SubTexture2D.h" />
-    <ClInclude Include="src\Renderer\Texture.h" />
+    <ClInclude Include="src\Renderer\Shader\Shader.h" />
+    <ClInclude Include="src\Renderer\Texture\SubTexture2D.h" />
+    <ClInclude Include="src\Renderer\Texture\Texture.h" />
     <ClInclude Include="src\Renderer\VertexArray.h" />
     <ClInclude Include="src\hzpch.h" />
     <ClInclude Include="vendor\ImGuizmo\ImGuizmo.h" />
@@ -510,7 +510,7 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Renderer\EditorCamera.cpp" />
+    <ClCompile Include="src\Renderer\Camera\EditorCamera.cpp" />
     <ClCompile Include="src\Hazel\Core\Allocation\Allocator\FreeListAllocator.cpp" />
     <ClCompile Include="src\Hazel\Core\Allocation\Allocator\MemoryPoolAllocator.cpp" />
     <ClCompile Include="src\Hazel\Core\Allocation\Allocator\PoolAllocator.cpp" />
@@ -562,18 +562,18 @@
     <ClCompile Include="src\Platform\Windows\WindowPlatformUtil.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
-    <ClCompile Include="src\Renderer\Buffer.cpp" />
-    <ClCompile Include="src\Renderer\Camera.cpp" />
-    <ClCompile Include="src\Renderer\FrameBuffer.cpp" />
-    <ClCompile Include="src\Renderer\OrthographicCamera.cpp" />
-    <ClCompile Include="src\Renderer\OrthographicCameraController.cpp" />
+    <ClCompile Include="src\Renderer\Buffer\Buffer.cpp" />
+    <ClCompile Include="src\Renderer\Camera\Camera.cpp" />
+    <ClCompile Include="src\Renderer\Buffer\FrameBuffer.cpp" />
+    <ClCompile Include="src\Renderer\Camera\OrthographicCamera.cpp" />
+    <ClCompile Include="src\Renderer\Camera\OrthographicCameraController.cpp" />
     <ClCompile Include="src\Renderer\RenderCommand.cpp" />
     <ClCompile Include="src\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Renderer\Renderer2D.cpp" />
     <ClCompile Include="src\Renderer\RendererAPI.cpp" />
-    <ClCompile Include="src\Renderer\Shader.cpp" />
-    <ClCompile Include="src\Renderer\SubTexture2D.cpp" />
-    <ClCompile Include="src\Renderer\Texture.cpp" />
+    <ClCompile Include="src\Renderer\Shader\Shader.cpp" />
+    <ClCompile Include="src\Renderer\Texture\SubTexture2D.cpp" />
+    <ClCompile Include="src\Renderer\Texture\Texture.cpp" />
     <ClCompile Include="src\Renderer\VertexArray.cpp" />
     <ClCompile Include="src\hzpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>

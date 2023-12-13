@@ -3,7 +3,10 @@
 #include <Hazel.h>
 #include "ParticleSystem.h"
 #include "Panel/SceneHierarchyPanel.h"
-#include "Renderer/EditorCamera.h"
+#include "Renderer/Camera/EditorCamera.h"
+#include "Renderer/Camera/OrthographicCameraController.h"
+#include "Renderer/Texture/SubTexture2D.h"
+#include "Renderer/Buffer/FrameBuffer.h"
 
 
 namespace HazelEditor

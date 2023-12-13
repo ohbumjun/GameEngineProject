@@ -7,7 +7,7 @@
 #include "Hazel/Core/Layer/LayerStack.h"
 #include "Hazel/ImGui/ImGuiLayer.h"
 
-#include "Renderer/Shader.h"
+#include "Renderer/Shader/Shader.h"
 #include "Hazel/Utils/TimeStep.h"
 
 

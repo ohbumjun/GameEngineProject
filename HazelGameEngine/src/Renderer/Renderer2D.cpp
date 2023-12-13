@@ -1,7 +1,7 @@
 ﻿#include "hzpch.h"
 #include "Renderer2D.h"
 #include "VertexArray.h"
-#include "Shader.h"
+#include "Shader/Shader.h"
 #include "RenderCommand.h"
 #include <glm/gtc/matrix_transform.hpp>
 

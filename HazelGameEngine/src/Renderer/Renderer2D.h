@@ -1,10 +1,10 @@
 ﻿#pragma once
 
-#include "OrthographicCamera.h"
-#include "Texture.h"
-#include "SubTexture2D.h"
-#include "Renderer/Camera.h"
-#include "Renderer/EditorCamera.h"
+#include "Camera/OrthographicCamera.h"
+#include "Texture/Texture.h"
+#include "Texture/SubTexture2D.h"
+#include "Renderer/Camera/Camera.h"
+#include "Renderer/Camera/EditorCamera.h"
 
 namespace Hazel
 {

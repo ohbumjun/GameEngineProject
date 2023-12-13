@@ -11,7 +11,6 @@
 #include "Hazel/Scene/Component/CameraComponent.h"
 #include "Hazel/Scene/Component/TransformComponent.h"
 #include "Hazel/Utils/PlatformUtils.h"
-#include "Renderer/EditorCamera.h"
 
 // 24 wide map
 static const uint32_t s_mapWidth = 24;
