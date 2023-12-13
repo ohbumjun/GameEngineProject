@@ -4,6 +4,7 @@
 
 namespace Hazel
 {
+	// FramebufferFormat : ex) Color Buffer, Depth Buffer, Shadow Map...
 	enum class FrameBufferTextureFormat
 	{
 		None = 0,
@@ -46,8 +47,8 @@ namespace Hazel
 	struct FrameBufferSpecification
 	{
 		uint32_t Width, Height;
-		// FramebufferFormat : ex) Color Buffer, Depth Buffer, Shadow Map...
 		
+		// > 1 ? 멀티 샘플링이라는 의미가 된다.
 		uint32_t Samples = 1;
 
 		// false : glBindFrameBuffer(0) 와 같은 의미이다
@@ -65,7 +66,7 @@ namespace Hazel
 		virtual void Bind() = 0;
 		virtual void UnBind() = 0;
 		virtual void Resize(uint32_t width, uint32_t height) = 0;
-		virtual uint32_t GetColorAttachmentRendererID() const = 0;
+		virtual uint32_t GetColorAttachmentRendererID(uint32 index = 0) const = 0;
 		virtual const FrameBufferSpecification& GetSpecification() = 0;
 
 		static Ref<FrameBuffer> Create(const FrameBufferSpecification& spec);
