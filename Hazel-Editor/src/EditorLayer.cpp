@@ -86,9 +86,12 @@ namespace HazelEditor
 		m_MapHeight = (uint32_t)strlen(s_MapTiles) / s_mapWidth;
 
 		Hazel::FrameBufferSpecification fbSpec{};
-		fbSpec.Attachments = { Hazel::FrameBufferTextureFormat::RGAB, Hazel::FrameBufferTextureFormat::DEPTH };
+		fbSpec.Attachments = { Hazel::FrameBufferTextureFormat::RGAB8, 
+			Hazel::FrameBufferTextureFormat::RGAB8,
+			Hazel::FrameBufferTextureFormat::DEPTH };
 		fbSpec.Width = 1280;
 		fbSpec.Height = 720;
+
 		m_FrameBuffer = Hazel::FrameBuffer::Create(fbSpec);
 
 		m_EditorCamera = Hazel::EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
@@ -468,7 +471,7 @@ namespace HazelEditor
 
 		m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
 
-		uint32_t textureID = m_FrameBuffer->GetColorAttachmentRendererID();
+		uint32_t textureID = m_FrameBuffer->GetColorAttachmentRendererID(1);
 
 		// uint32_t textureID = m_CheckerboardTexture->GetRendererID();
 		ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });

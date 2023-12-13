@@ -31,7 +31,14 @@ void main()
 #type fragment
 #version 330 core
 			
+// 참고 : OpenGLFrameBuffer 에서 bind 한 TexImage2D 들이 여기에 해당한다.
+// 첫번째 color buffer == GL_COLOR_ATTACHMENT0
 layout(location = 0) out vec4 color;
+
+// 두번째 color buffer == GL_COLOR_ATTACHMENT0 + 1
+// mouse picking 을 통해 해당 pixel 이 어떤 entity 에 속하는지를 
+// 판별하는 frame buffer 로 활용하고 있으므로 out vec4 가 아니라, int 가 된다.
+layout(location = 1) out vec4 color2;
 
 in vec4 v_Color;
 in vec2 v_TexCoord;
@@ -50,4 +57,6 @@ void main()
 	// 구체적으로는 Texture 가 없는 경우 texIndex 가 0 이 되고, 0번째 slot 에 Binding 된 것이 WhiteTexture
 	// color = texture(u_Textures[int(v_TexIndex)], v_TexCoord * v_TilingFactor) * v_Color;
 	color = texture(u_Textures[int(v_TexIndex)], v_TexCoord * v_TilingFactor) * v_Color;
+
+	color2 = vec4(0.9, 0.2, 0.2, 1.0);
 }

@@ -10,7 +10,8 @@ namespace Hazel
 		None = 0,
 
 		// Color
-		RGAB,
+		RGAB8,
+		RED_INTEGER, // int 
 
 		// Depth, stencil
 		DEPTH24STENCIL8,

@@ -32,7 +32,7 @@ namespace Hazel
 			glBindTexture(TextureTarget(multiSampled), id);
 		}
 
-		static void AttachColorFrameBufferTexture(uint32_t id, int samples, GLenum format, uint32_t width, uint32_t height, int index)
+		static void AttachColorFrameBufferTexture(uint32_t id, int samples, GLenum internalFormat, GLenum format, uint32_t width, uint32_t height, int index)
 		{
 			bool multiSampled = samples > 1;
 
@@ -41,7 +41,7 @@ namespace Hazel
 				glTexImage2DMultisample(
 					GL_TEXTURE_2D_MULTISAMPLE, 
 					samples, 
-					format, 
+					internalFormat,
 					width, 
 					height, 
 					GL_FALSE);
@@ -54,11 +54,11 @@ namespace Hazel
 					GL_TEXTURE_2D,
 					0,									// mip map level
 					// GL_RGBA8,				// texture data 의 format ex) 1byte for each channel
-					format,
+					internalFormat,
 					width,							// width of texture image
 					height,							// height of texture image
 					0,									// Border width
-					GL_RGBA,						// Format of pixel data
+					format,							// Format of pixel data
 					GL_UNSIGNED_BYTE,		// Data type of pixel data
 					nullptr);							// pointer to pixel data		: 마지막 3개 인자는 image 가 메모리 상에서 어떻게 표현되는지를 정의한다.
 
@@ -168,7 +168,7 @@ namespace Hazel
 	OpenGLFrameBuffer::~OpenGLFrameBuffer()
 	{
 		glDeleteFramebuffers(1, &m_RendererID);	
-		glDeleteTextures(m_ColorAttachmentIDs.size(), m_ColorAttachmentIDs.data());
+		glDeleteTextures((GLsizei)m_ColorAttachmentIDs.size(), m_ColorAttachmentIDs.data());
 		glDeleteTextures(1, &m_DepthAttachmentID);
 	}
 
@@ -180,7 +180,7 @@ namespace Hazel
 		{
 			// 기존에 세팅되었던 것을 모두 지운다.
 			glDeleteFramebuffers(1, &m_RendererID);
-			glDeleteTextures(m_ColorAttachmentIDs.size(), m_ColorAttachmentIDs.data());
+			glDeleteTextures((GLsizei)m_ColorAttachmentIDs.size(), m_ColorAttachmentIDs.data());
 			glDeleteTextures(1, &m_DepthAttachmentID);
 
 			m_ColorAttachmentIDs.clear();
@@ -214,13 +214,25 @@ namespace Hazel
 
 				switch (m_ColorAttachmentSpecs[i].m_TextureFormat)
 				{
-					case FrameBufferTextureFormat::RGAB :
+					case FrameBufferTextureFormat::RGAB8 :
 					{
 						Utils::AttachColorFrameBufferTexture(m_ColorAttachmentIDs[i], 
 							m_Specification.Samples, 
 							GL_RGBA8,
+							GL_RGBA,
 							m_Specification.Width, 
 							m_Specification.Height, 
+							i);
+						break;
+					}
+					case FrameBufferTextureFormat::RED_INTEGER:
+					{
+						Utils::AttachColorFrameBufferTexture(m_ColorAttachmentIDs[i],
+							m_Specification.Samples,
+							GL_R32I,
+							GL_RED_INTEGER,
+							m_Specification.Width,
+							m_Specification.Height,
 							i);
 						break;
 					}
@@ -257,7 +269,7 @@ namespace Hazel
 			GL_COLOR_ATTACHMENT2,
 			GL_COLOR_ATTACHMENT3};
 
-			glDrawBuffers(m_ColorAttachmentIDs.size(), buffers);
+			glDrawBuffers((GLsizei)m_ColorAttachmentIDs.size(), buffers);
 		}
 		else if (m_ColorAttachmentIDs.size() == 0)
 		{
