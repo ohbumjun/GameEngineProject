@@ -86,6 +86,7 @@ namespace HazelEditor
 		m_MapHeight = (uint32_t)strlen(s_MapTiles) / s_mapWidth;
 
 		Hazel::FrameBufferSpecification fbSpec{};
+		fbSpec.Attachments = { Hazel::FrameBufferTextureFormat::RGAB, Hazel::FrameBufferTextureFormat::DEPTH };
 		fbSpec.Width = 1280;
 		fbSpec.Height = 720;
 		m_FrameBuffer = Hazel::FrameBuffer::Create(fbSpec);

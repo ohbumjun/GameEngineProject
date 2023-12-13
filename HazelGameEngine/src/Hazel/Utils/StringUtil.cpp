@@ -1,6 +1,10 @@
 ﻿#include "hzpch.h"
 #include "StringUtil.h"
 
+namespace Utils
+{
+
+
 void StringUtil::CopyStr(char* const dst, size_t dstSize, const char* src)
 {
 	size_t srcLength = strlen(dst);
@@ -468,4 +472,5 @@ std::wstring StringUtil::pr_trim_end(const std::wstring& str, char c)
 std::wstring StringUtil::pr_trim(const std::wstring& str, char c)
 {
 	return pr_trim_end(pr_trim_start(str, c), c);
+}
 }

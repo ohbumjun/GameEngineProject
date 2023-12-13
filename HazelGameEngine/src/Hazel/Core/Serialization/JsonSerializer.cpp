@@ -218,12 +218,12 @@ void JsonSerializer::onSaveRaw(void* buffer, size_t size)
 	int originSize = (int)size;
 
 	// char 개수를 계산한다.
-	int encodeSize = Encoder::base64_encode_length(src, originSize) + 1;
+	int encodeSize = Utils::Encoder::base64_encode_length(src, originSize) + 1;
 
 	char* encodeResult = (char*)malloc(encodeSize);
 
 	// void* 데이터로 부터 char 정보를 읽어낸다.
-	Encoder::base64_encode(src, originSize, &encodeResult);
+	Utils::Encoder::base64_encode(src, originSize, &encodeResult);
 
 	// encodeResult : byte data 를 char 형태로 변환
 	JsonWriter* writer = (JsonWriter*)m_JsonWriter;
@@ -763,7 +763,7 @@ void JsonSerializer::onLoadBuffer(void* buffer, size_t size)
 	char* result = nullptr;
 
 	// converting binary data into a string of ASCII characters using the Base64 encoding scheme.
-	int encodeSize = Encoder::base64_encode(dest, originSize, &result);
+	int encodeSize = Utils::Encoder::base64_encode(dest, originSize, &result);
 
 	std::string encodeData;
 	onLoad(encodeData);
@@ -775,7 +775,7 @@ void JsonSerializer::onLoadBuffer(void* buffer, size_t size)
 	}
 
 	// string -> buffer
-	Encoder::base64_decode(const_cast<char*>(encodeData.c_str()), encodeSize, dest);
+	Utils::Encoder::base64_decode(const_cast<char*>(encodeData.c_str()), encodeSize, dest);
 }
 
 size_t JsonSerializer::onBeginLoadSeq()

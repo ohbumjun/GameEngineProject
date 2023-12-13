@@ -25,9 +25,11 @@ namespace Hazel
 		FrameBufferTextureSpecification(FrameBufferTextureFormat format) :
 			m_TextureFormat(format) {}
 
-		FrameBufferTextureFormat m_TextureFormat;
+		// 해당 Frame Buffer 가 어떤 format 인가
+		FrameBufferTextureFormat m_TextureFormat = FrameBufferTextureFormat::None;
 	};
 
+	// 모든 종류의 FrameBufferTextureSpecification 를 모아둔 것
 	struct FrameBufferAttachmentSpecification
 	{
 		FrameBufferAttachmentSpecification() = default;
@@ -35,9 +37,12 @@ namespace Hazel
 			m_Attachment(attachment){}
 
 		// 모든 종류의 FrameBufferTextureSpecification 가 될 것이다.
+		// ex) 어떤 Frame Buffer 의 설정값에는 Color Buffer 관련 2개, Depth Buffer 1개와 같이
+		//      여러 설정값들이 들어있을 수 있다.
 		std::vector<FrameBufferTextureSpecification> m_Attachment;
 	};
 
+	// 각 Frame Buffer 마다 하나의 FrameBufferSpecification 를 가지고 있을 것이다.
 	struct FrameBufferSpecification
 	{
 		uint32_t Width, Height;
@@ -50,7 +55,7 @@ namespace Hazel
 		//      다른 말로 하면, 실제 존재하지 않는 FrameBuffer 를 알아서 만들어주는 것이라고도 할 수 있다.
 		bool SwapChainTarget = false;
 
-		FrameBufferTextureSpecification Attachments;
+		FrameBufferAttachmentSpecification Attachments;
 	};
 
 	class FrameBuffer

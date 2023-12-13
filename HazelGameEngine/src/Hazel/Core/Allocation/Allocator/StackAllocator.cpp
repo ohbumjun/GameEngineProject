@@ -21,7 +21,7 @@ void* StackAllocator::Allocate(const size_t allocSize, const size_t alignment)
 
 	// const size_t padding = CEngineUtil::CalculatePaddingWithHeader(currentAddress, alignment, sizeof(AllocationHeader));
 	// size_t calculated_padding = CEngineUtil::CalculatePaddingWithHeader(m_Offset - , alignment, sizeof(AllocationHeader));
-	size_t padding = EngineUtil::CalculatePaddingWithHeader(m_Offset, alignment, sizeof(AllocationHeader));
+	size_t padding = Utils::EngineUtil::CalculatePaddingWithHeader(m_Offset, alignment, sizeof(AllocationHeader));
 
 	// 의도대로 라면, m_StartPtr 초기 위치에
 	// 메모리를 재할당해줘야 한다.

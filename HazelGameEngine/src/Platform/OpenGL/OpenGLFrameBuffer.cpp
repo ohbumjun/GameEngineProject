@@ -7,9 +7,35 @@ namespace Hazel
 {
 	static const uint32_t s_MaxFrameBufferSize = 8192;
 
+	namespace Utils
+	{
+		static bool IsDepthFormat(FrameBufferTextureFormat format)
+		{
+			switch (format)
+			{
+			case Hazel::FrameBufferTextureFormat::DEPTH24STENCIL8:
+				return true;
+			}
+			return false;
+		}
+	}
+
+
 	OpenGLFrameBuffer::OpenGLFrameBuffer(const FrameBufferSpecification& spec)
 		: m_Specification(spec)
 	{
+		for (FrameBufferTextureSpecification& format : m_Specification.Attachments.m_Attachment)
+		{
+			if (Utils::IsDepthFormat(format.m_TextureFormat))
+			{
+				m_ColorAttachmentSpecs.push_back(format);
+			}
+			else
+			{
+				m_DepthAttachmentSpec = format;
+			}
+		}
+
 		Invalidate();
 	}
 
@@ -40,6 +66,22 @@ namespace Hazel
 		glCreateFramebuffers(1, &m_RendererID);
 
 		glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
+
+
+		if (m_ColorAttachmentSpecs.size() > 0)
+		{
+			m_ColorAttachmentIDs.resize(m_ColorAttachmentSpecs.size());
+
+			// Utils::CreateTextures();
+
+			for (FrameBufferTextureSpecification& spec : m_ColorAttachmentSpecs)
+			{
+
+			}
+		}
+
+
+		
 
 		// 아래 과정은, FrameBuffer 를 위한 텍스처를 생성하는 과정이다.
 		// 일반적인 텍스쳐 생성과정과 거의 동일하다. 다만, 텍스처의 크기를 스크린 크기로 설정한다는 것 + 마지막 nullptr 인자를 넣는다는 것

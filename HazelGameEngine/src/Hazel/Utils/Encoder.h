@@ -1,6 +1,9 @@
 ﻿#pragma once
 #include <stdlib.h>
 
+namespace Utils
+{
+
 /*------ Base64 encoding Table ------*/
 static const char MimeBase64[] = {
     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
@@ -171,5 +174,6 @@ private :
  
 };
 
+}
 
 

@@ -234,7 +234,7 @@ void FreeListAllocator::findBest(const size_t allocSize, const size_t alignment,
 
 	while (iter != nullptr)
 	{
-		padding = EngineUtil::CalculatePaddingWithHeader((size_t)iter, alignment,
+		padding = Utils::EngineUtil::CalculatePaddingWithHeader((size_t)iter, alignment,
 			sizeof(FreeListAllocator::AllocationHeader));
 
 		const size_t requiredSpace = allocSize + padding;
@@ -260,7 +260,7 @@ void FreeListAllocator::findFirst(const size_t allocSize, const size_t alignment
 
 	while (iter != nullptr)
 	{
-		padding = EngineUtil::CalculatePaddingWithHeader((size_t)iter, alignment, sizeof(FreeListAllocator::AllocationHeader));
+		padding = Utils::EngineUtil::CalculatePaddingWithHeader((size_t)iter, alignment, sizeof(FreeListAllocator::AllocationHeader));
 
 		const size_t requiredSpace = allocSize + padding;
 
@@ -288,7 +288,7 @@ void FreeListAllocator::findSpeed(const size_t allocSize, const size_t alignment
 			// 반면, Node 는, DoublyLinkedList 상의 Node
 			Node* iter = reinterpret_cast<Node*>(node->second);
 
-			padding = EngineUtil::CalculatePaddingWithHeader((size_t)iter, alignment, sizeof(FreeListAllocator::AllocationHeader));
+			padding = Utils::EngineUtil::CalculatePaddingWithHeader((size_t)iter, alignment, sizeof(FreeListAllocator::AllocationHeader));
 
 			size_t requireSize = padding + allocSize;
 

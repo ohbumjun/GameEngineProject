@@ -2,6 +2,12 @@
 
 #include "hzpch.h"
 
+
+namespace Utils
+{ 
+
+
+
 #define INIT_STR_SHORT_LENGTH 256
 #define INIT_STR_LENGTH 512
 #define INIT_STR_LONG_LENGTH 2048
@@ -458,3 +464,4 @@ Trimmed End : '   Hello, world!'
     static std::wstring pr_trim(const std::wstring& str, char c);
 };
 
+}
