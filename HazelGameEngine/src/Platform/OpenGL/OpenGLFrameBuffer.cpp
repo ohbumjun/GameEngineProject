@@ -38,13 +38,9 @@ namespace Hazel
 
 			if (multiSampled)
 			{
-				glTexImage2DMultisample(
-					GL_TEXTURE_2D_MULTISAMPLE, 
-					samples, 
-					internalFormat,
-					width, 
-					height, 
-					GL_FALSE);
+				glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE,
+					samples, internalFormat, width, height, GL_FALSE);
+
 			}
 			else
 			{		
@@ -79,9 +75,8 @@ namespace Hazel
 				// glTextureParameteri(m_ColorAttachment, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 				// glTextureParameteri(m_ColorAttachment, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,  GL_LINEAR);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -145,6 +140,17 @@ namespace Hazel
 			}
 			return false;
 		}
+		static GLenum HazelFBTextureFormatToGL(FrameBufferTextureFormat format)
+		{
+			switch (format)
+			{
+			case FrameBufferTextureFormat::RGBA8:       return GL_RGBA8;
+			case FrameBufferTextureFormat::RED_INTEGER: return GL_RED_INTEGER;
+			}
+
+			HZ_CORE_ASSERT(false, "Error");
+			return 0;
+		}
 	}
 
 	OpenGLFrameBuffer::OpenGLFrameBuffer(const FrameBufferSpecification& spec)
@@ -170,6 +176,36 @@ namespace Hazel
 		glDeleteFramebuffers(1, &m_RendererID);	
 		glDeleteTextures((GLsizei)m_ColorAttachmentIDs.size(), m_ColorAttachmentIDs.data());
 		glDeleteTextures(1, &m_DepthAttachmentID);
+	}
+
+	int OpenGLFrameBuffer::ReadPixel(uint32_t attachmentIndex, int xCoord, int yCoord)
+	{
+		// 해당 함수를 실행하기 전에 bind 시키고, 이후에 unbind 도 시켜야 한다.
+		// Bind();
+
+		HZ_CORE_ASSERT(attachmentIndex < m_ColorAttachmentIDs.size(), 
+			"Check attachment Indx");
+
+		uint pixelData;
+
+		glReadBuffer(GL_COLOR_ATTACHMENT0 + attachmentIndex);
+
+		// GL_INT : 내가 읽고자 하는 데이터
+		// GL_RED_INTEGER : 해당 Texture..? 의 format
+		glReadPixels(xCoord, yCoord, 1, 1, GL_RED_INTEGER, GL_INT, &pixelData);
+
+		// UnBind();
+
+		return pixelData;
+	}
+
+	void OpenGLFrameBuffer::ClearAttachment(uint32_t attachmentIndex, int value)
+	{
+		HZ_CORE_ASSERT(attachmentIndex < m_ColorAttachmentIDs.size(), "Check Index");
+
+		auto& spec = m_ColorAttachmentSpecs[attachmentIndex];
+		glClearTexImage(m_ColorAttachmentIDs[attachmentIndex], 0,
+			Utils::HazelFBTextureFormatToGL(spec.m_TextureFormat), GL_INT, &value);
 	}
 
 	// State is not valid, so recreate it
@@ -214,7 +250,7 @@ namespace Hazel
 
 				switch (m_ColorAttachmentSpecs[i].m_TextureFormat)
 				{
-					case FrameBufferTextureFormat::RGAB8 :
+					case FrameBufferTextureFormat::RGBA8:
 					{
 						Utils::AttachColorFrameBufferTexture(m_ColorAttachmentIDs[i], 
 							m_Specification.Samples, 
@@ -229,7 +265,7 @@ namespace Hazel
 					{
 						Utils::AttachColorFrameBufferTexture(m_ColorAttachmentIDs[i],
 							m_Specification.Samples,
-							GL_R32I,
+							GL_R32I, 
 							GL_RED_INTEGER,
 							m_Specification.Width,
 							m_Specification.Height,
@@ -264,12 +300,8 @@ namespace Hazel
 			// no more than 4 color attachments
 			HZ_CORE_ASSERT(m_ColorAttachmentIDs.size() <= 4, "No more than 4 color attachments");
 
-			GLenum buffers[4] = {GL_COLOR_ATTACHMENT0,
-			GL_COLOR_ATTACHMENT1,
-			GL_COLOR_ATTACHMENT2,
-			GL_COLOR_ATTACHMENT3};
-
-			glDrawBuffers((GLsizei)m_ColorAttachmentIDs.size(), buffers);
+			GLenum buffers[4] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
+			glDrawBuffers(m_ColorAttachmentIDs.size(), buffers);
 		}
 		else if (m_ColorAttachmentIDs.size() == 0)
 		{

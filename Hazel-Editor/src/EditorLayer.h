@@ -64,6 +64,7 @@ namespace HazelEditor
 		bool m_VieportInteracted = false;
 
 		glm::vec2 m_ViewportSize = { 0,0 };
+		glm::vec2 m_ViewportBounds[2];
 
 		uint32_t m_MapWidth;
 		uint32_t m_MapHeight;

@@ -86,8 +86,8 @@ namespace HazelEditor
 		m_MapHeight = (uint32_t)strlen(s_MapTiles) / s_mapWidth;
 
 		Hazel::FrameBufferSpecification fbSpec{};
-		fbSpec.Attachments = { Hazel::FrameBufferTextureFormat::RGAB8, 
-			Hazel::FrameBufferTextureFormat::RGAB8,
+		fbSpec.Attachments = { Hazel::FrameBufferTextureFormat::RGBA8, 
+			Hazel::FrameBufferTextureFormat::RED_INTEGER,
 			Hazel::FrameBufferTextureFormat::DEPTH };
 		fbSpec.Width = 1280;
 		fbSpec.Height = 720;
@@ -159,9 +159,46 @@ namespace HazelEditor
 		Hazel::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.f });
 		Hazel::RenderCommand::Clear();
 
+
+		/*
+		Hazel::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.f }) 와는 다른 기능이다
+		위의 함수는, 모든 Frame Buffer 를 다 지우는 것이라고 생각하면 된다.
+		정확하게는 Frame Buffer 내 모든 Attachment 들을 특정 색상으로 칠해주는 것이다.
+
+		아래의 함수는, 해당 Frame Buffer 중에서 우리가 원하는 특정 Texture 및 Attachment 만
+		특정 값으로 세팅해주는 것이다.
+
+		Clear our entity ID attachment to -1
+		*/
+		m_FrameBuffer->ClearAttachment(1, -1);
+
+
 		// Render
 		// m_ActiveScene->OnUpdate(ts);
 		m_ActiveScene->OnUpdateEditor(ts, m_EditorCamera);
+
+		auto [mx, my] = ImGui::GetMousePos();
+
+		mx -= m_ViewportBounds[0].x;
+		my -= m_ViewportBounds[0].y;
+
+		glm::vec2 viewportSize = m_ViewportBounds[1] - m_ViewportBounds[0];
+
+		// glViewport 와 우리의 y coord 는 위아래 반대이다.
+		my = viewportSize.y - my;
+
+		int mouseX = (int)mx;
+		int mouseY = (int)my;
+
+		if (mouseX > 0 && mouseY > 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
+		{
+			// read back data from pixel 
+			// '1' 인 이유 : 현재 Frame Buffer 의 1번째 Texture 를 Entity 를 저장하는 용도로 사용했기 때문이다.
+			int pixelData = m_FrameBuffer->ReadPixel(1, mouseX, mouseY);
+			HZ_CORE_WARN("mouse {0}", pixelData);
+			HZ_CORE_WARN("mouse {0}, {1}", mouseX, mouseY);
+		}
+		
 
 		m_FrameBuffer->UnBind();
 	}
@@ -417,6 +454,12 @@ namespace HazelEditor
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 		ImGui::Begin("Viewport");
 
+		// Include tab bar
+		// 만일 tab 이 위아래로 길다면, offset 도 y 가 큰 값이 될거라는 이야기
+		// 현재 보는 viewport 의 왼쪽 위 시작
+		// ex) {0, 24}
+		auto viewportOffset = ImGui::GetCursorPos(); 
+
 		/*
 		* 해당 viewport 를 한번 클릭하면 true. 다른 곳을 클릭하면 그때 false 가 되지만
 		* 다른 곳을 클릭하지 않는 이상, 한번 클릭하면 계속 true 가 된다는 것이다.
@@ -471,10 +514,28 @@ namespace HazelEditor
 
 		m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
 
-		uint32_t textureID = m_FrameBuffer->GetColorAttachmentRendererID(1);
+		// uint32_t textureID = m_FrameBuffer->GetColorAttachmentRendererID(1);
+		uint32_t textureID = m_FrameBuffer->GetColorAttachmentRendererID();
 
 		// uint32_t textureID = m_CheckerboardTexture->GetRendererID();
 		ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+
+		auto  windowSize = ImGui::GetWindowSize();
+
+		// viewport 의 시작점 (왼쪽 위)
+		ImVec2 minBound = ImGui::GetWindowPos();
+		minBound.x += viewportOffset.x;
+		minBound.y += viewportOffset.y;
+
+		// viewport 의 끝점 (오른쪽 아래)
+		// windowSize 를 더하는 것이 아니라 m_ViewportSize 를 더하는 이유 ?
+		// ex) windowSize = {456, 696} , m_ViewportSize = {456, 672}
+		//       즉, windowSize 의 경우 Tab Bar 까지 포함한 window size 를 의미하는 것으로 보이고
+		//		  m_ViewportSize 는 Tab bar 는 제외한, 순수 viewport 의 크기를 보여준다.
+		ImVec2 maxBound = { minBound.x + m_ViewportSize.x, minBound.y + m_ViewportSize.y };
+
+		m_ViewportBounds[0] = { minBound.x, minBound.y };
+		m_ViewportBounds[1] = { maxBound.x, maxBound.y };
 
 		// Gizmos
 		Hazel::Entity selectedEntity = m_SceneHierachyPanel.get()->GetSelectedEntity();

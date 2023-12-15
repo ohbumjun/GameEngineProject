@@ -10,13 +10,14 @@ namespace Hazel
 		OpenGLFrameBuffer(const FrameBufferSpecification& spec);
 		virtual ~OpenGLFrameBuffer() override;
 
+		virtual int ReadPixel(uint32_t attachmentIndex, int xCoord, int yCoord);
 		virtual uint32_t GetColorAttachmentRendererID(uint32 index = 0) const override 
 		{ 
 			HZ_CORE_ASSERT(index < m_ColorAttachmentIDs.size(), "index not right");
 			return m_ColorAttachmentIDs[index]; 
 		};
 		virtual const FrameBufferSpecification& GetSpecification() override {return m_Specification;}
-		
+		virtual void ClearAttachment(uint32_t attachmentIndex, int value);
 		/*
 		Frame Buffer 에 변화가 생겼을 때 호출하는 함수
 		*/
