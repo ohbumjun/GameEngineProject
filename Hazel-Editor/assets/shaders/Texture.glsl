@@ -125,5 +125,5 @@ void main()
 	}
 	color = texColor;
 
-	color2 = 50; // placeholder for our entity ID
+	color2 = v_EntityID; // placeholder for our entity ID
 }

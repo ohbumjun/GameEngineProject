@@ -29,9 +29,15 @@ namespace Hazel
 		operator const glm::vec4& () const { return color; }
 		operator glm::vec4& () { return color; }
 
+		void SetTexture(const Ref<Texture2D>& texture)
+		{
+			Texture = texture;
+		}
+
 		const glm::vec4& GetColor() { return color; }
 		glm::vec4& GetColorRef() { return color; }
 		float GetTilingFactor() { return TilingFactor; }
+		float& GetTilingFactorRef() { return TilingFactor; }
 		const Ref<Texture2D>& GetTexture() { return Texture; }
 		virtual const TypeId GetType() const;
 	private:
@@ -39,6 +45,6 @@ namespace Hazel
 		float TilingFactor = 1.0f;
 		glm::vec4 color = { 1.f, 1.f, 1.f, 1.f };
 	};
-}
+};
 
 

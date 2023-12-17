@@ -19,6 +19,8 @@ namespace Hazel
 		glm::vec2 TexCoord;
 		float TexIndex;			 // Texture Slot 상 mapping 된 index
 		float TilingFactor;
+
+		int EntityID;
 	};
 
 	struct Renderer2DData
@@ -88,7 +90,8 @@ namespace Hazel
 			{ShaderDataType::Float4, "a_Color"},
 			{ShaderDataType::Float2, "a_TexCoord"},
 			{ShaderDataType::Float,   "a_TexIndex"},
-			{ShaderDataType::Float,   "a_TilingFactor"}
+			{ShaderDataType::Float,   "a_TilingFactor"},
+			{ShaderDataType::Int  , "a_EntityID"}
 		};
 
 		// squareVB->SetLayout(squareVBLayout);
@@ -438,7 +441,7 @@ namespace Hazel
 #endif
 	}
 
-	void Renderer2D::DrawQuad(const glm::mat4& transform, const glm::vec4& color)
+	void Renderer2D::DrawQuad(const glm::mat4& transform, const glm::vec4& color, int entityID)
 	{
 		HZ_PROFILE_FUNCTION();
 
@@ -467,6 +470,7 @@ namespace Hazel
 			s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[i];
 			s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
 			s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+			s_Data.QuadVertexBufferPtr->EntityID = entityID;
 			s_Data.QuadVertexBufferPtr++;
 		}
 
@@ -479,7 +483,7 @@ namespace Hazel
 	};
 
 	void Renderer2D::DrawQuad(const glm::mat4& transform, const Ref<Texture2D>& texture,
-		float tilingFactor, const glm::vec4& tintColor)
+		float tilingFactor, const glm::vec4& tintColor, int entityID)
 	{
 		HZ_PROFILE_FUNCTION();
 
@@ -526,6 +530,7 @@ namespace Hazel
 			s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[i];
 			s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
 			s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+			s_Data.QuadVertexBufferPtr->EntityID = entityID;
 			s_Data.QuadVertexBufferPtr++;
 		}
 
@@ -790,10 +795,10 @@ namespace Hazel
 
 	void Renderer2D::DrawSprite(const glm::mat4& transform, SpriteRenderComponent& src, int entityID)
 	{
-		// if (src.GetTexture())
-		// 	DrawQuad(transform, src.GetTexture(), src.GetTilingFactor(), src.GetColor(), entityID);
-		// else
-		// 	DrawQuad(transform, src.GetColor(), entityID);
+		if (src.GetTexture())
+			DrawQuad(transform, src.GetTexture(), src.GetTilingFactor(), src.GetColor(), entityID);
+		else
+			DrawQuad(transform, src.GetColor(), entityID);
 	}
 	
 	

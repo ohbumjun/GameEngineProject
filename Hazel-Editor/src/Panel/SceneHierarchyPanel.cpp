@@ -1,18 +1,20 @@
 ﻿#include "hzpch.h"
 #include "SceneHierarchyPanel.h"
-
 #include "Hazel/Scene/Component/Component.h"
 #include "Hazel/Scene/Component/SpriteRenderComponent.h"
 #include "Hazel/Scene/Component/NameComponent.h"
 #include "Hazel/Scene/Component/TransformComponent.h"
 #include "Hazel/Scene/Component/CameraComponent.h"
 #include "Hazel/Scene/Component/NativeScriptComponent.h"
-
+#include <filesystem>
 #include <imgui/imgui.h>
 
+namespace HazelEditor {
+	extern const std::filesystem::path g_AssetPath;
+}
 namespace Hazel
 {
-	extern const std::filesystem::path g_AssetPath;
+	using HazelEditor::g_AssetPath;
 
 	static void DrawVec3Control(const std::string& lable, glm::vec3& values, 
 		float resetValues = 0.0f, float columnWidth = 100.f)
@@ -149,12 +151,6 @@ namespace Hazel
 				entity.RemoveComponent<T>();
 			}
 		}
-	}
-
-	SceneHierarchyPanel::SceneHierarchyPanel(const  std::weak_ptr<Scene>& scene) :
-		m_Context(scene)
-	{
-		SetContext(scene);
 	}
 
 	void SceneHierarchyPanel::SetContext(const  std::weak_ptr<Scene>& scene)
@@ -430,21 +426,23 @@ namespace Hazel
 
 		DrawComponent<SpriteRenderComponent>("Sprite", entity, [](auto& component) {
 			ImGui::ColorEdit4("Color", glm::value_ptr(component.GetColorRef()));
-		
 
 			ImGui::Button("Texture", ImVec2(100.0f, 0.0f));
+			
+			// Drag In Texture for entity
 			if (ImGui::BeginDragDropTarget())
 			{
 				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
 				{
 					const wchar_t* path = (const wchar_t*)payload->Data;
 					std::filesystem::path texturePath = std::filesystem::path(g_AssetPath) / path;
-					component.Texture = Texture2D::Create(texturePath.string());
+					// component.Texture = Texture2D::Create(texturePath.string());
+					component.SetTexture(Texture2D::Create(texturePath.string()));
 				}
 				ImGui::EndDragDropTarget();
 			}
 
-			ImGui::DragFloat("Tiling Factor", &component.TilingFactor, 0.1f, 0.0f, 100.0f);
+			ImGui::DragFloat("Tiling Factor", &component.GetTilingFactorRef(), 0.1f, 0.0f, 100.0f);
 		});
 
 	}

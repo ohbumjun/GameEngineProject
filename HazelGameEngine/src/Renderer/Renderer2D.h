@@ -43,9 +43,9 @@ namespace Hazel
 			const Ref<SubTexture2D>& subTexture, float tilingFactor = 1.f,
 			const glm::vec4& tintColor = glm::vec4(1.0f));
 
-		static void DrawQuad(const glm::mat4& transform, const glm::vec4& color);
+		static void DrawQuad(const glm::mat4& transform, const glm::vec4& color, int entityID = -1);
 		static void DrawQuad(const glm::mat4& transform, const Ref<Texture2D>& texture, 
-			float tilingFactor = 1.f, const glm::vec4& tintColor = glm::vec4(1.0f));
+			float tilingFactor = 1.f, const glm::vec4& tintColor = glm::vec4(1.0f), int entityID = -1);
 
 		/*
 		* rotation 은 radian 형태로 client 에서 넘겨주게 할 것이다
