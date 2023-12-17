@@ -205,7 +205,7 @@ namespace HazelEditor
 			// read back data from pixel 
 			// '1' 인 이유 : 현재 Frame Buffer 의 1번째 Texture 를 Entity 를 저장하는 용도로 사용했기 때문이다.
 			int pixelData = m_FrameBuffer->ReadPixel(1, mouseX, mouseY);
-			HZ_CORE_WARN("mouse {0}", pixelData);
+			// HZ_CORE_WARN("mouse {0}", pixelData);
 
 			m_HoveredEntity = pixelData == -1 ? Hazel::Entity() : Hazel::Entity((entt::entity)pixelData, m_ActiveScene.get());
 		}
@@ -222,6 +222,7 @@ namespace HazelEditor
 		Hazel::EventDispatcher dispatcher(event);
 		dispatcher.Dispatch<Hazel::KeyPressedEvent>(HZ_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
 
+		dispatcher.Dispatch<Hazel::MouseButtonPressedEvent>(HZ_BIND_EVENT_FN(EditorLayer::OnMouseButtonPressed));
 	}
 
 	void EditorLayer::OnImGuiRender()
@@ -291,7 +292,31 @@ namespace HazelEditor
 
 		return true;
 	}
+	bool EditorLayer::OnMouseButtonPressed(Hazel::MouseButtonPressedEvent& e)
+	{
+		if (e.GetMouseButton() == Hazel::Mouse::ButtonLeft)
+		{
+			bool isImGuizmoOver = ImGuizmo::IsOver();
+			bool isLeftAltKeyPressed = Hazel::Input::IsKeyPressed(Hazel::Key::LeftAlt);
 
+			/*
+			1. View port 위에 마우스가 있고
+			2. ImguizMo 를 사용하지 않고 있고
+			3. ImGuizmo 를 조작하기 위해 LeftAltKey 도 안누르고 있고
+			순수하게 클릭만 하는 경우에만 Selected Entity 설정을 한다.
+			이를 통해, ImguizMo 조작 과정에서 조작중인 Entity 가
+			다른 Entity 뒤쪽으로 가서 HoveredEntity  가 변하더라도
+			Selected Entity 는 유지되게 하는 것이다.
+			*/
+			if (m_ViewportHovered &&
+				isImGuizmoOver &&
+				!isLeftAltKeyPressed)
+			{
+				m_SceneHierachyPanel->SetSelectedEntity(m_HoveredEntity);
+			}
+		}
+		return false;
+	}
 	void EditorLayer::NewScene()
 	{
 		m_ActiveScene = Hazel::CreateRef<Hazel::Scene>("Scene");

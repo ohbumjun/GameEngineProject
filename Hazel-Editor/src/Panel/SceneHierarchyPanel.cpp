@@ -160,6 +160,11 @@ namespace Hazel
 		m_SelectedEntity = {};
 	}
 
+	void SceneHierarchyPanel::SetSelectedEntity(Entity entity)
+	{
+		m_SelectedEntity = entity;
+	}
+
 	void SceneHierarchyPanel::OnImGuiRender()
 	{
 		Ref<Scene> sceneContext = m_Context.lock();

@@ -18,6 +18,7 @@ namespace Hazel
 		SceneHierarchyPanel(const std::weak_ptr<Scene>& scene);
 		// void SetContext(const Ref<Scene>& scene);
 		void SetContext(const  std::weak_ptr<Scene>& scene);
+		void SetSelectedEntity(Entity entity);
 		void OnImGuiRender();
 		Entity GetSelectedEntity() const
 		{

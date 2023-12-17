@@ -26,7 +26,7 @@ namespace HazelEditor
 
 	private:
 		bool OnKeyPressed(Hazel::KeyPressedEvent& e);
-
+		bool OnMouseButtonPressed(Hazel::MouseButtonPressedEvent& e);
 		void NewScene();
 		void OpenScene();
 		void OpenScene(const std::filesystem::path& path);
