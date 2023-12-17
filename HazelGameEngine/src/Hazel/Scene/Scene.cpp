@@ -130,8 +130,8 @@ namespace Hazel
 				// 즉, tuple 자체를 굳이 & 로 받을 필요도 없을 뿐더러, 이미 compont 정보들은 & 로 리턴한다.
 				auto [transform, sprite] = group.get<TransformComponent, SpriteRenderComponent>(entity);
 
-				// Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
-				Renderer2D::DrawQuad(transform.GetTransform(), sprite.color);
+				Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
+				// Renderer2D::DrawQuad(transform.GetTransform(), sprite.color);
 			}
 
 			Renderer2D::EndScene();

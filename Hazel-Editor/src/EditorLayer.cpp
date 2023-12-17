@@ -78,6 +78,10 @@ namespace HazelEditor
 	{
 		m_CheckerboardTexture = Hazel::Texture2D::Create("assets/textures/sample.png");
 		m_SpriteSheet = Hazel::Texture2D::Create("assets/game/textures/RPGpack_sheet_2X.png");
+
+		m_IconPlay =	  Hazel::Texture2D::Create("Resources/Icons/PlayButton.png");
+		m_IconStop = Hazel::Texture2D::Create("Resources/Icons/StopButton.png");
+		
 		// m_TextureStairs				= Hazel::SubTexture2D::CreateFromCoords(m_SpriteSheet, {7, 6}, {128, 128});
 		// m_TextureTree				= Hazel::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 2, 1 }, { 128, 128 }, { 1,2 });
 		// m_TextureGrass				= Hazel::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 1, 11 }, { 128, 128 }, { 1,2 });
@@ -115,11 +119,9 @@ namespace HazelEditor
 
 		m_ContentBrowserPanel = Hazel::CreateRef<HazelEditor::ContentBrowserPanel>();
 	}
-
 	void EditorLayer::OnDetach()
 	{
 	}
-
 	void EditorLayer::OnUpdate(Hazel::Timestep ts)
 	{
 		HZ_PROFILE_FUNCTION();
@@ -150,15 +152,6 @@ namespace HazelEditor
 			}
 		}
 
-		// Update
-		// m_ViewportFocused ? void ImGuiLayer::OnEvent 함수 참고
-		if (m_VieportInteracted)
-		{
-			m_CameraController.OnUpdate(ts);
-		}
-
-		m_EditorCamera.OnUpdate(ts);
-
 		// Reset
 		Hazel::Renderer2D::ResetStats();
 		m_FrameBuffer->Bind();
@@ -185,7 +178,28 @@ namespace HazelEditor
 
 		// Render
 		// m_ActiveScene->OnUpdate(ts);
-		m_ActiveScene->OnUpdateEditor(ts, m_EditorCamera);
+		// m_ActiveScene->OnUpdateEditor(ts, m_EditorCamera);
+
+		switch (m_SceneState)
+		{
+		case SceneState::Edit:
+		{
+			// Update
+			// m_ViewportFocused ? void ImGuiLayer::OnEvent 함수 참고
+			if (m_VieportInteracted)
+				m_CameraController.OnUpdate(ts);
+
+			m_EditorCamera.OnUpdate(ts);
+
+			m_ActiveScene->OnUpdateEditor(ts, m_EditorCamera);
+			break;
+		}
+		case SceneState::Play:
+		{
+			m_ActiveScene->OnUpdateRuntime(ts);
+			break;
+		}
+		}
 
 		auto [mx, my] = ImGui::GetMousePos();
 
@@ -213,18 +227,16 @@ namespace HazelEditor
 
 		m_FrameBuffer->UnBind();
 	}
-
 	void EditorLayer::OnEvent(Hazel::Event& event)
 	{
 		m_CameraController.OnEvent(event);
 
 		m_EditorCamera.OnEvent(event);
 		Hazel::EventDispatcher dispatcher(event);
-		dispatcher.Dispatch<Hazel::KeyPressedEvent>(HZ_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
+		dispatcher.Dispatch<Hazel::KeyPressedEvent>(HZ_BIND_EVENT_FN(EditorLayer::onKeyPressed));
 
-		dispatcher.Dispatch<Hazel::MouseButtonPressedEvent>(HZ_BIND_EVENT_FN(EditorLayer::OnMouseButtonPressed));
+		dispatcher.Dispatch<Hazel::MouseButtonPressedEvent>(HZ_BIND_EVENT_FN(EditorLayer::onMouseButtonPressed));
 	}
-
 	void EditorLayer::OnImGuiRender()
 	{
 		HZ_PROFILE_FUNCTION();
@@ -235,8 +247,7 @@ namespace HazelEditor
 		drawSetting();
 		drawViewPort();
 	}
-
-	bool EditorLayer::OnKeyPressed(Hazel::KeyPressedEvent& e)
+	bool EditorLayer::onKeyPressed(Hazel::KeyPressedEvent& e)
 	{
 		// Shortcuts
 		if (e.GetRepeatCount() > 0)
@@ -252,7 +263,7 @@ namespace HazelEditor
 		{
 			if (control)
 			{
-				NewScene();
+				newScene();
 			}
 
 			break;
@@ -261,7 +272,7 @@ namespace HazelEditor
 		{
 			if (control)
 			{
-				OpenScene();
+				openScene();
 			}
 
 			break;
@@ -270,7 +281,7 @@ namespace HazelEditor
 		{
 			if (control && shift)
 			{
-				SaveSceneAs();
+				saveSceneAs();
 			}
 
 			break;
@@ -292,7 +303,7 @@ namespace HazelEditor
 
 		return true;
 	}
-	bool EditorLayer::OnMouseButtonPressed(Hazel::MouseButtonPressedEvent& e)
+	bool EditorLayer::onMouseButtonPressed(Hazel::MouseButtonPressedEvent& e)
 	{
 		if (e.GetMouseButton() == Hazel::Mouse::ButtonLeft)
 		{
@@ -317,14 +328,13 @@ namespace HazelEditor
 		}
 		return false;
 	}
-	void EditorLayer::NewScene()
+	void EditorLayer::newScene()
 	{
 		m_ActiveScene = Hazel::CreateRef<Hazel::Scene>("Scene");
 		m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 		m_SceneHierachyPanel->SetContext(m_ActiveScene);
 	}
-
-	void EditorLayer::OpenScene()
+	void EditorLayer::openScene()
 	{
 		// std::string filepath = Hazel::FileChooser::OpenFile("Hazel Scene (*.hazel)\0*.hazel\0");
 		std::string filepath = Hazel::FileChooser::OpenFile("Hazel Scene (*.scene)\0*.scene\0");
@@ -336,10 +346,10 @@ namespace HazelEditor
 			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 			m_SceneHierachyPanel->SetContext(m_ActiveScene);
 
-			ResetEditorLayer(m_ActiveScene);
+			resetEditorLayer(m_ActiveScene);
 		}
 	}
-	void EditorLayer::OpenScene(const std::filesystem::path& filepath)
+	void EditorLayer::openScene(const std::filesystem::path& filepath)
 	{
 		m_ActiveScene = Hazel::CreateRef<Hazel::Scene>();
 		m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
@@ -348,7 +358,7 @@ namespace HazelEditor
 		Hazel::SceneSerializer serializer(m_ActiveScene);
 		serializer.DeserializeText(filepath.string());
 	};
-	void EditorLayer::SaveSceneAs()
+	void EditorLayer::saveSceneAs()
 	{
 		// std::string filepath = Hazel::FileChooser::SaveFile("Hazel Scene (*.hazel)\0*.hazel\0");
 		std::string filepath = Hazel::FileChooser::SaveFile("Hazel Scene (*.scene)\0*.scene\0");
@@ -358,7 +368,7 @@ namespace HazelEditor
 			serializer.SerializeText(filepath);
 		}
 	}
-	void EditorLayer::ResetEditorLayer(std::weak_ptr<Hazel::Scene> scene)
+	void EditorLayer::resetEditorLayer(std::weak_ptr<Hazel::Scene> scene)
 	{
 		// Hazel::Entity secondCameraEntity = scene.lock().get()->GetEntityByName(secondCameraName);
 		// secondCameraEntity.GetComponent<Hazel::NativeScriptComponent>().Bind<CameraTestController>();
@@ -433,7 +443,9 @@ namespace HazelEditor
 					Hazel::Application::Get().Close();
 				}
 				if (ImGui::MenuItem("New", "Ctrl+N"))
-					NewScene();
+				{
+					newScene();
+				}
 
 				if (ImGui::MenuItem("Serialize"))
 				{
@@ -442,7 +454,7 @@ namespace HazelEditor
 				}
 				if (ImGui::MenuItem("Open Scene...", "Ctrl+O"))
 				{
-					OpenScene();
+					openScene();
 				}
 				if (ImGui::MenuItem("Deserialize"))
 				{
@@ -451,7 +463,7 @@ namespace HazelEditor
 				}
 				if (ImGui::MenuItem("Save Scene As...", "Ctrl+Shift+S"))
 				{
-					SaveSceneAs();
+					saveSceneAs();
 				}
 
 				ImGui::EndMenu();
@@ -575,7 +587,7 @@ namespace HazelEditor
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
 			{
 				const wchar_t* path = (const wchar_t*)payload->Data;
-				OpenScene(std::filesystem::path(g_AssetPath) / path);
+				openScene(std::filesystem::path(g_AssetPath) / path);
 			}
 			ImGui::EndDragDropTarget();
 		}
@@ -665,6 +677,52 @@ namespace HazelEditor
 
 		ImGui::End();
 		ImGui::PopStyleVar();
+
+		uI_Toolbar();
+
+		ImGui::End();
+	}
+	void EditorLayer::onScenePlay()
+	{
+		m_SceneState = SceneState::Play;
+	}
+	void EditorLayer::onSceneStop()
+	{
+		m_SceneState = SceneState::Edit;
+	}
+	void EditorLayer::uI_Toolbar()
+	{
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 2));
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2(0, 0));
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
+		auto& colors = ImGui::GetStyle().Colors;
+		
+		const auto& buttonHovered = colors[ImGuiCol_ButtonHovered];
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(buttonHovered.x, buttonHovered.y, buttonHovered.z, 0.5f));
+		
+		const auto& buttonActive = colors[ImGuiCol_ButtonActive];
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(buttonActive.x, buttonActive.y, buttonActive.z, 0.5f));
+
+		ImGui::Begin("##toolbar", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+
+		float size = ImGui::GetWindowHeight() - 4.0f;
+		size *= 0.5f;
+
+		Hazel::Ref<Hazel::Texture2D> icon = m_SceneState == SceneState::Edit ? m_IconPlay : m_IconStop;
+
+		ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
+
+		if (ImGui::ImageButton((ImTextureID)icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
+		// if (ImGui::ImageButton((ImTextureID)icon->GetRendererID(), ImVec2(20.f, 20.f)))
+		{
+			if (m_SceneState == SceneState::Edit)
+				onScenePlay();
+			else if (m_SceneState == SceneState::Play)
+				onSceneStop();
+		}
+
+		ImGui::PopStyleVar(2);
+		ImGui::PopStyleColor(3);
 
 		ImGui::End();
 	}

@@ -25,20 +25,30 @@ namespace HazelEditor
 		virtual void OnImGuiRender() override;
 
 	private:
-		bool OnKeyPressed(Hazel::KeyPressedEvent& e);
-		bool OnMouseButtonPressed(Hazel::MouseButtonPressedEvent& e);
-		void NewScene();
-		void OpenScene();
-		void OpenScene(const std::filesystem::path& path);
-		void SaveSceneAs();
+		enum class SceneState
+		{
+			Edit = 0, Play = 1
+		};
+		bool onKeyPressed(Hazel::KeyPressedEvent& e);
+		bool onMouseButtonPressed(Hazel::MouseButtonPressedEvent& e);
+		void newScene();
+		void openScene();
+		void openScene(const std::filesystem::path& path);
+		void saveSceneAs();
 
-		void ResetEditorLayer(std::weak_ptr<Hazel::Scene> scene);
+		void resetEditorLayer(std::weak_ptr<Hazel::Scene> scene);
 
 		void prepareDockSpace();
 		void drawMenuBar();
 		void drawPanels();
 		void drawSetting();
 		void drawViewPort();
+
+		void onScenePlay();
+		void onSceneStop();
+
+		// UI Panels
+		void uI_Toolbar();
 
 		// Temp
 		Hazel::OrthographicCameraController m_CameraController;
@@ -53,9 +63,6 @@ namespace HazelEditor
 
 		Hazel::Ref<Hazel::Scene> m_ActiveScene;
 
-		// Hazel::Entity m_SquareEntity;
-		// Hazel::Entity m_CameraEntity;
-		// Hazel::Entity m_SecondCameraEntity;
 		Hazel::Entity m_HoveredEntity;
 
 		bool m_PrimaryCamera = false;
@@ -77,6 +84,11 @@ namespace HazelEditor
 		ParticleSystem m_ParticleSystem;
 		Hazel::EditorCamera m_EditorCamera;
 
+
+		// Editor resources
+		Hazel::Ref<Hazel::Texture2D> m_IconPlay, m_IconStop;
+
+		SceneState m_SceneState = SceneState::Edit;
 
 		int m_GizmoType = -1;
 
