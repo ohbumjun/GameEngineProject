@@ -2,8 +2,10 @@
 #include "Renderer2D.h"
 #include "VertexArray.h"
 #include "Shader/Shader.h"
+#include "Renderer/Buffer/UniformBuffer.h"
 #include "RenderCommand.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #define STATISTICS 1
 
@@ -48,6 +50,13 @@ namespace Hazel
 		glm::vec4 QuadVertexPositions[4];
 
 		Renderer2D::Statistics stats;
+
+		struct CameraData
+		{
+			glm::mat4 ViewProjection;
+		};
+		CameraData CameraBuffer;
+		Ref<UniformBuffer> CameraUniformBuffer;
 	};
 
 	static Renderer2DData s_Data;
@@ -119,14 +128,14 @@ namespace Hazel
 		s_Data.WhiteTexture->SetData(&whiteTextureData, /*1 * 1 */sizeof(uint32_t));
 
 		s_Data.TextureShader = Shader::Create("assets/shaders/Texture.glsl");
-		s_Data.TextureShader->Bind();
+		// s_Data.TextureShader->Bind();
+		// s_Data.TextureShader->SetIntArray("u_Textures", samplers, s_Data.MaxTextureSlots);
 
 		int samplers[s_Data.MaxTextureSlots];
 		for (uint32_t i = 0; i < s_Data.MaxTextureSlots; ++i)
 		{
 			samplers[i] = i;
 		}
-		s_Data.TextureShader->SetIntArray("u_Textures", samplers, s_Data.MaxTextureSlots);
 
 #if OLD_PATH
 		s_Data.TextureShader->SetInt("u_Texture", 0);
@@ -145,6 +154,9 @@ namespace Hazel
 		s_Data.QuadVertexPositions[1] = {  0.5f, -0.5f, 0.f, 1.f };
 		s_Data.QuadVertexPositions[2] = {  0.5f,  0.5f, 0.f, 1.f };
 		s_Data.QuadVertexPositions[3] = { -0.5f,  0.5f, 0.f, 1.f };
+
+
+		s_Data.CameraUniformBuffer = UniformBuffer::Create(sizeof(Renderer2DData::CameraData), 0);
 	}
 
 	void Renderer2D::ShutDown()
@@ -162,11 +174,12 @@ namespace Hazel
 
 		// transform : camera local -> world 변환 행렬
 		// inverse     : camera world -> local == view
-		const glm::mat4& viewProj = camera.GetProjection() * glm::inverse(transform);
+		// const glm::mat4& viewProj = camera.GetProjection() * glm::inverse(transform);
+		// s_Data.TextureShader->Bind();
+		// s_Data.TextureShader->SetMat4("u_ViewProjection", viewProj);
 
-		s_Data.TextureShader->Bind();
-		s_Data.TextureShader->SetMat4(
-			"u_ViewProjection", viewProj);
+		s_Data.CameraBuffer.ViewProjection = camera.GetProjection() * glm::inverse(transform);
+		s_Data.CameraUniformBuffer->SetData(&s_Data.CameraBuffer, sizeof(Renderer2DData::CameraData));
 
 		StartBatch();
 	}
@@ -186,10 +199,12 @@ namespace Hazel
 	{
 		HZ_PROFILE_FUNCTION();
 
-		glm::mat4 viewProj = camera.GetViewProjection();
+		// glm::mat4 viewProj = camera.GetViewProjection();
+		// s_Data.TextureShader->Bind();
+		// s_Data.TextureShader->SetMat4("u_ViewProjection", viewProj);
 
-		s_Data.TextureShader->Bind();
-		s_Data.TextureShader->SetMat4("u_ViewProjection", viewProj);
+		s_Data.CameraBuffer.ViewProjection = camera.GetViewProjection();
+		s_Data.CameraUniformBuffer->SetData(&s_Data.CameraBuffer, sizeof(Renderer2DData::CameraData));
 
 		StartBatch();
 	}
@@ -245,6 +260,8 @@ namespace Hazel
 		{
 			s_Data.TextureSlots[i]->Bind(i);
 		}
+
+		s_Data.TextureShader->Bind();
 
 		// Batch Rendering 의 경우, 한번의 DrawCall 을 한다.
 		RenderCommand::DrawIndexed(s_Data.QuadVertexArray, s_Data.QuadIndexCount);

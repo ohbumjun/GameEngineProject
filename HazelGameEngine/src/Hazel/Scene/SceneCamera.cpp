@@ -74,6 +74,7 @@ void Hazel::SceneCamera::SetPerspective(float fov, float nearDis, float farDis)
 
 void Hazel::SceneCamera::SetViewportSize(uint32_t width, uint32_t height)
 {
+	HZ_CORE_ASSERT(width > 0 && height > 0, "Check width, height");
 	m_AspectRatio = (float)width / (float)height;
 
 	RecalculateProjection();

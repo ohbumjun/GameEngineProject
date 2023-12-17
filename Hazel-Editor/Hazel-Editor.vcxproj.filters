@@ -35,4 +35,7 @@
     </ClCompile>
     <ClCompile Include="src\ParticleSystem.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="assets\shaders\ShaderExplanation.txt" />
+  </ItemGroup>
 </Project>

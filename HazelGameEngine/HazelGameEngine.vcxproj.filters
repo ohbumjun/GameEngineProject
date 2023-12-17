@@ -1207,6 +1207,9 @@
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
     <ClInclude Include="src\Renderer\Camera\EditorCamera.h" />
+    <ClInclude Include="src\Hazel\Utils\Timer.h" />
+    <ClInclude Include="src\Renderer\Buffer\UniformBuffer.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLUniformBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Core\Allocation\Allocator\FreeListAllocator.cpp">
@@ -1411,5 +1414,7 @@
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
     <ClCompile Include="src\Renderer\Camera\EditorCamera.cpp" />
+    <ClCompile Include="src\Renderer\Buffer\UniformBuffer.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLUniformBuffer.cpp" />
   </ItemGroup>
 </Project>
