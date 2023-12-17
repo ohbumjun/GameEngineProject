@@ -10,6 +10,7 @@
 #include "Hazel/Math/Math.h"
 #include "Hazel/Scene/Component/CameraComponent.h"
 #include "Hazel/Scene/Component/TransformComponent.h"
+#include <filesystem>
 #include "Hazel/Utils/PlatformUtils.h"
 
 // 24 wide map
@@ -64,6 +65,8 @@ public:
 
 namespace HazelEditor
 {
+	extern const std::filesystem::path g_AssetPath;
+
 	EditorLayer::EditorLayer()
 		: Layer("EditorLayer"),
 		m_CameraController(1280.f / 720.f, true)
@@ -109,7 +112,7 @@ namespace HazelEditor
 		m_SceneHierachyPanel = Hazel::CreateRef<Hazel::SceneHierarchyPanel>();
 		m_SceneHierachyPanel->SetContext(m_ActiveScene);
 
-		m_ContentBrowserPanel = Hazel::CreateRef<Hazel::ContentBrowserPanel>();
+		m_ContentBrowserPanel = Hazel::CreateRef<HazelEditor::ContentBrowserPanel>();
 	}
 
 	void EditorLayer::OnDetach()
@@ -304,13 +307,19 @@ namespace HazelEditor
 			m_ActiveScene = Hazel::CreateRef<Hazel::Scene>();
 			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 			m_SceneHierachyPanel->SetContext(m_ActiveScene);
-			Hazel::SceneSerializer serializer(m_ActiveScene);
-			serializer.DeserializeText(filepath.c_str());
 
 			ResetEditorLayer(m_ActiveScene);
 		}
 	}
+	void EditorLayer::OpenScene(const std::filesystem::path& filepath)
+	{
+		m_ActiveScene = Hazel::CreateRef<Hazel::Scene>();
+		m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+		m_SceneHierachyPanel->SetContext(m_ActiveScene);
 
+		Hazel::SceneSerializer serializer(m_ActiveScene);
+		serializer.DeserializeText(filepath.string());
+	};
 	void EditorLayer::SaveSceneAs()
 	{
 		// std::string filepath = Hazel::FileChooser::SaveFile("Hazel Scene (*.hazel)\0*.hazel\0");
@@ -525,6 +534,17 @@ namespace HazelEditor
 
 		// uint32_t textureID = m_CheckerboardTexture->GetRendererID();
 		ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+		
+		if (ImGui::BeginDragDropTarget())
+		{
+			// Content Browser 로 부터 Drag Drop
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+			{
+				const wchar_t* path = (const wchar_t*)payload->Data;
+				OpenScene(std::filesystem::path(g_AssetPath) / path);
+			}
+			ImGui::EndDragDropTarget();
+		}
 
 		auto  windowSize = ImGui::GetWindowSize();
 

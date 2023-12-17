@@ -29,6 +29,7 @@ namespace HazelEditor
 
 		void NewScene();
 		void OpenScene();
+		void OpenScene(const std::filesystem::path& path);
 		void SaveSceneAs();
 
 		void ResetEditorLayer(std::weak_ptr<Hazel::Scene> scene);
@@ -80,7 +81,7 @@ namespace HazelEditor
 
 		// Panels
 		Hazel::Ref<Hazel::SceneHierarchyPanel> m_SceneHierachyPanel;
-		Hazel::Ref<Hazel::ContentBrowserPanel>m_ContentBrowserPanel;
+		Hazel::Ref<ContentBrowserPanel>m_ContentBrowserPanel;
 	};
 }
 

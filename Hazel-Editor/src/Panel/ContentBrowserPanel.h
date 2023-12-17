@@ -1,9 +1,9 @@
 #pragma once
 
-#include <filesystem>
 #include "Renderer/Texture/Texture.h"
+#include <filesystem>
 
-namespace Hazel {
+namespace HazelEditor {
 
 	class ContentBrowserPanel
 	{
@@ -13,8 +13,8 @@ namespace Hazel {
 		void OnImGuiRender();
 	private:
 		std::filesystem::path m_CurrentDirectory;
-		Ref<Texture2D> m_DirectoryIcon;
-		Ref<Texture2D> m_FileIcon;
+		Hazel::Ref<Hazel::Texture2D> m_DirectoryIcon;
+		Hazel::Ref<Hazel::Texture2D> m_FileIcon;
 	};
 
 }
