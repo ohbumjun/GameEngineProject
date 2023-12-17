@@ -5,6 +5,7 @@
 #include "Texture/SubTexture2D.h"
 #include "Renderer/Camera/Camera.h"
 #include "Renderer/Camera/EditorCamera.h"
+#include "Hazel/Scene/Component/SpriteRenderComponent.h"
 
 namespace Hazel
 {
@@ -68,6 +69,7 @@ namespace Hazel
 			const Ref<SubTexture2D>& subTexture, float tilingFactor = 1.f,
 			const glm::vec4& tintColor = glm::vec4(1.0f));
 
+		static void DrawSprite(const glm::mat4& transform, SpriteRenderComponent& src, int entityID);
 
 		// 매Update 초반 마다 reset 해줄 것이다.
 		struct Statistics
@@ -84,7 +86,6 @@ namespace Hazel
 
 	private :
 		static void FlushAndReset();
-
 
 		static void StartBatch();
 		static void NextBatch();

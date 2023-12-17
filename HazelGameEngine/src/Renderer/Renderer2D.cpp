@@ -787,6 +787,14 @@ namespace Hazel
 		RenderCommand::DrawIndexed(s_Data.QuadVertexArray);
 #endif
 	}
+
+	void Renderer2D::DrawSprite(const glm::mat4& transform, SpriteRenderComponent& src, int entityID)
+	{
+		// if (src.GetTexture())
+		// 	DrawQuad(transform, src.GetTexture(), src.GetTilingFactor(), src.GetColor(), entityID);
+		// else
+		// 	DrawQuad(transform, src.GetColor(), entityID);
+	}
 	
 	
 	Renderer2D::Statistics Renderer2D::GetStats()

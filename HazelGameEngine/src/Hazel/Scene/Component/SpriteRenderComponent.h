@@ -2,6 +2,7 @@
 
 #include "Component.h"
 #include "Hazel/Core/Serialization/Serializer.h"
+#include "Renderer/Texture/Texture.h"
 
 class Serializer;
 
@@ -30,9 +31,12 @@ namespace Hazel
 
 		const glm::vec4& GetColor() { return color; }
 		glm::vec4& GetColorRef() { return color; }
-
+		float GetTilingFactor() { return TilingFactor; }
+		const Ref<Texture2D>& GetTexture() { return Texture; }
 		virtual const TypeId GetType() const;
 	private:
+		Ref<Texture2D> Texture;
+		float TilingFactor = 1.0f;
 		glm::vec4 color = { 1.f, 1.f, 1.f, 1.f };
 	};
 }

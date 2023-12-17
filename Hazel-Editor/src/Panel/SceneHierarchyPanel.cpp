@@ -12,6 +12,7 @@
 
 namespace Hazel
 {
+	extern const std::filesystem::path g_AssetPath;
 
 	static void DrawVec3Control(const std::string& lable, glm::vec3& values, 
 		float resetValues = 0.0f, float columnWidth = 100.f)
@@ -153,7 +154,7 @@ namespace Hazel
 	SceneHierarchyPanel::SceneHierarchyPanel(const  std::weak_ptr<Scene>& scene) :
 		m_Context(scene)
 	{
-		// SetContext(scene);
+		SetContext(scene);
 	}
 
 	void SceneHierarchyPanel::SetContext(const  std::weak_ptr<Scene>& scene)
@@ -429,6 +430,21 @@ namespace Hazel
 
 		DrawComponent<SpriteRenderComponent>("Sprite", entity, [](auto& component) {
 			ImGui::ColorEdit4("Color", glm::value_ptr(component.GetColorRef()));
+		
+
+			ImGui::Button("Texture", ImVec2(100.0f, 0.0f));
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+				{
+					const wchar_t* path = (const wchar_t*)payload->Data;
+					std::filesystem::path texturePath = std::filesystem::path(g_AssetPath) / path;
+					component.Texture = Texture2D::Create(texturePath.string());
+				}
+				ImGui::EndDragDropTarget();
+			}
+
+			ImGui::DragFloat("Tiling Factor", &component.TilingFactor, 0.1f, 0.0f, 100.0f);
 		});
 
 	}
