@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Panel\ContentBrowserPanel.h" />
     <ClInclude Include="src\EditorLayer.h" />
     <ClInclude Include="src\File\FileManager.h" />
     <ClInclude Include="src\File\PathManager.h" />
@@ -134,6 +135,7 @@
     <ClInclude Include="src\ParticleSystem.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Panel\ContentBrowserPanel.cpp" />
     <ClCompile Include="src\EditorLayer.cpp" />
     <ClCompile Include="src\File\FileManager.cpp" />
     <ClCompile Include="src\File\PathManager.cpp" />

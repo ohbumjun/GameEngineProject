@@ -108,6 +108,8 @@ namespace HazelEditor
 		// Panels
 		m_SceneHierachyPanel = Hazel::CreateRef<Hazel::SceneHierarchyPanel>();
 		m_SceneHierachyPanel->SetContext(m_ActiveScene);
+
+		m_ContentBrowserPanel = Hazel::CreateRef<Hazel::ContentBrowserPanel>();
 	}
 
 	void EditorLayer::OnDetach()
@@ -425,6 +427,7 @@ namespace HazelEditor
 	{	
 		// Panels
 		m_SceneHierachyPanel->OnImGuiRender();
+		m_ContentBrowserPanel->OnImGuiRender();
 	}
 	void EditorLayer::drawSetting()
 	{

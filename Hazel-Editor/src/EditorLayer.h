@@ -7,6 +7,7 @@
 #include "Renderer/Camera/OrthographicCameraController.h"
 #include "Renderer/Texture/SubTexture2D.h"
 #include "Renderer/Buffer/FrameBuffer.h"
+#include "Panel/ContentBrowserPanel.h"
 
 
 namespace HazelEditor
@@ -79,6 +80,7 @@ namespace HazelEditor
 
 		// Panels
 		Hazel::Ref<Hazel::SceneHierarchyPanel> m_SceneHierachyPanel;
+		Hazel::Ref<Hazel::ContentBrowserPanel>m_ContentBrowserPanel;
 	};
 }
 
