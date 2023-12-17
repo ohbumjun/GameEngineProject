@@ -169,6 +169,10 @@ namespace HazelEditor
 		특정 값으로 세팅해주는 것이다.
 
 		Clear our entity ID attachment to -1
+
+		주의 사항 : SetClearColor 이후에 호출해줘야 한다.
+		SetClearColor 로 한번 clear 하고 나서,
+		그 다음 그 위에 특정 값으로 또 다시 clear 하는 원리
 		*/
 		m_FrameBuffer->ClearAttachment(1, -1);
 
@@ -196,7 +200,6 @@ namespace HazelEditor
 			// '1' 인 이유 : 현재 Frame Buffer 의 1번째 Texture 를 Entity 를 저장하는 용도로 사용했기 때문이다.
 			int pixelData = m_FrameBuffer->ReadPixel(1, mouseX, mouseY);
 			HZ_CORE_WARN("mouse {0}", pixelData);
-			HZ_CORE_WARN("mouse {0}, {1}", mouseX, mouseY);
 		}
 		
 

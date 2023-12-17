@@ -204,8 +204,12 @@ namespace Hazel
 		HZ_CORE_ASSERT(attachmentIndex < m_ColorAttachmentIDs.size(), "Check Index");
 
 		auto& spec = m_ColorAttachmentSpecs[attachmentIndex];
-		glClearTexImage(m_ColorAttachmentIDs[attachmentIndex], 0,
-			Utils::HazelFBTextureFormatToGL(spec.m_TextureFormat), GL_INT, &value);
+
+		glClearTexImage(m_ColorAttachmentIDs[attachmentIndex], 
+			0, // 현재는 level 을 신경쓰지 않을 것이다.
+			Utils::HazelFBTextureFormatToGL(spec.m_TextureFormat),
+			GL_INT, 
+			&value);
 	}
 
 	// State is not valid, so recreate it
