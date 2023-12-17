@@ -67,7 +67,8 @@ namespace Hazel
 		glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		
 		// - texture 가 원래 크기보다 크게 하게 display 될때,  Neareset Interpolation(GL_NEAREST) 적용
-		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		// glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 		// Texture Coord 가 1, 1 범위 넘어설 때 어떤 식으로 표현할 것인가
 		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -111,7 +112,8 @@ namespace Hazel
 		glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
 		// - texture 가 원래 크기보다 크게 하게 display 될때,  Neareset Interpolation 적용
-		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		// glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 		// Texture Coord 가 1, 1 범위 넘어설 때 어떤 식으로 표현할 것인가
 		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
