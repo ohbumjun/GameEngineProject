@@ -56,6 +56,7 @@ namespace HazelEditor
 		// Hazel::Entity m_SquareEntity;
 		// Hazel::Entity m_CameraEntity;
 		// Hazel::Entity m_SecondCameraEntity;
+		Hazel::Entity m_HoveredEntity;
 
 		bool m_PrimaryCamera = false;
 

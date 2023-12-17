@@ -8,6 +8,7 @@
 #include "Hazel/FileSystem/DirectorySystem.h"
 #include "Hazel/Scene/SceneSerializer.h"
 #include "Hazel/Math/Math.h"
+#include "Hazel/Scene/Component/NameComponent.h"
 #include "Hazel/Scene/Component/CameraComponent.h"
 #include "Hazel/Scene/Component/TransformComponent.h"
 #include <filesystem>
@@ -205,6 +206,8 @@ namespace HazelEditor
 			// '1' 인 이유 : 현재 Frame Buffer 의 1번째 Texture 를 Entity 를 저장하는 용도로 사용했기 때문이다.
 			int pixelData = m_FrameBuffer->ReadPixel(1, mouseX, mouseY);
 			HZ_CORE_WARN("mouse {0}", pixelData);
+
+			m_HoveredEntity = pixelData == -1 ? Hazel::Entity() : Hazel::Entity((entt::entity)pixelData, m_ActiveScene.get());
 		}
 		
 
@@ -442,6 +445,12 @@ namespace HazelEditor
 	{
 		// Settings
 		ImGui::Begin("Settings");
+
+		std::string name = "None";
+		if (m_HoveredEntity)
+			name = m_HoveredEntity.GetComponent<Hazel::NameComponent>().GetName();
+		ImGui::Text("Hovered Entity: %s", name.c_str());
+
 
 		auto stats = Hazel::Renderer2D::GetStats();
 		ImGui::Text("Renderer2D Stats:");
