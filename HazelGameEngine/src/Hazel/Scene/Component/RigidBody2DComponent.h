@@ -39,9 +39,15 @@ namespace Hazel
 		}
 	private:
 		BodyType m_Type = BodyType::Static;
+
+		/*
+		true : not able to rotate
+		*/
 		bool m_FixedRotation = false;
 
-		// Storage for runtime
+		/*
+		Storage for runtime
+		*/
 		void* m_RuntimeBody = nullptr;
 	};
 

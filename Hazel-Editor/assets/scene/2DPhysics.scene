@@ -1,20 +1,6 @@
 {
     "SceneName": "ActiveScene",
     "Entities": [{
-            "types": [13729283319516192586, 15567495072973413409, 8364620273459969071],
-            "compDatas": [{
-                    "compName": "class Hazel::TransformComponent",
-                    "Translation": [0.0, 0.0, 0.0],
-                    "Rotation": [0.0, 0.0, 0.0],
-                    "Scale": [1.0, 1.0, 1.0]
-                }, {
-                    "compName": "class Hazel::NameComponent",
-                    "Name": "Sprite"
-                }, {
-                    "compName": "class Hazel::SpriteRenderComponent",
-                    "color": [1.0, 1.0, 1.0, 1.0]
-                }]
-        }, {
             "types": [6780415662489155265, 13729283319516192586, 15567495072973413409],
             "compDatas": [{
                     "compName": "class Hazel::CameraComponent",
@@ -22,7 +8,7 @@
                         "OrthographicSize": 10.0,
                         "OrthographicNear": -1.0,
                         "OrthographicFar": 1.0,
-                        "PerspectiveFov": 0.5235987901687622,
+                        "PerspectiveFov": 0.7853981852531433,
                         "PerspectiveNear": 0.009999999776482582,
                         "PerspectiveFar": 1000.0,
                         "AspectRatio": 0.9596412777900696,
@@ -32,12 +18,26 @@
                     "isFixedAspectRatio": false
                 }, {
                     "compName": "class Hazel::TransformComponent",
-                    "Translation": [0.0, 0.0, 10.0],
+                    "Translation": [0.0, 0.0, 15.0],
                     "Rotation": [0.0, 0.0, 0.0],
                     "Scale": [1.0, 1.0, 1.0]
                 }, {
                     "compName": "class Hazel::NameComponent",
                     "Name": "Main Camera Entity"
+                }]
+        }, {
+            "types": [13729283319516192586, 15567495072973413409, 8364620273459969071],
+            "compDatas": [{
+                    "compName": "class Hazel::TransformComponent",
+                    "Translation": [0.0, 1.2000000476837158, 0.0],
+                    "Rotation": [0.0, 0.0, 0.0],
+                    "Scale": [1.0, 1.0, 1.0]
+                }, {
+                    "compName": "class Hazel::NameComponent",
+                    "Name": "Sprite"
+                }, {
+                    "compName": "class Hazel::SpriteRenderComponent",
+                    "color": [1.0, 1.0, 1.0, 1.0]
                 }]
         }]
 }

@@ -46,12 +46,25 @@ namespace Hazel
 
 	private :
 		glm::vec2 m_Offset = { 0.0f, 0.0f };
+
+		/*
+		Half Extent 와 같은 개념
+		*/
 		glm::vec2 m_Size = { 0.5f, 0.5f };
 
 		// TODO(Yan): move into physics material in the future maybe
 		float m_Density = 1.0f;
 		float m_Friction = 0.5f;
+
+		/*
+		* Bouncy ness (얼마나 bouncy 하는지)
+		*/
 		float m_Restitution = 0.0f;
+
+		/*
+		* ex) Box 떨어뜨리면 여러번 통통 튀는데
+		* 점점 낮게 통통 뛰게 된다.
+		*/
 		float m_RestitutionThreshold = 0.5f;
 
 		// Storage for runtime

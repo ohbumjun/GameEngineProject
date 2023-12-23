@@ -112,6 +112,9 @@ namespace Hazel
 			auto& transform = entity.GetComponent<TransformComponent>();
 			auto& rb2d = entity.GetComponent<Rigidbody2DComponent>();
 
+			/*
+			특정 위치에, 특정 크기만의 Rigid Body 를 만들 것이다.
+			*/
 			b2BodyDef bodyDef;
 			bodyDef.type = Rigidbody2DTypeToBox2DBody(rb2d.m_Type);
 			bodyDef.position.Set(transform.Translation.x, transform.Translation.y);
@@ -127,7 +130,10 @@ namespace Hazel
 
 				b2PolygonShape boxShape;
 				boxShape.SetAsBox(bc2d.m_Size.x * transform.Scale.x, bc2d.m_Size.y * transform.Scale.y);
-
+				
+				/*
+				PolygonShape 의 물리 관련 특성들을 지정하는 것으로 보인다.
+				*/
 				b2FixtureDef fixtureDef;
 				fixtureDef.shape = &boxShape;
 				fixtureDef.density = bc2d.m_Density;
@@ -166,6 +172,12 @@ namespace Hazel
 		{
 			const int32_t velocityIterations = 6;
 			const int32_t positionIterations = 2;
+
+			/*
+			얼만큼 자주 값을 update 할 것인가
+			- update 자주    == 정확도 상승, 성능 저하
+			- update 자주 X == 정확도 저하, 성능 향상
+			*/
 			m_PhysicsWorld->Step(ts, velocityIterations, positionIterations);
 
 			// Retrieve transform from Box2D
