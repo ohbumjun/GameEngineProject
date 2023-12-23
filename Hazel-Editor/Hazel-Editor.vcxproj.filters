@@ -41,4 +41,7 @@
     </ClCompile>
     <ClCompile Include="src\ParticleSystem.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="TODO.txt" />
+  </ItemGroup>
 </Project>

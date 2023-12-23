@@ -21,6 +21,10 @@ namespace Hazel
 		glm::mat4& GetProjection() { return m_ProjectionMatrix; }
 		const glm::mat4& GetProjection() const { return m_ProjectionMatrix; }
 	protected :
+
+		virtual void serializeData(Serializer* serializer);
+		virtual void deserializeData(Serializer* serializer);
+
 		glm::mat4 m_ProjectionMatrix = glm::mat4(1.f);
 	};
 }

@@ -584,7 +584,10 @@ void JsonSerializer::onLoad(uint64& data)
 }
 
 void JsonSerializer::onLoad(glm::vec2& data)
-{//부모 얻어옴
+{
+	glm::vec2 readData;
+
+	//부모 얻어옴
 	JsonRecord& prevRecord = m_ReadRecord.back();
 
 	// '[' 와 같은 array 의 시작 데이터를 읽는다.
@@ -616,18 +619,21 @@ void JsonSerializer::onLoad(glm::vec2& data)
 		//set Data
 		if (nullptr == val || val->IsFloat() == false)
 		{
-			assert(false);
 			return;
 		}
 
-		data[i] = val->GetFloat();
+		readData[i] = val->GetFloat();
 	}
+
+	data = readData;
 
 	m_ReadRecord.pop_back();
 }
 
 void JsonSerializer::onLoad(glm::vec3& data)
 {
+	glm::vec3 readData;
+
 	//부모 얻어옴
 	JsonRecord& prevRecord = m_ReadRecord.back();
 
@@ -664,14 +670,18 @@ void JsonSerializer::onLoad(glm::vec3& data)
 			return;
 		}
 
-		data[i] = val->GetFloat();
+		readData[i] = val->GetFloat();
 	}
+
+	data = readData;
 
 	m_ReadRecord.pop_back();
 }
 
 void JsonSerializer::onLoad(glm::vec4& data)
 {
+	glm::vec4 readData;
+
 	JsonRecord& prevRecord = m_ReadRecord.back();
 
 	// '[' 와 같은 array 의 시작 데이터를 읽는다.
@@ -703,18 +713,22 @@ void JsonSerializer::onLoad(glm::vec4& data)
 		//set Data
 		if (nullptr == val || val->IsFloat() == false)
 		{
-			assert(false);
+			//  assert(false);
 			return;
 		}
 
-		data[i] = val->GetFloat();
+		readData[i] = val->GetFloat();
 	}
+
+	data = readData;
 
 	m_ReadRecord.pop_back();
 }
 
 void JsonSerializer::onLoad(glm::mat4& data)
 {
+	glm::mat4 readData;
+
 	rapidjson::Value* val = nullptr;
 
 	if (m_ReadRecord.empty())
@@ -735,14 +749,18 @@ void JsonSerializer::onLoad(glm::mat4& data)
 			//set Data
 			if (nullptr == val || val->IsFloat() == false)
 			{
-				assert(false);
+				// assert(false);
 				return;
 			}
 
 			// data = val->GetFloat();
-			data[r][c] = val->GetFloat();
+			readData[r][c] = val->GetFloat();
 		}
 	}
+
+	data = readData;
+
+	m_ReadRecord.pop_back();
 }
 
 void JsonSerializer::onLoad(float& data)
@@ -924,9 +942,15 @@ void* JsonSerializer::getValue(JsonRecord& prevRecord)
 	Value* v = nullptr;
 	Value* prevValue = static_cast<Value*>(prevRecord.value);
 
+	bool isPrevArray = false;
+	bool isPrevObject = false;
+	const char* key = nullptr;
+
 	// Array Type
 	if (nullptr != prevValue && prevValue->IsArray())
 	{
+		isPrevArray = true;
+
 		// Array 상에서 특정 index 에 있는 값을 가져온다.
 		v = &prevValue->operator[](static_cast<SizeType>(prevRecord.m_ArrayElemNum++));
 	}
@@ -934,8 +958,10 @@ void* JsonSerializer::getValue(JsonRecord& prevRecord)
 	// Object Type
 	else if (nullptr != prevRecord.value && prevValue->IsObject())
 	{
+		isPrevObject = true;
+
 		// Object 에 대응되는 Key 값을 가져온다.
-		const char* key = m_KeyRecord.top();
+		key = m_KeyRecord.top();
 
 		m_KeyRecord.pop();
 
@@ -947,7 +973,11 @@ void* JsonSerializer::getValue(JsonRecord& prevRecord)
 
 	if (v == nullptr || (v != nullptr && v->IsNull()))
 	{
-		assert(false);
+		// assert(false);
+		// 1) array 는 어떤 케이스에서 여기에 걸릴까
+		
+		// 2) object 의 경우, key 가 없는 녀석이면 여기에 걸릴 수 있다.
+		Hazel::Log::GetClientLogger()->warn("No Key : {0}", key);
 	}
 
 	return v;

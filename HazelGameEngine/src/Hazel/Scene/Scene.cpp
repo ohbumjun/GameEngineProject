@@ -406,6 +406,8 @@ namespace Hazel
 	}
 	Component* Scene::addComponentOnDeserialize(TypeId type, Entity entity)
 	{
+		// 차후 이것을 개선해야 한다.
+		// if else 는 최대 31개 까지만 진행하기 때문이다.
 		if (type == Reflection::GetTypeID<NameComponent>())
 		{
 			return &entity.AddComponent<NameComponent>();
@@ -421,6 +423,14 @@ namespace Hazel
 		else if (type == Reflection::GetTypeID<TransformComponent>())
 		{
 			return &entity.AddComponent<TransformComponent>();
+		}
+		else if (type == Reflection::GetTypeID<Rigidbody2DComponent>())
+		{
+			return &entity.AddComponent<Rigidbody2DComponent>();
+		}
+		else if (type == Reflection::GetTypeID<BoxCollider2DComponent>())
+		{
+			return &entity.AddComponent<BoxCollider2DComponent>();
 		}
 		else if (type == Reflection::GetTypeID<NativeScriptComponent>())
 		{

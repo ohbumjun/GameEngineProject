@@ -59,7 +59,7 @@ namespace Hazel
 		/*
 		* Bouncy ness (얼마나 bouncy 하는지)
 		*/
-		float m_Restitution = 0.0f;
+		float m_Restitution = 1.0f;
 
 		/*
 		* ex) Box 떨어뜨리면 여러번 통통 튀는데

@@ -17,6 +17,8 @@ void Hazel::SceneCamera::Serialize(Serializer* serializer)
 {
 	serializer->BeginSaveMap(Reflection::GetTypeID<SceneCamera>(), this);
 
+	Camera::serializeData(serializer);
+
 	serializer->Save("OrthographicSize", m_OrthographicSize);
 	serializer->Save("OrthographicNear", m_OrthographicNear);
 	serializer->Save("OrthographicFar", m_OrthographicFar);
@@ -34,7 +36,9 @@ void Hazel::SceneCamera::Serialize(Serializer* serializer)
 void Hazel::SceneCamera::Deserialize(Serializer* serializer)
 {
 	serializer->BeginLoadMap(Reflection::GetTypeID<SceneCamera>(), this);
-	
+
+	Camera::deserializeData(serializer);
+
 	serializer->Load("OrthographicSize", m_OrthographicSize);
 	serializer->Load("OrthographicNear", m_OrthographicNear);
 	serializer->Load("OrthographicFar", m_OrthographicFar);

@@ -9,7 +9,7 @@ namespace Hazel
 	{
 		serializer->BeginSaveMap(Reflection::GetTypeID<Camera>(), this);
 
-		serializer->Save("projectionMatrix", m_ProjectionMatrix);
+		serializeData(serializer);
 
 		serializer->EndSaveMap();
 	}
@@ -17,8 +17,16 @@ namespace Hazel
 	{
 		serializer->BeginLoadMap(Reflection::GetTypeID<Camera>(), this);
 
-		serializer->Load("projectionMatrix", m_ProjectionMatrix);
+		deserializeData(serializer);
 
 		serializer->EndLoadMap();
+	}
+	void Camera::serializeData(Serializer* serializer)
+	{
+		serializer->Save("projectionMatrix", m_ProjectionMatrix);
+	}
+	void Camera::deserializeData(Serializer* serializer)
+	{
+		serializer->Load("projectionMatrix", m_ProjectionMatrix);
 	}
 }
