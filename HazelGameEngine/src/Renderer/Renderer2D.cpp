@@ -206,6 +206,8 @@ namespace Hazel
 		// s_Data.TextureShader->Bind();
 		// s_Data.TextureShader->SetMat4("u_ViewProjection", viewProj);
 
+		// Uniform Buffer 메모리 할당 + Scene 전체에서 모든 Shader 에도 동일하게 적용되는
+		// 값들을 Uniform Buffer 에 할당하게 되는 것이다.
 		s_Data.CameraBuffer.ViewProjection = camera.GetViewProjection();
 		s_Data.CameraUniformBuffer->SetData(&s_Data.CameraBuffer, sizeof(Renderer2DData::CameraData));
 

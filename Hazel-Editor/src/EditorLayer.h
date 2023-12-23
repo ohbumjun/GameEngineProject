@@ -36,8 +36,6 @@ namespace HazelEditor
 		void openScene(const std::filesystem::path& path);
 		void saveSceneAs();
 
-		void resetEditorLayer(std::weak_ptr<Hazel::Scene> scene);
-
 		void prepareDockSpace();
 		void drawMenuBar();
 		void drawPanels();

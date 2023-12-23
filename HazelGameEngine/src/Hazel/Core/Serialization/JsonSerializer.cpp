@@ -145,6 +145,18 @@ void JsonSerializer::onSave(const uint64 data)
 	writer->Uint64(data);
 }
 
+void JsonSerializer::onSave(const glm::vec2& data)
+{
+	JsonWriter* writer = (JsonWriter*)m_JsonWriter;
+
+	writer->StartArray();
+	for (int i = 0; i < 2; ++i)
+	{
+		writer->Double(data[i]);
+	}
+	writer->EndArray();
+}
+
 void JsonSerializer::onSave(const glm::vec3& data)
 {
 	JsonWriter* writer = (JsonWriter*)m_JsonWriter;
@@ -539,6 +551,49 @@ void JsonSerializer::onLoad(uint64& data)
 	}
 
 	data = val->GetUint64();
+}
+
+void JsonSerializer::onLoad(glm::vec2& data)
+{//부모 얻어옴
+	JsonRecord& prevRecord = m_ReadRecord.back();
+
+	// '[' 와 같은 array 의 시작 데이터를 읽는다.
+	rapidjson::Value* arrayValue = static_cast<rapidjson::Value*>(getValue(prevRecord));
+
+	if ((nullptr != arrayValue && arrayValue->IsArray()) == false)
+	{
+		assert(false);
+	}
+
+	if (m_ReadRecord.empty())
+	{
+		return;
+	}
+
+	m_ReadRecord.push_back(JsonRecord(arrayValue));
+
+	JsonRecord& prevArrayRecord = m_ReadRecord.back();
+
+	for (int i = 0; i < 2; ++i)
+	{
+		//get next value
+		Value* val = nullptr;
+		Value* prevValue = static_cast<Value*>(arrayValue);
+
+		// Array 상에서 특정 index 에 있는 값을 가져온다.
+		val = &prevValue->operator[](static_cast<SizeType>(prevArrayRecord.m_ArrayElemNum++));
+
+		//set Data
+		if (nullptr == val || val->IsFloat() == false)
+		{
+			assert(false);
+			return;
+		}
+
+		data[i] = val->GetFloat();
+	}
+
+	m_ReadRecord.pop_back();
 }
 
 void JsonSerializer::onLoad(glm::vec3& data)

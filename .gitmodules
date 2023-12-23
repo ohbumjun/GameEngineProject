@@ -16,3 +16,6 @@
 [submodule "HazelGameEngine/vendor/ImGuizmo"]
 	path = HazelGameEngine/vendor/ImGuizmo
 	url = https://github.com/TheCherno/ImGuizmo.git
+[submodule "HazelGameEngine/vendor/Box2D"]
+	path = HazelGameEngine/vendor/Box2D
+	url = https://github.com/TheCherno/box2d.git

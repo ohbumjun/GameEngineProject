@@ -14,6 +14,7 @@ namespace Hazel
 		virtual uint32_t GetRendererID() const = 0;
 		// data : data to be uploaded to gpu
 		virtual void SetData(void* data, uint32_t size) = 0;
+		virtual bool IsLoaded() const = 0;
 
 		virtual bool operator == (const Texture& other) const = 0;
 	};

@@ -1210,6 +1210,8 @@
     <ClInclude Include="src\Hazel\Utils\Timer.h" />
     <ClInclude Include="src\Renderer\Buffer\UniformBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLUniformBuffer.h" />
+    <ClInclude Include="src\Hazel\Scene\Component\RigidBody2DComponent.h" />
+    <ClInclude Include="src\Hazel\Scene\Component\Box2DComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Core\Allocation\Allocator\FreeListAllocator.cpp">
@@ -1416,5 +1418,7 @@
     <ClCompile Include="src\Renderer\Camera\EditorCamera.cpp" />
     <ClCompile Include="src\Renderer\Buffer\UniformBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLUniformBuffer.cpp" />
+    <ClCompile Include="src\Hazel\Scene\Component\RigidBody2DComponent.cpp" />
+    <ClCompile Include="src\Hazel\Scene\Component\Box2DComponent.cpp" />
   </ItemGroup>
 </Project>

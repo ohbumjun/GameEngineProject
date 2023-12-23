@@ -1,18 +1,43 @@
 {
     "SceneName": "ActiveScene",
     "Entities": [{
+            "types": [6780415662489155265, 13729283319516192586, 15567495072973413409],
+            "compDatas": [{
+                    "compName": "class Hazel::CameraComponent",
+                    "Camera": {
+                        "OrthographicSize": 10.0,
+                        "OrthographicNear": -1.0,
+                        "OrthographicFar": 1.0,
+                        "PerspectiveFov": 0.7853981852531433,
+                        "PerspectiveNear": 0.009999999776482582,
+                        "PerspectiveFar": 1000.0,
+                        "AspectRatio": 1.123152732849121,
+                        "ProjectionType": 1
+                    },
+                    "isPrimary": true,
+                    "isFixedAspectRatio": false
+                }, {
+                    "compName": "class Hazel::TransformComponent",
+                    "Translation": [0.0, 0.0, 0.0],
+                    "Rotation": [0.0, 0.0, 0.0],
+                    "Scale": [1.0, 1.0, 1.0]
+                }, {
+                    "compName": "class Hazel::NameComponent",
+                    "Name": "Camera"
+                }]
+        }, {
             "types": [13729283319516192586, 15567495072973413409, 8364620273459969071],
             "compDatas": [{
                     "compName": "class Hazel::TransformComponent",
-                    "Translation": [-0.7222945094108582, 0.0, -1.9222939014434814],
-                    "Rotation": [0.0, -0.7853991389274597, -8.429377373886382e-8],
-                    "Scale": [1.9999998807907104, 1.9999995231628418, 2.0]
+                    "Translation": [0.0, 1.0666272640228271, -2.6500000953674316],
+                    "Rotation": [-1.5707972049713135, 0.7853981852531433, -5.900558903704223e-7],
+                    "Scale": [1.999999761581421, 1.9999867677688599, 1.9997934103012085]
                 }, {
                     "compName": "class Hazel::NameComponent",
-                    "Name": "Left"
+                    "Name": "Top"
                 }, {
                     "compName": "class Hazel::SpriteRenderComponent",
-                    "color": [0.0, 1.0, 0.0, 1.0]
+                    "color": [1.0, 1.0, 1.0, 1.0]
                 }]
         }, {
             "types": [13729283319516192586, 15567495072973413409, 8364620273459969071],
@@ -32,15 +57,15 @@
             "types": [13729283319516192586, 15567495072973413409, 8364620273459969071],
             "compDatas": [{
                     "compName": "class Hazel::TransformComponent",
-                    "Translation": [0.0, 1.0666272640228271, -2.6500000953674316],
-                    "Rotation": [-1.5707972049713135, 0.7853981852531433, -5.900558903704223e-7],
-                    "Scale": [1.999999761581421, 1.9999867677688599, 1.9997934103012085]
+                    "Translation": [-0.7222945094108582, 0.0, -1.9222939014434814],
+                    "Rotation": [0.0, -0.7853991389274597, -8.429377373886382e-8],
+                    "Scale": [1.9999998807907104, 1.9999995231628418, 2.0]
                 }, {
                     "compName": "class Hazel::NameComponent",
-                    "Name": "Top"
+                    "Name": "Left"
                 }, {
                     "compName": "class Hazel::SpriteRenderComponent",
-                    "color": [1.0, 1.0, 1.0, 1.0]
+                    "color": [0.0, 1.0, 0.0, 1.0]
                 }]
         }]
 }

@@ -25,6 +25,7 @@ private:
 	virtual void onSave(const uint32 data) override;
 	virtual void onSave(const int64 data) override;
 	virtual void onSave(const uint64 data) override;
+	virtual void onSave(const glm::vec2& data)  override;
 	virtual void onSave(const glm::vec3& data)  override;
 	virtual void onSave(const glm::vec4& data)  override;
 	virtual void onSave(const glm::mat4& mat4)  override;
@@ -53,6 +54,7 @@ private:
 	virtual void onLoad(uint32& data) override;
 	virtual void onLoad(int64& data) override;
 	virtual void onLoad(uint64& data) override;
+	virtual void onLoad(glm::vec2& data) override;
 	virtual void onLoad(glm::vec3& data) override;
 	virtual void onLoad(glm::vec4& data) override;
 	virtual void onLoad(glm::mat4& data) override;

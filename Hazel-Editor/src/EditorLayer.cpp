@@ -341,16 +341,17 @@ namespace HazelEditor
 		
 		if (!filepath.empty())
 		{
-			// 기존  Scene 을 지운다.
-			m_ActiveScene = Hazel::CreateRef<Hazel::Scene>();
-			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-			m_SceneHierachyPanel->SetContext(m_ActiveScene);
-
-			resetEditorLayer(m_ActiveScene);
+			openScene(filepath);
 		}
 	}
 	void EditorLayer::openScene(const std::filesystem::path& filepath)
 	{
+		if(filepath.extension().string() != ".scene")
+		{
+			HZ_WARN("Could not load {0} - not a scene file", filepath.filename().string());
+			return;
+		}
+
 		m_ActiveScene = Hazel::CreateRef<Hazel::Scene>();
 		m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 		m_SceneHierachyPanel->SetContext(m_ActiveScene);
@@ -368,11 +369,7 @@ namespace HazelEditor
 			serializer.SerializeText(filepath);
 		}
 	}
-	void EditorLayer::resetEditorLayer(std::weak_ptr<Hazel::Scene> scene)
-	{
-		// Hazel::Entity secondCameraEntity = scene.lock().get()->GetEntityByName(secondCameraName);
-		// secondCameraEntity.GetComponent<Hazel::NativeScriptComponent>().Bind<CameraTestController>();
-	}
+	
 	void EditorLayer::prepareDockSpace()
 	{
 		// DockSpace
@@ -706,7 +703,7 @@ namespace HazelEditor
 		ImGui::Begin("##toolbar", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 
 		float size = ImGui::GetWindowHeight() - 4.0f;
-		size *= 0.5f;
+		// size *= 0.5f;
 
 		Hazel::Ref<Hazel::Texture2D> icon = m_SceneState == SceneState::Edit ? m_IconPlay : m_IconStop;
 

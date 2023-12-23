@@ -259,6 +259,12 @@ void Serializer::Save(const char* key, const uint64 data)
 	onSave(data);
 }
 
+void Serializer::Save(const char* key, const glm::vec2& data)
+{
+	SaveKey(key);
+	onSave(data);
+}
+
 void Serializer::Save(const char* key, const glm::vec3& data)
 {
 	SaveKey(key);
@@ -570,6 +576,13 @@ void Serializer::Load(const char* key, int64& data)
 }
 
 void Serializer::Load(const char* key, uint64& data)
+{
+	LoadKey(key);
+	onLoad(data);
+	m_Record.recentKey = "";
+}
+
+void Serializer::Load(const char* key, glm::vec2& data)
 {
 	LoadKey(key);
 	onLoad(data);

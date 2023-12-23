@@ -74,6 +74,7 @@ public:
 	void Save(const char* key, const uint32 data);
 	void Save(const char* key, const int64 data);
 	void Save(const char* key, const uint64 data);
+	void Save(const char* key, const glm::vec2& data);
 	void Save(const char* key, const glm::vec3& data);
 	void Save(const char* key, const glm::vec4& data);
 	void Save(const char* key, const glm::mat4& data);
@@ -110,6 +111,7 @@ protected:
 	virtual void onSave(const uint32 data) = 0;
 	virtual void onSave(const int64 data) = 0;
 	virtual void onSave(const uint64 data) = 0;
+	virtual void onSave (const glm::vec2& data) = 0;
 	virtual void onSave (const glm::vec3& data) = 0;
 	virtual void onSave (const glm::vec4& data) = 0;
 	virtual void onSave (const glm::mat4& data) = 0;
@@ -161,6 +163,7 @@ public:
 	void Load(const char* key, uint32& data);
 	void Load(const char* key, int64& data);
 	void Load(const char* key, uint64& data);
+	void Load(const char* key, glm::vec2& data);
 	void Load(const char* key, glm::vec3& data);
 	void Load(const char* key, glm::vec4& data);
 	void Load(const char* key, glm::mat4& data);
@@ -213,6 +216,7 @@ public:
 	virtual void onLoad(uint32& data) = 0;
 	virtual void onLoad(int64& data) = 0;
 	virtual void onLoad(uint64& data) = 0;
+	virtual void onLoad(glm::vec2& data) = 0;
 	virtual void onLoad(glm::vec3& data) = 0;
 	virtual void onLoad(glm::vec4& data) = 0;
 	virtual void onLoad(glm::mat4& data) = 0;
