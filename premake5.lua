@@ -40,7 +40,7 @@ project "HazelGameEngine"       --프로젝트 이름
     kind "StaticLib" -- static lib / kind "SharedLib" : dll      
     language "C++"
     cppdialect "C++17"
-    staticruntime "on" -- static lib 일 경우 on, shared lib 일 경우 off    
+    staticruntime "off" -- static lib 일 경우 on, shared lib 일 경우 off    
 
     --생성파일(exe,lib,dll) 경로설정
     targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")  
@@ -64,7 +64,8 @@ project "HazelGameEngine"       --프로젝트 이름
 
     defines
 	{
-		"_CRT_SECURE_NO_WARNINGS"
+		"_CRT_SECURE_NO_WARNINGS",
+        "GLFW_INCLUDE_NONE"
 	}
 
     includedirs                 --추가포함 디렉토리경로 설정
@@ -193,7 +194,7 @@ project "Hazel-Editor"
     kind "ConsoleApp"
     language "C++"
     cppdialect "C++17"
-    staticruntime "on"
+    staticruntime "off"
 
     targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
     objdir ("%{wks.location}/bin-int/" .. outputdir .. "/%{prj.name}")
@@ -208,7 +209,7 @@ project "Hazel-Editor"
     {
         "HazelGameEngine/vendor/spdlog/include",
         "HazelGameEngine/src",
-        "Hazel-Editor/src",
+        -- "Hazel-Editor/src",
         "HazelGameEngine/vendor",
         "%{IncludeDir.glm}",
         "%{IncludeDir.entt}",
