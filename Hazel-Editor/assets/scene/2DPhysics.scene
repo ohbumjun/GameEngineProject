@@ -1,57 +1,6 @@
 {
     "SceneName": "ActiveScene",
     "Entities": [{
-            "types": [6780415662489155265, 13729283319516192586, 15567495072973413409],
-            "compDatas": [{
-                    "compName": "class Hazel::CameraComponent",
-                    "Camera": {
-                        "OrthographicSize": 10.0,
-                        "OrthographicNear": -1.0,
-                        "OrthographicFar": 1.0,
-                        "PerspectiveFov": 0.7853981852531433,
-                        "PerspectiveNear": 0.009999999776482582,
-                        "PerspectiveFar": 1000.0,
-                        "AspectRatio": 0.9596412777900696,
-                        "ProjectionType": 0
-                    },
-                    "isPrimary": true,
-                    "isFixedAspectRatio": false
-                }, {
-                    "compName": "class Hazel::TransformComponent",
-                    "Translation": [0.0, 3.700000047683716, 15.0],
-                    "Rotation": [0.0, 0.0, 0.0],
-                    "Scale": [1.0, 1.0, 1.0]
-                }, {
-                    "compName": "class Hazel::NameComponent",
-                    "Name": "Main Camera Entity"
-                }]
-        }, {
-            "types": [13729283319516192586, 15567495072973413409, 8364620273459969071, 8797137598225480593, 10980904963728746519],
-            "compDatas": [{
-                    "compName": "class Hazel::TransformComponent",
-                    "Translation": [0.0, 0.327983558177948, 0.0],
-                    "Rotation": [0.0, 0.0, 0.7853981852531433],
-                    "Scale": [1.0, 1.0, 1.0]
-                }, {
-                    "compName": "class Hazel::NameComponent",
-                    "Name": "Sprite"
-                }, {
-                    "compName": "class Hazel::SpriteRenderComponent",
-                    "color": [1.0, 1.0, 1.0, 1.0]
-                }, {
-                    "compName": "class Hazel::Rigidbody2DComponent",
-                    "bodyType": 1,
-                    "FixedRotation": false
-                }, {
-                    "compName": "class Hazel::BoxCollider2DComponent",
-                    "Offset": [0.0, 0.0],
-                    "Size": [0.5, 0.5],
-                    "Density": 1.0,
-                    "Friction": 0.5,
-                    "Restitution": 0.0,
-                    "RestitutionThreshold": 0.5
-                }]
-        }, {
             "types": [13729283319516192586, 15567495072973413409, 8364620273459969071, 8797137598225480593, 10980904963728746519],
             "compDatas": [{
                     "compName": "class Hazel::TransformComponent",
@@ -76,6 +25,58 @@
                     "Friction": 0.5,
                     "Restitution": 0.0,
                     "RestitutionThreshold": 0.5
+                }]
+        }, {
+            "types": [13729283319516192586, 15567495072973413409, 8364620273459969071, 8797137598225480593, 10980904963728746519],
+            "compDatas": [{
+                    "compName": "class Hazel::TransformComponent",
+                    "Translation": [0.0, 2.828000068664551, 0.0],
+                    "Rotation": [0.0, 0.0, 0.7853981852531433],
+                    "Scale": [1.0, 1.0, 1.0]
+                }, {
+                    "compName": "class Hazel::NameComponent",
+                    "Name": "Sprite"
+                }, {
+                    "compName": "class Hazel::SpriteRenderComponent",
+                    "color": [1.0, 1.0, 1.0, 1.0]
+                }, {
+                    "compName": "class Hazel::Rigidbody2DComponent",
+                    "bodyType": 1,
+                    "FixedRotation": false
+                }, {
+                    "compName": "class Hazel::BoxCollider2DComponent",
+                    "Offset": [0.0, 0.0],
+                    "Size": [0.5, 0.5],
+                    "Density": 1.0,
+                    "Friction": 0.5,
+                    "Restitution": 1.0,
+                    "RestitutionThreshold": 0.5
+                }]
+        }, {
+            "types": [6780415662489155265, 13729283319516192586, 15567495072973413409],
+            "compDatas": [{
+                    "compName": "class Hazel::CameraComponent",
+                    "Camera": {
+                        "projectionMatrix": [2.5157458782196045, 0.0, 0.0, 0.0, 0.0, 2.4142134189605713, 0.0, 0.0, 0.0, 0.0, -1.0000200271606445, -1.0, 0.0, 0.0, -0.02000020071864128, 0.0],
+                        "OrthographicSize": 10.0,
+                        "OrthographicNear": -1.0,
+                        "OrthographicFar": 1.0,
+                        "PerspectiveFov": 0.7853981852531433,
+                        "PerspectiveNear": 0.009999999776482582,
+                        "PerspectiveFar": 1000.0,
+                        "AspectRatio": 0.9596412777900696,
+                        "ProjectionType": 0
+                    },
+                    "isPrimary": true,
+                    "isFixedAspectRatio": false
+                }, {
+                    "compName": "class Hazel::TransformComponent",
+                    "Translation": [0.0, 3.700000047683716, 15.0],
+                    "Rotation": [0.0, 0.0, 0.0],
+                    "Scale": [1.0, 1.0, 1.0]
+                }, {
+                    "compName": "class Hazel::NameComponent",
+                    "Name": "Main Camera Entity"
                 }]
         }]
 }

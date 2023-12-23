@@ -1233,6 +1233,8 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
+    <ClInclude Include="src\Hazel\Core\ID\UUID.h" />
+    <ClInclude Include="src\Hazel\Scene\Component\IDComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Core\Allocation\Allocator\FreeListAllocator.cpp">
@@ -1451,5 +1453,7 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
+    <ClCompile Include="src\Hazel\Core\ID\UUID.cpp" />
+    <ClCompile Include="src\Hazel\Scene\Component\IDComponent.cpp" />
   </ItemGroup>
 </Project>
