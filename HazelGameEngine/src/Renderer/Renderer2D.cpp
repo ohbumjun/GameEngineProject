@@ -110,6 +110,13 @@ namespace Hazel
 
 		uint32_t offset = 0;
 
+		/*
+		ex) s_Data.MaxIndices 가 6000 개라고 한다면
+		      하나의 Square 를 그리기 위한 index의 개수는 6개이다.
+
+			  그러면 해당 index buffer 에 들어갈 데이터 크기는
+			  index 하나의 크기 * 6개 씩 * 사각형 개수가 되는 것이다.
+		*/
 		for (uint32_t i = 0; i < s_Data.MaxIndices; i += 6)
 		{
 			quadIndices[i + 0] = offset + 0;

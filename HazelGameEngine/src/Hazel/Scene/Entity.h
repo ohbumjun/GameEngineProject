@@ -57,6 +57,8 @@ namespace Hazel
 			return !(*this == other);
 		}
 		std::vector<const Component*> GetComponents();
+
+		inline bool IsValid() const { return m_EntityHandle != entt::null; }
 	private:
 		entt::entity m_EntityHandle{ entt::null };
 

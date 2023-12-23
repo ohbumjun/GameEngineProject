@@ -42,7 +42,22 @@ namespace Hazel
 	void OpenGLRendererAPI::DrawIndexed(const Ref<VertexArray>& vertexArray,
 		uint32_t indexCount)
 	{
-		uint32_t count = (indexCount == 0) ? vertexArray->GetIndexBuffer()->GetCount() : indexCount;
+		/*
+		예를 들어, NewScene 을 하면 기존에 화면에 그려졌던 데이터가 모두 지워져야 한다.
+		그래서 EditoryLayer::clearScene 을 보면 Renderer2D::FlushAndReset 을 호출한다.
+		그런데 문제는 , 이렇게 하면 이미 GPU 에는 clearScene 을 하기 전에 vertex buffer정보가 들어잇다.
+		즉, gpu 는 계속해서 기존의 scene 정보를 담은 vertex buffer 정보를 가지고 있다는 의미이다.
+
+		이 상태에서 그냥 vertexArray->GetIndexBuffer()->GetCount() 만큼 index buffer 정보를 
+		넘겨주게 되면, gpu 는 그냥 vertex buffer 에 있는 데이터를 또 다시그릴 것이다.
+
+		왜냐하면 우리는 gpu 쪽의 데이터를 clear 해준 것이 아니기 때문이다.
+
+		따라서 만약 index Count 가 0이면, 실제 gpu 를 그릴 당시 넘겨주는 indices 개수도 0개로 해서
+		gpu 가 아무것도 그리지 않게 한다.
+		*/
+		// uint32_t count = (indexCount == 0) ? vertexArray->GetIndexBuffer()->GetCount() : indexCount;
+		uint32_t count = (indexCount == 0) ? 0 : indexCount;
 		
 		glDrawElements(
 			GL_TRIANGLES, 

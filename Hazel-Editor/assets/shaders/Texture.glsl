@@ -34,6 +34,10 @@ struct VertexOutput
 
 
 layout (location = 0) out VertexOutput Output;
+
+// 16 byte 마다 location 값이 1 증가한다.
+// VertexOutput 의 경우, padding 까지 다 해서 16  * 4
+// 만큼의 크기를 차지하는 것으로 보인다.
 layout (location = 4) out flat int v_EntityID;
 
 void main()

@@ -31,6 +31,7 @@ namespace HazelEditor
 		};
 		bool onKeyPressed(Hazel::KeyPressedEvent& e);
 		bool onMouseButtonPressed(Hazel::MouseButtonPressedEvent& e);
+		void cleanScene();
 		void newScene();
 		void openScene();
 		void openScene(const std::filesystem::path& path);
@@ -51,6 +52,7 @@ namespace HazelEditor
 		// Temp
 		Hazel::OrthographicCameraController m_CameraController;
 
+		/*
 		Hazel::Ref<Hazel::Texture2D> m_CheckerboardTexture;
 		Hazel::Ref<Hazel::Texture2D> m_SpriteSheet;
 
@@ -58,6 +60,7 @@ namespace HazelEditor
 		Hazel::Ref<Hazel::SubTexture2D> m_TextureTree;
 		Hazel::Ref<Hazel::SubTexture2D> m_TextureGrass;
 		Hazel::Ref<Hazel::SubTexture2D> m_TextureBarrel;
+		*/
 
 		Hazel::Ref<Hazel::Scene> m_ActiveScene;
 

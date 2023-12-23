@@ -76,8 +76,8 @@ namespace HazelEditor
 
 	void EditorLayer::OnAttach()
 	{
-		m_CheckerboardTexture = Hazel::Texture2D::Create("assets/textures/sample.png");
-		m_SpriteSheet = Hazel::Texture2D::Create("assets/game/textures/RPGpack_sheet_2X.png");
+		//	m_CheckerboardTexture = Hazel::Texture2D::Create("assets/textures/sample.png");
+		// m_SpriteSheet = Hazel::Texture2D::Create("assets/game/textures/RPGpack_sheet_2X.png");
 
 		m_IconPlay =	  Hazel::Texture2D::Create("Resources/Icons/PlayButton.png");
 		m_IconStop = Hazel::Texture2D::Create("Resources/Icons/StopButton.png");
@@ -85,10 +85,10 @@ namespace HazelEditor
 		// m_TextureStairs				= Hazel::SubTexture2D::CreateFromCoords(m_SpriteSheet, {7, 6}, {128, 128});
 		// m_TextureTree				= Hazel::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 2, 1 }, { 128, 128 }, { 1,2 });
 		// m_TextureGrass				= Hazel::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 1, 11 }, { 128, 128 }, { 1,2 });
-		m_TextureBarrel = Hazel::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 8, 2 }, { 128, 128 });
+		// m_TextureBarrel = Hazel::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 8, 2 }, { 128, 128 });
 
-		m_TextureMap['D'] = Hazel::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 6, 11 }, { 128, 128 });
-		m_TextureMap['W'] = Hazel::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 11, 11 }, { 128, 128 });
+		// m_TextureMap['D'] = Hazel::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 6, 11 }, { 128, 128 });
+		// m_TextureMap['W'] = Hazel::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 11, 11 }, { 128, 128 });
 
 		m_MapWidth = s_mapWidth;
 		m_MapHeight = (uint32_t)strlen(s_MapTiles) / s_mapWidth;
@@ -328,11 +328,22 @@ namespace HazelEditor
 		}
 		return false;
 	}
+	void EditorLayer::cleanScene()
+	{
+		m_GizmoType = -1;
+
+		// Batch 정보를 지워준다.
+		Hazel::Renderer2D::FlushAndReset();
+	}
 	void EditorLayer::newScene()
 	{
+		cleanScene();
+
 		m_ActiveScene = Hazel::CreateRef<Hazel::Scene>("Scene");
 		m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 		m_SceneHierachyPanel->SetContext(m_ActiveScene);
+	
+	
 	}
 	void EditorLayer::openScene()
 	{
@@ -351,6 +362,8 @@ namespace HazelEditor
 			HZ_WARN("Could not load {0} - not a scene file", filepath.filename().string());
 			return;
 		}
+
+		cleanScene();
 
 		m_ActiveScene = Hazel::CreateRef<Hazel::Scene>();
 		m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
@@ -609,7 +622,7 @@ namespace HazelEditor
 		// Gizmos
 		Hazel::Entity selectedEntity = m_SceneHierachyPanel.get()->GetSelectedEntity();
 
-		if (selectedEntity && m_GizmoType != -1)
+		if (selectedEntity.IsValid() && m_GizmoType != -1)
 		{
 			ImGuizmo::SetOrthographic(false);
 			ImGuizmo::SetDrawlist();

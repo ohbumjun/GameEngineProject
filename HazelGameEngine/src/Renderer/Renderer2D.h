@@ -83,9 +83,9 @@ namespace Hazel
 
 		static Statistics GetStats();
 		static void ResetStats();
+		static void FlushAndReset();
 
 	private :
-		static void FlushAndReset();
 
 		static void StartBatch();
 		static void NextBatch();
