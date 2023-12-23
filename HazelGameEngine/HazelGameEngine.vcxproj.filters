@@ -76,6 +76,18 @@
     <Filter Include="src\Renderer">
       <UniqueIdentifier>{73D1DFBF-5F34-6F64-08BA-A71AF4FB3AE7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Renderer\Buffer">
+      <UniqueIdentifier>{FCD3C1F3-6835-9F01-F1A2-E5B35D03D6C0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Renderer\Camera">
+      <UniqueIdentifier>{8BE6B0F4-F747-8E02-80B5-D4B4EC15C5C1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Renderer\Shader">
+      <UniqueIdentifier>{B9817B1A-25E3-5828-AE50-9FDA1AB18FE7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Renderer\Texture">
+      <UniqueIdentifier>{D3B98FB1-BF48-197B-6867-2D7654D52921}</UniqueIdentifier>
+    </Filter>
     <Filter Include="vendor">
       <UniqueIdentifier>{B3738122-9F15-ACF8-88D0-BF4C74113349}</UniqueIdentifier>
     </Filter>
@@ -243,6 +255,9 @@
     <ClInclude Include="src\Hazel\Scene\BaseObject.h">
       <Filter>src\Hazel\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="src\Hazel\Scene\Component\BoxCollider2DComponent.h">
+      <Filter>src\Hazel\Scene\Component</Filter>
+    </ClInclude>
     <ClInclude Include="src\Hazel\Scene\Component\CameraComponent.h">
       <Filter>src\Hazel\Scene\Component</Filter>
     </ClInclude>
@@ -253,6 +268,9 @@
       <Filter>src\Hazel\Scene\Component</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\Scene\Component\NativeScriptComponent.h">
+      <Filter>src\Hazel\Scene\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Scene\Component\RigidBody2DComponent.h">
       <Filter>src\Hazel\Scene\Component</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\Scene\Component\SpriteRenderComponent.h">
@@ -315,6 +333,9 @@
     <ClInclude Include="src\Platform\OpenGL\OpenGLTexture.h">
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLUniformBuffer.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h">
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
@@ -325,21 +346,27 @@
       <Filter>src\Platform\Windows</Filter>
     </ClInclude>
     <ClInclude Include="src\Renderer\Buffer\Buffer.h">
-      <Filter>src\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Renderer\Camera\Camera.h">
-      <Filter>src\Renderer</Filter>
+      <Filter>src\Renderer\Buffer</Filter>
     </ClInclude>
     <ClInclude Include="src\Renderer\Buffer\FrameBuffer.h">
-      <Filter>src\Renderer</Filter>
+      <Filter>src\Renderer\Buffer</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\GraphicsContext.h">
-      <Filter>src\Renderer</Filter>
+    <ClInclude Include="src\Renderer\Buffer\UniformBuffer.h">
+      <Filter>src\Renderer\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\Camera\Camera.h">
+      <Filter>src\Renderer\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\Camera\EditorCamera.h">
+      <Filter>src\Renderer\Camera</Filter>
     </ClInclude>
     <ClInclude Include="src\Renderer\Camera\OrthographicCamera.h">
-      <Filter>src\Renderer</Filter>
+      <Filter>src\Renderer\Camera</Filter>
     </ClInclude>
     <ClInclude Include="src\Renderer\Camera\OrthographicCameraController.h">
+      <Filter>src\Renderer\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\GraphicsContext.h">
       <Filter>src\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Renderer\RenderCommand.h">
@@ -355,13 +382,13 @@
       <Filter>src\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Renderer\Shader\Shader.h">
-      <Filter>src\Renderer</Filter>
+      <Filter>src\Renderer\Shader</Filter>
     </ClInclude>
     <ClInclude Include="src\Renderer\Texture\SubTexture2D.h">
-      <Filter>src\Renderer</Filter>
+      <Filter>src\Renderer\Texture</Filter>
     </ClInclude>
     <ClInclude Include="src\Renderer\Texture\Texture.h">
-      <Filter>src\Renderer</Filter>
+      <Filter>src\Renderer\Texture</Filter>
     </ClInclude>
     <ClInclude Include="src\Renderer\VertexArray.h">
       <Filter>src\Renderer</Filter>
@@ -1206,12 +1233,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Camera\EditorCamera.h" />
-    <ClInclude Include="src\Hazel\Utils\Timer.h" />
-    <ClInclude Include="src\Renderer\Buffer\UniformBuffer.h" />
-    <ClInclude Include="src\Platform\OpenGL\OpenGLUniformBuffer.h" />
-    <ClInclude Include="src\Hazel\Scene\Component\RigidBody2DComponent.h" />
-    <ClInclude Include="src\Hazel\Scene\Component\Box2DComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Core\Allocation\Allocator\FreeListAllocator.cpp">
@@ -1292,6 +1313,9 @@
     <ClCompile Include="src\Hazel\Scene\BaseObject.cpp">
       <Filter>src\Hazel\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="src\Hazel\Scene\Component\BoxCollider2DComponent.cpp">
+      <Filter>src\Hazel\Scene\Component</Filter>
+    </ClCompile>
     <ClCompile Include="src\Hazel\Scene\Component\CameraComponent.cpp">
       <Filter>src\Hazel\Scene\Component</Filter>
     </ClCompile>
@@ -1302,6 +1326,9 @@
       <Filter>src\Hazel\Scene\Component</Filter>
     </ClCompile>
     <ClCompile Include="src\Hazel\Scene\Component\NativeScriptComponent.cpp">
+      <Filter>src\Hazel\Scene\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\Scene\Component\RigidBody2DComponent.cpp">
       <Filter>src\Hazel\Scene\Component</Filter>
     </ClCompile>
     <ClCompile Include="src\Hazel\Scene\Component\SpriteRenderComponent.cpp">
@@ -1355,6 +1382,9 @@
     <ClCompile Include="src\Platform\OpenGL\OpenGLTexture.cpp">
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLUniformBuffer.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp">
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
@@ -1368,19 +1398,25 @@
       <Filter>src\Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\Renderer\Buffer\Buffer.cpp">
-      <Filter>src\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Renderer\Camera\Camera.cpp">
-      <Filter>src\Renderer</Filter>
+      <Filter>src\Renderer\Buffer</Filter>
     </ClCompile>
     <ClCompile Include="src\Renderer\Buffer\FrameBuffer.cpp">
-      <Filter>src\Renderer</Filter>
+      <Filter>src\Renderer\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Renderer\Buffer\UniformBuffer.cpp">
+      <Filter>src\Renderer\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Renderer\Camera\Camera.cpp">
+      <Filter>src\Renderer\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Renderer\Camera\EditorCamera.cpp">
+      <Filter>src\Renderer\Camera</Filter>
     </ClCompile>
     <ClCompile Include="src\Renderer\Camera\OrthographicCamera.cpp">
-      <Filter>src\Renderer</Filter>
+      <Filter>src\Renderer\Camera</Filter>
     </ClCompile>
     <ClCompile Include="src\Renderer\Camera\OrthographicCameraController.cpp">
-      <Filter>src\Renderer</Filter>
+      <Filter>src\Renderer\Camera</Filter>
     </ClCompile>
     <ClCompile Include="src\Renderer\RenderCommand.cpp">
       <Filter>src\Renderer</Filter>
@@ -1395,13 +1431,13 @@
       <Filter>src\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Renderer\Shader\Shader.cpp">
-      <Filter>src\Renderer</Filter>
+      <Filter>src\Renderer\Shader</Filter>
     </ClCompile>
     <ClCompile Include="src\Renderer\Texture\SubTexture2D.cpp">
-      <Filter>src\Renderer</Filter>
+      <Filter>src\Renderer\Texture</Filter>
     </ClCompile>
     <ClCompile Include="src\Renderer\Texture\Texture.cpp">
-      <Filter>src\Renderer</Filter>
+      <Filter>src\Renderer\Texture</Filter>
     </ClCompile>
     <ClCompile Include="src\Renderer\VertexArray.cpp">
       <Filter>src\Renderer</Filter>
@@ -1415,10 +1451,5 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\Camera\EditorCamera.cpp" />
-    <ClCompile Include="src\Renderer\Buffer\UniformBuffer.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\OpenGLUniformBuffer.cpp" />
-    <ClCompile Include="src\Hazel\Scene\Component\RigidBody2DComponent.cpp" />
-    <ClCompile Include="src\Hazel\Scene\Component\Box2DComponent.cpp" />
   </ItemGroup>
 </Project>

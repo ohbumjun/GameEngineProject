@@ -97,6 +97,12 @@ void JsonSerializer::onSave(const bool data)
 	writer->Bool(data);
 }
 
+void JsonSerializer::onSave(const char data)
+{
+	JsonWriter* writer = (JsonWriter*)m_JsonWriter;
+	writer->Int(data);
+}
+
 void JsonSerializer::onSave(const int8 data)
 {
 	JsonWriter* writer = (JsonWriter*)m_JsonWriter;
@@ -359,6 +365,30 @@ void JsonSerializer::onLoad(bool& data)
 	}
 
 	data = val->GetBool();
+}
+
+void JsonSerializer::onLoad(char& data)
+{
+	rapidjson::Value* val = nullptr;
+
+	if (m_ReadRecord.empty())
+	{
+		return;
+	}
+
+	//부모 얻어옮
+	JsonRecord& prevRecord = m_ReadRecord.back();
+
+	//get next value
+	val = static_cast<rapidjson::Value*>(getValue(prevRecord));
+
+	//set Data
+	if (nullptr == val || val->IsInt() == false)
+	{
+		return;
+	}
+
+	data = val->GetInt();
 }
 
 void JsonSerializer::onLoad(int8& data)

@@ -682,10 +682,14 @@ namespace HazelEditor
 	void EditorLayer::onScenePlay()
 	{
 		m_SceneState = SceneState::Play;
+
+		m_ActiveScene->OnRuntimeStart();
 	}
 	void EditorLayer::onSceneStop()
 	{
 		m_SceneState = SceneState::Edit;
+
+		m_ActiveScene->OnRuntimeStop();
 	}
 	void EditorLayer::uI_Toolbar()
 	{

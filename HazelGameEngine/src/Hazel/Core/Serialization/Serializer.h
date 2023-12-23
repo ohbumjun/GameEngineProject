@@ -66,6 +66,7 @@ public:
 	void Save(const char* key, void* data);
 	void Save(const char* key, const SerializeTarget* data);
 	void Save(const char* key, const bool data);
+	void Save(const char* key, const char data);
 	void Save(const char* key, const int8 data);
 	void Save(const char* key, const uint8 data);
 	void Save(const char* key, const int16 data);
@@ -103,6 +104,7 @@ protected:
 	virtual void onBeginSaveMap(TypeId type) = 0;
 	virtual void onSaveKey(const char* key) = 0;
 	virtual void onSave(const bool data) = 0;
+	virtual void onSave(const char data) = 0;
 	virtual void onSave(const int8 data) = 0;
 	virtual void onSave(const uint8 data) = 0;
 	virtual void onSave(const int16 data) = 0;
@@ -155,6 +157,7 @@ public:
 	void Load(const char* key, const TypeId type, void* data);
 	void Load(const char* key, SerializeTarget* data);
 	void Load(const char* key, bool& data);
+	void Load(const char* key, char& data);
 	void Load(const char* key, int8& data);
 	void Load(const char* key, uint8& data);
 	void Load(const char* key, int16& data);
@@ -208,6 +211,7 @@ public:
 
 	virtual void onLoadKey(const char* key) = 0;
 	virtual void onLoad(bool& data) = 0;
+	virtual void onLoad(char& data) = 0;
 	virtual void onLoad(int8& data) = 0;
 	virtual void onLoad(uint8& data) = 0;
 	virtual void onLoad(int16& data) = 0;

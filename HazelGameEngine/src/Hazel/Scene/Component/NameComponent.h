@@ -22,7 +22,7 @@ namespace Hazel
 
 		operator const std::string& () const { return name; }
 		operator std::string& () { return name; }
-		const std::string& GetName() { return name; }
+		inline const std::string& GetName() { return name; }
 
 		virtual void Serialize(Serializer* serializer);
 		virtual void Deserialize(Serializer* serializer);

@@ -22,11 +22,12 @@ IncludeDir["stb_image"] = "HazelGameEngine/vendor/stb_image"
 IncludeDir["entt"] = "HazelGameEngine/vendor/entt/include"
 IncludeDir["rapidJson"] = "HazelGameEngine/vendor/RapidJson"
 IncludeDir["ImGuizmo"] = "HazelGameEngine/vendor/ImGuizmo"
-IncludeDir["Box2D"] = "HazelGameEngine/vendor/Box2D"
+IncludeDir["Box2D"] = "HazelGameEngine/vendor/Box2D/include"
 
 -- 해당 경로 내의 premake.lua 파일을 include => 그대로 복사붙여넣기 한다는 것이다. 여기 lua file 에
 -- 관찰한 바, 아래의 include 파일들을 통해서 해당 프로젝트들이 솔루션에 추가된다.
 group "Dependencies"
+    include "HazelGameEngine/vendor/Box2D"
     include "HazelGameEngine/vendor/GLFW"
     include "HazelGameEngine/vendor/Glad"
     include "HazelGameEngine/vendor/imgui"

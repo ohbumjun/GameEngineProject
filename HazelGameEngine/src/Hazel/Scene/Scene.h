@@ -7,6 +7,7 @@
 #include "Renderer/Camera/EditorCamera.h"
 #include "entt.hpp"
 
+class b2World;
 
 namespace Hazel
 {
@@ -34,6 +35,16 @@ namespace Hazel
 		Entity CreateEntity(const std::string& name = "Entity");
 		void DestroyEntity(const Entity& entity);
 		void OnViewportResize(uint32_t width, uint32_t height);
+
+		/*
+		Play 시작 때 호출되는 Scene 쪽의 함수
+		*/
+		void OnRuntimeStart();
+
+		/*
+		Play 끝날 때 호출되는 Scene 함수
+		*/
+		void OnRuntimeStop();
 		/*
 		1) runtime update function
 		2) update function called from editor side
@@ -79,6 +90,14 @@ namespace Hazel
 		uint32_t m_ViewportWidth = 0;
 		uint32_t m_ViewportHeight = 0;
 		std::string m_Name;
+
+		/*
+		Physic World 를 가지고 있는 전체 World 개념
+
+		- Trasform 을 Controll 하는 것은 이 Physics World 가 
+		된다.
+		*/
+		b2World* m_PhysicsWorld = nullptr;
 
 		
 	};

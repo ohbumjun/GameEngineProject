@@ -211,6 +211,12 @@ void Serializer::Save(const char* key, const bool data)
 	onSave(data);
 }
 
+void Serializer::Save(const char* key, const char data)
+{
+	SaveKey(key);
+	onSave(data);
+}
+
 void Serializer::Save(const char* key, const int8 data)
 {
 	SaveKey(key);
@@ -415,6 +421,12 @@ void Serializer::Load(const TypeId type, void* data)
 		onLoad(*v);
 		return;
 	}
+	else if (type == Reflection::GetTypeID<int8>())
+	{
+		int8* v = static_cast<int8*>(pointer);
+		onLoad(*v);
+		return;
+	}
 	else if (type == Reflection::GetTypeID<int16>())
 	{
 		int16* v = static_cast<int16*>(pointer);
@@ -520,6 +532,13 @@ void Serializer::Load(const char* key, SerializeTarget* data)
 }
 
 void Serializer::Load(const char* key, bool& data)
+{
+	LoadKey(key);
+	onLoad(data);
+	m_Record.recentKey = "";
+}
+
+void Serializer::Load(const char* key, char& data)
 {
 	LoadKey(key);
 	onLoad(data);

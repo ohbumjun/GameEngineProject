@@ -17,6 +17,7 @@ private:
 	virtual void onBeginSaveMap(TypeId type) override;
 	virtual void onSaveKey(const char* key) override;
 	virtual void onSave(const bool data) override;
+	virtual void onSave(const char data) override;
 	virtual void onSave(const int8 data) override;
 	virtual void onSave(const uint8 data) override;
 	virtual void onSave(const int16 data) override;
@@ -46,6 +47,7 @@ private:
 
 	virtual void onLoadKey(const char* key) override;
 	virtual void onLoad(bool& data) override;
+	virtual void onLoad(char& data) override;
 	virtual void onLoad(int8& data) override;
 	virtual void onLoad(uint8& data) override;
 	virtual void onLoad(int16& data) override;

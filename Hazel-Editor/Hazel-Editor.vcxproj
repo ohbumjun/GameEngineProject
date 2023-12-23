@@ -127,19 +127,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Panel\ContentBrowserPanel.h" />
     <ClInclude Include="src\EditorLayer.h" />
     <ClInclude Include="src\File\FileManager.h" />
     <ClInclude Include="src\File\PathManager.h" />
+    <ClInclude Include="src\Panel\ContentBrowserPanel.h" />
     <ClInclude Include="src\Panel\SceneHierarchyPanel.h" />
     <ClInclude Include="src\ParticleSystem.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Panel\ContentBrowserPanel.cpp" />
     <ClCompile Include="src\EditorLayer.cpp" />
     <ClCompile Include="src\File\FileManager.cpp" />
     <ClCompile Include="src\File\PathManager.cpp" />
     <ClCompile Include="src\HazelEditorApp.cpp" />
+    <ClCompile Include="src\Panel\ContentBrowserPanel.cpp" />
     <ClCompile Include="src\Panel\SceneHierarchyPanel.cpp" />
     <ClCompile Include="src\ParticleSystem.cpp" />
   </ItemGroup>
@@ -147,9 +147,6 @@
     <ProjectReference Include="..\HazelGameEngine\HazelGameEngine.vcxproj">
       <Project>{692DC840-D5B8-3505-DEC9-B8F94AD49105}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="assets\shaders\ShaderExplanation.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
