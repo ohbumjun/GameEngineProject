@@ -52,6 +52,8 @@ void Hazel::SceneCamera::Deserialize(Serializer* serializer)
 
 	m_ProjectionType = (ProjectionType)projectionType;
 
+	RecalculateProjection();
+
 	serializer->EndLoadMap();
 }
 
@@ -87,7 +89,7 @@ void Hazel::SceneCamera::SetViewportSize(uint32_t width, uint32_t height)
 void Hazel::SceneCamera::RecalculateProjection()
 {	
 	if (m_ProjectionType == ProjectionType::Orthographic)
-	{
+	{ 
 		// height : orthographic size
 		// width  : orthographic size (viewport size) * aspect ratio
 		float orthoLeft = m_OrthographicSize * m_AspectRatio * -0.5f;

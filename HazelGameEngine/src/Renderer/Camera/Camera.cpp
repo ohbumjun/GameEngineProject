@@ -28,5 +28,6 @@ namespace Hazel
 	void Camera::deserializeData(Serializer* serializer)
 	{
 		serializer->Load("projectionMatrix", m_ProjectionMatrix);
+		bool h = true;
 	}
 }
