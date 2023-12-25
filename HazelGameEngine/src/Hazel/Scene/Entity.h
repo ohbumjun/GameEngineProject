@@ -3,11 +3,14 @@
 #include "entt.hpp"
 #include "Scene.h"
 #include "Component/Component.h"
+#include "Component/IDComponent.h"
+#include "Hazel/Core/ID/UUID.h"
 
 namespace Hazel
 {
 	class Entity
 	{
+		friend class Scene;
 	public:
 		Entity() = default;
 		Entity(entt::entity hanel, Scene* scene);
@@ -57,6 +60,8 @@ namespace Hazel
 			return !(*this == other);
 		}
 		std::vector<const Component*> GetComponents();
+
+		UUID GetUUID() { return GetComponent<IDComponent>().GetUUID(); }
 
 		inline bool IsValid() const { return m_EntityHandle != entt::null; }
 	private:

@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "entt.hpp"
+#include "Hazel/Core/ID/UUID.h"
 #include "Hazel/Utils/TimeStep.h"
 #include "Hazel/Core/Reflection/TypeId.h"
 #include "Hazel/Core/Serialization/SerializeTarget.h"
@@ -32,6 +33,7 @@ namespace Hazel
 		Scene() {};
 		virtual ~Scene();
 
+		Entity CreateEntityWithUUID(UUID uuid, const std::string& name = std::string());
 		Entity CreateEntity(const std::string& name = "Entity");
 		void DestroyEntity(const Entity& entity);
 		void OnViewportResize(uint32_t width, uint32_t height);

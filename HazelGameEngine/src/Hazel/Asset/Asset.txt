@@ -1,0 +1,7 @@
+Cherno 의 경우
+Asset 들을 각각의 file 경로를 id 로
+사용하지 않을 것이다.
+
+- 왜냐하면 파일 경로를 이동할 수도 있고
+- package 되고, compres 등 되면
+path 가 완전히 바뀔 수도 있고

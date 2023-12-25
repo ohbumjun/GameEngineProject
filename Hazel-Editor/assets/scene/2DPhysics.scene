@@ -1,7 +1,7 @@
 {
     "SceneName": "ActiveScene",
     "Entities": [{
-            "types": [13729283319516192586, 15567495072973413409, 8364620273459969071, 8797137598225480593, 10980904963728746519],
+            "types": [13729283319516192586, 15567495072973413409, 1927429000379262859, 8364620273459969071, 8797137598225480593, 10980904963728746519],
             "compDatas": [{
                     "compName": "class Hazel::TransformComponent",
                     "Translation": [0.0, -0.8941230773925781, 0.0],
@@ -10,6 +10,8 @@
                 }, {
                     "compName": "class Hazel::NameComponent",
                     "Name": "DownBox"
+                }, {
+                    "UUID": 5609561400105098421
                 }, {
                     "compName": "class Hazel::SpriteRenderComponent",
                     "color": [0.8779444098472595, 0.9111968874931335, 0.40458548069000244, 1.0]
@@ -27,7 +29,7 @@
                     "RestitutionThreshold": 0.5
                 }]
         }, {
-            "types": [13729283319516192586, 15567495072973413409, 8364620273459969071, 8797137598225480593, 10980904963728746519],
+            "types": [13729283319516192586, 15567495072973413409, 1927429000379262859, 8364620273459969071, 8797137598225480593, 10980904963728746519],
             "compDatas": [{
                     "compName": "class Hazel::TransformComponent",
                     "Translation": [0.0, 2.828000068664551, 0.0],
@@ -36,6 +38,8 @@
                 }, {
                     "compName": "class Hazel::NameComponent",
                     "Name": "Sprite"
+                }, {
+                    "UUID": 9715766381655773815
                 }, {
                     "compName": "class Hazel::SpriteRenderComponent",
                     "color": [1.0, 1.0, 1.0, 1.0]
@@ -53,7 +57,7 @@
                     "RestitutionThreshold": 0.5
                 }]
         }, {
-            "types": [6780415662489155265, 13729283319516192586, 15567495072973413409],
+            "types": [6780415662489155265, 13729283319516192586, 15567495072973413409, 1927429000379262859],
             "compDatas": [{
                     "compName": "class Hazel::CameraComponent",
                     "Camera": {
@@ -77,6 +81,8 @@
                 }, {
                     "compName": "class Hazel::NameComponent",
                     "Name": "Main Camera Entity"
+                }, {
+                    "UUID": 12832608054326705950
                 }]
         }]
 }

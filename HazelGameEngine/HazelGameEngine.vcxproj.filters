@@ -1456,4 +1456,7 @@
     <ClCompile Include="src\Hazel\Core\ID\UUID.cpp" />
     <ClCompile Include="src\Hazel\Scene\Component\IDComponent.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="src\Hazel\Asset\Asset.txt" />
+  </ItemGroup>
 </Project>

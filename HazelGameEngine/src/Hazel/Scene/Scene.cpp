@@ -5,6 +5,7 @@
 #include "Component/TransformComponent.h"
 #include "Component/NativeScriptComponent.h"
 #include "Component/NameComponent.h"
+#include "Component/IDComponent.h"
 #include "Component/RigidBody2DComponent.h"
 #include "Component/BoxCollider2DComponent.h"
 #include "Renderer/Renderer2D.h"
@@ -100,6 +101,22 @@ namespace Hazel
 				assert(false);
 			}
 		});
+
+		/*
+		auto& entities = m_Registry.storage<Entity>();
+
+		for (const Entity& entity : entities)
+		{
+			if (m_Registry.valid(entity.m_EntityHandle))
+			{
+				m_Registry.destroy(entity.m_EntityHandle);
+			}
+			else
+			{
+				assert(false);
+			}
+		}
+		*/
 	}
 	void Scene::OnRuntimeStart()
 	{
@@ -267,12 +284,26 @@ namespace Hazel
 		m_Registry.each([&](auto entityID)
 		{
 			Entity entity = { entityID, this};
-		
+
 			if (!entity) return;
 
 			serializeEntity(serializer, entity);
 
 		});
+
+		/*
+		auto& entities = m_Registry.storage<Entity>();
+
+		for (const Entity& entity : entities)
+		{
+			if (m_Registry.valid(entity.m_EntityHandle) == false)
+			{
+				return;
+			}
+
+			serializeEntity(serializer, entity);
+		}
+		*/
 
 		serializer->EndSaveSeq();
 
@@ -291,6 +322,16 @@ namespace Hazel
 
 		for (size_t i = 0; i < numActiveEntities; ++i)
 		{
+			/*
+			즉, LVEngine 처럼 entity 를 serialize, deserialize 하면서
+			entity 를 유지하지 않을 것이다.
+
+			왜냐하면 어차피 entity 는 idx 일 분이다.
+			각 entity 혹은 object 를 식별하는 identifier 는 IDComponent 의 uuid 가 있다.
+
+			따라서 굳이 entity 를 그대로 serialize, deserialize 할 필요가 없다.
+			또한 차후 entity reuse 개념에서도 필요할 수 있다. 
+			*/
 			Entity entity{ m_Registry.create(), this };
 
 			deserializeEntity(serializer, entity);
@@ -342,6 +383,8 @@ namespace Hazel
 
 	void Scene::serializeEntity(Serializer* serializer, Entity entity)
 	{
+		HZ_CORE_ASSERT(entity.HasComponent<IDComponent>(), "uuid must exist");
+
 		serializer->BeginSaveMap(Reflection::GetTypeID<Entity>(), this);
 
 		std::vector<const Component*> components = entity.GetComponents();
@@ -400,6 +443,16 @@ namespace Hazel
 			vecComponents[i]->Deserialize(serializer);
 		}
 
+		/*
+		나중에 지울 코드이다.
+		혹여나 scene 중에서 IDComponent 가 생기기 전에 serialize 된 녀석들은
+		entity가  Id Component 가 없을 것이다.
+		*/
+		if (entity.HasComponent<IDComponent>() == false)
+		{
+			entity.AddComponent<IDComponent>(UUID());
+		}
+
 		serializer->EndLoadSeq();
 
 		serializer->EndLoadMap();
@@ -424,6 +477,10 @@ namespace Hazel
 		{
 			return &entity.AddComponent<TransformComponent>();
 		}
+		else if (type == Reflection::GetTypeID<IDComponent>())
+		{
+			return &entity.AddComponent<IDComponent>(UUID());
+		}
 		else if (type == Reflection::GetTypeID<Rigidbody2DComponent>())
 		{
 			return &entity.AddComponent<Rigidbody2DComponent>();
@@ -439,14 +496,19 @@ namespace Hazel
 
 		assert(false);
 	}
-	Entity Scene::CreateEntity(const std::string& name)
+	Entity Scene::CreateEntityWithUUID(UUID uuid, const std::string& name)
 	{
 		Entity entity{ m_Registry.create(), this };
 
 		entity.AddComponent<TransformComponent>();
+		entity.AddComponent<IDComponent>(uuid);
 		entity.AddComponent<NameComponent>(name);
 
 		return entity;
+	}
+	Entity Scene::CreateEntity(const std::string& name)
+	{
+		return CreateEntityWithUUID(UUID(), name);
 	}
 	void Scene::DestroyEntity(const Entity& entity)
 	{
@@ -506,6 +568,10 @@ namespace Hazel
 	}
 	template<>
 	void Scene::OnComponentAdded<BoxCollider2DComponent>(Entity entity, BoxCollider2DComponent& component)
+	{
+	}
+	template<>
+	void Scene::OnComponentAdded<IDComponent>(Entity entity, IDComponent& component)
 	{
 	}
 }
