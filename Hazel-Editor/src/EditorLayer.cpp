@@ -305,7 +305,8 @@ namespace HazelEditor
 		}
 		case Hazel::Key::S:
 		{
-			if (control)
+			// Edit 상태에서만 scene save 가 가능하게 할 것이다.
+			if (control && m_SceneState == SceneState::Edit)
 			{
 				if (shift)
 					saveSceneAs();
@@ -437,6 +438,7 @@ namespace HazelEditor
 	}
 	void EditorLayer::serializeScene(Hazel::Ref<Hazel::Scene> scene, const std::filesystem::path& path)
 	{
+		HZ_CORE_INFO("Scene Saved to {0}", path.string());
 		Hazel::SceneSerializer serializer(scene);
 		serializer.SerializeText(path.string());
 	}
@@ -659,6 +661,8 @@ namespace HazelEditor
 			{
 				const wchar_t* path = (const wchar_t*)payload->Data;
 				openScene(std::filesystem::path(g_AssetPath) / path);
+
+				m_SceneState = SceneState::Edit;
 			}
 			ImGui::EndDragDropTarget();
 		}
@@ -768,9 +772,13 @@ namespace HazelEditor
 
 		m_ActiveScene->OnRuntimeStop();
 
-		// Active Scene 을 지울 거면 nullptr 을 대입해서
-		// ref cnt 를 0으로 만들면 되지 않을까 ?
-		m_ActiveScene = nullptr;
+		/*
+		1) Active Scene 을 지울 거면 nullptr 을 대입해서
+		ref cnt 를 0으로 만들면 된다.
+		2) nullptr 을 넣어주지 않는 다는 것은, 이전의 play scene 을 계속해서 메모리에 올려두고
+		그 다음 play 때, 새롭게 생성된 scene 을 해당 m_ActiveScene 에 올려두겠다는 의미이다.
+		*/
+		// m_ActiveScene = nullptr;
 
 		m_SceneHierachyPanel->SetContext(m_EditorScene);
 	}
