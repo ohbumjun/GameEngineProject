@@ -130,9 +130,10 @@
     <ClInclude Include="src\EditorLayer.h" />
     <ClInclude Include="src\File\FileManager.h" />
     <ClInclude Include="src\File\PathManager.h" />
-    <ClInclude Include="src\Panel\Component\NameComponentPanel.h" />
+    <ClInclude Include="src\Panel\ComponentPanel\CameraPanel.h" />
     <ClInclude Include="src\Panel\ContentBrowserPanel.h" />
     <ClInclude Include="src\Panel\SceneHierarchyPanel.h" />
+    <ClInclude Include="src\Panel\Utils\PanelUtils.h" />
     <ClInclude Include="src\ParticleSystem.h" />
   </ItemGroup>
   <ItemGroup>
@@ -140,6 +141,7 @@
     <ClCompile Include="src\File\FileManager.cpp" />
     <ClCompile Include="src\File\PathManager.cpp" />
     <ClCompile Include="src\HazelEditorApp.cpp" />
+    <ClCompile Include="src\Panel\ComponentPanel\CameraPanel.cpp" />
     <ClCompile Include="src\Panel\ContentBrowserPanel.cpp" />
     <ClCompile Include="src\Panel\SceneHierarchyPanel.cpp" />
     <ClCompile Include="src\ParticleSystem.cpp" />

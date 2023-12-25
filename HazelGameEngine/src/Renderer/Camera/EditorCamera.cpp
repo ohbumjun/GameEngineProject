@@ -16,19 +16,19 @@ namespace Hazel {
 	EditorCamera::EditorCamera(float fov, float aspectRatio, float nearClip, float farClip)
 		: m_FOV(fov), m_AspectRatio(aspectRatio), m_NearClip(nearClip), m_FarClip(farClip), Camera(glm::perspective(glm::radians(fov), aspectRatio, nearClip, farClip))
 	{
-		UpdateView();
+		updateView();
 	}
 
-	void EditorCamera::UpdateProjection()
+	void EditorCamera::updateProjection()
 	{
 		m_AspectRatio = m_ViewportWidth / m_ViewportHeight;
 		m_ProjectionMatrix = glm::perspective(glm::radians(m_FOV), m_AspectRatio, m_NearClip, m_FarClip);
 	}
 
-	void EditorCamera::UpdateView()
+	void EditorCamera::updateView()
 	{ 
 		// m_Yaw = m_Pitch = 0.0f; // Lock the camera's rotation
-		m_Position = CalculatePosition();
+		m_Position = calculatePosition();
 
 		glm::quat orientation = GetOrientation();
 
@@ -37,7 +37,7 @@ namespace Hazel {
 		m_ViewMatrix = glm::inverse(m_ViewMatrix);
 	}
 
-	std::pair<float, float> EditorCamera::PanSpeed() const
+	std::pair<float, float> EditorCamera::panSpeed() const
 	{
 		// Cherno 가 어디선가 복사한 함수
 		float x = std::min(m_ViewportWidth / 1000.0f, 2.4f); // max = 2.4f
@@ -49,7 +49,7 @@ namespace Hazel {
 		return { xFactor, yFactor };
 	}
 
-	float EditorCamera::RotationSpeed() const
+	float EditorCamera::rotationSpeed() const
 	{
 		return 0.8f;
 	}
@@ -82,38 +82,38 @@ namespace Hazel {
 			m_InitialMousePosition = mouse;
 
 			if (Input::IsMouseButtonPressed(Mouse::ButtonMiddle))
-				MousePan(delta);
+				mousePan(delta);
 			else if (Input::IsMouseButtonPressed(Mouse::ButtonLeft))
-				MouseRotate(delta);
+				mouseRotate(delta);
 			else if (Input::IsMouseButtonPressed(Mouse::ButtonRight))
-				MouseZoom(delta.y);
+				mouseZoom(delta.y);
 		}
 
-		UpdateView();
+		updateView();
 	}
 
 	void EditorCamera::OnEvent(Event& e)
 	{
 		EventDispatcher dispatcher(e);
-		dispatcher.Dispatch<MouseScrolledEvent>(HZ_BIND_EVENT_FN(EditorCamera::OnMouseScroll));
+		dispatcher.Dispatch<MouseScrolledEvent>(HZ_BIND_EVENT_FN(EditorCamera::onMouseScroll));
 	}
 
-	bool EditorCamera::OnMouseScroll(MouseScrolledEvent& e)
+	bool EditorCamera::onMouseScroll(MouseScrolledEvent& e)
 	{
 		float delta = e.GetYOffset() * 0.1f;
-		MouseZoom(delta);
-		UpdateView();
+		mouseZoom(delta);
+		updateView();
 		return false;
 	}
 
-	void EditorCamera::MousePan(const glm::vec2& delta)
+	void EditorCamera::mousePan(const glm::vec2& delta)
 	{
-		auto [xSpeed, ySpeed] = PanSpeed();
+		auto [xSpeed, ySpeed] = panSpeed();
 		m_FocalPoint += -GetRightDirection() * delta.x * xSpeed * m_Distance;
 		m_FocalPoint += GetUpDirection() * delta.y * ySpeed * m_Distance;
 	}
 
-	void EditorCamera::MouseRotate(const glm::vec2& delta)
+	void EditorCamera::mouseRotate(const glm::vec2& delta)
 	{
 		/*
 		GetUpDirection().y  == 0 ?
@@ -176,9 +176,9 @@ namespace Hazel {
 
 		float yawSign = GetUpDirection().y < 0 ? -1.0f : 1.0f;
 
-		m_Yaw += yawSign * delta.x * RotationSpeed();
+		m_Yaw += yawSign * delta.x * rotationSpeed();
 
-		m_Pitch += delta.y * RotationSpeed();
+		m_Pitch += delta.y * rotationSpeed();
 
 		/*
 		glm::vec3 forwardVec = GetForwardDirection();
@@ -191,7 +191,7 @@ namespace Hazel {
 		*/
 	}
 
-	void EditorCamera::MouseZoom(float delta)
+	void EditorCamera::mouseZoom(float delta)
 	{
 		m_Distance -= delta * ZoomSpeed();
 
@@ -234,7 +234,7 @@ namespace Hazel {
 		return glm::rotate(GetOrientation(), glm::vec3(0.0f, 0.0f, -1.0f));
 	}
 
-	glm::vec3 EditorCamera::CalculatePosition() const
+	glm::vec3 EditorCamera::calculatePosition() const
 	{
 		/*
 		ex) m_FocalPoint 가 (0,0,0), Distance 가 10 이면

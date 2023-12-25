@@ -1,6 +1,9 @@
 ﻿#include "hzpch.h"
+
+// Panel
 #include "SceneHierarchyPanel.h"
-#include "Component/NameComponentPanel.h"
+#include "ComponentPanel/CameraPanel.h"
+#include "Utils/PanelUtils.h"
 
 // Component
 #include "Hazel/Scene/Component/Component.h"
@@ -16,147 +19,11 @@
 
 namespace HazelEditor {
 	extern const std::filesystem::path g_AssetPath;
+
 }
 namespace Hazel
 {
 	using HazelEditor::g_AssetPath;
-
-	static void DrawVec3Control(const std::string& lable, glm::vec3& values, 
-		float resetValues = 0.0f, float columnWidth = 100.f)
-	{
-		ImGuiIO& io = ImGui::GetIO();
-		auto boldFont = io.Fonts->Fonts[1];
-
-
-		ImGui::PushID(lable.c_str());
-
-		ImGui::Columns(2);
-		ImGui::SetColumnWidth(0, columnWidth);
-		ImGui::Text(lable.c_str());
-		ImGui::NextColumn();
-
-		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 1.f, 0 });
-
-		// ImGui::PushItemWidth(3, ImGui::CalcItemWidth());
-		// float lineHeight = ImGui::GetTextLineHeightWithSpacing();
-		float lineHeight = ImGui::GetFontSize() + 2.f * ImGui::GetStyle().FramePadding.y;
-		ImVec2 buttonSize = { lineHeight + 2.f, lineHeight };
-
-		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.1f, 0.15f, 1.0f));
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.8f, 0.3f, 0.15f, 1.0f));
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.8f, 0.5f, 0.15f, 1.0f));
-
-		ImGui::PushFont(boldFont);
-		if (ImGui::Button("X", buttonSize)) {
-			values.x = resetValues;
-		}
-		ImGui::PopFont();
-		ImGui::PopStyleColor(3);
-
-		ImGui::SameLine();
-		// ImGui::PushItemWidth(lineHeight * 4.0f); // Adjust the width as needed
-		ImGui::PushItemWidth(lineHeight * 2.0f); // Adjust the width as needed
-		ImGui::DragFloat("##X", &values.x, 0.1f);
-		ImGui::PopItemWidth();
-		ImGui::SameLine();
-
-		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.1f, 0.8f, 0.15f, 1.0f));
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.1f, 0.8f, 0.3f, 1.0f));
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.7f, 0.5f, 1.0f));
-
-		ImGui::PushFont(boldFont);
-		if (ImGui::Button("Y", buttonSize)) {
-			values.y = resetValues;
-		}
-		ImGui::PopFont();
-		ImGui::PopStyleColor(3);
-
-		ImGui::SameLine();
-		ImGui::PushItemWidth(lineHeight * 2.0f); // Adjust the width as needed
-		ImGui::DragFloat("##Y", &values.y, 0.1f);
-		ImGui::PopItemWidth();
-		ImGui::SameLine();
-
-
-		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.1f, 0.1f, 0.8f, 1.0f));
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.1f, 0.8f, 1.0f));
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.5f, 0.1f, 0.8f, 1.0f));
-
-		ImGui::PushFont(boldFont);
-		if (ImGui::Button("Z", buttonSize)) {
-			values.z = resetValues;
-		}
-		ImGui::PopFont();
-		ImGui::PopStyleColor(3);
-
-		ImGui::SameLine();
-		ImGui::PushItemWidth(lineHeight * 2.0f); // Adjust the width as needed
-		ImGui::DragFloat("##Z", &values.z, 0.1f);
-		ImGui::PopItemWidth();
-
-		ImGui::PopStyleVar();
-
-		ImGui::Columns(1);
-
-		ImGui::PopID();
-	}
-	template<typename T, typename UFunction>
-	static void DrawComponent(const std::string& name, Entity entity, UFunction uFunc)
-	{
-		// const ImGuiTreeNodeFlags treeNodeFlag = ImGuiTreeNodeFlags_DefaultOpen |
-		const ImGuiTreeNodeFlags treeNodeFlag =
-			ImGuiTreeNodeFlags_AllowItemOverlap |
-			ImGuiTreeNodeFlags_Framed |
-			ImGuiTreeNodeFlags_FramePadding;
-
-		float lineHeight = ImGui::GetFontSize() + 2.f * ImGui::GetStyle().FramePadding.y;
-		ImVec2 buttonSize = { lineHeight, lineHeight };
-
-		if (entity.HasComponent<T>())
-		{
-			// transform 조정
-			auto& component = entity.GetComponent<T>();
-
-			ImVec2 contentRegion = ImGui::GetContentRegionAvail();
-
-			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 2.f, 2.f });
-
-			ImGui::Separator();
-
-			// 해당 영역을 선택해서 열어야만 조정 가능하다
-			bool opened = ImGui::TreeNodeEx((void*)typeid(T).hash_code(),
-				treeNodeFlag, name.c_str());
-
-			ImGui::SameLine(contentRegion.x - lineHeight * 0.5f);
-
-			bool removeComponent = false;
-
-			if (ImGui::Button("+", buttonSize))
-				ImGui::OpenPopup("ComponentSettings");
-
-			ImGui::PopStyleVar();
-
-			if (ImGui::BeginPopup("ComponentSettings"))
-			{
-				if (ImGui::MenuItem("Remove Component"))
-					removeComponent = true;
-
-				ImGui::EndPopup();
-			}
-
-			if (opened)
-			{
-				uFunc(component);
-
-				ImGui::TreePop();
-			}
-
-			if (removeComponent)
-			{
-				entity.RemoveComponent<T>();
-			}
-		}
-	}
 
 	void SceneHierarchyPanel::SetContext(const  std::weak_ptr<Scene>& scene)
 	{
@@ -372,15 +239,18 @@ namespace Hazel
 
 		ImGui::PopItemWidth();
 
-		DrawComponent<TransformComponent>("Transform", entity, [](auto& component) {
-			DrawVec3Control("Translation", component.GetTranslationRef());
+		HazelEditor::DrawComponent<TransformComponent>("Transform", entity, [](auto& component) {
+			HazelEditor::DrawVec3Control("Translation", component.GetTranslationRef());
 			glm::vec3 degree = glm::degrees(component.GetRotationRef());
-			DrawVec3Control("Rotation", degree);
+			HazelEditor::DrawVec3Control("Rotation", degree);
 			// component.Rotation = glm::radians(degree);
 			component.SetRotation(glm::radians(degree));
-			DrawVec3Control("Scale", component.GetScaleRef());
+			HazelEditor::DrawVec3Control("Scale", component.GetScaleRef());
 		});
 
+		HazelEditor::DrawComponent<CameraComponent>("Camera", entity, &HazelEditor::CameraPanel::DrawCameraComponent);
+
+		/*
 		DrawComponent<CameraComponent>("Camera", entity, [](auto& component) {
 			SceneCamera& camera = const_cast<SceneCamera&>(
 				component.GetCamera());
@@ -456,8 +326,9 @@ namespace Hazel
 
 			ImGui::Checkbox("Fixed Aspect Ratio", &component.GetFixedAspectRatioRef());
 		});
+		*/
 
-		DrawComponent<SpriteRenderComponent>("Sprite", entity, [](auto& component) {
+		HazelEditor::DrawComponent<SpriteRenderComponent>("Sprite", entity, [](auto& component) {
 			ImGui::ColorEdit4("Color", glm::value_ptr(component.GetColorRef()));
 
 			ImGui::Button("Texture", ImVec2(100.0f, 0.0f));
@@ -485,7 +356,7 @@ namespace Hazel
 
 			ImGui::DragFloat("Tiling Factor", &component.GetTilingFactorRef(), 0.1f, 0.0f, 100.0f);
 		});
-		DrawComponent<Rigidbody2DComponent>("Rigidbody 2D", entity, [](auto& component)
+		HazelEditor::DrawComponent<Rigidbody2DComponent>("Rigidbody 2D", entity, [](auto& component)
 			{
 				const char* bodyTypeStrings[] = { "Static", "Dynamic", "Kinematic" };
 				const char* currentBodyTypeString = bodyTypeStrings[(int)component.GetBodyType()];
@@ -513,7 +384,7 @@ namespace Hazel
 				ImGui::Checkbox("Fixed Rotation", &component.GetFixedRotationRef());
 			});
 
-		DrawComponent<BoxCollider2DComponent>("Box Collider 2D", entity, [](auto& component)
+		HazelEditor::DrawComponent<BoxCollider2DComponent>("Box Collider 2D", entity, [](auto& component)
 			{
 				ImGui::DragFloat2("Offset", glm::value_ptr(component.GetOffsetRef()));
 				ImGui::DragFloat2("Size", glm::value_ptr(component.GetSizeRef()));

@@ -181,6 +181,9 @@ namespace Hazel
 		CopyComponent<Rigidbody2DComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
 		CopyComponent<BoxCollider2DComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
 
+		// Set Default Name
+		newScene->SetName("PlayScene");
+
 		return newScene;
 	}
 	void Scene::OnRuntimeStart()

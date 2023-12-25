@@ -1,18 +1,27 @@
 ﻿#include "EditorLayer.h"
-#include "Platform/OpenGL/OpenGLShader.h"
+
+// 3rd
+#include <filesystem>
 #include "imgui/imgui.h"
 #include "ImGuizmo.h"
-#include "File/PathManager.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
+// Editor
+#include "File/PathManager.h"
+#include "Panel/Utils/PanelUtils.h"
+#include "Panel/ComponentPanel/CameraPanel.h"
+
+// Engine
 #include "Hazel/FileSystem/DirectorySystem.h"
 #include "Hazel/Scene/SceneSerializer.h"
 #include "Hazel/Math/Math.h"
+#include "Hazel/Utils/PlatformUtils.h"
+
+#include "Platform/OpenGL/OpenGLShader.h"
 #include "Hazel/Scene/Component/NameComponent.h"
 #include "Hazel/Scene/Component/CameraComponent.h"
 #include "Hazel/Scene/Component/TransformComponent.h"
-#include <filesystem>
-#include "Hazel/Utils/PlatformUtils.h"
 
 // 24 wide map
 static const uint32_t s_mapWidth = 24;
@@ -237,9 +246,8 @@ namespace HazelEditor
 			// read back data from pixel 
 			// '1' 인 이유 : 현재 Frame Buffer 의 1번째 Texture 를 Entity 를 저장하는 용도로 사용했기 때문이다.
 			int pixelData = m_FrameBuffer->ReadPixel(1, mouseX, mouseY);
-			// HZ_CORE_WARN("mouse {0}", pixelData);
-
-			m_HoveredEntity = pixelData == -1 ? Hazel::Entity() : Hazel::Entity((entt::entity)pixelData, m_ActiveScene.get());
+			Hazel::Scene* currentScene = m_SceneState == SceneState::Edit ? m_EditorScene.get() : m_ActiveScene.get();
+			m_HoveredEntity = pixelData == -1 ? Hazel::Entity() : Hazel::Entity((entt::entity)pixelData, currentScene);
 		}
 		
 
@@ -363,13 +371,19 @@ namespace HazelEditor
 	}
 	void EditorLayer::newScene()
 	{
+		if (m_SceneState != SceneState::Edit)
+		{
+			// play scene 중에 scene 을 load 하면 우선 현재 scene 을 stop 한다.
+			onSceneStop();
+		}
+
 		// Batch 정보를 지워준다.
 		Hazel::Renderer2D::FlushAndReset();
 
-		m_ActiveScene = Hazel::CreateRef<Hazel::Scene>("Scene");
-		m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-		m_SceneHierachyPanel->SetContext(m_ActiveScene);
-	
+		m_EditorScene = Hazel::CreateRef<Hazel::Scene>("New Scene");
+		m_EditorScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+		m_SceneHierachyPanel->SetContext(m_EditorScene);
+
 		m_EditorScenePath = std::filesystem::path();
 	}
 	void EditorLayer::openScene()
@@ -384,12 +398,6 @@ namespace HazelEditor
 	}
 	void EditorLayer::openScene(const std::filesystem::path& filepath)
 	{
-		if (m_SceneState != SceneState::Edit)
-		{
-			// play scene 중에 scene 을 load 하면 우선 현재 scene 을 stop 한다.
-			onSceneStop();
-		}
-
 		if(filepath.extension().string() != ".scene")
 		{
 			HZ_WARN("Could not load {0} - not a scene file", filepath.filename().string());
@@ -420,7 +428,6 @@ namespace HazelEditor
 			m_EditorScenePath = filepath;
 		}
 	}
-
 	void EditorLayer::saveScene()
 	{
 		if (!m_EditorScenePath.empty())
@@ -428,13 +435,11 @@ namespace HazelEditor
 		else
 			saveSceneAs();
 	}
-
 	void EditorLayer::serializeScene(Hazel::Ref<Hazel::Scene> scene, const std::filesystem::path& path)
 	{
 		Hazel::SceneSerializer serializer(scene);
 		serializer.SerializeText(path.string());
 	}
-	
 	void EditorLayer::prepareDockSpace()
 	{
 		// DockSpace
@@ -562,16 +567,8 @@ namespace HazelEditor
 		ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
 		ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 
-		{
-			// auto& cameraComp = m_SecondCameraEntity.GetComponent<Hazel::CameraComponent>();
-			// auto& camera = cameraComp.GetCamera();
-			// float orthoSize = camera.GetOrthoGraphicSize();
-			// 
-			// if (ImGui::DragFloat("Second Camera Ortho Size", &orthoSize))
-			// {
-			// 	const_cast<Hazel::SceneCamera&>(camera).SetOrthoGraphicSize(orthoSize);
-			// }
-		}
+		// Editor Camera 내용
+		CameraPanel::DrawEditorCamera(&m_EditorCamera);
 
 		ImGui::End();
 	}
@@ -641,12 +638,20 @@ namespace HazelEditor
 
 		m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
 
+#ifdef _WIN32
+#pragma warning(push)
+#pragma warning(disable: 4312) // Disable warning related to conversion
+#endif
 		// uint32_t textureID = m_FrameBuffer->GetColorAttachmentRendererID(1);
+
 		uint32_t textureID = m_FrameBuffer->GetColorAttachmentRendererID();
 
-		// uint32_t textureID = m_CheckerboardTexture->GetRendererID();
 		ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-		
+
+#ifdef _WIN32
+#pragma warning(pop) // Restore previous warning settings
+#endif
+
 		if (ImGui::BeginDragDropTarget())
 		{
 			// Content Browser 로 부터 Drag Drop
@@ -803,14 +808,20 @@ namespace HazelEditor
 
 		ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
 
-		if (ImGui::ImageButton((ImTextureID)icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
-		// if (ImGui::ImageButton((ImTextureID)icon->GetRendererID(), ImVec2(20.f, 20.f)))
+#ifdef _WIN32
+#pragma warning(push)
+#pragma warning(disable: 4312) // Disable warning related to conversion
+#endif
+		if (ImGui::ImageButton((ImTextureID)icon->GetRendererID(), ImVec2(20.f, 20.f)))
 		{
 			if (m_SceneState == SceneState::Edit)
 				onScenePlay();
 			else if (m_SceneState == SceneState::Play)
 				onSceneStop();
 		}
+#ifdef _WIN32
+#pragma warning(pop) // Restore previous warning settings
+#endif
 
 		ImGui::PopStyleVar(2);
 		ImGui::PopStyleColor(3);

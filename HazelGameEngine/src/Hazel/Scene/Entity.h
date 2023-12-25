@@ -30,6 +30,7 @@ namespace Hazel
 		T& GetComponent()
 		{
 			HZ_CORE_ASSERT(HasComponent<T>() == true, "Component Does not Exist");
+			HZ_CORE_ASSERT(m_Scene, "Scene Does Not Exist");
 
 			return m_Scene->m_Registry.get<T>(m_EntityHandle);
 		}

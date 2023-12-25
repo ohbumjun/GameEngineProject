@@ -23,7 +23,8 @@
       <Filter>Panel</Filter>
     </ClInclude>
     <ClInclude Include="src\ParticleSystem.h" />
-    <ClInclude Include="src\Panel\Component\NameComponentPanel.h" />
+    <ClInclude Include="src\Panel\ComponentPanel\CameraPanel.h" />
+    <ClInclude Include="src\Panel\Utils\PanelUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EditorLayer.cpp" />
@@ -41,6 +42,7 @@
       <Filter>Panel</Filter>
     </ClCompile>
     <ClCompile Include="src\ParticleSystem.cpp" />
+    <ClCompile Include="src\Panel\ComponentPanel\CameraPanel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="TODO.txt" />

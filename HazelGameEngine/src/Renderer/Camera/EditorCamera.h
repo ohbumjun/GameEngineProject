@@ -18,12 +18,10 @@ namespace Hazel {
 		void OnUpdate(Timestep ts);
 		void OnEvent(Event& e);
 
+		// Getter
 		inline float GetDistance() const { return m_Distance; }
-		inline void SetDistance(float distance) { m_Distance = distance; }
 
-		inline void SetViewportSize(float width, float height) { m_ViewportWidth = width; m_ViewportHeight = height; UpdateProjection(); }
-
-		const glm::mat4& GetViewMatrix() const { return m_ViewMatrix; }
+		inline const glm::mat4& GetViewMatrix() const { return m_ViewMatrix; }
 		glm::mat4 GetViewProjection() const { return m_ProjectionMatrix * m_ViewMatrix; }
 
 		glm::vec3 GetUpDirection() const;
@@ -33,20 +31,43 @@ namespace Hazel {
 		카메라가 바라보는 방향 벡터값을 리턴한다.
 		*/
 		glm::vec3 GetForwardDirection() const;
-		const glm::vec3& GetPosition() const { return m_Position; }
+		inline const glm::vec3& GetPosition() const { return m_Position; }
 
 		/*
 		단순히 x,y 회전값이 얼마인지
 		*/
 		glm::quat GetOrientation() const;
 
-		float GetPitch() const { return m_Pitch; }
-		float GetYaw() const { return m_Yaw; }
-	private:
-		void UpdateProjection();
-		void UpdateView();
+		inline float GetPerspectiveFov() const { return m_FOV; }
+		inline float GetPerspectiveNear() const { return m_NearClip; }
+		inline float GetPerspectiveFar() const { return m_FarClip; }
 
-		bool OnMouseScroll(MouseScrolledEvent& e);
+		inline float GetPitch() const { return m_Pitch; }
+		inline float GetYaw() const { return m_Yaw; }
+
+		// Setter
+		inline void SetDistance(float distance) { m_Distance = distance; }
+		inline void SetViewportSize(float width, float height) 
+		{ 
+			m_ViewportWidth = width; m_ViewportHeight = height; updateProjection(); 
+		}
+		inline void SetPerspectiveFov(float FOV)  
+		{  
+			m_FOV = FOV;  updateProjection();
+		}
+		inline void SetPerspectiveNearClip(float Near)
+		{
+			m_NearClip = Near;  updateProjection();
+		}
+		inline void SetPerspectiveFarClip(float Far)
+		{
+			m_FarClip = Far;  updateProjection();
+		}
+	private:
+		void updateProjection();
+		void updateView();
+
+		bool onMouseScroll(MouseScrolledEvent& e);
 
 		/*
 		정리
@@ -59,16 +80,16 @@ namespace Hazel {
 		World 변환 행렬 S,R,T 를 만드는 것이다.
 		*/
 		// 마우스를 이동시키는 함수
-		void MousePan(const glm::vec2& delta);
+		void mousePan(const glm::vec2& delta);
 		// 마우스를 회전시키는 함수
-		void MouseRotate(const glm::vec2& delta);
+		void mouseRotate(const glm::vec2& delta);
 		// 마우스 줌인을 해주는 함수
-		void MouseZoom(float delta);
+		void mouseZoom(float delta);
 
-		glm::vec3 CalculatePosition() const;
+		glm::vec3 calculatePosition() const;
 
-		std::pair<float, float> PanSpeed() const;
-		float RotationSpeed() const;
+		std::pair<float, float> panSpeed() const;
+		float rotationSpeed() const;
 
 		/*
 		Mouse Scroll 하면서 Camera 의 Zoom Speed 를
@@ -81,7 +102,8 @@ namespace Hazel {
 		빨리 가까워진다.
 		*/
 		float ZoomSpeed() const;
-	private:
+
+
 		float m_FOV = 45.0f, m_AspectRatio = 1.778f, m_NearClip = 0.1f, m_FarClip = 1000.0f;
 
 		glm::mat4 m_ViewMatrix;
