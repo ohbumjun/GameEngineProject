@@ -192,6 +192,8 @@ namespace Hazel
 		s_Data.CircleVertexArray->SetIndexBuffer(quadIdxBuffer); // Use quad IB
 		s_Data.CircleVertexBufferBase = new CircleVertex[s_Data.MaxVertices];
 
+		s_Data.CircleIndexCount = 0;
+		s_Data.CircleVertexBufferPtr = s_Data.CircleVertexBufferBase;
 	}
 
 	void Renderer2D::initQuadVertexInfo()
@@ -334,21 +336,41 @@ namespace Hazel
 	{
 		HZ_PROFILE_FUNCTION();
 
-		// 모든 Texture 를 한꺼번에 Bind 해야 한다.
-		// 0 번째에 기본적으로 Binding 된 WhiteTexture 도 Bind 해줘야 한다.
-		for (uint32_t i = 0; i < s_Data.TextureSlotIndex; ++i)
+		for (uint32_t i = 0; i < s_Data.TextureSlotIndex; i++)
 		{
 			s_Data.TextureSlots[i]->Bind(i);
 		}
 
-		s_Data.QuadShader->Bind();
+		if (s_Data.QuadIndexCount)
+		{
+			uint32_t dataSize = (uint32_t)((uint8_t*)s_Data.QuadVertexBufferPtr - (uint8_t*)s_Data.QuadVertexBufferBase);
+			s_Data.QuadVertexBuffer->SetData(s_Data.QuadVertexBufferBase, dataSize);
 
-		// Batch Rendering 의 경우, 한번의 DrawCall 을 한다.
-		RenderCommand::DrawIndexed(s_Data.QuadVertexArray, s_Data.QuadIndexCount);
+			// Bind textures (해당 함수는.. 여기가 아니라 맨 위에서 해줘야 하는거 아닌가 ?)
+			// 모든 Texture 를 한꺼번에 Bind 해야 한다.
+			// 0 번째에 기본적으로 Binding 된 WhiteTexture 도 Bind 해줘야 한다.
+			// for (uint32_t i = 0; i < s_Data.TextureSlotIndex; i++)
+			// 	s_Data.TextureSlots[i]->Bind(i);
+
+			s_Data.QuadShader->Bind();
+			RenderCommand::DrawIndexed(s_Data.QuadVertexArray, s_Data.QuadIndexCount);
+#if STATISTICS
+			s_Data.stats.DrawCalls++;
+#endif
+
+		}
+		if (s_Data.CircleIndexCount)
+		{
+			uint32_t dataSize = (uint32_t)((uint8_t*)s_Data.CircleVertexBufferPtr - (uint8_t*)s_Data.CircleVertexBufferBase);
+			s_Data.CircleVertexBuffer->SetData(s_Data.CircleVertexBufferBase, dataSize);
+
+			s_Data.CircleShader->Bind();
+			RenderCommand::DrawIndexed(s_Data.CircleVertexArray, s_Data.CircleIndexCount);
 
 #if STATISTICS
-		s_Data.stats.DrawCalls++;
+			s_Data.stats.DrawCalls++;
 #endif
+		}
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, const glm::vec4& color)
@@ -872,6 +894,26 @@ namespace Hazel
 
 	void Renderer2D::DrawCircle(const glm::mat4& transform, const glm::vec4& color, float thickness, float fade, int entityID)
 	{
+		HZ_PROFILE_FUNCTION();
+
+		// TODO: implement for circles
+		// if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
+		// 	NextBatch();
+
+		for (size_t i = 0; i < 4; i++)
+		{
+			s_Data.CircleVertexBufferPtr->WorldPosition = transform * s_Data.QuadVertexPositions[i];
+			s_Data.CircleVertexBufferPtr->LocalPosition = s_Data.QuadVertexPositions[i] * 2.0f;
+			s_Data.CircleVertexBufferPtr->Color = color;
+			s_Data.CircleVertexBufferPtr->Thickness = thickness;
+			s_Data.CircleVertexBufferPtr->Fade = fade;
+			s_Data.CircleVertexBufferPtr->EntityID = entityID;
+			s_Data.CircleVertexBufferPtr++;
+		}
+
+		s_Data.CircleIndexCount += 6;
+
+		s_Data.stats.QuadCount++;
 	}
 
 	void Renderer2D::DrawSprite(const glm::mat4& transform, SpriteRenderComponent& src, int entityID)

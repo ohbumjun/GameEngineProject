@@ -1235,6 +1235,7 @@
     </ClInclude>
     <ClInclude Include="src\Hazel\Core\ID\UUID.h" />
     <ClInclude Include="src\Hazel\Scene\Component\IDComponent.h" />
+    <ClInclude Include="src\Hazel\Scene\Component\CircleRendererComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Core\Allocation\Allocator\FreeListAllocator.cpp">
@@ -1455,6 +1456,7 @@
     </ClCompile>
     <ClCompile Include="src\Hazel\Core\ID\UUID.cpp" />
     <ClCompile Include="src\Hazel\Scene\Component\IDComponent.cpp" />
+    <ClCompile Include="src\Hazel\Scene\Component\CircleRendererComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\Hazel\Asset\Asset.txt" />

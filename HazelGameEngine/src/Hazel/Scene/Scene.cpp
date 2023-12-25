@@ -11,7 +11,7 @@
 #include "Renderer/Renderer2D.h"
 #include <glm/glm.hpp>
 #include "Entity.h"
-
+#include "Hazel/Core/Serialization/Serializer.h"
 
 // Box2D
 #include "box2d/b2_world.h"

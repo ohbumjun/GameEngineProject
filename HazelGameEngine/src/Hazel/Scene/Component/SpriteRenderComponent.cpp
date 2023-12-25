@@ -1,4 +1,5 @@
 ﻿#include "hzpch.h"
+#include "Hazel/Core/Serialization/Serializer.h"
 #include "SpriteRenderComponent.h"
 
 Hazel::SpriteRenderComponent::SpriteRenderComponent()
@@ -11,6 +12,7 @@ void Hazel::SpriteRenderComponent::Serialize(Serializer* serializer)
 	serializer->BeginSaveMap(Reflection::GetTypeID<SpriteRenderComponent>(), this);
 
 	Reflection::TypeInfo* compTypeInfo = Reflection::GetTypeInfo(GetType());
+
 	serializer->Save("compName", compTypeInfo->m_Name.c_str());
 
 	serializer->Save("color", color);

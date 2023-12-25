@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "Component.h"
-#include "Hazel/Core/Serialization/Serializer.h"
 #include "Renderer/Texture/Texture.h"
 
 class Serializer;
