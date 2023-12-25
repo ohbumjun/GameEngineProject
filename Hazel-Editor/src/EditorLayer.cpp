@@ -103,19 +103,20 @@ namespace HazelEditor
 		m_FrameBuffer = Hazel::FrameBuffer::Create(fbSpec);
 
 		m_EditorCamera = Hazel::EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
-		m_ActiveScene = Hazel::CreateRef<Hazel::Scene>("ActiveScene");
-		auto squareEntity = m_ActiveScene->CreateEntity("Square Entity");
+		m_EditorScene = Hazel::CreateRef<Hazel::Scene>("Editor Scene");
+
+		auto squareEntity = m_EditorScene->CreateEntity("Square Entity");
 		squareEntity.AddComponent<Hazel::SpriteRenderComponent>(glm::vec4{ 0.f, 1.f, 0.f, 1.f });
 	
-		auto secondSquareEntity = m_ActiveScene->CreateEntity("Second Square Entity");
+		auto secondSquareEntity = m_EditorScene->CreateEntity("Second Square Entity");
 		secondSquareEntity.AddComponent<Hazel::SpriteRenderComponent>(glm::vec4{ 1.f, 0.f, 0.f, 1.f });
 
-		auto cameraEntity = m_ActiveScene->CreateEntity("Main Camera Entity");
+		auto cameraEntity = m_EditorScene->CreateEntity("Main Camera Entity");
 		cameraEntity.AddComponent<Hazel::CameraComponent>(glm::ortho(-16.f, 16.f, -9.f, 9.f, -1.f, 1.f));
 
 		// Panels
 		m_SceneHierachyPanel = Hazel::CreateRef<Hazel::SceneHierarchyPanel>();
-		m_SceneHierachyPanel->SetContext(m_ActiveScene);
+		m_SceneHierachyPanel->SetContext(m_EditorScene);
 
 		m_ContentBrowserPanel = Hazel::CreateRef<HazelEditor::ContentBrowserPanel>();
 	}
@@ -148,7 +149,22 @@ namespace HazelEditor
 				m_EditorCamera.SetViewportSize(m_ViewportSize.x, m_ViewportSize.y);
 
 				// Scene 에 있는 모든 CameraComponent 의 Camera 정보 다시 세팅
-				m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+
+				switch (m_SceneState)
+				{
+				case SceneState::Edit:
+				{
+					m_EditorScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+
+					break;
+				}
+				case SceneState::Play:
+				{
+					m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+
+					break;
+				}
+				}
 			}
 		}
 
@@ -191,7 +207,9 @@ namespace HazelEditor
 
 			m_EditorCamera.OnUpdate(ts);
 
-			m_ActiveScene->OnUpdateEditor(ts, m_EditorCamera);
+			// m_ActiveScene->OnUpdateEditor(ts, m_EditorCamera);
+			m_EditorScene->OnUpdateEditor(ts, m_EditorCamera);
+
 			break;
 		}
 		case SceneState::Play:
@@ -343,16 +361,10 @@ namespace HazelEditor
 		}
 		return false;
 	}
-	void EditorLayer::cleanScene()
-	{
-		m_GizmoType = -1;
-
-		// Batch 정보를 지워준다.
-		Hazel::Renderer2D::FlushAndReset();
-	}
 	void EditorLayer::newScene()
 	{
-		cleanScene();
+		// Batch 정보를 지워준다.
+		Hazel::Renderer2D::FlushAndReset();
 
 		m_ActiveScene = Hazel::CreateRef<Hazel::Scene>("Scene");
 		m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
@@ -374,6 +386,7 @@ namespace HazelEditor
 	{
 		if (m_SceneState != SceneState::Edit)
 		{
+			// play scene 중에 scene 을 load 하면 우선 현재 scene 을 stop 한다.
 			onSceneStop();
 		}
 
@@ -383,7 +396,8 @@ namespace HazelEditor
 			return;
 		}
 
-		cleanScene();
+		// Batch 정보를 지워준다.
+		Hazel::Renderer2D::FlushAndReset();
 
 		m_EditorScene = Hazel::CreateRef<Hazel::Scene>();
 		m_EditorScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
@@ -532,8 +546,12 @@ namespace HazelEditor
 		ImGui::Begin("Settings");
 
 		std::string name = "None";
+
 		if (m_HoveredEntity)
+		{
 			name = m_HoveredEntity.GetComponent<Hazel::NameComponent>().GetName();
+		}
+
 		ImGui::Text("Hovered Entity: %s", name.c_str());
 
 
@@ -744,6 +762,12 @@ namespace HazelEditor
 		m_SceneState = SceneState::Edit;
 
 		m_ActiveScene->OnRuntimeStop();
+
+		// Active Scene 을 지울 거면 nullptr 을 대입해서
+		// ref cnt 를 0으로 만들면 되지 않을까 ?
+		m_ActiveScene = nullptr;
+
+		m_SceneHierachyPanel->SetContext(m_EditorScene);
 	}
 	void EditorLayer::onDuplicateEntity()
 	{

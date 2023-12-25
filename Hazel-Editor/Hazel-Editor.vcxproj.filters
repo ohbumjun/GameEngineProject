@@ -23,6 +23,7 @@
       <Filter>Panel</Filter>
     </ClInclude>
     <ClInclude Include="src\ParticleSystem.h" />
+    <ClInclude Include="src\Panel\Component\NameComponentPanel.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EditorLayer.cpp" />

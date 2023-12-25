@@ -122,13 +122,20 @@ namespace Hazel
 	static void CopyComponent(entt::registry& dst, entt::registry& src, const std::unordered_map<UUID, entt::entity>& enttMap)
 	{
 		auto view = src.view<Component>();
+
 		for (auto e : view)
 		{
-			UUID uuid = src.get<IDComponent>(e).ID;
-			HZ_CORE_ASSERT(enttMap.find(uuid) != enttMap.end());
+			UUID uuid = src.get<IDComponent>(e).GetUUID();
+
+			HZ_CORE_ASSERT(enttMap.find(uuid) != enttMap.end(), "Wrong Entity");
+
 			entt::entity dstEnttID = enttMap.at(uuid);
 
 			auto& component = src.get<Component>(e);
+
+			// 앞서서 새로운 entity 를 만드는 과정에서 CreateEntityWithUUID() 를 사용하는데
+			// 이미 Transform, NameComponent 등은 존재할 수 있다.
+			// 따라서 없으면 추가하고, 있으면 replace 하는 함수로 진행할 것이다.
 			dst.emplace_or_replace<Component>(dstEnttID, component);
 		}
 	}
@@ -140,23 +147,28 @@ namespace Hazel
 			dst.AddOrReplaceComponent<Component>(src.GetComponent<Component>());
 	}
 
-	Ref<Scene> Scene::Copy(Ref<Scene> other)
+	Ref<Scene> Scene::Copy(Ref<Scene> src)
 	{
 		Ref<Scene> newScene = CreateRef<Scene>();
 
-		newScene->m_ViewportWidth = other->m_ViewportWidth;
-		newScene->m_ViewportHeight = other->m_ViewportHeight;
+		newScene->m_ViewportWidth = src->m_ViewportWidth;
+		newScene->m_ViewportHeight = src->m_ViewportHeight;
 
-		auto& srcSceneRegistry = other->m_Registry;
+		auto& srcSceneRegistry = src->m_Registry;
 		auto& dstSceneRegistry = newScene->m_Registry;
+
+		// src entity 의 uuid ~ 새로운 dst entity
 		std::unordered_map<UUID, entt::entity> enttMap;
 
 		// Create entities in new scene
 		auto idView = srcSceneRegistry.view<IDComponent>();
+
 		for (auto e : idView)
 		{
 			UUID uuid = srcSceneRegistry.get<IDComponent>(e).GetUUID();
 			const auto& name = srcSceneRegistry.get<NameComponent>(e).GetName();
+
+			// create entities in this new scene
 			Entity newEntity = newScene->CreateEntityWithUUID(uuid, name);
 			enttMap[uuid] = (entt::entity)newEntity;
 		}
@@ -563,17 +575,17 @@ namespace Hazel
 	{
 		return CreateEntityWithUUID(UUID(), name);
 	}
-	void Scene::DuplicateEntity(Entity entity)
+	void Scene::DuplicateEntity(Entity srcCntity)
 	{
-		std::string name = entity.GetName();
+		std::string name = srcCntity.GetName();
 		Entity newEntity = CreateEntity(name);
 
-		CopyComponentIfExists<TransformComponent>(newEntity, entity);
-		CopyComponentIfExists<SpriteRenderComponent>(newEntity, entity);
-		CopyComponentIfExists<CameraComponent>(newEntity, entity);
-		CopyComponentIfExists<NativeScriptComponent>(newEntity, entity);
-		CopyComponentIfExists<Rigidbody2DComponent>(newEntity, entity);
-		CopyComponentIfExists<BoxCollider2DComponent>(newEntity, entity);
+		CopyComponentIfExists<TransformComponent>(newEntity, srcCntity);
+		CopyComponentIfExists<SpriteRenderComponent>(newEntity, srcCntity);
+		CopyComponentIfExists<CameraComponent>(newEntity, srcCntity);
+		CopyComponentIfExists<NativeScriptComponent>(newEntity, srcCntity);
+		CopyComponentIfExists<Rigidbody2DComponent>(newEntity, srcCntity);
+		CopyComponentIfExists<BoxCollider2DComponent>(newEntity, srcCntity);
 	}
 	void Scene::DestroyEntity(const Entity& entity)
 	{
@@ -599,11 +611,6 @@ namespace Hazel
 		}
 	}
 
-	Ref<Scene> Scene::Copy(Ref<Scene> other)
-	{
-		return Ref<Scene>();
-	}
-	
 	// 아래는 Component 가 Add 될때의 Event 같은 함수들
 	template<typename T>
 	void Scene::OnComponentAdded(Entity entity, T& component)

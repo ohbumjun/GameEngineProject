@@ -29,6 +29,9 @@ namespace Hazel
 		friend class SceneHierarchyPanel;
 		friend class SceneSerializer;
 	public :
+		
+		static Ref<Scene> Copy(Ref<Scene> other);
+
 		Scene(std::string_view name);
 		Scene() {};
 		virtual ~Scene();
@@ -38,7 +41,6 @@ namespace Hazel
 		void DuplicateEntity(Entity entity);
 		void DestroyEntity(const Entity& entity);
 		void OnViewportResize(uint32_t width, uint32_t height);
-		static Ref<Scene> Copy(Ref<Scene> other);
 
 
 		/*

@@ -130,6 +130,7 @@
     <ClInclude Include="src\EditorLayer.h" />
     <ClInclude Include="src\File\FileManager.h" />
     <ClInclude Include="src\File\PathManager.h" />
+    <ClInclude Include="src\Panel\Component\NameComponentPanel.h" />
     <ClInclude Include="src\Panel\ContentBrowserPanel.h" />
     <ClInclude Include="src\Panel\SceneHierarchyPanel.h" />
     <ClInclude Include="src\ParticleSystem.h" />

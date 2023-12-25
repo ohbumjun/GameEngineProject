@@ -31,7 +31,6 @@ namespace HazelEditor
 		};
 		bool onKeyPressed(Hazel::KeyPressedEvent& e);
 		bool onMouseButtonPressed(Hazel::MouseButtonPressedEvent& e);
-		void cleanScene();
 		void newScene();
 		void openScene();
 		void openScene(const std::filesystem::path& path);
@@ -67,8 +66,12 @@ namespace HazelEditor
 		Hazel::Ref<Hazel::SubTexture2D> m_TextureBarrel;
 		*/
 
+		// runtime scene
 		Hazel::Ref<Hazel::Scene> m_ActiveScene;
+
+		// 평소 editor scene
 		Hazel::Ref<Hazel::Scene> m_EditorScene;
+
 		std::filesystem::path m_EditorScenePath;
 
 		Hazel::Entity m_HoveredEntity;

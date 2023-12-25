@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "Component/Component.h"
 #include "Component/IDComponent.h"
+#include "Component/NameComponent.h"
 #include "Hazel/Core/ID/UUID.h"
 
 namespace Hazel
@@ -68,7 +69,7 @@ namespace Hazel
 		std::vector<const Component*> GetComponents();
 
 		UUID GetUUID() { return GetComponent<IDComponent>().GetUUID(); }
-		const std::string& GetName() { return GetComponent<NameComponent>().Tag; }
+		const std::string& GetName() { return GetComponent<NameComponent>().GetName(); }
 
 		inline bool IsValid() const { return m_EntityHandle != entt::null; }
 	private:
