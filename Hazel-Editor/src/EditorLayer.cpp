@@ -425,7 +425,8 @@ namespace HazelEditor
 
 		if (!filepath.empty())
 		{
-			serializeScene(m_ActiveScene, filepath);
+			// serializeScene(m_ActiveScene, filepath);
+			serializeScene(m_EditorScene, filepath);
 			m_EditorScenePath = filepath;
 		}
 	}

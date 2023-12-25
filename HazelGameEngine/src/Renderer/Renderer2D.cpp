@@ -23,6 +23,18 @@ namespace Hazel
 		int EntityID;
 	};
 
+	struct CircleVertex
+	{
+		glm::vec3 WorldPosition;
+		glm::vec3 LocalPosition;
+		glm::vec4 Color;
+		float Thickness;
+		float Fade;
+
+		// Editor-only
+		int EntityID;
+	};
+
 	struct Renderer2DData
 	{
 		static const uint32_t MaxQuads    = 10000;
@@ -32,7 +44,7 @@ namespace Hazel
 
 		Ref<VertexArray> QuadVertexArray;
 		Ref<VertexBuffer> QuadVertexBuffer;
-		Ref<Shader> TextureShader;
+		Ref<Shader> QuadShader;
 		Ref<Texture2D> WhiteTexture;
 
 		// 총 몇개의 quad indice 가 그려지고 있는가
@@ -44,6 +56,15 @@ namespace Hazel
 
 		// QuadVertexBufferBase 라는 배열 내에서 각 원소를 순회하기 위한 포인터
 		QuadVertex* QuadVertexBufferPtr = nullptr;
+
+		Ref<VertexArray> CircleVertexArray;
+		Ref<VertexBuffer> CircleVertexBuffer;
+		Ref<Shader> CircleShader;
+
+		uint32_t CircleIndexCount = 0;
+		CircleVertex* CircleVertexBufferBase = nullptr;
+		CircleVertex* CircleVertexBufferPtr = nullptr;
+
 
 		std::array<Ref<Texture2D>, MaxTextureSlots> TextureSlots;
 		uint32_t TextureSlotIndex = 1; // 0 : Default White Texture 로 세팅
@@ -67,6 +88,115 @@ namespace Hazel
 	{
 		HZ_PROFILE_FUNCTION();
 
+		initQuadVertexInfo();
+		initCircleVertexInfo();
+		initTextures();
+		initShaders();
+		initUniforms();
+	}
+
+	void Renderer2D::ShutDown()
+	{
+		HZ_PROFILE_FUNCTION();
+
+		delete s_Data.QuadVertexBufferBase;
+
+		s_Data.TextureSlotIndex = 1;
+	}
+
+	void Renderer2D::BeginScene(const Camera& camera, const glm::mat4& transform)
+	{
+		HZ_PROFILE_FUNCTION();
+
+		// transform : camera local -> world 변환 행렬
+		// inverse     : camera world -> local == view
+		// const glm::mat4& viewProj = camera.GetProjection() * glm::inverse(transform);
+		// s_Data.TextureShader->Bind();
+		// s_Data.TextureShader->SetMat4("u_ViewProjection", viewProj);
+
+		s_Data.CameraBuffer.ViewProjection = camera.GetProjection() * glm::inverse(transform);
+		s_Data.CameraUniformBuffer->SetData(&s_Data.CameraBuffer, sizeof(Renderer2DData::CameraData));
+
+		startBatch();
+	}
+
+	void Renderer2D::BeginScene(const OrthographicCamera& camera)
+	{
+		HZ_PROFILE_FUNCTION();
+
+		s_Data.QuadShader->Bind();
+		s_Data.QuadShader->SetMat4(
+			"u_ViewProjection", const_cast<OrthographicCamera&>(camera).GetViewProjectionMatrix());
+	
+		startBatch();
+	}
+
+	void Renderer2D::BeginScene(const EditorCamera& camera)
+	{
+		HZ_PROFILE_FUNCTION();
+
+		// glm::mat4 viewProj = camera.GetViewProjection();
+		// s_Data.TextureShader->Bind();
+		// s_Data.TextureShader->SetMat4("u_ViewProjection", viewProj);
+
+		// Uniform Buffer 메모리 할당 + Scene 전체에서 모든 Shader 에도 동일하게 적용되는
+		// 값들을 Uniform Buffer 에 할당하게 되는 것이다.
+		s_Data.CameraBuffer.ViewProjection = camera.GetViewProjection();
+		s_Data.CameraUniformBuffer->SetData(&s_Data.CameraBuffer, sizeof(Renderer2DData::CameraData));
+
+		startBatch();
+	}
+
+
+	void Renderer2D::EndScene()
+	{
+		HZ_PROFILE_FUNCTION();
+
+		// EndScene 에서 s_Data.QuadVertexBufferPtr 을 이용하여 쌓아놓은 정점 정보들을
+		// 이용하여 한번에 그려낼 것이다.
+		// - 포인터를 숫자 형태로 형변환하기 위해  (uint8_t*) 로 캐스팅한다.
+		uint32_t dataSize = (uint8_t*)s_Data.QuadVertexBufferPtr - (uint8_t*)s_Data.QuadVertexBufferBase;
+		s_Data.QuadVertexBuffer->SetData(s_Data.QuadVertexBufferBase, dataSize);
+
+		Flush();
+	}
+
+	void Renderer2D::FlushAndReset()
+	{
+		EndScene();
+
+		// 1) Begin Scene 과 달리 TextureShader 를 새로 Bind 할 필요도 없고
+		// 2) VewProjectionMatrix 를 Bind 할 필요도 없다.
+
+		s_Data.QuadIndexCount = 0;
+		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
+		s_Data.TextureSlotIndex = 1;
+	}
+
+	void Renderer2D::initCircleVertexInfo()
+	{
+		// Circle
+		s_Data.CircleVertexArray = VertexArray::Create();
+
+		s_Data.CircleVertexBuffer = VertexBuffer::Create(s_Data.MaxVertices * sizeof(CircleVertex));
+		s_Data.CircleVertexBuffer->SetLayout({
+			{ ShaderDataType::Float3, "a_WorldPosition" },
+			{ ShaderDataType::Float3, "a_LocalPosition" },
+			{ ShaderDataType::Float4, "a_Color"         },
+			{ ShaderDataType::Float,  "a_Thickness"     },
+			{ ShaderDataType::Float,  "a_Fade"          },
+			{ ShaderDataType::Int,    "a_EntityID"      }
+			});
+		s_Data.CircleVertexArray->AddVertexBuffer(s_Data.CircleVertexBuffer);
+		Ref<IndexBuffer>& quadIdxBuffer = const_cast<Ref<IndexBuffer>&>(s_Data.QuadVertexArray->GetIndexBuffer());
+		s_Data.CircleVertexArray->SetIndexBuffer(quadIdxBuffer); // Use quad IB
+		s_Data.CircleVertexBufferBase = new CircleVertex[s_Data.MaxVertices];
+
+	}
+
+	void Renderer2D::initQuadVertexInfo()
+	{
+
 		/*Square*/
 		s_Data.QuadVertexArray = VertexArray::Create();
 
@@ -82,7 +212,7 @@ namespace Hazel
 
 		// Ref<VertexBuffer> squareVB;
 		// squareVB = VertexBuffer::Create(squareVertices, sizeof(squareVertices));
-		
+
 		s_Data.QuadVertexBuffer = VertexBuffer::Create(s_Data.MaxVertices * sizeof(QuadVertex));
 
 		BufferLayout squareVBLayout = {
@@ -112,7 +242,7 @@ namespace Hazel
 
 		/*
 		ex) s_Data.MaxIndices 가 6000 개라고 한다면
-		      하나의 Square 를 그리기 위한 index의 개수는 6개이다.
+			  하나의 Square 를 그리기 위한 index의 개수는 6개이다.
 
 			  그러면 해당 index buffer 에 들어갈 데이터 크기는
 			  index 하나의 크기 * 6개 씩 * 사각형 개수가 되는 것이다.
@@ -131,13 +261,32 @@ namespace Hazel
 		}
 		Ref<IndexBuffer> quadIdxB = IndexBuffer::Create(quadIndices, s_Data.MaxIndices);
 		s_Data.QuadVertexArray->SetIndexBuffer(quadIdxB);
-		delete [] quadIndices;
+		delete[] quadIndices;
+
+		// 일종의 기본 mesh (local pos)
+		s_Data.QuadVertexPositions[0] = { -0.5f, -0.5f, 0.f, 1.f };
+		s_Data.QuadVertexPositions[1] = { 0.5f, -0.5f, 0.f, 1.f };
+		s_Data.QuadVertexPositions[2] = { 0.5f,  0.5f, 0.f, 1.f };
+		s_Data.QuadVertexPositions[3] = { -0.5f,  0.5f, 0.f, 1.f };
+
+	}
+
+	void Renderer2D::initShaders()
+	{
+		// Shader
+		s_Data.QuadShader = Shader::Create("assets/shaders/Renderer2D_Quad.glsl");
+		s_Data.CircleShader = Shader::Create("assets/shaders/Renderer2D_Circle.glsl");
+
+	}
+
+	void Renderer2D::initTextures()
+	{
 
 		s_Data.WhiteTexture = Texture2D::Create(1, 1);
 		uint32_t whiteTextureData = 0xffffffff;
 		s_Data.WhiteTexture->SetData(&whiteTextureData, /*1 * 1 */sizeof(uint32_t));
 
-		s_Data.TextureShader = Shader::Create("assets/shaders/Texture.glsl");
+
 		// s_Data.TextureShader->Bind();
 		// s_Data.TextureShader->SetIntArray("u_Textures", samplers, s_Data.MaxTextureSlots);
 
@@ -159,95 +308,14 @@ namespace Hazel
 		// bind default texture
 		s_Data.TextureSlots[0] = s_Data.WhiteTexture;
 
-		// 일종의 기본 mesh (local pos)
-		s_Data.QuadVertexPositions[0] = { -0.5f, -0.5f, 0.f, 1.f };
-		s_Data.QuadVertexPositions[1] = {  0.5f, -0.5f, 0.f, 1.f };
-		s_Data.QuadVertexPositions[2] = {  0.5f,  0.5f, 0.f, 1.f };
-		s_Data.QuadVertexPositions[3] = { -0.5f,  0.5f, 0.f, 1.f };
+	}
 
-
+	void Renderer2D::initUniforms()
+	{
 		s_Data.CameraUniformBuffer = UniformBuffer::Create(sizeof(Renderer2DData::CameraData), 0);
 	}
 
-	void Renderer2D::ShutDown()
-	{
-		HZ_PROFILE_FUNCTION();
-
-		delete s_Data.QuadVertexBufferBase;
-
-		s_Data.TextureSlotIndex = 1;
-	}
-
-	void Renderer2D::BeginScene(const Camera& camera, const glm::mat4& transform)
-	{
-		HZ_PROFILE_FUNCTION();
-
-		// transform : camera local -> world 변환 행렬
-		// inverse     : camera world -> local == view
-		// const glm::mat4& viewProj = camera.GetProjection() * glm::inverse(transform);
-		// s_Data.TextureShader->Bind();
-		// s_Data.TextureShader->SetMat4("u_ViewProjection", viewProj);
-
-		s_Data.CameraBuffer.ViewProjection = camera.GetProjection() * glm::inverse(transform);
-		s_Data.CameraUniformBuffer->SetData(&s_Data.CameraBuffer, sizeof(Renderer2DData::CameraData));
-
-		StartBatch();
-	}
-
-	void Renderer2D::BeginScene(const OrthographicCamera& camera)
-	{
-		HZ_PROFILE_FUNCTION();
-
-		s_Data.TextureShader->Bind();
-		s_Data.TextureShader->SetMat4(
-			"u_ViewProjection", const_cast<OrthographicCamera&>(camera).GetViewProjectionMatrix());
-	
-		StartBatch();
-	}
-
-	void Renderer2D::BeginScene(const EditorCamera& camera)
-	{
-		HZ_PROFILE_FUNCTION();
-
-		// glm::mat4 viewProj = camera.GetViewProjection();
-		// s_Data.TextureShader->Bind();
-		// s_Data.TextureShader->SetMat4("u_ViewProjection", viewProj);
-
-		// Uniform Buffer 메모리 할당 + Scene 전체에서 모든 Shader 에도 동일하게 적용되는
-		// 값들을 Uniform Buffer 에 할당하게 되는 것이다.
-		s_Data.CameraBuffer.ViewProjection = camera.GetViewProjection();
-		s_Data.CameraUniformBuffer->SetData(&s_Data.CameraBuffer, sizeof(Renderer2DData::CameraData));
-
-		StartBatch();
-	}
-
-
-	void Renderer2D::EndScene()
-	{
-		HZ_PROFILE_FUNCTION();
-
-		// EndScene 에서 s_Data.QuadVertexBufferPtr 을 이용하여 쌓아놓은 정점 정보들을
-		// 이용하여 한번에 그려낼 것이다.
-		// - 포인터를 숫자 형태로 형변환하기 위해  (uint8_t*) 로 캐스팅한다.
-		uint32_t dataSize = (uint8_t*)s_Data.QuadVertexBufferPtr - (uint8_t*)s_Data.QuadVertexBufferBase;
-		s_Data.QuadVertexBuffer->SetData(s_Data.QuadVertexBufferBase, dataSize);
-
-		Flush();
-	}
-
-	void Renderer2D::FlushAndReset()
-	{
-		EndScene();
-
-		// 1) Begin Scene 과 달리 TextureShader 를 새로 Bind 할 필요도 없고
-		// 2) VewProjectionMatrix 를 Bind 할 필요도 없다.
-
-		s_Data.QuadIndexCount = 0;
-		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
-		s_Data.TextureSlotIndex = 1;
-	}
-
-	void Renderer2D::StartBatch()
+	void Renderer2D::startBatch()
 	{
 		s_Data.QuadIndexCount = 0;
 		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
@@ -255,10 +323,10 @@ namespace Hazel
 		s_Data.TextureSlotIndex = 1;
 	}
 
-	void Renderer2D::NextBatch()
+	void Renderer2D::nextBatch()
 	{
 		Flush();
-		StartBatch();
+		startBatch();
 	}
 
 
@@ -273,7 +341,7 @@ namespace Hazel
 			s_Data.TextureSlots[i]->Bind(i);
 		}
 
-		s_Data.TextureShader->Bind();
+		s_Data.QuadShader->Bind();
 
 		// Batch Rendering 의 경우, 한번의 DrawCall 을 한다.
 		RenderCommand::DrawIndexed(s_Data.QuadVertexArray, s_Data.QuadIndexCount);
@@ -357,7 +425,7 @@ namespace Hazel
 		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
 		{
 			// FlushAndReset();
-			NextBatch();
+			nextBatch();
 		}
 
 		constexpr glm::vec4 color = { 1.f, 1.f, 1.f, 1.f };
@@ -457,7 +525,7 @@ namespace Hazel
 		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
 		{
 			// FlushAndReset();
-			NextBatch();
+			nextBatch();
 		}
 
 		constexpr glm::vec2 textureCoords[] = { {0.f, 0.f}, {1.f, 0.f} ,{1.f, 1.f}, {0.f, 1.f} };
@@ -499,7 +567,7 @@ namespace Hazel
 		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
 		{
 			// FlushAndReset();
-			NextBatch();
+			nextBatch();
 		}
 
 		constexpr glm::vec4 color = { 1.f, 1.f, 1.f, 1.f };
@@ -563,7 +631,7 @@ namespace Hazel
 		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
 		{
 			// FlushAndReset();
-			NextBatch();
+			nextBatch();
 		}
 		constexpr glm::vec2 textureCoords[] = { {0.f, 0.f}, {1.f, 0.f} ,{1.f, 1.f}, {0.f, 1.f} };
 
@@ -800,6 +868,10 @@ namespace Hazel
 
 		RenderCommand::DrawIndexed(s_Data.QuadVertexArray);
 #endif
+	}
+
+	void Renderer2D::DrawCircle(const glm::mat4& transform, const glm::vec4& color, float thickness, float fade, int entityID)
+	{
 	}
 
 	void Renderer2D::DrawSprite(const glm::mat4& transform, SpriteRenderComponent& src, int entityID)

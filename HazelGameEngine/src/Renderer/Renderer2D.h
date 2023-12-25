@@ -69,6 +69,8 @@ namespace Hazel
 			const Ref<SubTexture2D>& subTexture, float tilingFactor = 1.f,
 			const glm::vec4& tintColor = glm::vec4(1.0f));
 
+		static void DrawCircle(const glm::mat4& transform, const glm::vec4& color, float thickness = 1.0f, float fade = 0.005f, int entityID = -1);
+
 		static void DrawSprite(const glm::mat4& transform, SpriteRenderComponent& src, int entityID);
 
 		// 매Update 초반 마다 reset 해줄 것이다.
@@ -86,9 +88,14 @@ namespace Hazel
 		static void FlushAndReset();
 
 	private :
+		static void initCircleVertexInfo();
+		static void initQuadVertexInfo();
+		static void initShaders();
+		static void initTextures();
+		static void initUniforms();
 
-		static void StartBatch();
-		static void NextBatch();
+		static void startBatch();
+		static void nextBatch();
 	};
 };
 
