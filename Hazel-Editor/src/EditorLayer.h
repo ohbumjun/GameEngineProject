@@ -36,6 +36,9 @@ namespace HazelEditor
 		void openScene();
 		void openScene(const std::filesystem::path& path);
 		void saveSceneAs();
+		void saveScene();
+
+		void serializeScene(Hazel::Ref<Hazel::Scene> scene, const std::filesystem::path& path);
 
 		void prepareDockSpace();
 		void drawMenuBar();
@@ -45,6 +48,8 @@ namespace HazelEditor
 
 		void onScenePlay();
 		void onSceneStop();
+		void onDuplicateEntity();
+
 
 		// UI Panels
 		void uI_Toolbar();
@@ -63,6 +68,8 @@ namespace HazelEditor
 		*/
 
 		Hazel::Ref<Hazel::Scene> m_ActiveScene;
+		Hazel::Ref<Hazel::Scene> m_EditorScene;
+		std::filesystem::path m_EditorScenePath;
 
 		Hazel::Entity m_HoveredEntity;
 

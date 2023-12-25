@@ -35,8 +35,11 @@ namespace Hazel
 
 		Entity CreateEntityWithUUID(UUID uuid, const std::string& name = std::string());
 		Entity CreateEntity(const std::string& name = "Entity");
+		void DuplicateEntity(Entity entity);
 		void DestroyEntity(const Entity& entity);
 		void OnViewportResize(uint32_t width, uint32_t height);
+		static Ref<Scene> Copy(Ref<Scene> other);
+
 
 		/*
 		Play 시작 때 호출되는 Scene 쪽의 함수

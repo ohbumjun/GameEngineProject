@@ -1,5 +1,8 @@
 ﻿#include "hzpch.h"
 #include "SceneHierarchyPanel.h"
+#include "Component/NameComponentPanel.h"
+
+// Component
 #include "Hazel/Scene/Component/Component.h"
 #include "Hazel/Scene/Component/SpriteRenderComponent.h"
 #include "Hazel/Scene/Component/NameComponent.h"
