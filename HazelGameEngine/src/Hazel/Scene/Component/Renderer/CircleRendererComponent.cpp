@@ -7,7 +7,11 @@ Hazel::CircleRendererComponent::CircleRendererComponent()
 	Reflection::RegistType<CircleRendererComponent>();
 }
 
-Hazel::CircleRendererComponent::CircleRendererComponent(const CircleRendererComponent&)
+Hazel::CircleRendererComponent::CircleRendererComponent(const CircleRendererComponent& other)
+	: m_Color(other.m_Color),
+	m_Thickness(other.m_Thickness),
+	m_Fade(other.m_Fade)
+
 {
 	Reflection::RegistType<CircleRendererComponent>();
 }

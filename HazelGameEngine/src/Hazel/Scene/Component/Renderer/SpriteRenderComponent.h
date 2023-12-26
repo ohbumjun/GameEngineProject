@@ -13,10 +13,7 @@ namespace Hazel
 		friend class Scene;
 	public:
 		SpriteRenderComponent();
-		SpriteRenderComponent(const SpriteRenderComponent& other) :
-			color(other.color) {
-			SpriteRenderComponent();
-		};
+		SpriteRenderComponent(const SpriteRenderComponent& other);
 		SpriteRenderComponent(const glm::vec4& color) :
 			color(color)
 		{

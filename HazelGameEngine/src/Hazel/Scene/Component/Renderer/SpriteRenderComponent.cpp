@@ -7,6 +7,12 @@ Hazel::SpriteRenderComponent::SpriteRenderComponent()
 	Reflection::RegistType<SpriteRenderComponent>();
 }
 
+Hazel::SpriteRenderComponent::SpriteRenderComponent(const SpriteRenderComponent& other)
+: color(other.color)
+{
+	Reflection::RegistType<SpriteRenderComponent>();
+}
+
 void Hazel::SpriteRenderComponent::Serialize(Serializer* serializer)
 {
 	serializer->BeginSaveMap(Reflection::GetTypeID<SpriteRenderComponent>(), this);
