@@ -58,8 +58,8 @@ namespace Hazel
 		따라서 만약 index Count 가 0이면, 실제 gpu 를 그릴 당시 넘겨주는 indices 개수도 0개로 해서
 		gpu 가 아무것도 그리지 않게 한다.
 		*/
-		// uint32_t count = (indexCount == 0) ? vertexArray->GetIndexBuffer()->GetCount() : indexCount;
-		uint32_t count = (indexCount == 0) ? 0 : indexCount;
+		uint32_t count = (indexCount == 0) ? vertexArray->GetIndexBuffer()->GetCount() : indexCount;
+		// uint32_t count = (indexCount == 0) ? 0 : indexCount;
 		
 		glDrawElements(
 			GL_TRIANGLES, 
@@ -69,6 +69,7 @@ namespace Hazel
 			nullptr);
 
 		// Open GL 에 Bind 된 Texture Unbind 시키기
+		// 왜 굳이 여기서..?
 		// glBindTexture(GL_TEXTURE_2D, 0);
 	}
 

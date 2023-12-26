@@ -21,6 +21,11 @@ namespace Hazel
 		static void BeginScene(const OrthographicCamera& camera);
 		static void BeginScene(const EditorCamera& camera);
 		static void EndScene();
+
+		/*
+		더 발전시키려면 CircleFlush, QuadFlush 를
+		구분하는 것이 좋다.
+		*/
 		static void Flush();
 
 		// Primitives

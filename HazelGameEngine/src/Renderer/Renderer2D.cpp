@@ -20,6 +20,7 @@ namespace Hazel
 		float TexIndex;			 // Texture Slot 상 mapping 된 index
 		float TilingFactor;
 
+		// Editor-only
 		int EntityID;
 	};
 
@@ -189,6 +190,12 @@ namespace Hazel
 			});
 		s_Data.CircleVertexArray->AddVertexBuffer(s_Data.CircleVertexBuffer);
 		Ref<IndexBuffer>& quadIdxBuffer = const_cast<Ref<IndexBuffer>&>(s_Data.QuadVertexArray->GetIndexBuffer());
+		
+		/*
+		Circle 도 왜 같은 Index buffer 를 활용할 수 있는 거지 ? 
+		- 왜냐하면 지금 우리는 Circle 을 Quad 와 마찬가지로
+		  4개의 정점을 활용하여 Circle 을 그려내고 있기 때문이다.
+		*/
 		s_Data.CircleVertexArray->SetIndexBuffer(quadIdxBuffer); // Use quad IB
 		s_Data.CircleVertexBufferBase = new CircleVertex[s_Data.MaxVertices];
 
@@ -266,6 +273,7 @@ namespace Hazel
 		delete[] quadIndices;
 
 		// 일종의 기본 mesh (local pos)
+		/*왼아 -> 오아 -> 오위 -> 왼위*/
 		s_Data.QuadVertexPositions[0] = { -0.5f, -0.5f, 0.f, 1.f };
 		s_Data.QuadVertexPositions[1] = { 0.5f, -0.5f, 0.f, 1.f };
 		s_Data.QuadVertexPositions[2] = { 0.5f,  0.5f, 0.f, 1.f };
@@ -903,6 +911,7 @@ namespace Hazel
 		for (size_t i = 0; i < 4; i++)
 		{
 			s_Data.CircleVertexBufferPtr->WorldPosition = transform * s_Data.QuadVertexPositions[i];
+			/*x,y 가 -1 에서 1 사이의 값을 가지게 된다.*/
 			s_Data.CircleVertexBufferPtr->LocalPosition = s_Data.QuadVertexPositions[i] * 2.0f;
 			s_Data.CircleVertexBufferPtr->Color = color;
 			s_Data.CircleVertexBufferPtr->Thickness = thickness;
