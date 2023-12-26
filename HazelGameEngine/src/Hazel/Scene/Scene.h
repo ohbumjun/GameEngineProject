@@ -72,6 +72,9 @@ namespace Hazel
 		virtual void Serialize(Serializer* serializer) override;
 		virtual void Deserialize(Serializer* serializer) override;
 
+		void OnSimulationStart();
+		void OnSimulationStop();
+
 		Entity GetPrimaryCameraEntity();
 		// Component 추가시 호출되는 함수
 		template<typename T>
@@ -89,6 +92,9 @@ namespace Hazel
 			m_Name = name;
 		}
 	private :
+
+		void onPhysics2DStart();
+		void onPhysics2DStop();
 
 		void serializeEntity(Serializer* serializer, Entity entity);
 		void deserializeEntity(Serializer* serializer, Entity entity);

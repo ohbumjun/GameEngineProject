@@ -27,7 +27,7 @@ namespace HazelEditor
 	private:
 		enum class SceneState
 		{
-			Edit = 0, Play = 1
+			Edit = 0, Play = 1, Simulate = 2
 		};
 		bool onKeyPressed(Hazel::KeyPressedEvent& e);
 		bool onMouseButtonPressed(Hazel::MouseButtonPressedEvent& e);
@@ -38,6 +38,7 @@ namespace HazelEditor
 		void saveScene();
 
 		void serializeScene(Hazel::Ref<Hazel::Scene> scene, const std::filesystem::path& path);
+		void onSceneSimulate();
 
 		void prepareDockSpace();
 		void drawMenuBar();
@@ -101,7 +102,7 @@ namespace HazelEditor
 
 
 		// Editor resources
-		Hazel::Ref<Hazel::Texture2D> m_IconPlay, m_IconStop;
+		Hazel::Ref<Hazel::Texture2D> m_IconPlay, m_IconSimulate, m_IconStop;
 
 		SceneState m_SceneState = SceneState::Edit;
 

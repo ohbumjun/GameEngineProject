@@ -105,6 +105,12 @@ namespace Hazel
 			}
 		});
 
+		if (m_PhysicsWorld)
+		{
+			delete m_PhysicsWorld;
+			m_PhysicsWorld = nullptr;
+		}
+
 		/*
 		auto& entities = m_Registry.storage<Entity>();
 
@@ -486,6 +492,12 @@ namespace Hazel
 
 		serializer->EndLoadMap();
 	}
+	void Scene::OnSimulationStart()
+	{
+	}
+	void Scene::OnSimulationStop()
+	{
+	}
 	Entity Scene::GetPrimaryCameraEntity()
 	{
 		auto view = m_Registry.view<CameraComponent>();
@@ -525,6 +537,14 @@ namespace Hazel
 		}
 
 		return Entity{ foundEntity, this };
+	}
+
+	void Scene::onPhysics2DStart()
+	{
+	}
+
+	void Scene::onPhysics2DStop()
+	{
 	}
 
 	void Scene::serializeEntity(Serializer* serializer, Entity entity)

@@ -140,9 +140,6 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Hazel\Scene\Component\Collider\CircleCollider2DComponent.h" />
-    <ClInclude Include="src\Hazel\Scene\Component\Renderer\CircleRendererComponent.h" />
-    <ClInclude Include="src\Hazel\Scene\Component\Identifier\IDComponent.h" />
     <ClInclude Include="src\Hazel.h" />
     <ClInclude Include="src\Hazel\Core\Allocation\Allocator\FreeListAllocator.h" />
     <ClInclude Include="src\Hazel\Core\Allocation\Allocator\MemoryPoolAllocator.h" />
@@ -163,6 +160,7 @@
     <ClInclude Include="src\Hazel\Core\GC\GC.h" />
     <ClInclude Include="src\Hazel\Core\GC\GCInfo.h" />
     <ClInclude Include="src\Hazel\Core\GC\GCObject.h" />
+    <ClInclude Include="src\Hazel\Core\ID\UUID.h" />
     <ClInclude Include="src\Hazel\Core\Layer\Layer.h" />
     <ClInclude Include="src\Hazel\Core\Layer\LayerStack.h" />
     <ClInclude Include="src\Hazel\Core\Memory\Channel.h" />
@@ -189,13 +187,16 @@
     <ClInclude Include="src\Hazel\Input\MouseButtonCodes.h" />
     <ClInclude Include="src\Hazel\Math\Math.h" />
     <ClInclude Include="src\Hazel\Scene\BaseObject.h" />
-    <ClInclude Include="src\Hazel\Scene\Component\Collider\BoxCollider2DComponent.h" />
     <ClInclude Include="src\Hazel\Scene\Component\CameraComponent.h" />
+    <ClInclude Include="src\Hazel\Scene\Component\Collider\BoxCollider2DComponent.h" />
+    <ClInclude Include="src\Hazel\Scene\Component\Collider\CircleCollider2DComponent.h" />
     <ClInclude Include="src\Hazel\Scene\Component\Component.h" />
+    <ClInclude Include="src\Hazel\Scene\Component\Identifier\IDComponent.h" />
     <ClInclude Include="src\Hazel\Scene\Component\Identifier\NameComponent.h" />
     <ClInclude Include="src\Hazel\Scene\Component\NativeScriptComponent.h" />
-    <ClInclude Include="src\Hazel\Scene\Component\RigidBody2DComponent.h" />
+    <ClInclude Include="src\Hazel\Scene\Component\Renderer\CircleRendererComponent.h" />
     <ClInclude Include="src\Hazel\Scene\Component\Renderer\SpriteRenderComponent.h" />
+    <ClInclude Include="src\Hazel\Scene\Component\RigidBody2DComponent.h" />
     <ClInclude Include="src\Hazel\Scene\Component\TransformComponent.h" />
     <ClInclude Include="src\Hazel\Scene\Entity.h" />
     <ClInclude Include="src\Hazel\Scene\Scene.h" />
@@ -236,7 +237,6 @@
     <ClInclude Include="src\Renderer\Texture\Texture.h" />
     <ClInclude Include="src\Renderer\VertexArray.h" />
     <ClInclude Include="src\hzpch.h" />
-    <ClInclude Include="src\Hazel\Core\ID\UUID.h" />
     <ClInclude Include="vendor\ImGuizmo\ImGuizmo.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_features.hpp" />
@@ -518,9 +518,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Hazel\Scene\Component\Collider\CircleCollider2DComponent.cpp" />
-    <ClCompile Include="src\Hazel\Scene\Component\Renderer\CircleRendererComponent.cpp" />
-    <ClCompile Include="src\Hazel\Scene\Component\Identifier\IDComponent.cpp" />
     <ClCompile Include="src\Hazel\Core\Allocation\Allocator\FreeListAllocator.cpp" />
     <ClCompile Include="src\Hazel\Core\Allocation\Allocator\MemoryPoolAllocator.cpp" />
     <ClCompile Include="src\Hazel\Core\Allocation\Allocator\PoolAllocator.cpp" />
@@ -532,6 +529,7 @@
     <ClCompile Include="src\Hazel\Core\Application.cpp" />
     <ClCompile Include="src\Hazel\Core\GC\GC.cpp" />
     <ClCompile Include="src\Hazel\Core\GC\GCObject.cpp" />
+    <ClCompile Include="src\Hazel\Core\ID\UUID.cpp" />
     <ClCompile Include="src\Hazel\Core\Layer\Layer.cpp" />
     <ClCompile Include="src\Hazel\Core\Layer\LayerStack.cpp" />
     <ClCompile Include="src\Hazel\Core\Reflection\Reflection.cpp" />
@@ -547,13 +545,16 @@
     <ClCompile Include="src\Hazel\ImGui\ImGuilBuild.cpp" />
     <ClCompile Include="src\Hazel\Math\Math.cpp" />
     <ClCompile Include="src\Hazel\Scene\BaseObject.cpp" />
-    <ClCompile Include="src\Hazel\Scene\Component\Collider\BoxCollider2DComponent.cpp" />
     <ClCompile Include="src\Hazel\Scene\Component\CameraComponent.cpp" />
+    <ClCompile Include="src\Hazel\Scene\Component\Collider\BoxCollider2DComponent.cpp" />
+    <ClCompile Include="src\Hazel\Scene\Component\Collider\CircleCollider2DComponent.cpp" />
     <ClCompile Include="src\Hazel\Scene\Component\Component.cpp" />
+    <ClCompile Include="src\Hazel\Scene\Component\Identifier\IDComponent.cpp" />
     <ClCompile Include="src\Hazel\Scene\Component\Identifier\NameComponent.cpp" />
     <ClCompile Include="src\Hazel\Scene\Component\NativeScriptComponent.cpp" />
-    <ClCompile Include="src\Hazel\Scene\Component\RigidBody2DComponent.cpp" />
+    <ClCompile Include="src\Hazel\Scene\Component\Renderer\CircleRendererComponent.cpp" />
     <ClCompile Include="src\Hazel\Scene\Component\Renderer\SpriteRenderComponent.cpp" />
+    <ClCompile Include="src\Hazel\Scene\Component\RigidBody2DComponent.cpp" />
     <ClCompile Include="src\Hazel\Scene\Component\TransformComponent.cpp" />
     <ClCompile Include="src\Hazel\Scene\Entity.cpp" />
     <ClCompile Include="src\Hazel\Scene\Scene.cpp" />
@@ -593,7 +594,6 @@
     <ClCompile Include="src\hzpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\Hazel\Core\ID\UUID.cpp" />
     <ClCompile Include="vendor\ImGuizmo\ImGuizmo.cpp" />
     <ClCompile Include="vendor\stb_image\stb_image.cpp" />
   </ItemGroup>
@@ -610,9 +610,6 @@
     <ProjectReference Include="vendor\imgui\ImGui.vcxproj">
       <Project>{C0FF640D-2C14-8DBE-F595-301E616989EF}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="src\Hazel\Asset\Asset.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
