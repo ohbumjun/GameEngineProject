@@ -3,8 +3,8 @@
 #include "entt.hpp"
 #include "Scene.h"
 #include "Component/Component.h"
-#include "Component/IDComponent.h"
-#include "Component/NameComponent.h"
+#include "Component/Identifier/IDComponent.h"
+#include "Component/Identifier/NameComponent.h"
 #include "Hazel/Core/ID/UUID.h"
 
 namespace Hazel

@@ -214,12 +214,12 @@ namespace Hazel
 		Circle 도 왜 같은 Index buffer 를 활용할 수 있는 거지 ? 
 		- 왜냐하면 지금 우리는 Circle 을 Quad 와 마찬가지로
 		  4개의 정점을 활용하여 Circle 을 그려내고 있기 때문이다.
+
+		  즉, 사실상 우리는 4각형 박스 범위 안에 Circle 을 그리고 있는 것이다.
 		*/
 		s_Data.CircleVertexArray->SetIndexBuffer(quadIdxBuffer); // Use quad IB
 		s_Data.CircleVertexBufferBase = new CircleVertex[s_Data.MaxVertices];
 
-		s_Data.CircleIndexCount = 0;
-		s_Data.CircleVertexBufferPtr = s_Data.CircleVertexBufferBase;
 	}
 
 	void Renderer2D::initQuadVertexInfo()
@@ -313,6 +313,23 @@ namespace Hazel
 			});
 		s_Data.LineVertexArray->AddVertexBuffer(s_Data.LineVertexBuffer);
 		s_Data.LineVertexBufferBase = new LineVertex[s_Data.MaxVertices];
+
+		/*
+		기본적으로 Line 은 index buffer 를 사용하지 않을 것이다
+		예를 들어
+		 ㅡ
+		|  |
+		 ㅡ
+
+		 이렇게 Line 4개를 그어서 Rect 를 만들 때
+		 4개 정점을 duplicate 하여 사용할 것이다.
+
+		 즉, 일반적으로 Quad 를 그릴 때는 4개의 정점과 6개의 idx buffer 정보를
+		 이용해서 그린다. 4개의 정점을 6번 사용하지 않도록 하기 위함이다.
+
+		 하지만 Line 은 그저 indx buffer 없이 , 그리는 방식으로 진행할
+		 것이라는 의미이다.
+		*/
 	}
 
 	void Renderer2D::initShaders()

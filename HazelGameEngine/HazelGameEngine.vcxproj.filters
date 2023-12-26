@@ -255,7 +255,7 @@
     <ClInclude Include="src\Hazel\Scene\BaseObject.h">
       <Filter>src\Hazel\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hazel\Scene\Component\BoxCollider2DComponent.h">
+    <ClInclude Include="src\Hazel\Scene\Component\Collider\BoxCollider2DComponent.h">
       <Filter>src\Hazel\Scene\Component</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\Scene\Component\CameraComponent.h">
@@ -264,7 +264,7 @@
     <ClInclude Include="src\Hazel\Scene\Component\Component.h">
       <Filter>src\Hazel\Scene\Component</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hazel\Scene\Component\NameComponent.h">
+    <ClInclude Include="src\Hazel\Scene\Component\Identifier\NameComponent.h">
       <Filter>src\Hazel\Scene\Component</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\Scene\Component\NativeScriptComponent.h">
@@ -273,7 +273,7 @@
     <ClInclude Include="src\Hazel\Scene\Component\RigidBody2DComponent.h">
       <Filter>src\Hazel\Scene\Component</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hazel\Scene\Component\SpriteRenderComponent.h">
+    <ClInclude Include="src\Hazel\Scene\Component\Renderer\SpriteRenderComponent.h">
       <Filter>src\Hazel\Scene\Component</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\Scene\Component\TransformComponent.h">
@@ -1234,8 +1234,9 @@
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\Core\ID\UUID.h" />
-    <ClInclude Include="src\Hazel\Scene\Component\IDComponent.h" />
-    <ClInclude Include="src\Hazel\Scene\Component\CircleRendererComponent.h" />
+    <ClInclude Include="src\Hazel\Scene\Component\Identifier\IDComponent.h" />
+    <ClInclude Include="src\Hazel\Scene\Component\Renderer\CircleRendererComponent.h" />
+    <ClInclude Include="src\Hazel\Scene\Component\Collider\CircleCollider2DComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Core\Allocation\Allocator\FreeListAllocator.cpp">
@@ -1316,7 +1317,7 @@
     <ClCompile Include="src\Hazel\Scene\BaseObject.cpp">
       <Filter>src\Hazel\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="src\Hazel\Scene\Component\BoxCollider2DComponent.cpp">
+    <ClCompile Include="src\Hazel\Scene\Component\Collider\BoxCollider2DComponent.cpp">
       <Filter>src\Hazel\Scene\Component</Filter>
     </ClCompile>
     <ClCompile Include="src\Hazel\Scene\Component\CameraComponent.cpp">
@@ -1325,7 +1326,7 @@
     <ClCompile Include="src\Hazel\Scene\Component\Component.cpp">
       <Filter>src\Hazel\Scene\Component</Filter>
     </ClCompile>
-    <ClCompile Include="src\Hazel\Scene\Component\NameComponent.cpp">
+    <ClCompile Include="src\Hazel\Scene\Component\Identifier\NameComponent.cpp">
       <Filter>src\Hazel\Scene\Component</Filter>
     </ClCompile>
     <ClCompile Include="src\Hazel\Scene\Component\NativeScriptComponent.cpp">
@@ -1334,7 +1335,7 @@
     <ClCompile Include="src\Hazel\Scene\Component\RigidBody2DComponent.cpp">
       <Filter>src\Hazel\Scene\Component</Filter>
     </ClCompile>
-    <ClCompile Include="src\Hazel\Scene\Component\SpriteRenderComponent.cpp">
+    <ClCompile Include="src\Hazel\Scene\Component\Renderer\SpriteRenderComponent.cpp">
       <Filter>src\Hazel\Scene\Component</Filter>
     </ClCompile>
     <ClCompile Include="src\Hazel\Scene\Component\TransformComponent.cpp">
@@ -1455,8 +1456,9 @@
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
     <ClCompile Include="src\Hazel\Core\ID\UUID.cpp" />
-    <ClCompile Include="src\Hazel\Scene\Component\IDComponent.cpp" />
-    <ClCompile Include="src\Hazel\Scene\Component\CircleRendererComponent.cpp" />
+    <ClCompile Include="src\Hazel\Scene\Component\Identifier\IDComponent.cpp" />
+    <ClCompile Include="src\Hazel\Scene\Component\Renderer\CircleRendererComponent.cpp" />
+    <ClCompile Include="src\Hazel\Scene\Component\Collider\CircleCollider2DComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\Hazel\Asset\Asset.txt" />

@@ -1,7 +1,9 @@
 #pragma once
 
 #include "Hazel/Core/ID//UUID.h"
-#include "Component.h"
+
+
+#include "Hazel/Scene/Component/Component.h"
 
 namespace Hazel
 {

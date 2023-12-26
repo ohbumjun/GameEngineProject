@@ -37,6 +37,15 @@ namespace Hazel
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		glEnable(GL_DEPTH_TEST);
+
+		/*
+		Enabled ? Draw lines with correct filtering
+		otherwise draw aliased line
+
+		GL_LINE_SMOOTH : enable line antialiasing
+
+		즉, enable 시켜야 대각선 line 이 smooth 하게 보인다.
+		*/
 		glEnable(GL_LINE_SMOOTH);
 	}
 
@@ -71,7 +80,7 @@ namespace Hazel
 
 		// Open GL 에 Bind 된 Texture Unbind 시키기
 		// 왜 굳이 여기서..?
-		// glBindTexture(GL_TEXTURE_2D, 0);
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
 	void OpenGLRendererAPI::SetViewPort(uint32_t x, uint32_t y, uint32_t width, uint32_t height)

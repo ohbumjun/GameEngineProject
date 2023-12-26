@@ -1,6 +1,7 @@
 ﻿#pragma once
 
-#include "Component.h"
+
+#include "Hazel/Scene/Component/Component.h"
 
 namespace Hazel
 {

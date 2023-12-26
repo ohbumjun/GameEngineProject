@@ -1,14 +1,15 @@
 ﻿#include "hzpch.h"
 #include "Scene.h"
-#include "Component/SpriteRenderComponent.h"
-#include "Component/CircleRendererComponent.h"
+#include "Component/Renderer/SpriteRenderComponent.h"
+#include "Component/Renderer/CircleRendererComponent.h"
 #include "Component/CameraComponent.h"
 #include "Component/TransformComponent.h"
 #include "Component/NativeScriptComponent.h"
-#include "Component/NameComponent.h"
-#include "Component/IDComponent.h"
+#include "Component/Identifier/NameComponent.h"
+#include "Component/Identifier/IDComponent.h"
 #include "Component/RigidBody2DComponent.h"
-#include "Component/BoxCollider2DComponent.h"
+#include "Component/Collider/BoxCollider2DComponent.h"
+#include "Component/Collider/CircleCollider2DComponent.h"
 #include "Renderer/Renderer2D.h"
 #include <glm/glm.hpp>
 #include "Entity.h"
@@ -352,17 +353,31 @@ namespace Hazel
 
 				Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
 			}
+		}
 
-			// Draw circles
+		// Draw circles
+		{
+			auto view = m_Registry.view<TransformComponent, CircleRendererComponent>();
+			for (auto entity : view)
 			{
-				auto view = m_Registry.view<TransformComponent, CircleRendererComponent>();
-				for (auto entity : view)
-				{
-					auto [transform, circle] = view.get<TransformComponent, CircleRendererComponent>(entity);
+				auto [transform, circle] = view.get<TransformComponent, CircleRendererComponent>(entity);
 
-					Renderer2D::DrawCircle(transform.GetTransform(), circle.GetColor(), circle.GetThickNess(), circle.GetFade(), (int)entity);
-				}
+				Renderer2D::DrawCircle(transform.GetTransform(), circle.GetColor(), circle.GetThickNess(), circle.GetFade(), (int)entity);
 			}
+		}
+
+		// Draw Line
+		{
+			Renderer2D::SetLineWidth(3.f);
+			Renderer2D::DrawLine(glm::vec3(0.f), glm::vec3(5.f), glm::vec4(1, 0, 1, 1));
+		
+			Renderer2D::SetLineWidth(5.f);
+			Renderer2D::DrawLine(glm::vec3(0.f), glm::vec3(2.f, 0.f, 0.f), glm::vec4(0, 1, 1, 1));
+		}
+
+		// Draw Rect
+		{
+			Renderer2D::DrawRect(glm::vec3(0.f), glm::vec3(3.f), glm::vec4(1, 0, 0, 1));
 		}
 		
 		Renderer2D::EndScene();

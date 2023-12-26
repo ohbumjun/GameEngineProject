@@ -5,7 +5,7 @@
 #include "Texture/SubTexture2D.h"
 #include "Renderer/Camera/Camera.h"
 #include "Renderer/Camera/EditorCamera.h"
-#include "Hazel/Scene/Component/SpriteRenderComponent.h"
+#include "Hazel/Scene/Component/Renderer/SpriteRenderComponent.h"
 
 namespace Hazel
 {
