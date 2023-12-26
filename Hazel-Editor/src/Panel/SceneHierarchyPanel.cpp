@@ -14,6 +14,7 @@
 #include "Hazel/Scene/Component/NativeScriptComponent.h"
 #include "Hazel/Scene/Component/RigidBody2DComponent.h"
 #include "Hazel/Scene/Component/BoxCollider2DComponent.h"
+#include "Hazel/Scene/Component/CircleRendererComponent.h"
 #include <filesystem>
 #include <imgui/imgui.h>
 
@@ -198,6 +199,14 @@ namespace Hazel
 
 			if (ImGui::BeginPopup("AddComponent"))
 			{
+				if (!m_SelectedEntity.HasComponent<CircleRendererComponent>())
+				{
+					if (ImGui::MenuItem("Circle Renderer"))
+					{
+						m_SelectedEntity.AddComponent<CircleRendererComponent>();
+						ImGui::CloseCurrentPopup();
+					}
+				}
 				if (!m_SelectedEntity.HasComponent<CameraComponent>())
 				{
 					if (ImGui::MenuItem("Camera"))
@@ -249,7 +258,13 @@ namespace Hazel
 		});
 
 		HazelEditor::DrawComponent<CameraComponent>("Camera", entity, &HazelEditor::CameraPanel::DrawCameraComponent);
-
+		
+		HazelEditor::DrawComponent<CircleRendererComponent>("Circle Renderer", entity, [](auto& component)
+			{
+				ImGui::ColorEdit4("Color", glm::value_ptr(component.GetColorRef()));
+				ImGui::DragFloat("Thickness", &component.GetThickNessRef(), 0.025f, 0.0f, 1.0f);
+				ImGui::DragFloat("Fade", &component.GetFadeRef(), 0.00025f, 0.0f, 1.0f);
+			});
 		/*
 		DrawComponent<CameraComponent>("Camera", entity, [](auto& component) {
 			SceneCamera& camera = const_cast<SceneCamera&>(

@@ -47,4 +47,7 @@
   <ItemGroup>
     <Text Include="TODO.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\shaders\Renderer2D_Circle.glsl" />
+  </ItemGroup>
 </Project>

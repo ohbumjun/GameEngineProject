@@ -1,6 +1,7 @@
 ﻿#include "hzpch.h"
 #include "Scene.h"
 #include "Component/SpriteRenderComponent.h"
+#include "Component/CircleRendererComponent.h"
 #include "Component/CameraComponent.h"
 #include "Component/TransformComponent.h"
 #include "Component/NativeScriptComponent.h"
@@ -180,7 +181,7 @@ namespace Hazel
 		CopyComponent<NativeScriptComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
 		CopyComponent<Rigidbody2DComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
 		CopyComponent<BoxCollider2DComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
-
+		CopyComponent<CircleRendererComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
 		// Set Default Name
 		newScene->SetName("PlayScene");
 
@@ -306,16 +307,31 @@ namespace Hazel
 		{
 			Renderer2D::BeginScene(*mainCamera, *cameraTransform);
 
-			auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRenderComponent>);
-
-			for (const auto& entity : group)
+			// Draw Sprite
 			{
-				// auto& 가 필요없다. 왜냐하면 group.get 의 리턴값은  tuple<comp&, comp&> 이다.
-				// 즉, tuple 자체를 굳이 & 로 받을 필요도 없을 뿐더러, 이미 compont 정보들은 & 로 리턴한다.
-				auto [transform, sprite] = group.get<TransformComponent, SpriteRenderComponent>(entity);
+				auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRenderComponent>);
 
-				Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
-				// Renderer2D::DrawQuad(transform.GetTransform(), sprite.color);
+				for (const auto& entity : group)
+				{
+					// auto& 가 필요없다. 왜냐하면 group.get 의 리턴값은  tuple<comp&, comp&> 이다.
+					// 즉, tuple 자체를 굳이 & 로 받을 필요도 없을 뿐더러, 이미 compont 정보들은 & 로 리턴한다.
+					auto [transform, sprite] = group.get<TransformComponent, SpriteRenderComponent>(entity);
+
+					Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
+					// Renderer2D::DrawQuad(transform.GetTransform(), sprite.color);
+				}
+			}
+			
+
+			// Draw circles
+			{
+				auto view = m_Registry.view<TransformComponent, CircleRendererComponent>();
+				for (auto entity : view)
+				{
+					auto [transform, circle] = view.get<TransformComponent, CircleRendererComponent>(entity);
+
+					Renderer2D::DrawCircle(transform.GetTransform(), circle.GetColor(), circle.GetThickNess(), circle.GetFade(), (int)entity);
+				}
 			}
 
 			Renderer2D::EndScene();
@@ -326,15 +342,29 @@ namespace Hazel
 	{
 		Renderer2D::BeginScene(camera);
 
-		auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRenderComponent>);
-		for (auto entity : group)
+		// sprite
 		{
-			auto [transform, sprite] = group.get<TransformComponent, SpriteRenderComponent>(entity);
+			auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRenderComponent>);
 
-			Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
-			// Renderer2D::DrawQuad(transform.GetTransform(), sprite.color);
+			for (auto entity : group)
+			{
+				auto [transform, sprite] = group.get<TransformComponent, SpriteRenderComponent>(entity);
+
+				Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
+			}
+
+			// Draw circles
+			{
+				auto view = m_Registry.view<TransformComponent, CircleRendererComponent>();
+				for (auto entity : view)
+				{
+					auto [transform, circle] = view.get<TransformComponent, CircleRendererComponent>(entity);
+
+					Renderer2D::DrawCircle(transform.GetTransform(), circle.GetColor(), circle.GetThickNess(), circle.GetFade(), (int)entity);
+				}
+			}
 		}
-
+		
 		Renderer2D::EndScene();
 	}
 	void Scene::Serialize(Serializer* serializer)
@@ -541,6 +571,10 @@ namespace Hazel
 		{
 			return &entity.AddComponent<SpriteRenderComponent>();
 		}
+		else if (type == Reflection::GetTypeID<CircleRendererComponent>())
+		{
+			return &entity.AddComponent<CircleRendererComponent>();
+		}
 		else if (type == Reflection::GetTypeID<TransformComponent>())
 		{
 			return &entity.AddComponent<TransformComponent>();
@@ -578,17 +612,18 @@ namespace Hazel
 	{
 		return CreateEntityWithUUID(UUID(), name);
 	}
-	void Scene::DuplicateEntity(Entity srcCntity)
+	void Scene::DuplicateEntity(Entity srcEntity)
 	{
-		std::string name = srcCntity.GetName();
+		std::string name = srcEntity.GetName();
 		Entity newEntity = CreateEntity(name);
 
-		CopyComponentIfExists<TransformComponent>(newEntity, srcCntity);
-		CopyComponentIfExists<SpriteRenderComponent>(newEntity, srcCntity);
-		CopyComponentIfExists<CameraComponent>(newEntity, srcCntity);
-		CopyComponentIfExists<NativeScriptComponent>(newEntity, srcCntity);
-		CopyComponentIfExists<Rigidbody2DComponent>(newEntity, srcCntity);
-		CopyComponentIfExists<BoxCollider2DComponent>(newEntity, srcCntity);
+		CopyComponentIfExists<TransformComponent>(newEntity, srcEntity);
+		CopyComponentIfExists<SpriteRenderComponent>(newEntity, srcEntity);
+		CopyComponentIfExists<CameraComponent>(newEntity, srcEntity);
+		CopyComponentIfExists<NativeScriptComponent>(newEntity, srcEntity);
+		CopyComponentIfExists<Rigidbody2DComponent>(newEntity, srcEntity);
+		CopyComponentIfExists<CircleRendererComponent>(newEntity, srcEntity);
+		CopyComponentIfExists<BoxCollider2DComponent>(newEntity, srcEntity);
 	}
 	void Scene::DestroyEntity(const Entity& entity)
 	{
@@ -652,6 +687,10 @@ namespace Hazel
 	}
 	template<>
 	void Scene::OnComponentAdded<IDComponent>(Entity entity, IDComponent& component)
+	{
+	}
+	template<>
+	void Scene::OnComponentAdded<CircleRendererComponent>(Entity entity, CircleRendererComponent& component)
 	{
 	}
 }

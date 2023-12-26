@@ -42,6 +42,8 @@ namespace Hazel
 	void OpenGLRendererAPI::DrawIndexed(const Ref<VertexArray>& vertexArray,
 		uint32_t indexCount)
 	{
+
+		vertexArray->Bind();
 		/*
 		예를 들어, NewScene 을 하면 기존에 화면에 그려졌던 데이터가 모두 지워져야 한다.
 		그래서 EditoryLayer::clearScene 을 보면 Renderer2D::FlushAndReset 을 호출한다.
@@ -67,7 +69,7 @@ namespace Hazel
 			nullptr);
 
 		// Open GL 에 Bind 된 Texture Unbind 시키기
-		glBindTexture(GL_TEXTURE_2D, 0);
+		// glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
 	void OpenGLRendererAPI::SetViewPort(uint32_t x, uint32_t y, uint32_t width, uint32_t height)

@@ -7,7 +7,7 @@ class Serializer;
 
 namespace Hazel
 {
-	class CircleRendererComponent
+	class CircleRendererComponent : public Component
 	{
 		friend class Scene;
 	public :
@@ -17,9 +17,13 @@ namespace Hazel
 		virtual void Serialize(Serializer* serializer);
 		virtual void Deserialize(Serializer* serializer);
 
-		inline const glm::vec4 GetColor() const { return m_Color; }
+		inline const glm::vec4& GetColor() const { return m_Color; }
 		inline const float GetThickNess() const { return m_Thickness; }
 		inline const float GetFade() const { return m_Fade; }
+
+		inline glm::vec4& GetColorRef()  { return m_Color; }
+		inline float& GetThickNessRef()  { return m_Thickness; }
+		inline float& GetFadeRef()  { return m_Fade; }
 
 		virtual const TypeId GetType() const;
 	private :
