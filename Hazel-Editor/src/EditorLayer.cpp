@@ -257,10 +257,13 @@ namespace HazelEditor
 	{
 		m_CameraController.OnEvent(event);
 
-		m_EditorCamera.OnEvent(event);
+		if (m_SceneState == SceneState::Edit)
+		{
+			m_EditorCamera.OnEvent(event);
+		}
+
 		Hazel::EventDispatcher dispatcher(event);
 		dispatcher.Dispatch<Hazel::KeyPressedEvent>(HZ_BIND_EVENT_FN(EditorLayer::onKeyPressed));
-
 		dispatcher.Dispatch<Hazel::MouseButtonPressedEvent>(HZ_BIND_EVENT_FN(EditorLayer::onMouseButtonPressed));
 	}
 	void EditorLayer::OnImGuiRender()

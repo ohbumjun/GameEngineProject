@@ -1,17 +1,35 @@
 {
-    "SceneName": "ActiveScene",
+    "SceneName": "PlayScene",
     "Entities": [{
-            "types": [13729283319516192586, 15567495072973413409, 1927429000379262859, 8364620273459969071, 8797137598225480593, 10980904963728746519],
+            "types": [13729283319516192586, 1927429000379262859, 15567495072973413409, 10446373130454601381],
             "compDatas": [{
                     "compName": "class Hazel::TransformComponent",
-                    "Translation": [0.0, -0.8941230773925781, 0.0],
+                    "Translation": [-1.8320000171661377, 0.6393395662307739, 0.0],
                     "Rotation": [0.0, 0.0, 0.0],
+                    "Scale": [1.5, 1.5, 1.0]
+                }, {
+                    "UUID": 12270987440353096039
+                }, {
+                    "compName": "class Hazel::NameComponent",
+                    "Name": "Circle"
+                }, {
+                    "compName": "class Hazel::CircleRendererComponent",
+                    "color": [1.0, 1.0, 1.0, 1.0],
+                    "Thickness": 0.6000000238418579,
+                    "Fade": 0.30300000309944153
+                }]
+        }, {
+            "types": [13729283319516192586, 1927429000379262859, 15567495072973413409, 8364620273459969071, 8797137598225480593, 10980904963728746519],
+            "compDatas": [{
+                    "compName": "class Hazel::TransformComponent",
+                    "Translation": [2.0999999046325684, -0.8941230773925781, 0.0],
+                    "Rotation": [0.0, 0.0, 0.5096361637115479],
                     "Scale": [6.551405429840088, 1.0, 1.0]
+                }, {
+                    "UUID": 5609561400105098421
                 }, {
                     "compName": "class Hazel::NameComponent",
                     "Name": "DownBox"
-                }, {
-                    "UUID": 5609561400105098421
                 }, {
                     "compName": "class Hazel::SpriteRenderComponent",
                     "color": [0.8779444098472595, 0.9111968874931335, 0.40458548069000244, 1.0]
@@ -25,27 +43,27 @@
                     "Size": [0.5, 0.5],
                     "Density": 1.0,
                     "Friction": 0.5,
-                    "Restitution": 0.0,
+                    "Restitution": 1.0,
                     "RestitutionThreshold": 0.5
                 }]
         }, {
-            "types": [13729283319516192586, 15567495072973413409, 1927429000379262859, 8364620273459969071, 8797137598225480593, 10980904963728746519],
+            "types": [13729283319516192586, 1927429000379262859, 15567495072973413409, 8364620273459969071, 8797137598225480593, 10980904963728746519],
             "compDatas": [{
                     "compName": "class Hazel::TransformComponent",
-                    "Translation": [0.0, 2.828000068664551, 0.0],
+                    "Translation": [0.6000000238418579, 2.828000068664551, 0.0],
                     "Rotation": [0.0, 0.0, 0.7853981852531433],
-                    "Scale": [1.0, 1.0, 1.0]
+                    "Scale": [0.699999988079071, 0.699999988079071, 1.0]
+                }, {
+                    "UUID": 9715766381655773815
                 }, {
                     "compName": "class Hazel::NameComponent",
                     "Name": "Sprite"
                 }, {
-                    "UUID": 9715766381655773815
-                }, {
                     "compName": "class Hazel::SpriteRenderComponent",
-                    "color": [1.0, 1.0, 1.0, 1.0]
+                    "color": [0.7490347623825073, 0.17062954604625702, 0.17062954604625702, 1.0]
                 }, {
                     "compName": "class Hazel::Rigidbody2DComponent",
-                    "bodyType": 1,
+                    "bodyType": 0,
                     "FixedRotation": false
                 }, {
                     "compName": "class Hazel::BoxCollider2DComponent",
@@ -57,7 +75,7 @@
                     "RestitutionThreshold": 0.5
                 }]
         }, {
-            "types": [6780415662489155265, 13729283319516192586, 15567495072973413409, 1927429000379262859],
+            "types": [6780415662489155265, 13729283319516192586, 1927429000379262859, 15567495072973413409],
             "compDatas": [{
                     "compName": "class Hazel::CameraComponent",
                     "Camera": {
@@ -75,14 +93,42 @@
                     "isFixedAspectRatio": false
                 }, {
                     "compName": "class Hazel::TransformComponent",
-                    "Translation": [0.0, 3.700000047683716, 15.0],
+                    "Translation": [0.0, 0.0, 30.0],
                     "Rotation": [0.0, 0.0, 0.0],
                     "Scale": [1.0, 1.0, 1.0]
                 }, {
+                    "UUID": 12832608054326705950
+                }, {
                     "compName": "class Hazel::NameComponent",
                     "Name": "Main Camera Entity"
+                }]
+        }, {
+            "types": [13729283319516192586, 1927429000379262859, 15567495072973413409, 8364620273459969071, 8797137598225480593, 10980904963728746519],
+            "compDatas": [{
+                    "compName": "class Hazel::TransformComponent",
+                    "Translation": [-2.700000047683716, -0.8941230773925781, 0.0],
+                    "Rotation": [0.0, 0.0, -0.5235987901687622],
+                    "Scale": [6.551405429840088, 1.0, 1.0]
                 }, {
-                    "UUID": 12832608054326705950
+                    "UUID": 228202161900674202
+                }, {
+                    "compName": "class Hazel::NameComponent",
+                    "Name": "DownBox2"
+                }, {
+                    "compName": "class Hazel::SpriteRenderComponent",
+                    "color": [0.8779444098472595, 0.9111968874931335, 0.40458548069000244, 1.0]
+                }, {
+                    "compName": "class Hazel::Rigidbody2DComponent",
+                    "bodyType": 0,
+                    "FixedRotation": false
+                }, {
+                    "compName": "class Hazel::BoxCollider2DComponent",
+                    "Offset": [0.0, 0.0],
+                    "Size": [0.5, 0.5],
+                    "Density": 1.0,
+                    "Friction": 0.5,
+                    "Restitution": 1.0,
+                    "RestitutionThreshold": 0.5
                 }]
         }]
 }
