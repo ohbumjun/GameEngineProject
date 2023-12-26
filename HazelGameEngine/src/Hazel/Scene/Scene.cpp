@@ -136,10 +136,23 @@ namespace Hazel
 
 			auto& component = src.get<Component>(e);
 
+#ifdef _DEBUG
+			NameComponent& name = src.get<NameComponent>(e);
+			bool h = true;
+#endif
+
 			// 앞서서 새로운 entity 를 만드는 과정에서 CreateEntityWithUUID() 를 사용하는데
 			// 이미 Transform, NameComponent 등은 존재할 수 있다.
 			// 따라서 없으면 추가하고, 있으면 replace 하는 함수로 진행할 것이다.
 			dst.emplace_or_replace<Component>(dstEnttID, component);
+
+
+#ifdef _DEBUG
+			NameComponent& dstName = dst.get<NameComponent>(dstEnttID);
+			Component& dstNewComp = dst.get<Component>(dstEnttID);
+			bool h2 = true;
+#endif
+
 		}
 	}
 

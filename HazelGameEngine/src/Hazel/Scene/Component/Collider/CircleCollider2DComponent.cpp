@@ -9,7 +9,13 @@ Hazel::CircleCollider2DComponent::CircleCollider2DComponent()
 
 }
 
-Hazel::CircleCollider2DComponent::CircleCollider2DComponent(const CircleCollider2DComponent&)
+Hazel::CircleCollider2DComponent::CircleCollider2DComponent(const CircleCollider2DComponent& other) :
+m_Offset(other.m_Offset),
+m_Radius(other.m_Radius),
+m_Density(other.m_Density),
+m_Friction(other.m_Friction),
+m_Restitution(other.m_Restitution),
+m_RestitutionThreshold(other.m_RestitutionThreshold)
 {
     Reflection::RegistType<CircleCollider2DComponent>();
 }

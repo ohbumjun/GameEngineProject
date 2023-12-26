@@ -11,6 +11,14 @@ Hazel::TransformComponent::TransformComponent()
 	Reflection::RegistType<TransformComponent>();
 }
 
+Hazel::TransformComponent::TransformComponent(const TransformComponent& other)
+: Translation(other.Translation),
+Rotation(other.Rotation),
+Scale(other.Scale)
+{
+	Reflection::RegistType<TransformComponent>();
+}
+
 void Hazel::TransformComponent::Serialize(Serializer* serializer)
 {
 	serializer->BeginSaveMap(Reflection::GetTypeID<TransformComponent>(), this);

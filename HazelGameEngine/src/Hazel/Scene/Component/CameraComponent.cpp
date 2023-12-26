@@ -8,10 +8,17 @@ Hazel::CameraComponent::CameraComponent()
 	Reflection::RegistType<CameraComponent>();
 }
 
+Hazel::CameraComponent::CameraComponent(const CameraComponent& other)
+	: camera(other.camera),
+	isFixedAspectRatio(other.isFixedAspectRatio),
+	isPrimary(other.isPrimary)
+{
+	Reflection::RegistType<CameraComponent>();
+}
+
 Hazel::CameraComponent::CameraComponent(const glm::mat4& projection)
 	: camera(projection)
 {
-	Reflection::RegistType<CameraComponent>();
 }
 
 void Hazel::CameraComponent::Serialize(Serializer* serializer)

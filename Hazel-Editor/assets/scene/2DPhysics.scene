@@ -15,8 +15,8 @@
                 }, {
                     "compName": "class Hazel::CircleRendererComponent",
                     "color": [1.0, 1.0, 1.0, 1.0],
-                    "Thickness": 0.6000000238418579,
-                    "Fade": 0.30300000309944153
+                    "Thickness": 1.0,
+                    "Fade": 0.004999999888241291
                 }]
         }, {
             "types": [13729283319516192586, 1927429000379262859, 15567495072973413409, 8364620273459969071, 8797137598225480593, 10980904963728746519],
@@ -75,8 +75,18 @@
                     "RestitutionThreshold": 0.5
                 }]
         }, {
-            "types": [6780415662489155265, 13729283319516192586, 1927429000379262859, 15567495072973413409],
+            "types": [13729283319516192586, 1927429000379262859, 15567495072973413409, 6780415662489155265],
             "compDatas": [{
+                    "compName": "class Hazel::TransformComponent",
+                    "Translation": [0.0, 0.0, 30.0],
+                    "Rotation": [0.0, 0.0, 0.0],
+                    "Scale": [1.0, 1.0, 1.0]
+                }, {
+                    "UUID": 12832608054326705950
+                }, {
+                    "compName": "class Hazel::NameComponent",
+                    "Name": "Main Camera Entity"
+                }, {
                     "compName": "class Hazel::CameraComponent",
                     "Camera": {
                         "projectionMatrix": [2.5157458782196045, 0.0, 0.0, 0.0, 0.0, 2.4142134189605713, 0.0, 0.0, 0.0, 0.0, -1.0000200271606445, -1.0, 0.0, 0.0, -0.02000020071864128, 0.0],
@@ -91,16 +101,6 @@
                     },
                     "isPrimary": true,
                     "isFixedAspectRatio": false
-                }, {
-                    "compName": "class Hazel::TransformComponent",
-                    "Translation": [0.0, 0.0, 30.0],
-                    "Rotation": [0.0, 0.0, 0.0],
-                    "Scale": [1.0, 1.0, 1.0]
-                }, {
-                    "UUID": 12832608054326705950
-                }, {
-                    "compName": "class Hazel::NameComponent",
-                    "Name": "Main Camera Entity"
                 }]
         }, {
             "types": [13729283319516192586, 1927429000379262859, 15567495072973413409, 8364620273459969071, 8797137598225480593, 10980904963728746519],

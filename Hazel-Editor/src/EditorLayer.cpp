@@ -212,7 +212,9 @@ namespace HazelEditor
 			// Update
 			// m_ViewportFocused ? void ImGuiLayer::OnEvent 함수 참고
 			if (m_VieportInteracted)
+			{
 				m_CameraController.OnUpdate(ts);
+			}
 
 			m_EditorCamera.OnUpdate(ts);
 

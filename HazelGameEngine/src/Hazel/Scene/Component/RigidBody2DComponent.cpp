@@ -9,7 +9,9 @@ namespace Hazel
 		Reflection::RegistType<Rigidbody2DComponent>();
 	}
 
-	Rigidbody2DComponent::Rigidbody2DComponent(const Rigidbody2DComponent&)
+	Rigidbody2DComponent::Rigidbody2DComponent(const Rigidbody2DComponent& other) :
+		m_Type(other.m_Type),
+		m_FixedRotation(other.m_FixedRotation)
 	{
 		Reflection::RegistType<Rigidbody2DComponent>();
 	}
