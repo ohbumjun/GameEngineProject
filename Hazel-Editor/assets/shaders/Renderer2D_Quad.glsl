@@ -59,12 +59,12 @@ void main()
 			
 // 참고 : OpenGLFrameBuffer 에서 bind 한 TexImage2D 들이 여기에 해당한다.
 // 첫번째 color buffer == GL_COLOR_ATTACHMENT0
-layout(location = 0) out vec4 color;
+layout(location = 0) out vec4 o_Color;
 
 // 두번째 color buffer == GL_COLOR_ATTACHMENT0 + 1
 // mouse picking 을 통해 해당 pixel 이 어떤 entity 에 속하는지를 
 // 판별하는 frame buffer 로 활용하고 있으므로 out vec4 가 아니라, int 가 된다.
-layout(location = 1) out int color2;
+layout(location = 1) out int o_EntityID;
 
 struct VertexOutput
 {
@@ -127,7 +127,7 @@ void main()
 		case 30: texColor *= texture(u_Textures[30], Input.TexCoord * Input.TilingFactor); break;
 		case 31: texColor *= texture(u_Textures[31], Input.TexCoord * Input.TilingFactor); break;	
 	}
-	color = texColor;
+	o_Color = texColor;
 
-	color2 = v_EntityID; // placeholder for our entity ID
+	o_EntityID = v_EntityID; // placeholder for our entity ID
 }
