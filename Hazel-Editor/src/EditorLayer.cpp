@@ -22,6 +22,8 @@
 #include "Hazel/Scene/Component/Identifier/NameComponent.h"
 #include "Hazel/Scene/Component/CameraComponent.h"
 #include "Hazel/Scene/Component/TransformComponent.h"
+#include "Hazel/Scene/Component/Collider/BoxCollider2DComponent.h"
+#include "Hazel/Scene/Component/Collider/CircleCollider2DComponent.h"
 
 // 24 wide map
 static const uint32_t s_mapWidth = 24;
@@ -251,7 +253,8 @@ namespace HazelEditor
 			Hazel::Scene* currentScene = m_SceneState == SceneState::Edit ? m_EditorScene.get() : m_ActiveScene.get();
 			m_HoveredEntity = pixelData == -1 ? Hazel::Entity() : Hazel::Entity((entt::entity)pixelData, currentScene);
 		}
-		
+
+		onOverlayRender();
 
 		m_FrameBuffer->UnBind();
 	}
@@ -557,6 +560,11 @@ namespace HazelEditor
 	{
 		// Settings
 		ImGui::Begin("Settings");
+		ImGui::Checkbox("Show physics colliders", &m_ShowPhysicsColliders);
+		ImGui::End();
+
+		// State
+		ImGui::Begin("Stats");
 
 		std::string name = "None";
 
@@ -762,6 +770,60 @@ namespace HazelEditor
 		uI_Toolbar();
 
 		ImGui::End();
+	}
+	void EditorLayer::onOverlayRender()
+	{
+		if (m_SceneState == SceneState::Play)
+		{
+			Hazel::Entity camera = m_ActiveScene->GetPrimaryCameraEntity();
+			Hazel::Renderer2D::BeginScene(camera.GetComponent<Hazel::CameraComponent>().GetCamera(), camera.GetComponent<Hazel::TransformComponent>().GetTransform());
+		}
+		else
+		{
+			Hazel::Renderer2D::BeginScene(m_EditorCamera);
+		}
+
+		if (m_ShowPhysicsColliders)
+		{
+			// Box Colliders
+			{
+				auto view = m_ActiveScene->GetAllEntitiesWith<Hazel::TransformComponent,
+					Hazel::BoxCollider2DComponent>();
+				for (auto entity : view)
+				{
+					auto [tc, bc2d] = view.get<Hazel::TransformComponent, Hazel::BoxCollider2DComponent>(entity);
+
+					glm::vec3 translation = tc.GetTranslation() + glm::vec3(bc2d.GetOffset(), 0.001f);
+					glm::vec3 scale = tc.GetScale() * glm::vec3(bc2d.GetSize() * 2.0f, 1.0f);
+
+					glm::mat4 transform = glm::translate(glm::mat4(1.0f), translation)
+						* glm::rotate(glm::mat4(1.0f), tc.GetRotation().z, glm::vec3(0.0f, 0.0f, 1.0f))
+						* glm::scale(glm::mat4(1.0f), scale);
+
+					Hazel::Renderer2D::DrawRect(transform, glm::vec4(0, 1, 0, 1));
+				}
+			}
+
+			// Circle Colliders
+			{
+				auto view = m_ActiveScene->GetAllEntitiesWith<Hazel::TransformComponent, 
+					Hazel::CircleCollider2DComponent>();
+				for (auto entity : view)
+				{
+					auto [tc, cc2d] = view.get<Hazel::TransformComponent, Hazel::CircleCollider2DComponent>(entity);
+
+					glm::vec3 translation = tc.GetTranslation() + glm::vec3(cc2d.GetOffset(), 0.001f);
+					glm::vec3 scale = tc.GetScale() * glm::vec3(cc2d.GetRadius() * 2.0f);
+
+					glm::mat4 transform = glm::translate(glm::mat4(1.0f), translation)
+						* glm::scale(glm::mat4(1.0f), scale);
+
+					Hazel::Renderer2D::DrawCircle(transform, glm::vec4(0, 1, 0, 1), 0.01f);
+				}
+			}
+		}
+
+		Hazel::Renderer2D::EndScene();
 	}
 	void EditorLayer::onScenePlay()
 	{

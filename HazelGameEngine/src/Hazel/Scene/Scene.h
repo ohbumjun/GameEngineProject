@@ -42,6 +42,11 @@ namespace Hazel
 		void DestroyEntity(const Entity& entity);
 		void OnViewportResize(uint32_t width, uint32_t height);
 
+		template<typename... Components>
+		auto GetAllEntitiesWith()
+		{
+			return m_Registry.view<Components...>();
+		}
 
 		/*
 		Play 시작 때 호출되는 Scene 쪽의 함수

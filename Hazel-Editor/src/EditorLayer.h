@@ -45,6 +45,7 @@ namespace HazelEditor
 		void drawSetting();
 		void drawViewPort();
 
+		void onOverlayRender();
 		void onScenePlay();
 		void onSceneStop();
 		void onDuplicateEntity();
@@ -83,6 +84,8 @@ namespace HazelEditor
 		bool m_ViewportFocused  = false;
 		bool m_ViewportHovered  = false;
 		bool m_VieportInteracted = false;
+
+		bool m_ShowPhysicsColliders = false;
 
 		glm::vec2 m_ViewportSize = { 0,0 };
 		glm::vec2 m_ViewportBounds[2];

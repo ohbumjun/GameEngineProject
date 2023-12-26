@@ -252,7 +252,7 @@ namespace Hazel
 
 				b2CircleShape circleShape;
 				circleShape.m_p.Set(cc2d.GetOffset().x, cc2d.GetOffset().y);
-				circleShape.m_radius = cc2d.GetRadius();
+				circleShape.m_radius = transform.Scale.x * cc2d.GetRadius();
 
 				b2FixtureDef fixtureDef;
 				fixtureDef.shape = &circleShape;
