@@ -19,7 +19,7 @@
 #include "Hazel/Utils/PlatformUtils.h"
 
 #include "Platform/OpenGL/OpenGLShader.h"
-#include "Hazel/Scene/Component/NameComponent.h"
+#include "Hazel/Scene/Component/Identifier/NameComponent.h"
 #include "Hazel/Scene/Component/CameraComponent.h"
 #include "Hazel/Scene/Component/TransformComponent.h"
 

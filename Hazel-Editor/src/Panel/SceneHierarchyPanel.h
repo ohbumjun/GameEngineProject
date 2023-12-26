@@ -27,6 +27,14 @@ namespace Hazel
 	private :
 		void drawEntityNode(Entity entity);
 		void drawComponents(Entity entity);
+		void drawNameComponent(Entity entity);
+		void drawTransformComponent(Entity entity);
+		void drawCameraComponent(Entity entity);
+		void drawRendererComponent(Entity entity);
+		void drawColliderComponent(Entity entity);
+		void drawRigidBodyComponent(Entity entity);
+
+		void drawAddComponentPanel();
 		std::weak_ptr<Scene> m_Context;
 		Entity m_SelectedEntity;
 

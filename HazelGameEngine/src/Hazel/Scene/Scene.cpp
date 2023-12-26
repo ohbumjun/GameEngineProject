@@ -20,6 +20,7 @@
 #include "box2d/b2_body.h"
 #include "box2d/b2_fixture.h"
 #include "box2d/b2_polygon_shape.h"
+#include "box2d/b2_circle_shape.h"
 
 namespace Hazel
 {
@@ -183,6 +184,8 @@ namespace Hazel
 		CopyComponent<Rigidbody2DComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
 		CopyComponent<BoxCollider2DComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
 		CopyComponent<CircleRendererComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+		CopyComponent<CircleCollider2DComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+		
 		// Set Default Name
 		newScene->SetName("PlayScene");
 
@@ -227,6 +230,23 @@ namespace Hazel
 				fixtureDef.friction = bc2d.m_Friction;
 				fixtureDef.restitution = bc2d.m_Restitution;
 				fixtureDef.restitutionThreshold = bc2d.m_RestitutionThreshold;
+				body->CreateFixture(&fixtureDef);
+			}
+
+			if (entity.HasComponent<CircleCollider2DComponent>())
+			{
+				auto& cc2d = entity.GetComponent<CircleCollider2DComponent>();
+
+				b2CircleShape circleShape;
+				circleShape.m_p.Set(cc2d.GetOffset().x, cc2d.GetOffset().y);
+				circleShape.m_radius = cc2d.GetRadius();
+
+				b2FixtureDef fixtureDef;
+				fixtureDef.shape = &circleShape;
+				fixtureDef.density = cc2d.GetDensity();
+				fixtureDef.friction = cc2d.GetFriction();
+				fixtureDef.restitution = cc2d.GetRestitution();
+				fixtureDef.restitutionThreshold = cc2d.GetRestitutionThreshold();
 				body->CreateFixture(&fixtureDef);
 			}
 		}
@@ -606,6 +626,10 @@ namespace Hazel
 		{
 			return &entity.AddComponent<BoxCollider2DComponent>();
 		}
+		else if (type == Reflection::GetTypeID<CircleCollider2DComponent>())
+		{
+			return &entity.AddComponent<CircleCollider2DComponent>();
+		}
 		else if (type == Reflection::GetTypeID<NativeScriptComponent>())
 		{
 			return &entity.AddComponent<NativeScriptComponent>();
@@ -639,6 +663,7 @@ namespace Hazel
 		CopyComponentIfExists<Rigidbody2DComponent>(newEntity, srcEntity);
 		CopyComponentIfExists<CircleRendererComponent>(newEntity, srcEntity);
 		CopyComponentIfExists<BoxCollider2DComponent>(newEntity, srcEntity);
+		CopyComponentIfExists<CircleCollider2DComponent>(newEntity, srcEntity);
 	}
 	void Scene::DestroyEntity(const Entity& entity)
 	{
@@ -706,6 +731,10 @@ namespace Hazel
 	}
 	template<>
 	void Scene::OnComponentAdded<CircleRendererComponent>(Entity entity, CircleRendererComponent& component)
+	{
+	}
+	template<>
+	void Scene::OnComponentAdded<CircleCollider2DComponent>(Entity entity, CircleCollider2DComponent& component)
 	{
 	}
 }

@@ -14,12 +14,23 @@ namespace Hazel
 		virtual void Serialize(Serializer* serializer) override;
 		virtual void Deserialize(Serializer* serializer) override;
 
-		float GetRadius() const { return m_Radius; }
-		const glm::vec2& GetOffset() const { return m_Offset; }
-		float GetDensity() const { return m_Density; }
-		float GetFriction() const { return m_Friction; }
-		float GetRestitution() const { return m_Restitution; }
-		float GetRestitutionThreshold() const { return m_RestitutionThreshold; }
+		inline const glm::vec2& GetOffset() const { return m_Offset; }
+		inline glm::vec2& GetOffsetRef() { return m_Offset; }
+		
+		inline float GetRadius() const { return m_Radius; }
+		inline float& GetRadiusRef() { return m_Radius; }
+		
+		inline float GetDensity() const { return m_Density; }
+		inline float& GetDensityRef() { return m_Density; }
+		
+		inline float GetFriction() const { return m_Friction; }
+		inline float& GetFrictionRef() { return m_Friction; }
+		
+		inline float GetRestitution() const { return m_Restitution; }
+		inline float& GetRestitutionRef() { return m_Restitution; }
+
+		inline float GetRestitutionThreshold() const { return m_RestitutionThreshold; }
+		inline float& GetRestitutionThresholdRef() { return m_RestitutionThreshold; }
 
 		virtual const TypeId GetType() const;
 	private :

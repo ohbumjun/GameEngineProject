@@ -26,8 +26,9 @@
 /*Scene*/
 #include "Hazel/Scene/Scene.h"
 #include "Hazel/Scene/Component/CameraComponent.h"
-#include "Hazel/Scene/Component/SpriteRenderComponent.h"
-#include "Hazel/Scene/Component/NameComponent.h"
+#include "Hazel/Scene/Component/Renderer/SpriteRenderComponent.h"
+#include "Hazel/Scene/Component/Identifier/NameComponent.h"
+#include "Hazel/Scene/Component/Identifier/IDComponent.h"
 #include "Hazel/Scene/Component/TransformComponent.h"
 #include "Hazel/Scene/Component/NativeScriptComponent.h"
 #include "Hazel/Scene/Component/Component.h"

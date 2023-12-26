@@ -7,14 +7,15 @@
 
 // Component
 #include "Hazel/Scene/Component/Component.h"
-#include "Hazel/Scene/Component/SpriteRenderComponent.h"
-#include "Hazel/Scene/Component/NameComponent.h"
+#include "Hazel/Scene/Component/Renderer/SpriteRenderComponent.h"
+#include "Hazel/Scene/Component/Identifier/NameComponent.h"
 #include "Hazel/Scene/Component/TransformComponent.h"
 #include "Hazel/Scene/Component/CameraComponent.h"
 #include "Hazel/Scene/Component/NativeScriptComponent.h"
 #include "Hazel/Scene/Component/RigidBody2DComponent.h"
-#include "Hazel/Scene/Component/BoxCollider2DComponent.h"
-#include "Hazel/Scene/Component/CircleRendererComponent.h"
+#include "Hazel/Scene/Component/Collider/BoxCollider2DComponent.h"
+#include "Hazel/Scene/Component/Collider/CircleCollider2DComponent.h"
+#include "Hazel/Scene/Component/Renderer/CircleRendererComponent.h"
 #include <filesystem>
 #include <imgui/imgui.h>
 
@@ -174,6 +175,26 @@ namespace Hazel
 
 	void SceneHierarchyPanel::drawComponents(Entity entity)
 	{
+		drawNameComponent(entity);
+
+		ImGui::SameLine();
+		ImGui::PushItemWidth(-1);
+
+		drawAddComponentPanel();
+
+		ImGui::PopItemWidth();
+
+		drawTransformComponent(entity);
+
+
+		drawRendererComponent(entity);
+		drawRigidBodyComponent(entity);
+		drawColliderComponent(entity);
+
+	}
+
+	void SceneHierarchyPanel::drawNameComponent(Entity entity)
+	{
 		if (entity.HasComponent<NameComponent>())
 		{
 			// 여기서 name 을 수정할 수 있게 한다.
@@ -189,65 +210,10 @@ namespace Hazel
 				name = std::string(buffer);
 			}
 		}
+	}
 
-		ImGui::SameLine();
-		ImGui::PushItemWidth(-1);
-
-		{
-			if (ImGui::Button("Add Component"))
-				ImGui::OpenPopup("AddComponent");
-
-			if (ImGui::BeginPopup("AddComponent"))
-			{
-				if (!m_SelectedEntity.HasComponent<CircleRendererComponent>())
-				{
-					if (ImGui::MenuItem("Circle Renderer"))
-					{
-						m_SelectedEntity.AddComponent<CircleRendererComponent>();
-						ImGui::CloseCurrentPopup();
-					}
-				}
-				if (!m_SelectedEntity.HasComponent<CameraComponent>())
-				{
-					if (ImGui::MenuItem("Camera"))
-					{
-						m_SelectedEntity.AddComponent<CameraComponent>();
-						ImGui::CloseCurrentPopup();
-					}
-				}
-
-				if (!m_SelectedEntity.HasComponent<SpriteRenderComponent>())
-				{
-					if (ImGui::MenuItem("SpriteRenderer"))
-					{
-						m_SelectedEntity.AddComponent<SpriteRenderComponent>();
-						ImGui::CloseCurrentPopup();
-					}
-				}
-				if (!m_SelectedEntity.HasComponent<Rigidbody2DComponent>())
-				{
-					if (ImGui::MenuItem("Rigidbody 2D"))
-					{
-						m_SelectedEntity.AddComponent<Rigidbody2DComponent>();
-						ImGui::CloseCurrentPopup();
-					}
-				}
-
-				if (!m_SelectedEntity.HasComponent<BoxCollider2DComponent>())
-				{
-					if (ImGui::MenuItem("Box Collider 2D"))
-					{
-						m_SelectedEntity.AddComponent<BoxCollider2DComponent>();
-						ImGui::CloseCurrentPopup();
-					}
-				}
-
-				ImGui::EndPopup();
-			}
-		}
-
-		ImGui::PopItemWidth();
-
+	void SceneHierarchyPanel::drawTransformComponent(Entity entity)
+	{
 		HazelEditor::DrawComponent<TransformComponent>("Transform", entity, [](auto& component) {
 			HazelEditor::DrawVec3Control("Translation", component.GetTranslationRef());
 			glm::vec3 degree = glm::degrees(component.GetRotationRef());
@@ -255,10 +221,17 @@ namespace Hazel
 			// component.Rotation = glm::radians(degree);
 			component.SetRotation(glm::radians(degree));
 			HazelEditor::DrawVec3Control("Scale", component.GetScaleRef());
-		});
+			});
+	}
 
+	void SceneHierarchyPanel::drawCameraComponent(Entity entity)
+	{
 		HazelEditor::DrawComponent<CameraComponent>("Camera", entity, &HazelEditor::CameraPanel::DrawCameraComponent);
-		
+	}
+
+	void SceneHierarchyPanel::drawRendererComponent(Entity entity)
+	{
+
 		HazelEditor::DrawComponent<CircleRendererComponent>("Circle Renderer", entity, [](auto& component)
 			{
 				ImGui::ColorEdit4("Color", glm::value_ptr(component.GetColorRef()));
@@ -347,7 +320,7 @@ namespace Hazel
 			ImGui::ColorEdit4("Color", glm::value_ptr(component.GetColorRef()));
 
 			ImGui::Button("Texture", ImVec2(100.0f, 0.0f));
-			
+
 			// Drag In Texture for entity
 			if (ImGui::BeginDragDropTarget())
 			{
@@ -370,7 +343,35 @@ namespace Hazel
 			}
 
 			ImGui::DragFloat("Tiling Factor", &component.GetTilingFactorRef(), 0.1f, 0.0f, 100.0f);
-		});
+			});
+	}
+
+	void SceneHierarchyPanel::drawColliderComponent(Entity entity)
+	{
+
+		HazelEditor::DrawComponent<BoxCollider2DComponent>("Box Collider 2D", entity, [](auto& component)
+			{
+				ImGui::DragFloat2("Offset", glm::value_ptr(component.GetOffsetRef()));
+				ImGui::DragFloat2("Size", glm::value_ptr(component.GetSizeRef()));
+				ImGui::DragFloat("Density", &component.GetDensityRef(), 0.01f, 0.0f, 1.0f);
+				ImGui::DragFloat("Friction", &component.GetFrictionRef(), 0.01f, 0.0f, 1.0f);
+				ImGui::DragFloat("Restitution", &component.GetRestitutionRef(), 0.01f, 0.0f, 1.0f);
+				ImGui::DragFloat("Restitution Threshold", &component.GetRestitutionThresholdRef(), 0.01f, 0.0f);
+			});
+
+		HazelEditor::DrawComponent<CircleCollider2DComponent>("Circle Collider 2D", entity, [](auto& component)
+			{
+				ImGui::DragFloat2("Offset", glm::value_ptr(component.GetOffsetRef()));
+				ImGui::DragFloat("Radius", &component.GetRadiusRef());
+				ImGui::DragFloat("Density", &component.GetDensityRef(), 0.01f, 0.0f, 1.0f);
+				ImGui::DragFloat("Friction", &component.GetFrictionRef(), 0.01f, 0.0f, 1.0f);
+				ImGui::DragFloat("Restitution", &component.GetRestitutionRef(), 0.01f, 0.0f, 1.0f);
+				ImGui::DragFloat("Restitution Threshold", &component.GetRestitutionThresholdRef(), 0.01f, 0.0f);
+			});
+	}
+
+	void SceneHierarchyPanel::drawRigidBodyComponent(Entity entity)
+	{
 		HazelEditor::DrawComponent<Rigidbody2DComponent>("Rigidbody 2D", entity, [](auto& component)
 			{
 				const char* bodyTypeStrings[] = { "Static", "Dynamic", "Kinematic" };
@@ -398,16 +399,68 @@ namespace Hazel
 
 				ImGui::Checkbox("Fixed Rotation", &component.GetFixedRotationRef());
 			});
+	}
 
-		HazelEditor::DrawComponent<BoxCollider2DComponent>("Box Collider 2D", entity, [](auto& component)
+	void SceneHierarchyPanel::drawAddComponentPanel()
+	{
+		if (ImGui::Button("Add Component"))
+			ImGui::OpenPopup("AddComponent");
+
+		if (ImGui::BeginPopup("AddComponent"))
+		{
+			if (!m_SelectedEntity.HasComponent<CircleRendererComponent>())
 			{
-				ImGui::DragFloat2("Offset", glm::value_ptr(component.GetOffsetRef()));
-				ImGui::DragFloat2("Size", glm::value_ptr(component.GetSizeRef()));
-				ImGui::DragFloat("Density", &component.GetDensityRef(), 0.01f, 0.0f, 1.0f);
-				ImGui::DragFloat("Friction", &component.GetFrictionRef(), 0.01f, 0.0f, 1.0f);
-				ImGui::DragFloat("Restitution", &component.GetRestitutionRef(), 0.01f, 0.0f, 1.0f);
-				ImGui::DragFloat("Restitution Threshold", &component.GetRestitutionThresholdRef(), 0.01f, 0.0f);
-			});
+				if (ImGui::MenuItem("Circle Renderer"))
+				{
+					m_SelectedEntity.AddComponent<CircleRendererComponent>();
+					ImGui::CloseCurrentPopup();
+				}
+			}
+			if (!m_SelectedEntity.HasComponent<CameraComponent>())
+			{
+				if (ImGui::MenuItem("Camera"))
+				{
+					m_SelectedEntity.AddComponent<CameraComponent>();
+					ImGui::CloseCurrentPopup();
+				}
+			}
+
+			if (!m_SelectedEntity.HasComponent<SpriteRenderComponent>())
+			{
+				if (ImGui::MenuItem("SpriteRenderer"))
+				{
+					m_SelectedEntity.AddComponent<SpriteRenderComponent>();
+					ImGui::CloseCurrentPopup();
+				}
+			}
+			if (!m_SelectedEntity.HasComponent<Rigidbody2DComponent>())
+			{
+				if (ImGui::MenuItem("Rigidbody 2D"))
+				{
+					m_SelectedEntity.AddComponent<Rigidbody2DComponent>();
+					ImGui::CloseCurrentPopup();
+				}
+			}
+
+			if (!m_SelectedEntity.HasComponent<BoxCollider2DComponent>())
+			{
+				if (ImGui::MenuItem("Box Collider 2D"))
+				{
+					m_SelectedEntity.AddComponent<BoxCollider2DComponent>();
+					ImGui::CloseCurrentPopup();
+				}
+			}
+			if (!m_SelectedEntity.HasComponent<CircleCollider2DComponent>())
+			{
+				if (ImGui::MenuItem("Circle Collider 2D"))
+				{
+					m_SelectedEntity.AddComponent<CircleCollider2DComponent>();
+					ImGui::CloseCurrentPopup();
+				}
+			}
+
+			ImGui::EndPopup();
+		}
 	}
 
 }
