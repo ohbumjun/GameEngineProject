@@ -44,6 +44,7 @@ namespace HazelEditor
 		void drawPanels();
 		void drawSetting();
 		void drawViewPort();
+		void pickMouse2D();
 
 		void onOverlayRender();
 		void onScenePlay();

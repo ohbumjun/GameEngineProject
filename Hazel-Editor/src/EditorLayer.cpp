@@ -202,11 +202,6 @@ namespace HazelEditor
 		*/
 		m_FrameBuffer->ClearAttachment(1, -1);
 
-
-		// Render
-		// m_ActiveScene->OnUpdate(ts);
-		// m_ActiveScene->OnUpdateEditor(ts, m_EditorCamera);
-
 		switch (m_SceneState)
 		{
 		case SceneState::Edit:
@@ -232,27 +227,7 @@ namespace HazelEditor
 		}
 		}
 
-		auto [mx, my] = ImGui::GetMousePos();
-
-		mx -= m_ViewportBounds[0].x;
-		my -= m_ViewportBounds[0].y;
-
-		glm::vec2 viewportSize = m_ViewportBounds[1] - m_ViewportBounds[0];
-
-		// glViewport 와 우리의 y coord 는 위아래 반대이다.
-		my = viewportSize.y - my;
-
-		int mouseX = (int)mx;
-		int mouseY = (int)my;
-
-		if (mouseX > 0 && mouseY > 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
-		{
-			// read back data from pixel 
-			// '1' 인 이유 : 현재 Frame Buffer 의 1번째 Texture 를 Entity 를 저장하는 용도로 사용했기 때문이다.
-			int pixelData = m_FrameBuffer->ReadPixel(1, mouseX, mouseY);
-			Hazel::Scene* currentScene = m_SceneState == SceneState::Edit ? m_EditorScene.get() : m_ActiveScene.get();
-			m_HoveredEntity = pixelData == -1 ? Hazel::Entity() : Hazel::Entity((entt::entity)pixelData, currentScene);
-		}
+		pickMouse2D();
 
 		onOverlayRender();
 
@@ -770,6 +745,31 @@ namespace HazelEditor
 		uI_Toolbar();
 
 		ImGui::End();
+	}
+	void EditorLayer::pickMouse2D()
+	{
+		auto [mx, my] = ImGui::GetMousePos();
+
+		mx -= m_ViewportBounds[0].x;
+		my -= m_ViewportBounds[0].y;
+
+		glm::vec2 viewportSize = m_ViewportBounds[1] - m_ViewportBounds[0];
+
+		// glViewport 와 우리의 y coord 는 위아래 반대이다.
+		my = viewportSize.y - my;
+
+		int mouseX = (int)mx;
+		int mouseY = (int)my;
+
+		if (mouseX > 0 && mouseY > 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
+		{
+			// read back data from pixel 
+			// '1' 인 이유 : 현재 Frame Buffer 의 1번째 Texture 를 Entity 를 저장하는 용도로 사용했기 때문이다.
+			int pixelData = m_FrameBuffer->ReadPixel(1, mouseX, mouseY);
+			Hazel::Scene* currentScene = m_SceneState == SceneState::Edit ? m_EditorScene.get() : m_ActiveScene.get();
+			m_HoveredEntity = pixelData == -1 ? Hazel::Entity() : Hazel::Entity((entt::entity)pixelData, currentScene);
+		}
+
 	}
 	void EditorLayer::onOverlayRender()
 	{
