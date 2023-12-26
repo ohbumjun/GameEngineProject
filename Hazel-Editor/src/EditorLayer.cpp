@@ -7,6 +7,9 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/quaternion.hpp>
+
 // Editor
 #include "File/PathManager.h"
 #include "Panel/Utils/PanelUtils.h"
@@ -796,8 +799,11 @@ namespace HazelEditor
 					glm::vec3 translation = tc.GetTranslation() + glm::vec3(bc2d.GetOffset(), 0.001f);
 					glm::vec3 scale = tc.GetScale() * glm::vec3(bc2d.GetSize() * 2.0f, 1.0f);
 
+					glm::mat4 rotation = glm::toMat4(glm::quat(tc.GetRotation()));
+
 					glm::mat4 transform = glm::translate(glm::mat4(1.0f), translation)
-						* glm::rotate(glm::mat4(1.0f), tc.GetRotation().z, glm::vec3(0.0f, 0.0f, 1.0f))
+						// * glm::rotate(glm::mat4(1.0f), tc.GetRotation().z, glm::vec3(0.0f, 0.0f, 1.0f))
+						* rotation
 						* glm::scale(glm::mat4(1.0f), scale);
 
 					Hazel::Renderer2D::DrawRect(transform, glm::vec4(0, 1, 0, 1));
@@ -815,8 +821,15 @@ namespace HazelEditor
 					glm::vec3 translation = tc.GetTranslation() + glm::vec3(cc2d.GetOffset(), 0.001f);
 					glm::vec3 scale = tc.GetScale() * glm::vec3(cc2d.GetRadius() * 2.0f);
 
+					glm::mat4 rotation = glm::toMat4(glm::quat(tc.GetRotation()));
+					
 					glm::mat4 transform = glm::translate(glm::mat4(1.0f), translation)
+						// * glm::rotate(glm::mat4(1.0f), tc.GetRotation().z, glm::vec3(0.0f, 0.0f, 1.0f))
+						* rotation
 						* glm::scale(glm::mat4(1.0f), scale);
+					
+					// glm::mat4 transform = glm::translate(glm::mat4(1.0f), translation)
+					// 	* glm::scale(glm::mat4(1.0f), scale);
 
 					Hazel::Renderer2D::DrawCircle(transform, glm::vec4(0, 1, 0, 1), 0.01f);
 				}
