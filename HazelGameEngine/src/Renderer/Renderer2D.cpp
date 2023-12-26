@@ -153,12 +153,6 @@ namespace Hazel
 	{
 		HZ_PROFILE_FUNCTION();
 
-		// EndScene 에서 s_Data.QuadVertexBufferPtr 을 이용하여 쌓아놓은 정점 정보들을
-		// 이용하여 한번에 그려낼 것이다.
-		// - 포인터를 숫자 형태로 형변환하기 위해  (uint8_t*) 로 캐스팅한다.
-		uint32_t dataSize = (uint8_t*)s_Data.QuadVertexBufferPtr - (uint8_t*)s_Data.QuadVertexBufferBase;
-		s_Data.QuadVertexBuffer->SetData(s_Data.QuadVertexBufferBase, dataSize);
-
 		Flush();
 	}
 
@@ -330,6 +324,10 @@ namespace Hazel
 		s_Data.QuadIndexCount = 0;
 		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
 
+		// Quad 와 Circle 을 분리해야 할 것 같다
+		s_Data.CircleIndexCount = 0;
+		s_Data.CircleVertexBufferPtr = s_Data.CircleVertexBufferBase;
+
 		s_Data.TextureSlotIndex = 1;
 	}
 
@@ -351,6 +349,9 @@ namespace Hazel
 
 		if (s_Data.QuadIndexCount)
 		{
+			// EndScene 에서 s_Data.QuadVertexBufferPtr 을 이용하여 쌓아놓은 정점 정보들을
+			// 이용하여 한번에 그려낼 것이다.
+			// - 포인터를 숫자 형태로 형변환하기 위해  (uint8_t*) 로 캐스팅한다.
 			uint32_t dataSize = (uint32_t)((uint8_t*)s_Data.QuadVertexBufferPtr - (uint8_t*)s_Data.QuadVertexBufferBase);
 			s_Data.QuadVertexBuffer->SetData(s_Data.QuadVertexBufferBase, dataSize);
 
