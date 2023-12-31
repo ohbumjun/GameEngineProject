@@ -10,6 +10,7 @@
 #include "Component/RigidBody2DComponent.h"
 #include "Component/Collider/BoxCollider2DComponent.h"
 #include "Component/Collider/CircleCollider2DComponent.h"
+#include "Component/ComponentFlag.h"
 #include "Renderer/Renderer2D.h"
 #include <glm/glm.hpp>
 #include "Entity.h"
@@ -127,8 +128,9 @@ namespace Hazel
 		}
 		*/
 	}
+
 	template<typename Component>
-	static void CopyComponent(entt::registry& dst, entt::registry& src, const std::unordered_map<UUID, entt::entity>& enttMap)
+	static void CopySingleComponent(entt::registry& dst, entt::registry& src, const std::unordered_map<UUID, entt::entity>& enttMap)
 	{
 		auto view = src.view<Component>();
 
@@ -158,15 +160,52 @@ namespace Hazel
 			Component& dstNewComp = dst.get<Component>(dstEnttID);
 			bool h2 = true;
 #endif
-
 		}
 	}
 
+	// template<typename Component>
+	template<typename ...Component>
+	static void CopyComponent(entt::registry& dst, entt::registry& src, const std::unordered_map<UUID, entt::entity>& enttMap)
+	{
+		([&]()
+			{
+				auto view = src.view<Component>();
+				for (auto srcEntity : view)
+				{
+					entt::entity dstEntity = enttMap.at(src.get<IDComponent>(srcEntity).GetUUID());
+					auto& srcComponent = src.get<Component>(srcEntity);
+					dst.emplace_or_replace<Component>(dstEntity, srcComponent);
+				}
+			}(), ...);
+	};
+
+	template<typename... Component>
+	static void CopyComponent(ComponentGroup<Component...>, entt::registry& dst, entt::registry& src, const std::unordered_map<UUID, entt::entity>& enttMap)
+	{
+		CopyComponent<Component...>(dst, src, enttMap);
+	}
+
 	template<typename Component>
-	static void CopyComponentIfExists(Entity dst, Entity src)
+	static void CopySingleComponentIfExists(Entity dst, Entity src)
 	{
 		if (src.HasComponent<Component>())
 			dst.AddOrReplaceComponent<Component>(src.GetComponent<Component>());
+	}
+
+	template<typename ...Component>
+	static void CopyComponentIfExists(Entity dst, Entity src)
+	{
+		([&]()
+		{
+			if (src.HasComponent<Component>())
+				dst.AddOrReplaceComponent<Component>(src.GetComponent<Component>());
+		}(), ...);
+	}
+
+	template<typename... Component>
+	static void CopyComponentIfExists(ComponentGroup<Component...>, Entity dst, Entity src)
+	{
+		CopyComponentIfExists<Component...>(dst, src);
 	}
 
 	Ref<Scene> Scene::Copy(Ref<Scene> src)
@@ -196,15 +235,17 @@ namespace Hazel
 		}
 
 		// Copy components (except IDComponent and TagComponent)
-		CopyComponent<TransformComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
-		CopyComponent<SpriteRenderComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
-		CopyComponent<CameraComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
-		CopyComponent<NativeScriptComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
-		CopyComponent<Rigidbody2DComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
-		CopyComponent<BoxCollider2DComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
-		CopyComponent<CircleRendererComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
-		CopyComponent<CircleCollider2DComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
-		
+		// CopyComponent<TransformComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+		// CopyComponent<SpriteRenderComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+		// CopyComponent<CameraComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+		// CopyComponent<NativeScriptComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+		// CopyComponent<Rigidbody2DComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+		// CopyComponent<BoxCollider2DComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+		// CopyComponent<CircleRendererComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+		// CopyComponent<CircleCollider2DComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+
+		CopyComponent(AllComponents{}, dstSceneRegistry, srcSceneRegistry, enttMap);
+
 		// Set Default Name
 		newScene->SetName("PlayScene");
 
@@ -327,7 +368,7 @@ namespace Hazel
 	}
 	void Scene::OnUpdateSimulation(Timestep ts, EditorCamera& camera)
 	{
-		// Physics
+		// Update Physics
 		{
 			const int32_t velocityIterations = 6;
 			const int32_t positionIterations = 2;
@@ -425,6 +466,7 @@ namespace Hazel
 	}
 	void Scene::OnSimulationStart()
 	{
+		onPhysics2DStart();
 	}
 	void Scene::OnSimulationStop()
 	{
@@ -704,6 +746,8 @@ namespace Hazel
 		}
 
 		assert(false);
+		
+		return nullptr;
 	}
 	Entity Scene::CreateEntityWithUUID(UUID uuid, const std::string& name)
 	{
@@ -724,14 +768,18 @@ namespace Hazel
 		std::string name = srcEntity.GetName();
 		Entity newEntity = CreateEntity(name);
 
-		CopyComponentIfExists<TransformComponent>(newEntity, srcEntity);
-		CopyComponentIfExists<SpriteRenderComponent>(newEntity, srcEntity);
-		CopyComponentIfExists<CameraComponent>(newEntity, srcEntity);
-		CopyComponentIfExists<NativeScriptComponent>(newEntity, srcEntity);
-		CopyComponentIfExists<Rigidbody2DComponent>(newEntity, srcEntity);
-		CopyComponentIfExists<CircleRendererComponent>(newEntity, srcEntity);
-		CopyComponentIfExists<BoxCollider2DComponent>(newEntity, srcEntity);
-		CopyComponentIfExists<CircleCollider2DComponent>(newEntity, srcEntity);
+		// CopyComponentIfExists<TransformComponent>(newEntity, srcEntity);
+		// CopyComponentIfExists<SpriteRenderComponent>(newEntity, srcEntity);
+		// CopyComponentIfExists<CameraComponent>(newEntity, srcEntity);
+		// CopyComponentIfExists<NativeScriptComponent>(newEntity, srcEntity);
+		// CopyComponentIfExists<Rigidbody2DComponent>(newEntity, srcEntity);
+		// CopyComponentIfExists<CircleRendererComponent>(newEntity, srcEntity);
+		// CopyComponentIfExists<BoxCollider2DComponent>(newEntity, srcEntity);
+		// CopyComponentIfExists<CircleCollider2DComponent>(newEntity, srcEntity);
+
+
+		CopyComponentIfExists(AllComponents{}, newEntity, srcEntity);
+
 	}
 	void Scene::DestroyEntity(const Entity& entity)
 	{

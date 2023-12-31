@@ -24,4 +24,5 @@ namespace Hazel
 			return Reflection::GetTypeID<Component>();
 		}
 	};
+
 }

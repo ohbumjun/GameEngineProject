@@ -440,7 +440,9 @@ namespace HazelEditor
 	void EditorLayer::onSceneSimulate()
 	{
 		if (m_SceneState == SceneState::Play)
+		{
 			onSceneStop();
+		}
 
 		m_SceneState = SceneState::Simulate;
 
@@ -796,7 +798,7 @@ namespace HazelEditor
 	}
 	void EditorLayer::onOverlayRender()
 	{
-		if (m_ShowPhysicsColliders)
+		if (m_ShowPhysicsColliders == false)
 		{
 			return;
 		}

@@ -69,6 +69,10 @@ namespace Hazel
 		*/
 		void OnUpdateRuntime(const Timestep& ts);
 		void OnUpdateEditor(Timestep ts, EditorCamera& camera);
+
+		/*
+		실제  Game Play  없이 Physics 부분만 진행시키는 함수이다.
+		*/
 		void OnUpdateSimulation(Timestep ts, EditorCamera& camera);
 		virtual void Serialize(Serializer* serializer) override;
 		virtual void Deserialize(Serializer* serializer) override;
@@ -97,6 +101,10 @@ namespace Hazel
 		void onPhysics2DStart();
 		void onPhysics2DStop();
 
+		/*
+		Editor Camera 로 Scene 을 draw 하기 때문에
+		editor 에서 scene 을 render 할 때 사용되는 함수이다.
+		*/
 		void renderScene(EditorCamera& camera);
 
 		void serializeEntity(Serializer* serializer, Entity entity);

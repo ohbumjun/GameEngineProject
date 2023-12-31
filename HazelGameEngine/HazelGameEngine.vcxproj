@@ -191,6 +191,7 @@
     <ClInclude Include="src\Hazel\Scene\Component\Collider\BoxCollider2DComponent.h" />
     <ClInclude Include="src\Hazel\Scene\Component\Collider\CircleCollider2DComponent.h" />
     <ClInclude Include="src\Hazel\Scene\Component\Component.h" />
+    <ClInclude Include="src\Hazel\Scene\Component\ComponentFlag.h" />
     <ClInclude Include="src\Hazel\Scene\Component\Identifier\IDComponent.h" />
     <ClInclude Include="src\Hazel\Scene\Component\Identifier\NameComponent.h" />
     <ClInclude Include="src\Hazel\Scene\Component\NativeScriptComponent.h" />
