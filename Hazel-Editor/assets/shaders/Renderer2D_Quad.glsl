@@ -132,6 +132,10 @@ void main()
 		case 30: texColor *= texture(u_Textures[30], Input.TexCoord * Input.TilingFactor); break;
 		case 31: texColor *= texture(u_Textures[31], Input.TexCoord * Input.TilingFactor); break;	
 	}
+	
+	if (texColor.a == 0.0)
+		discard;
+
 	o_Color = texColor;
 
 	o_EntityID = v_EntityID; // placeholder for our entity ID
