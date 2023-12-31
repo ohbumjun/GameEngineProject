@@ -141,6 +141,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Hazel.h" />
+    <ClInclude Include="src\Hazel\Asset\Image\ImageUtils.h" />
     <ClInclude Include="src\Hazel\Core\Allocation\Allocator\FreeListAllocator.h" />
     <ClInclude Include="src\Hazel\Core\Allocation\Allocator\MemoryPoolAllocator.h" />
     <ClInclude Include="src\Hazel\Core\Allocation\Allocator\PoolAllocator.h" />

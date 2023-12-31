@@ -15,7 +15,7 @@ namespace Hazel
 		// data : data to be uploaded to gpu
 		virtual void SetData(void* data, uint32_t size) = 0;
 		virtual bool IsLoaded() const = 0;
-
+		virtual const std::string& GetPath() const = 0;
 		virtual bool operator == (const Texture& other) const = 0;
 	};
 

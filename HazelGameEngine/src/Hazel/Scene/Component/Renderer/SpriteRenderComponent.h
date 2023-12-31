@@ -15,7 +15,7 @@ namespace Hazel
 		SpriteRenderComponent();
 		SpriteRenderComponent(const SpriteRenderComponent& other);
 		SpriteRenderComponent(const glm::vec4& color) :
-			color(color)
+			m_Color(color)
 		{
 			SpriteRenderComponent();
 		}
@@ -23,24 +23,24 @@ namespace Hazel
 		virtual void Serialize(Serializer* serializer);
 		virtual void Deserialize(Serializer* serializer);
 
-		operator const glm::vec4& () const { return color; }
-		operator glm::vec4& () { return color; }
+		operator const glm::vec4& () const { return m_Color; }
+		operator glm::vec4& () { return m_Color; }
 
 		void SetTexture(const Ref<Texture2D>& texture)
 		{
-			Texture = texture;
+			m_Texture = texture;
 		}
 
-		const glm::vec4& GetColor() { return color; }
-		glm::vec4& GetColorRef() { return color; }
-		float GetTilingFactor() { return TilingFactor; }
-		float& GetTilingFactorRef() { return TilingFactor; }
-		const Ref<Texture2D>& GetTexture() { return Texture; }
+		const glm::vec4& GetColor() { return m_Color; }
+		glm::vec4& GetColorRef() { return m_Color; }
+		float GetTilingFactor() { return m_TilingFactor; }
+		float& GetTilingFactorRef() { return m_TilingFactor; }
+		const Ref<Texture2D>& GetTexture() { return m_Texture; }
 		virtual const TypeId GetType() const;
 	private:
-		Ref<Texture2D> Texture;
-		float TilingFactor = 1.0f;
-		glm::vec4 color = { 1.f, 1.f, 1.f, 1.f };
+		Ref<Texture2D> m_Texture;
+		float m_TilingFactor = 1.0f;
+		glm::vec4 m_Color = { 1.f, 1.f, 1.f, 1.f };
 	};
 };
 

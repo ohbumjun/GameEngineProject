@@ -5,6 +5,9 @@
 #include "ComponentPanel/CameraPanel.h"
 #include "Utils/PanelUtils.h"
 
+// Utils
+#include "Hazel/Asset/Image/ImageUtils.h"
+
 // Component
 #include "Hazel/Scene/Component/Component.h"
 #include "Hazel/Scene/Component/Renderer/SpriteRenderComponent.h"
@@ -16,11 +19,13 @@
 #include "Hazel/Scene/Component/Collider/BoxCollider2DComponent.h"
 #include "Hazel/Scene/Component/Collider/CircleCollider2DComponent.h"
 #include "Hazel/Scene/Component/Renderer/CircleRendererComponent.h"
+
 #include <filesystem>
 #include <imgui/imgui.h>
 
 namespace HazelEditor {
 	extern const std::filesystem::path g_AssetPath;
+	extern const std::filesystem::path g_ImageFormats;
 
 }
 namespace Hazel
@@ -319,7 +324,18 @@ namespace Hazel
 		HazelEditor::DrawComponent<SpriteRenderComponent>("Sprite", entity, [](auto& component) {
 			ImGui::ColorEdit4("Color", glm::value_ptr(component.GetColorRef()));
 
-			ImGui::Button("Texture", ImVec2(100.0f, 0.0f));
+			ImGui::Button("Texture Drop", ImVec2(100.0f, 0.0f));
+			/*
+			ImGui::Text("Texture");
+			ImGui::Button("Texture Drop", ImVec2(100.0f, 0.0f));
+			ImGui::Text("Path");
+			ImGui::SameLine();
+
+			std::string texturePath = component.GetTexture() ? 
+				component.GetTexture()->GetPath() : "";
+
+			ImGui::Text(texturePath.c_str());
+			*/
 
 			// Drag In Texture for entity
 			if (ImGui::BeginDragDropTarget())
@@ -327,17 +343,28 @@ namespace Hazel
 				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
 				{
 					const wchar_t* path = (const wchar_t*)payload->Data;
+
+					// 확장자를 검사해야 한다.
 					std::filesystem::path texturePath = std::filesystem::path(g_AssetPath) / path;
-					// component.Texture = Texture2D::Create(texturePath.string());
-					Ref<Texture2D> texture = Texture2D::Create(texturePath.string());
-					if (texture->IsLoaded())
+
+					if (Utils::isSupportedImageFormat(texturePath.string()))
 					{
-						component.SetTexture(texture);
+						Ref<Texture2D> texture = Texture2D::Create(texturePath.string());
+
+						if (texture->IsLoaded())
+						{
+							component.SetTexture(texture);
+						}
+						else
+						{
+							HZ_WARN("Could not load texture {0}", texturePath.filename().string());
+						}
 					}
 					else
 					{
-						HZ_WARN("Could not load texture {0}", texturePath.filename().string());
+						HZ_WARN("Invalid Texture Format {0}", texturePath.filename().string());
 					}
+					
 				}
 				ImGui::EndDragDropTarget();
 			}

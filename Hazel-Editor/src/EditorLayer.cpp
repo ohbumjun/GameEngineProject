@@ -544,6 +544,10 @@ namespace HazelEditor
 				{
 					saveSceneAs();
 				}
+				if (ImGui::MenuItem("Save", "Ctrl+S"))
+				{
+					saveScene();
+				}
 
 				ImGui::EndMenu();
 			}
