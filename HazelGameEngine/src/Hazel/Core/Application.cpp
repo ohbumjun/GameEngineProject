@@ -23,7 +23,8 @@ namespace Hazel
 	// make it as single ton
 	Application* Application::s_Instance = nullptr;
 
-	Application::Application(const std::string& name)
+	Application::Application(const ApplicationSpecification& specification)
+		: m_Specification(specification)
 	{
 		HZ_PROFILE_FUNCTION();
 
@@ -31,8 +32,14 @@ namespace Hazel
 		
 		s_Instance = this;
 
+		// Set working directory here
+		if (!m_Specification.WorkingDirectory.empty())
+		{
+			// std::filesystem::current_path(m_Specification.WorkingDirectory);
+		}
+
 		// Window 생성자 호출 => WIndowsWindow 생성
-		m_Window = std::unique_ptr<Window>(Window::Create(WindowProps(name)));
+		m_Window = std::unique_ptr<Window>(Window::Create(WindowProps(m_Specification.Name)));
 
 		// WindowsWindow.WindowsData.EventCallback 에 해당 함수 세팅
 		m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));

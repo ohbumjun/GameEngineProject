@@ -12,8 +12,8 @@ namespace Hazel
 	class EditorApplication : public Hazel::Application
 	{
 	public:
-		EditorApplication() :
-			Application("Hazel Editor")
+		EditorApplication(ApplicationCommandLineArgs args)
+			: Hazel::Application(Hazel::ApplicationSpecification{ "Hazelnut", "", args})
 		{
 			// PushLayer(new ExampleLayer());
 			PushLayer(new HazelEditor::EditorLayer());
@@ -32,9 +32,9 @@ namespace Hazel
 
 	};
 
-	Hazel::Application* CreateApplication()
+	Hazel::Application* CreateApplication(ApplicationCommandLineArgs args)
 	{
-		return new EditorApplication();
+		return new EditorApplication(args);
 	}
 }
 
