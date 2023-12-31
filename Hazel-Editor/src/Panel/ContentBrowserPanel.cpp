@@ -66,7 +66,9 @@ namespace HazelEditor {
 			if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
 			{
 				if (directoryEntry.is_directory())
+				{
 					m_CurrentDirectory /= path.filename();
+				}
 
 			}
 			ImGui::TextWrapped(filenameString.c_str());

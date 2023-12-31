@@ -324,20 +324,12 @@ namespace Hazel
 		HazelEditor::DrawComponent<SpriteRenderComponent>("Sprite", entity, [](auto& component) {
 			ImGui::ColorEdit4("Color", glm::value_ptr(component.GetColorRef()));
 
-			ImGui::Button("Texture Drop", ImVec2(100.0f, 0.0f));
-			/*
+			static float imageSize = 60.f;
+
 			ImGui::Text("Texture");
+
+			// Drag Drop
 			ImGui::Button("Texture Drop", ImVec2(100.0f, 0.0f));
-			ImGui::Text("Path");
-			ImGui::SameLine();
-
-			std::string texturePath = component.GetTexture() ? 
-				component.GetTexture()->GetPath() : "";
-
-			ImGui::Text(texturePath.c_str());
-			*/
-
-			// Drag In Texture for entity
 			if (ImGui::BeginDragDropTarget())
 			{
 				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
@@ -364,10 +356,24 @@ namespace Hazel
 					{
 						HZ_WARN("Invalid Texture Format {0}", texturePath.filename().string());
 					}
-					
+
 				}
 				ImGui::EndDragDropTarget();
 			}
+
+			// Path
+			ImGui::Text("Path");
+
+			ImGui::SameLine();
+
+			std::string texturePath = component.GetTexture() ?
+				component.GetTexture()->GetPath() : "Texture Empty";
+
+			ImGui::Text(texturePath.c_str());
+
+			// Image
+			ImGui::Image(component.GetTexture() ? (void*)component.GetTexture()->GetRendererID() : nullptr,
+				{ imageSize, imageSize }, { 0, 1 }, { 1, 0 });
 
 			ImGui::DragFloat("Tiling Factor", &component.GetTilingFactorRef(), 0.1f, 0.0f, 100.0f);
 			});
