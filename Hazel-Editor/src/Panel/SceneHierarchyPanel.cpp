@@ -341,7 +341,7 @@ namespace Hazel
 
 					if (Utils::isSupportedImageFormat(texturePath.string()))
 					{
-						Ref<Texture2D> texture = Texture2D::Create(texturePath.string());
+						Ref<Texture2D> texture = TextureManager::CreateTexture2D(texturePath.string());
 
 						if (texture->IsLoaded())
 						{

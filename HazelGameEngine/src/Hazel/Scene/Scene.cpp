@@ -586,11 +586,14 @@ namespace Hazel
 
 		// sprite
 		{
-			auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRenderComponent>);
+			// auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRenderComponent>);
+			auto view = m_Registry.view<TransformComponent, SpriteRenderComponent>();
 
-			for (auto entity : group)
+			//for (auto entity : group)
+			for (auto entity : view)
 			{
-				auto [transform, sprite] = group.get<TransformComponent, SpriteRenderComponent>(entity);
+				// auto [transform, sprite] = group.get<TransformComponent, SpriteRenderComponent>(entity);
+				auto [transform, sprite] = view.get<TransformComponent, SpriteRenderComponent>(entity);
 
 				Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
 			}

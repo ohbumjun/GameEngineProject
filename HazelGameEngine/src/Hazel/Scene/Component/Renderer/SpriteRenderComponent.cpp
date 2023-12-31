@@ -2,6 +2,8 @@
 #include "Hazel/Core/Serialization/Serializer.h"
 #include "SpriteRenderComponent.h"
 
+static std::string emptyTexture = "";
+
 Hazel::SpriteRenderComponent::SpriteRenderComponent()
 {
 	Reflection::RegistType<SpriteRenderComponent>();
@@ -22,7 +24,8 @@ void Hazel::SpriteRenderComponent::Serialize(Serializer* serializer)
 
 	serializer->Save("compName", compTypeInfo->m_Name.c_str());
 
-	serializer->Save("texturePath", m_Texture->GetPath());
+	serializer->Save("texturePath", m_Texture ? m_Texture->GetPath() :
+		emptyTexture);
 
 	serializer->Save("tilingFactor", m_TilingFactor);
 
@@ -41,7 +44,7 @@ void Hazel::SpriteRenderComponent::Deserialize(Serializer* serializer)
 	std::string texturePath;
 	serializer->Load("texturePath", texturePath);
 	
-	if (texturePath.empty() == false)
+	if (texturePath != emptyTexture)
 	{
 		m_Texture = TextureManager::CreateTexture2D(texturePath);
 	}

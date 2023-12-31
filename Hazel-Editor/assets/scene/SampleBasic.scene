@@ -14,7 +14,7 @@
                     "Name": "Sprite"
                 }, {
                     "compName": "class Hazel::SpriteRenderComponent",
-                    "texturePath": "assets\\textures\\RandomBox.png",
+                    "texturePath": "",
                     "tilingFactor": 1.0,
                     "color": [1.0, 1.0, 1.0, 1.0]
                 }]
@@ -57,10 +57,10 @@
                     "UUID": 17664963270425764302
                 }, {
                     "compName": "class Hazel::NameComponent",
-                    "Name": "Sprite"
+                    "Name": "TextureSprite"
                 }, {
                     "compName": "class Hazel::SpriteRenderComponent",
-                    "texturePath": "assets\\textures\\RandomBox.png",
+                    "texturePath": "assets\\textures\\curious.png",
                     "tilingFactor": 1.0,
                     "color": [1.0, 1.0, 1.0, 1.0]
                 }]

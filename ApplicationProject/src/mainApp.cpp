@@ -165,8 +165,8 @@ public:
 		auto textureShader = m_ShaderLibrary.Load("assets/shaders/Texture.glsl");
 
 		// Create Texture
-		m_Texture = Hazel::Texture2D::Create("assets/textures/RandomBox.png");
-		m_TransparentTexture = Hazel::Texture2D::Create("assets/textures/opaque.png");
+		m_Texture = Hazel::TextureManager::CreateTexture2D("assets/textures/RandomBox.png");
+		m_TransparentTexture = Hazel::TextureManager::CreateTexture2D("assets/textures/opaque.png");
 
 		std::dynamic_pointer_cast<Hazel::OpenGLShader>(textureShader)->Bind();
 		std::dynamic_pointer_cast<Hazel::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);

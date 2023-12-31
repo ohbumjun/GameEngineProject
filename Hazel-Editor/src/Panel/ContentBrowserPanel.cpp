@@ -10,8 +10,8 @@ namespace HazelEditor {
 	ContentBrowserPanel::ContentBrowserPanel()
 		: m_CurrentDirectory(g_AssetPath)
 	{
-		m_DirectoryIcon = Hazel::Texture2D::Create("Resources/Icons/ContentBrowser/DirectoryIcon.png");
-		m_FileIcon = Hazel::Texture2D::Create("Resources/Icons/ContentBrowser/FileIcon.png");
+		m_DirectoryIcon = Hazel::TextureManager::CreateTexture2D("Resources/Icons/ContentBrowser/DirectoryIcon.png");
+		m_FileIcon = Hazel::TextureManager::CreateTexture2D("Resources/Icons/ContentBrowser/FileIcon.png");
 	}
 
 	void ContentBrowserPanel::OnImGuiRender()
