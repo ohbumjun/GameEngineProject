@@ -1,7 +1,7 @@
 ﻿#include "hzpch.h"
 #include "Renderer2D.h"
 #include "VertexArray.h"
-#include "Shader/Shader.h"
+#include "Hazel/Asset/Shader/Shader.h"
 #include "Renderer/Buffer/UniformBuffer.h"
 #include "RenderCommand.h"
 #include <glm/gtc/matrix_transform.hpp>
@@ -343,7 +343,7 @@ namespace Hazel
 	void Renderer2D::initTextures()
 	{
 
-		s_Data.WhiteTexture = Texture2D::Create(1, 1);
+		s_Data.WhiteTexture = TextureManager::CreateTexture2D(1, 1);
 		uint32_t whiteTextureData = 0xffffffff;
 		s_Data.WhiteTexture->SetData(&whiteTextureData, /*1 * 1 */sizeof(uint32_t));
 

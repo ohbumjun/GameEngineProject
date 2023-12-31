@@ -4,7 +4,7 @@
 #include "RendererAPI.h"
 #include "RenderCommand.h"
 #include "Camera/OrthographicCamera.h"
-#include "Shader/Shader.h"
+#include "Hazel/Asset/Shader/Shader.h"
 
 namespace Hazel
 {

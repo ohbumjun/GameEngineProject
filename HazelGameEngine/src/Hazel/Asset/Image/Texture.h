@@ -19,16 +19,23 @@ namespace Hazel
 		virtual bool operator == (const Texture& other) const = 0;
 	};
 
-	class Texture2D : public Texture
+	class Texture2D : public Texture{};
+
+	class TextureManager
 	{
-	public:
-		virtual ~Texture2D() = default;
-
-		static Ref<Texture2D> Create(const std::string& path);
-		static Ref<Texture2D> Create(uint32_t width, uint32_t height);
-
-
+	public :
+		static Ref<Texture2D> CreateTexture2D(const std::string& path);
+		static Ref<Texture2D> CreateTexture2D(uint32_t width, uint32_t height);
 	};
+
+	// class Texture2D : public Texture
+	// {
+	// public:
+	// 	virtual ~Texture2D() = default;
+	// 
+	// 	static Ref<Texture2D> Create(const std::string& path);
+	// 	static Ref<Texture2D> Create(uint32_t width, uint32_t height);
+	// };
 }
 
 

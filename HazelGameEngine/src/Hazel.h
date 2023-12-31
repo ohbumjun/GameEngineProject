@@ -35,6 +35,11 @@
 #include "Hazel/Scene/Entity.h"
 #include "Hazel/Scene/ScriptableEntity.h"
 
+/*Assets*/
+#include "Hazel/Asset/Shader/Shader.h"
+#include "Hazel/Asset/Image/Texture.h"
+#include "Hazel/Asset/Image/SubTexture2D.h"
+
 /*Utils*/
 #include "Hazel/Utils/Random.h"
 
@@ -43,11 +48,8 @@
 #include "Renderer/Renderer2D.h"
 #include "Renderer/RenderCommand.h"
 #include "Renderer/Buffer/Buffer.h"
-#include "Renderer/Shader/Shader.h"
 #include "Renderer/Buffer/FrameBuffer.h"
 #include "Renderer/VertexArray.h"
-#include "Renderer/Texture/Texture.h"
-#include "Renderer/Texture/SubTexture2D.h"
 
 /*Camera*/
 #include "Renderer/Camera/OrthographicCameraController.h"

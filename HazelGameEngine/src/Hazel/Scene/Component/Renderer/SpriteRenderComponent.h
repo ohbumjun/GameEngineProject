@@ -2,7 +2,7 @@
 
 
 #include "Hazel/Scene/Component/Component.h"
-#include "Renderer/Texture/Texture.h"
+#include "Hazel/Asset/Image/Texture.h"
 
 class Serializer;
 

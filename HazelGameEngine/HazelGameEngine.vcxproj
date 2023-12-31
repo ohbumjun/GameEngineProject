@@ -140,6 +140,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Hazel\Asset\ResourceManager.h" />
     <ClInclude Include="src\Hazel.h" />
     <ClInclude Include="src\Hazel\Asset\Image\ImageUtils.h" />
     <ClInclude Include="src\Hazel\Core\Allocation\Allocator\FreeListAllocator.h" />
@@ -234,9 +235,9 @@
     <ClInclude Include="src\Renderer\Renderer.h" />
     <ClInclude Include="src\Renderer\Renderer2D.h" />
     <ClInclude Include="src\Renderer\RendererAPI.h" />
-    <ClInclude Include="src\Renderer\Shader\Shader.h" />
-    <ClInclude Include="src\Renderer\Texture\SubTexture2D.h" />
-    <ClInclude Include="src\Renderer\Texture\Texture.h" />
+    <ClInclude Include="src\Hazel\Asset\Shader\Shader.h" />
+    <ClInclude Include="src\Hazel\Asset\Image\SubTexture2D.h" />
+    <ClInclude Include="src\Hazel\Asset\Image\Texture.h" />
     <ClInclude Include="src\Renderer\VertexArray.h" />
     <ClInclude Include="src\hzpch.h" />
     <ClInclude Include="vendor\ImGuizmo\ImGuizmo.h" />
@@ -520,6 +521,7 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Hazel\Asset\ResourceManager.cpp" />
     <ClCompile Include="src\Hazel\Core\Allocation\Allocator\FreeListAllocator.cpp" />
     <ClCompile Include="src\Hazel\Core\Allocation\Allocator\MemoryPoolAllocator.cpp" />
     <ClCompile Include="src\Hazel\Core\Allocation\Allocator\PoolAllocator.cpp" />
@@ -589,9 +591,9 @@
     <ClCompile Include="src\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Renderer\Renderer2D.cpp" />
     <ClCompile Include="src\Renderer\RendererAPI.cpp" />
-    <ClCompile Include="src\Renderer\Shader\Shader.cpp" />
-    <ClCompile Include="src\Renderer\Texture\SubTexture2D.cpp" />
-    <ClCompile Include="src\Renderer\Texture\Texture.cpp" />
+    <ClCompile Include="src\Hazel\Asset\Shader\Shader.cpp" />
+    <ClCompile Include="src\Hazel\Asset\Image\SubTexture2D.cpp" />
+    <ClCompile Include="src\Hazel\Asset\Image\Texture.cpp" />
     <ClCompile Include="src\Renderer\VertexArray.cpp" />
     <ClCompile Include="src\hzpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>

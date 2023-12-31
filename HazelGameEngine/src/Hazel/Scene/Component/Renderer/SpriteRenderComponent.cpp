@@ -43,7 +43,7 @@ void Hazel::SpriteRenderComponent::Deserialize(Serializer* serializer)
 	
 	if (texturePath.empty() == false)
 	{
-		m_Texture = Texture2D::Create(texturePath);
+		m_Texture = TextureManager::CreateTexture2D(texturePath);
 	}
 
 	serializer->Load("tilingFactor", m_TilingFactor);

@@ -1,6 +1,7 @@
 ﻿#pragma once
 
-#include "Renderer/Shader/Shader.h"
+#include "Hazel/Asset/Shader/Shader.h"
+
 #include <glm/glm.hpp>
 
 // TODO Remove

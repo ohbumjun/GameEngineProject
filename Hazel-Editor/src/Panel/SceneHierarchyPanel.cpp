@@ -375,9 +375,9 @@ namespace Hazel
 			ImGui::Image(component.GetTexture() ? (void*)component.GetTexture()->GetRendererID() : nullptr,
 				{ imageSize, imageSize }, { 0, 1 }, { 1, 0 });
 
-			ImGui::DragFloat("Tiling Factor", &component.GetTilingFactorRef(), 0.1f, 0.0f, 100.0f);
-			});
-	}
+			ImGui::DragFloat("Tiling Factor", &component.GetTilingFactorRef(), 0.1f, 0.0f, 100.0f);});
+	
+}
 
 	void SceneHierarchyPanel::drawColliderComponent(Entity entity)
 	{

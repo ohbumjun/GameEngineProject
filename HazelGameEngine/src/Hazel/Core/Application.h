@@ -6,8 +6,10 @@
 #include "Hazel/Event/ApplicationEvent.h"
 #include "Hazel/Core/Layer/LayerStack.h"
 #include "Hazel/ImGui/ImGuiLayer.h"
+#include "Hazel/Asset/Shader/Shader.h"
+#include "Hazel/Asset/Image/Texture.h"
+#include "Hazel/Asset/Image/SubTexture2D.h"
 
-#include "Renderer/Shader/Shader.h"
 #include "Hazel/Utils/TimeStep.h"
 
 

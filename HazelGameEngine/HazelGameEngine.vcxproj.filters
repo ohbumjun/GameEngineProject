@@ -405,13 +405,13 @@
     <ClInclude Include="src\Renderer\RendererAPI.h">
       <Filter>src\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Shader\Shader.h">
+    <ClInclude Include="src\Hazel\Asset\Shader\Shader.h">
       <Filter>src\Renderer\Shader</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Texture\SubTexture2D.h">
+    <ClInclude Include="src\Hazel\Asset\Image\SubTexture2D.h">
       <Filter>src\Renderer\Texture</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Texture\Texture.h">
+    <ClInclude Include="src\Hazel\Asset\Image\Texture.h">
       <Filter>src\Renderer\Texture</Filter>
     </ClInclude>
     <ClInclude Include="src\Renderer\VertexArray.h">
@@ -1259,6 +1259,7 @@
     </ClInclude>
     <ClInclude Include="src\Hazel\Scene\Component\ComponentFlag.h" />
     <ClInclude Include="src\Hazel\Asset\Image\ImageUtils.h" />
+    <ClInclude Include="src\Hazel\Asset\ResourceManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Hazel\Core\Allocation\Allocator\FreeListAllocator.cpp">
@@ -1468,13 +1469,13 @@
     <ClCompile Include="src\Renderer\RendererAPI.cpp">
       <Filter>src\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\Shader\Shader.cpp">
+    <ClCompile Include="src\Hazel\Asset\Shader\Shader.cpp">
       <Filter>src\Renderer\Shader</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\Texture\SubTexture2D.cpp">
+    <ClCompile Include="src\Hazel\Asset\Image\SubTexture2D.cpp">
       <Filter>src\Renderer\Texture</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer\Texture\Texture.cpp">
+    <ClCompile Include="src\Hazel\Asset\Image\Texture.cpp">
       <Filter>src\Renderer\Texture</Filter>
     </ClCompile>
     <ClCompile Include="src\Renderer\VertexArray.cpp">
@@ -1489,5 +1490,6 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
+    <ClCompile Include="src\Hazel\Asset\ResourceManager.cpp" />
   </ItemGroup>
 </Project>
