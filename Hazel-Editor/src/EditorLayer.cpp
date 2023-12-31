@@ -799,12 +799,6 @@ namespace HazelEditor
 	}
 	void EditorLayer::onOverlayRender()
 	{
-		if (m_ShowPhysicsColliders == false)
-		{
-			return;
-		}
-
-
 		if (m_SceneState == SceneState::Play)
 		{
 			Hazel::Entity camera = m_ActiveScene->GetPrimaryCameraEntity();
@@ -819,52 +813,63 @@ namespace HazelEditor
 			Hazel::Renderer2D::BeginScene(m_EditorCamera);
 		}
 
-		
-		// Box Colliders
+		if (m_ShowPhysicsColliders)
 		{
-			auto view = m_ActiveScene->GetAllEntitiesWith<Hazel::TransformComponent,
-				Hazel::BoxCollider2DComponent>();
-			for (auto entity : view)
+
+			// Box Colliders
 			{
-				auto [tc, bc2d] = view.get<Hazel::TransformComponent, Hazel::BoxCollider2DComponent>(entity);
+				auto view = m_ActiveScene->GetAllEntitiesWith<Hazel::TransformComponent,
+					Hazel::BoxCollider2DComponent>();
+				for (auto entity : view)
+				{
+					auto [tc, bc2d] = view.get<Hazel::TransformComponent, Hazel::BoxCollider2DComponent>(entity);
 
-				glm::vec3 translation = tc.GetTranslation() + glm::vec3(bc2d.GetOffset(), 0.001f);
-				glm::vec3 scale = tc.GetScale() * glm::vec3(bc2d.GetSize() * 2.0f, 1.0f);
+					glm::vec3 translation = tc.GetTranslation() + glm::vec3(bc2d.GetOffset(), 0.001f);
+					glm::vec3 scale = tc.GetScale() * glm::vec3(bc2d.GetSize() * 2.0f, 1.0f);
 
-				glm::mat4 rotation = glm::toMat4(glm::quat(tc.GetRotation()));
+					glm::mat4 rotation = glm::toMat4(glm::quat(tc.GetRotation()));
 
-				glm::mat4 transform = glm::translate(glm::mat4(1.0f), translation)
-					// * glm::rotate(glm::mat4(1.0f), tc.GetRotation().z, glm::vec3(0.0f, 0.0f, 1.0f))
-					* rotation
-					* glm::scale(glm::mat4(1.0f), scale);
+					glm::mat4 transform = glm::translate(glm::mat4(1.0f), translation)
+						// * glm::rotate(glm::mat4(1.0f), tc.GetRotation().z, glm::vec3(0.0f, 0.0f, 1.0f))
+						* rotation
+						* glm::scale(glm::mat4(1.0f), scale);
 
-				Hazel::Renderer2D::DrawRect(transform, glm::vec4(0, 1, 0, 1));
+					Hazel::Renderer2D::DrawRect(transform, glm::vec4(0, 1, 0, 1));
+				}
+			}
+
+			// Circle Colliders
+			{
+				auto view = m_ActiveScene->GetAllEntitiesWith<Hazel::TransformComponent,
+					Hazel::CircleCollider2DComponent>();
+				for (auto entity : view)
+				{
+					auto [tc, cc2d] = view.get<Hazel::TransformComponent, Hazel::CircleCollider2DComponent>(entity);
+
+					glm::vec3 translation = tc.GetTranslation() + glm::vec3(cc2d.GetOffset(), 0.001f);
+					glm::vec3 scale = tc.GetScale() * glm::vec3(cc2d.GetRadius() * 2.0f);
+
+					glm::mat4 rotation = glm::toMat4(glm::quat(tc.GetRotation()));
+
+					glm::mat4 transform = glm::translate(glm::mat4(1.0f), translation)
+						// * glm::rotate(glm::mat4(1.0f), tc.GetRotation().z, glm::vec3(0.0f, 0.0f, 1.0f))
+						* rotation
+						* glm::scale(glm::mat4(1.0f), scale);
+
+					// glm::mat4 transform = glm::translate(glm::mat4(1.0f), translation)
+					// 	* glm::scale(glm::mat4(1.0f), scale);
+
+					Hazel::Renderer2D::DrawCircle(transform, glm::vec4(0, 1, 0, 1), 0.01f);
+				}
 			}
 		}
 
-		// Circle Colliders
-		{
-			auto view = m_ActiveScene->GetAllEntitiesWith<Hazel::TransformComponent, 
-				Hazel::CircleCollider2DComponent>();
-			for (auto entity : view)
-			{
-				auto [tc, cc2d] = view.get<Hazel::TransformComponent, Hazel::CircleCollider2DComponent>(entity);
+		// Draw selected entity outline 
+		if (Hazel::Entity selectedEntity = m_SceneHierachyPanel->GetSelectedEntity()) {
+			Hazel::TransformComponent transform = selectedEntity.GetComponent<Hazel::TransformComponent>();
 
-				glm::vec3 translation = tc.GetTranslation() + glm::vec3(cc2d.GetOffset(), 0.001f);
-				glm::vec3 scale = tc.GetScale() * glm::vec3(cc2d.GetRadius() * 2.0f);
-
-				glm::mat4 rotation = glm::toMat4(glm::quat(tc.GetRotation()));
-					
-				glm::mat4 transform = glm::translate(glm::mat4(1.0f), translation)
-					// * glm::rotate(glm::mat4(1.0f), tc.GetRotation().z, glm::vec3(0.0f, 0.0f, 1.0f))
-					* rotation
-					* glm::scale(glm::mat4(1.0f), scale);
-					
-				// glm::mat4 transform = glm::translate(glm::mat4(1.0f), translation)
-				// 	* glm::scale(glm::mat4(1.0f), scale);
-
-				Hazel::Renderer2D::DrawCircle(transform, glm::vec4(0, 1, 0, 1), 0.01f);
-			}
+			//Red
+			Hazel::Renderer2D::DrawRect(transform.GetTransform(), glm::vec4(1, 0, 0, 1));
 		}
 
 		Hazel::Renderer2D::EndScene();

@@ -7,7 +7,7 @@
 #include "Renderer/RenderCommand.h"
 #include "Renderer/Renderer.h"
 #include "Hazel/Input/Input.h"
-#include <GLFW/glfw3.h>
+#include "Hazel/Utils/PlatformUtils.h"
 
 namespace Hazel
 {
@@ -59,7 +59,7 @@ namespace Hazel
 		{
 			HZ_PROFILE_SCOPE("Run Loop");
 
-			float time = glfwGetTime(); // Platform::GetTime
+			float time = Time::GetTime();// Platform::GetTime
 
 			// Frame 사이의 소요시간
 			Timestep timeStep = time - m_LastFrameTime;

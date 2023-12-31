@@ -19,6 +19,10 @@ directly from the GLFW API.
 
 namespace Hazel
 {
+	float Time::GetTime()
+	{
+		return glfwGetTime();
+	}
 	std::string FileChooser::OpenFile(const char* filter)
 	{
 		OPENFILENAMEA ofn;
