@@ -31,6 +31,8 @@ namespace Hazel
 		inline bool GetFixedRotation() { return m_FixedRotation; }
 		inline bool& GetFixedRotationRef() { return m_FixedRotation; }
 
+		inline void* GetRuntimeBody() const {return m_RuntimeBody;}
+
 		inline void SetBodyType(BodyType type) { m_Type = type; }
 	
 		virtual const TypeId GetType() const 

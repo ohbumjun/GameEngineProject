@@ -212,69 +212,12 @@ namespace Hazel
 	}
 	void Scene::OnRuntimeStart()
 	{
-		m_PhysicsWorld = new b2World({ 0.0f, -9.8f });
-
-		auto view = m_Registry.view<Rigidbody2DComponent>();
-		for (auto e : view)
-		{
-			Entity entity = { e, this };
-			auto& transform = entity.GetComponent<TransformComponent>();
-			auto& rb2d = entity.GetComponent<Rigidbody2DComponent>();
-
-			/*
-			특정 위치에, 특정 크기만의 Rigid Body 를 만들 것이다.
-			*/
-			b2BodyDef bodyDef;
-			bodyDef.type = Rigidbody2DTypeToBox2DBody(rb2d.m_Type);
-			bodyDef.position.Set(transform.Translation.x, transform.Translation.y);
-			bodyDef.angle = transform.Rotation.z;
-
-			b2Body* body = m_PhysicsWorld->CreateBody(&bodyDef);
-			body->SetFixedRotation(rb2d.m_FixedRotation);
-			rb2d.m_RuntimeBody = body;
-
-			if (entity.HasComponent<BoxCollider2DComponent>())
-			{
-				auto& bc2d = entity.GetComponent<BoxCollider2DComponent>();
-
-				b2PolygonShape boxShape;
-				boxShape.SetAsBox(bc2d.m_Size.x * transform.Scale.x, bc2d.m_Size.y * transform.Scale.y);
-				
-				/*
-				PolygonShape 의 물리 관련 특성들을 지정하는 것으로 보인다.
-				*/
-				b2FixtureDef fixtureDef;
-				fixtureDef.shape = &boxShape;
-				fixtureDef.density = bc2d.m_Density;
-				fixtureDef.friction = bc2d.m_Friction;
-				fixtureDef.restitution = bc2d.m_Restitution;
-				fixtureDef.restitutionThreshold = bc2d.m_RestitutionThreshold;
-				body->CreateFixture(&fixtureDef);
-			}
-
-			if (entity.HasComponent<CircleCollider2DComponent>())
-			{
-				auto& cc2d = entity.GetComponent<CircleCollider2DComponent>();
-
-				b2CircleShape circleShape;
-				circleShape.m_p.Set(cc2d.GetOffset().x, cc2d.GetOffset().y);
-				circleShape.m_radius = transform.Scale.x * cc2d.GetRadius();
-
-				b2FixtureDef fixtureDef;
-				fixtureDef.shape = &circleShape;
-				fixtureDef.density = cc2d.GetDensity();
-				fixtureDef.friction = cc2d.GetFriction();
-				fixtureDef.restitution = cc2d.GetRestitution();
-				fixtureDef.restitutionThreshold = cc2d.GetRestitutionThreshold();
-				body->CreateFixture(&fixtureDef);
-			}
-		}
+		onPhysics2DStart();
 	}
 
 	void Scene::OnRuntimeStop()
 	{
-		delete m_PhysicsWorld;
-		m_PhysicsWorld = nullptr;
+		onPhysics2DStop();
 	}
 	void Scene::OnUpdateRuntime(const Timestep& ts)
 	{
@@ -380,46 +323,34 @@ namespace Hazel
 	}
 	void Scene::OnUpdateEditor(Timestep ts, EditorCamera& camera)
 	{
-		Renderer2D::BeginScene(camera);
-
-		// sprite
+		renderScene(camera);
+	}
+	void Scene::OnUpdateSimulation(Timestep ts, EditorCamera& camera)
+	{
+		// Physics
 		{
-			auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRenderComponent>);
+			const int32_t velocityIterations = 6;
+			const int32_t positionIterations = 2;
+			m_PhysicsWorld->Step(ts, velocityIterations, positionIterations);
 
-			for (auto entity : group)
+			// Retrieve transform from Box2D
+			auto view = m_Registry.view<Rigidbody2DComponent>();
+			for (auto e : view)
 			{
-				auto [transform, sprite] = group.get<TransformComponent, SpriteRenderComponent>(entity);
+				Entity entity = { e, this };
+				auto& transform = entity.GetComponent<TransformComponent>();
+				auto& rb2d = entity.GetComponent<Rigidbody2DComponent>();
 
-				Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
+				b2Body* body = (b2Body*)rb2d.GetRuntimeBody();
+				const auto& position = body->GetPosition();
+				transform.Translation.x = position.x;
+				transform.Translation.y = position.y;
+				transform.Rotation.z = body->GetAngle();
 			}
 		}
 
-		// Draw circles
-		{
-			auto view = m_Registry.view<TransformComponent, CircleRendererComponent>();
-			for (auto entity : view)
-			{
-				auto [transform, circle] = view.get<TransformComponent, CircleRendererComponent>(entity);
-
-				Renderer2D::DrawCircle(transform.GetTransform(), circle.GetColor(), circle.GetThickNess(), circle.GetFade(), (int)entity);
-			}
-		}
-
-		// Draw Line
-		{
-			Renderer2D::SetLineWidth(3.f);
-			Renderer2D::DrawLine(glm::vec3(0.f), glm::vec3(5.f), glm::vec4(1, 0, 1, 1));
-		
-			Renderer2D::SetLineWidth(5.f);
-			Renderer2D::DrawLine(glm::vec3(0.f), glm::vec3(2.f, 0.f, 0.f), glm::vec4(0, 1, 1, 1));
-		}
-
-		// Draw Rect
-		{
-			Renderer2D::DrawRect(glm::vec3(0.f), glm::vec3(3.f), glm::vec4(1, 0, 0, 1));
-		}
-		
-		Renderer2D::EndScene();
+		// Render
+		renderScene(camera);
 	}
 	void Scene::Serialize(Serializer* serializer)
 	{
@@ -497,6 +428,7 @@ namespace Hazel
 	}
 	void Scene::OnSimulationStop()
 	{
+		onPhysics2DStop();
 	}
 	Entity Scene::GetPrimaryCameraEntity()
 	{
@@ -541,10 +473,113 @@ namespace Hazel
 
 	void Scene::onPhysics2DStart()
 	{
+		m_PhysicsWorld = new b2World({ 0.0f, -9.8f });
+
+		auto view = m_Registry.view<Rigidbody2DComponent>();
+		for (auto e : view)
+		{
+			Entity entity = { e, this };
+			auto& transform = entity.GetComponent<TransformComponent>();
+			auto& rb2d = entity.GetComponent<Rigidbody2DComponent>();
+
+			/*
+			특정 위치에, 특정 크기만의 Rigid Body 를 만들 것이다.
+			*/
+			b2BodyDef bodyDef;
+			bodyDef.type = Rigidbody2DTypeToBox2DBody(rb2d.m_Type);
+			bodyDef.position.Set(transform.Translation.x, transform.Translation.y);
+			bodyDef.angle = transform.Rotation.z;
+
+			b2Body* body = m_PhysicsWorld->CreateBody(&bodyDef);
+			body->SetFixedRotation(rb2d.m_FixedRotation);
+			rb2d.m_RuntimeBody = body;
+
+			if (entity.HasComponent<BoxCollider2DComponent>())
+			{
+				auto& bc2d = entity.GetComponent<BoxCollider2DComponent>();
+
+				b2PolygonShape boxShape;
+				boxShape.SetAsBox(bc2d.m_Size.x * transform.Scale.x, bc2d.m_Size.y * transform.Scale.y);
+
+				/*
+				PolygonShape 의 물리 관련 특성들을 지정하는 것으로 보인다.
+				*/
+				b2FixtureDef fixtureDef;
+				fixtureDef.shape = &boxShape;
+				fixtureDef.density = bc2d.m_Density;
+				fixtureDef.friction = bc2d.m_Friction;
+				fixtureDef.restitution = bc2d.m_Restitution;
+				fixtureDef.restitutionThreshold = bc2d.m_RestitutionThreshold;
+				body->CreateFixture(&fixtureDef);
+			}
+
+			if (entity.HasComponent<CircleCollider2DComponent>())
+			{
+				auto& cc2d = entity.GetComponent<CircleCollider2DComponent>();
+
+				b2CircleShape circleShape;
+				circleShape.m_p.Set(cc2d.GetOffset().x, cc2d.GetOffset().y);
+				circleShape.m_radius = transform.Scale.x * cc2d.GetRadius();
+
+				b2FixtureDef fixtureDef;
+				fixtureDef.shape = &circleShape;
+				fixtureDef.density = cc2d.GetDensity();
+				fixtureDef.friction = cc2d.GetFriction();
+				fixtureDef.restitution = cc2d.GetRestitution();
+				fixtureDef.restitutionThreshold = cc2d.GetRestitutionThreshold();
+				body->CreateFixture(&fixtureDef);
+			}
+		}
 	}
 
 	void Scene::onPhysics2DStop()
 	{
+		delete m_PhysicsWorld;
+		m_PhysicsWorld = nullptr;
+	}
+
+	void Scene::renderScene(EditorCamera& camera)
+	{
+		Renderer2D::BeginScene(camera);
+
+		// sprite
+		{
+			auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRenderComponent>);
+
+			for (auto entity : group)
+			{
+				auto [transform, sprite] = group.get<TransformComponent, SpriteRenderComponent>(entity);
+
+				Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
+			}
+		}
+
+		// Draw circles
+		{
+			auto view = m_Registry.view<TransformComponent, CircleRendererComponent>();
+			for (auto entity : view)
+			{
+				auto [transform, circle] = view.get<TransformComponent, CircleRendererComponent>(entity);
+
+				Renderer2D::DrawCircle(transform.GetTransform(), circle.GetColor(), circle.GetThickNess(), circle.GetFade(), (int)entity);
+			}
+		}
+
+		// Draw Line
+		{
+			Renderer2D::SetLineWidth(3.f);
+			Renderer2D::DrawLine(glm::vec3(0.f), glm::vec3(5.f), glm::vec4(1, 0, 1, 1));
+
+			Renderer2D::SetLineWidth(5.f);
+			Renderer2D::DrawLine(glm::vec3(0.f), glm::vec3(2.f, 0.f, 0.f), glm::vec4(0, 1, 1, 1));
+		}
+
+		// Draw Rect
+		{
+			Renderer2D::DrawRect(glm::vec3(0.f), glm::vec3(3.f), glm::vec4(1, 0, 0, 1));
+		}
+
+		Renderer2D::EndScene();
 	}
 
 	void Scene::serializeEntity(Serializer* serializer, Entity entity)

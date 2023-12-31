@@ -69,6 +69,7 @@ namespace Hazel
 		*/
 		void OnUpdateRuntime(const Timestep& ts);
 		void OnUpdateEditor(Timestep ts, EditorCamera& camera);
+		void OnUpdateSimulation(Timestep ts, EditorCamera& camera);
 		virtual void Serialize(Serializer* serializer) override;
 		virtual void Deserialize(Serializer* serializer) override;
 
@@ -95,6 +96,8 @@ namespace Hazel
 
 		void onPhysics2DStart();
 		void onPhysics2DStop();
+
+		void renderScene(EditorCamera& camera);
 
 		void serializeEntity(Serializer* serializer, Entity entity);
 		void deserializeEntity(Serializer* serializer, Entity entity);

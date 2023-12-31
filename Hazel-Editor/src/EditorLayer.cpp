@@ -956,7 +956,7 @@ namespace HazelEditor
 		ImGui::SameLine();
 		{
 			Hazel::Ref < Hazel::Texture2D > icon = (m_SceneState == SceneState::Edit || m_SceneState == SceneState::Play) ? m_IconSimulate : m_IconStop;
-			ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
+			// ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
 
 #ifdef _WIN32
 #pragma warning(push)
