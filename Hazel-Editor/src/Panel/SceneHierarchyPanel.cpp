@@ -408,61 +408,25 @@ namespace Hazel
 
 		if (ImGui::BeginPopup("AddComponent"))
 		{
-			if (!m_SelectedEntity.HasComponent<CircleRendererComponent>())
-			{
-				if (ImGui::MenuItem("Circle Renderer"))
-				{
-					m_SelectedEntity.AddComponent<CircleRendererComponent>();
-					ImGui::CloseCurrentPopup();
-				}
-			}
-			if (!m_SelectedEntity.HasComponent<CameraComponent>())
-			{
-				if (ImGui::MenuItem("Camera"))
-				{
-					m_SelectedEntity.AddComponent<CameraComponent>();
-					ImGui::CloseCurrentPopup();
-				}
-			}
-
-			if (!m_SelectedEntity.HasComponent<SpriteRenderComponent>())
-			{
-				if (ImGui::MenuItem("SpriteRenderer"))
-				{
-					m_SelectedEntity.AddComponent<SpriteRenderComponent>();
-					ImGui::CloseCurrentPopup();
-				}
-			}
-			if (!m_SelectedEntity.HasComponent<Rigidbody2DComponent>())
-			{
-				if (ImGui::MenuItem("Rigidbody 2D"))
-				{
-					m_SelectedEntity.AddComponent<Rigidbody2DComponent>();
-					ImGui::CloseCurrentPopup();
-				}
-			}
-
-			if (!m_SelectedEntity.HasComponent<BoxCollider2DComponent>())
-			{
-				if (ImGui::MenuItem("Box Collider 2D"))
-				{
-					m_SelectedEntity.AddComponent<BoxCollider2DComponent>();
-					ImGui::CloseCurrentPopup();
-				}
-			}
-			if (!m_SelectedEntity.HasComponent<CircleCollider2DComponent>())
-			{
-				if (ImGui::MenuItem("Circle Collider 2D"))
-				{
-					m_SelectedEntity.AddComponent<CircleCollider2DComponent>();
-					ImGui::CloseCurrentPopup();
-				}
-			}
-
+			displayAddComponentEntry<CameraComponent>("Camera");
+			displayAddComponentEntry<SpriteRenderComponent>("Sprite Renderer");
+			displayAddComponentEntry<CircleRendererComponent>("Circle Renderer");
+			displayAddComponentEntry<Rigidbody2DComponent>("Rigidbody 2D");
+			displayAddComponentEntry<BoxCollider2DComponent>("Box Collider 2D");
+			displayAddComponentEntry<CircleCollider2DComponent>("Circle Collider 2D");
 			ImGui::EndPopup();
 		}
 	}
 
+	template<typename T>
+	void SceneHierarchyPanel::displayAddComponentEntry(const std::string& entryName) {
+		if (!m_SelectedEntity.HasComponent<T>())
+		{
+			if (ImGui::MenuItem(entryName.c_str()))
+			{
+				m_SelectedEntity.AddComponent<T>();
+				ImGui::CloseCurrentPopup();
+			}
+		}
+	}
 }
-
-

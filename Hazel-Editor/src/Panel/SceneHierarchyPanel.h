@@ -34,6 +34,10 @@ namespace Hazel
 		void drawColliderComponent(Entity entity);
 		void drawRigidBodyComponent(Entity entity);
 
+		template<typename T>
+		void displayAddComponentEntry(const std::string& entryName);
+
+
 		void drawAddComponentPanel();
 		std::weak_ptr<Scene> m_Context;
 		Entity m_SelectedEntity;
