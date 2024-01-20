@@ -2,7 +2,7 @@
 
 #include "Hazel/Core/Serialization/SerializeTarget.h"
 
-class BaseObject
+class BaseObject : public SerializeTarget
 {
 public :
 	virtual void Serialize(Serializer& archive) 

@@ -3,8 +3,7 @@
 #include "Hazel/Core/Reflection/TypeId.h"
 #include "Hazel/Core/Reflection/Reflection.h"
 #include "Hazel/Core/Serialization/SerializeTarget.h"
-
-
+#include "Hazel/Core/Object/BaseObject.h"
 #define GLM_ENABLE_EXPERIMENTAL
 // #include <glm/gtx/quarternion.hpp>
 
@@ -12,7 +11,7 @@ class Serializer;
 
 namespace Hazel
 {
-	class Component : public SerializeTarget
+	class Component : public BaseObject
 	{
 	public:
 		Component();
