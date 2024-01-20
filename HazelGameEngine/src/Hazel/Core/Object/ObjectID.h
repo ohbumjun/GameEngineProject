@@ -4,6 +4,7 @@ class ObjectID {
 	uint64_t m_ID = 0;
 
 public:
+	inline ObjectID() = default;
 	inline bool IsRefCounted() const { return (m_ID & (uint64_t(1) << 63)) != 0; }
 	inline bool IsValid() const { return m_ID != 0; }
 	inline bool IsNull() const { return m_ID == 0; }
