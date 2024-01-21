@@ -1,5 +1,5 @@
 #include "hzpch.h"
-#include "IDComponent.h"
+#include "Hazel/Scene/Component/Identifier/IDComponent.h"
 #include "Hazel/Core/Serialization/Serializer.h"
 
 Hazel::IDComponent::IDComponent(UUID uuid) :

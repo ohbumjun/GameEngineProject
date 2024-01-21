@@ -1,7 +1,7 @@
 #include "hzpch.h"
-#include "VariableId.h"
-#include "Reflection.h"
-#include "TypeUtils.h"
+#include "Hazel/Core/Reflection/VariableId.h"
+#include "Hazel/Core/Reflection/Reflection.h"
+#include "Hazel/Core/Reflection/TypeUtils.h"
 
 template <>
 struct std::hash<VariableId> {

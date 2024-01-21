@@ -1,5 +1,5 @@
 #include "hzpch.h"
-#include "LayerStack.h"
+#include "Hazel/Core/Layer/LayerStack.h"
 
 namespace Hazel {
 

@@ -1,6 +1,6 @@
 
 #include "hzpch.h"
-#include "GCObject.h"
+#include "Hazel/Core/GC/GCObject.h"
 
 
 GCObject::GCObject(void* data, GCAllocationHeader* header, Reflection::TypeInfo* pTypeInfo)

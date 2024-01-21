@@ -1,6 +1,6 @@
 #include "hzpch.h"
-#include "BaseObject.h"
 #include "Hazel/Core/Object/ObjectDB.h"
+#include "Hazel/Core/Object/BaseObject.h"
 
 namespace Hazel
 {

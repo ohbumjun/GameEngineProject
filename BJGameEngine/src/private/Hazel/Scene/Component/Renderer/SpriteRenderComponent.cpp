@@ -1,6 +1,6 @@
 ﻿#include "hzpch.h"
+#include "Hazel/Scene/Component/Renderer/SpriteRenderComponent.h"
 #include "Hazel/Core/Serialization/Serializer.h"
-#include "SpriteRenderComponent.h"
 
 static std::string emptyTexture = "";
 

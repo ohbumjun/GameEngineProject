@@ -1,6 +1,6 @@
 #include "hzpch.h"
-#include "FixedMemoryPool.h"
-#include "MemoryPoolInfo.h"
+#include "Hazel/Core/Allocation/MemoryPool/FixedMemoryPool.h"
+#include "Hazel/Core/Allocation/MemoryPool/MemoryPoolInfo.h"
 
 FixedMemoryPool::FixedMemoryPool()
 {
