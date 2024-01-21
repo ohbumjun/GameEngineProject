@@ -60,6 +60,7 @@ add_subdirectory(external)              # external libraries
 # add sub modules cmake files
 add_git_submodule(external/Box2D)
 add_git_submodule(external/imgui)
+add_git_submodule(external/Glad)
 
 # clang format, cmake format
 # add_cmake_format_target()
