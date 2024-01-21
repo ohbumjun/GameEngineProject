@@ -61,6 +61,14 @@ add_subdirectory(external)              # external libraries
 add_git_submodule(external/Box2D)
 add_git_submodule(external/imgui)
 add_git_submodule(external/Glad)
+add_git_submodule(external/glm)
+
+set(GLFW_BUILD_EXAMPLES OFF CACHE INTERNAL "Build the GLFW example programs")
+set(GLFW_BUILD_TESTS OFF CACHE INTERNAL "Build the GLFW test programs")
+set(GLFW_BUILD_DOCS OFF CACHE INTERNAL "Build the GLFW documentation")
+set(GLFW_INSTALL OFF CACHE INTERNAL "Generate installation target")
+
+add_git_submodule(external/GLFW)
 
 # clang format, cmake format
 # add_cmake_format_target()

@@ -106,7 +106,7 @@ target_link_libraries(
            # ex) projectname::libraryname (refer to other github cmakelists.txt)
     box2d  # find project name in actual cmakefile
     imgui
-    GLFW
+    glfw
     Glad
     glm
     opengl32.lib
