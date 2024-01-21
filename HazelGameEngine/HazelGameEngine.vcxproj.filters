@@ -132,16 +132,16 @@
     <ClInclude Include="src\Hazel.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hazel\Core\Allocation\Allocator\FreeListAllocator.h">
+    <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\Allocator\FreeListAllocator.h">
       <Filter>src\Hazel\Core\Allocation\Allocator</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hazel\Core\Allocation\Allocator\MemoryPoolAllocator.h">
+    <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\Allocator\MemoryPoolAllocator.h">
       <Filter>src\Hazel\Core\Allocation\Allocator</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hazel\Core\Allocation\Allocator\PoolAllocator.h">
+    <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\Allocator\PoolAllocator.h">
       <Filter>src\Hazel\Core\Allocation\Allocator</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hazel\Core\Allocation\Allocator\StackAllocator.h">
+    <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\Allocator\StackAllocator.h">
       <Filter>src\Hazel\Core\Allocation\Allocator</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\BaseMemoryPool.h">
@@ -267,7 +267,7 @@
     <ClInclude Include="src\Hazel\Math\Math.h">
       <Filter>src\Hazel\Math</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hazel\Scene\BaseObject.h">
+    <ClInclude Include="src\Hazel\Core\Object\BaseObject.h">
       <Filter>src\Hazel\Scene</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\Scene\Component\CameraComponent.h">
@@ -1260,18 +1260,23 @@
     <ClInclude Include="src\Hazel\Scene\Component\ComponentFlag.h" />
     <ClInclude Include="src\Hazel\Asset\Image\ImageUtils.h" />
     <ClInclude Include="src\Hazel\Asset\ResourceManager.h" />
+    <ClInclude Include="src\Hazel\Core\Object\ObjectDB.h" />
+    <ClInclude Include="src\Hazel\Core\Object\ObjectID.h" />
+    <ClInclude Include="src\Hazel\Core\Object\ObjectPtr.h" />
+    <ClInclude Include="src\Hazel\Core\Allocation\Allocator\DefaultHeapAllocator.h" />
+    <ClInclude Include="src\Hazel\Core\Thread\ThreadUtil.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Hazel\Core\Allocation\Allocator\FreeListAllocator.cpp">
+    <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\Allocator\FreeListAllocator.cpp">
       <Filter>src\Hazel\Core\Allocation\Allocator</Filter>
     </ClCompile>
-    <ClCompile Include="src\Hazel\Core\Allocation\Allocator\MemoryPoolAllocator.cpp">
+    <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\Allocator\MemoryPoolAllocator.cpp">
       <Filter>src\Hazel\Core\Allocation\Allocator</Filter>
     </ClCompile>
-    <ClCompile Include="src\Hazel\Core\Allocation\Allocator\PoolAllocator.cpp">
+    <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\Allocator\PoolAllocator.cpp">
       <Filter>src\Hazel\Core\Allocation\Allocator</Filter>
     </ClCompile>
-    <ClCompile Include="src\Hazel\Core\Allocation\Allocator\StackAllocator.cpp">
+    <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\Allocator\StackAllocator.cpp">
       <Filter>src\Hazel\Core\Allocation\Allocator</Filter>
     </ClCompile>
     <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\BaseMemoryPool.cpp">
@@ -1340,7 +1345,7 @@
     <ClCompile Include="src\Hazel\Math\Math.cpp">
       <Filter>src\Hazel\Math</Filter>
     </ClCompile>
-    <ClCompile Include="src\Hazel\Scene\BaseObject.cpp">
+    <ClCompile Include="src\Hazel\Core\Object\BaseObject.cpp">
       <Filter>src\Hazel\Scene</Filter>
     </ClCompile>
     <ClCompile Include="src\Hazel\Scene\Component\CameraComponent.cpp">
@@ -1491,5 +1496,10 @@
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
     <ClCompile Include="src\Hazel\Asset\ResourceManager.cpp" />
+    <ClCompile Include="src\Hazel\Core\Object\ObjectDB.cpp" />
+    <ClCompile Include="src\Hazel\Core\Object\ObjectID.cpp" />
+    <ClCompile Include="src\Hazel\Core\Object\ObjectPtr.cpp" />
+    <ClCompile Include="src\Hazel\Core\Allocation\Allocator\DefaultHeapAllocator.cpp" />
+    <ClCompile Include="src\Hazel\Core\Thread\ThreadUtil.cpp" />
   </ItemGroup>
 </Project>

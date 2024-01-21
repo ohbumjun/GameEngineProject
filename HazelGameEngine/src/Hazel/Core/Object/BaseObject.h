@@ -3,21 +3,25 @@
 #include "Hazel/Core/Serialization/SerializeTarget.h"
 #include  "ObjectID.h"
 
-class BaseObject : public SerializeTarget
+namespace Hazel
 {
-public :
 
-	BaseObject();
-	virtual ~BaseObject();
-	void DetachFromDB();
-	inline ObjectID GetInstanceID() const { return m_InstanceID; }
-	inline bool IsRefCounted() const { return m_IsTypeReferenced; }
-	virtual void Serialize(Serializer& archive) {}
-	virtual void Deserialize(Serializer& archive){}
+	class BaseObject : public SerializeTarget
+	{
+	public:
 
-private :
-	void constructObject(bool p_reference);
-	ObjectID m_InstanceID;
-	bool m_IsTypeReferenced = false;
-};
+		BaseObject();
+		virtual ~BaseObject();
+		void DetachFromDB();
+		inline ObjectID GetInstanceID() const { return m_InstanceID; }
+		inline bool IsRefCounted() const { return m_IsTypeReferenced; }
+		virtual void Serialize(Serializer& archive) {}
+		virtual void Deserialize(Serializer& archive) {}
+
+	private:
+		void constructObject(bool p_reference);
+		ObjectID m_InstanceID;
+		bool m_IsTypeReferenced = false;
+	};
+}
 

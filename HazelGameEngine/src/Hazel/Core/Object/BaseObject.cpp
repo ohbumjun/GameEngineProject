@@ -2,28 +2,32 @@
 #include "BaseObject.h"
 #include "Hazel/Core/Object/ObjectDB.h"
 
-BaseObject::BaseObject()
+namespace Hazel
 {
-	constructObject(false);
-}
 
-BaseObject::~BaseObject()
-{
-	if (m_InstanceID != ObjectID()) {
-		ObjectDB::Remove(this);
-		m_InstanceID = ObjectID();
+	BaseObject::BaseObject()
+	{
+		constructObject(false);
 	}
-}
 
-void BaseObject::DetachFromDB()
-{
-	if (m_InstanceID != ObjectID()) {
-		ObjectDB::Remove(this);
-		m_InstanceID = ObjectID();
+	BaseObject::~BaseObject()
+	{
+		if (m_InstanceID != ObjectID()) {
+			ObjectDB::Remove(this);
+			m_InstanceID = ObjectID();
+		}
 	}
-}
 
-void BaseObject::constructObject(bool p_reference)
-{
-	m_InstanceID = ObjectDB::Add(this);
+	void BaseObject::DetachFromDB()
+	{
+		if (m_InstanceID != ObjectID()) {
+			ObjectDB::Remove(this);
+			m_InstanceID = ObjectID();
+		}
+	}
+
+	void BaseObject::constructObject(bool p_reference)
+	{
+		m_InstanceID = ObjectDB::Add(this);
+	}
 }

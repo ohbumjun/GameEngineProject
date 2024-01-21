@@ -1,7 +1,7 @@
 #pragma once
 
 #include "BaseMemoryPool.h"
-#include "../Allocator/PoolAllocator.h"
+#include "Allocator/PoolAllocator.h"
 
 class FixedMemoryPool : public BaseMemoryPool
 {

@@ -42,12 +42,12 @@ void SandBox2D::OnAttach()
 	m_CheckerboardTexture = Hazel::TextureManager::CreateTexture2D("assets/textures/sample.png");
 	m_SpriteSheet				= Hazel::TextureManager::CreateTexture2D("assets/game/textures/RPGpack_sheet_2X.png");
 	// m_TextureStairs				= Hazel::SubTextureManager::CreateTexture2DFromCoords(m_SpriteSheet, {7, 6}, {128, 128});
-	m_TextureBarrel				= Hazel::SubTextureManager::CreateTexture2DFromCoords(m_SpriteSheet, {8, 2}, {128, 128});
+	// m_TextureBarrel				= Hazel::SubTextureManager::CreateTexture2DFromCoords(m_SpriteSheet, {8, 2}, {128, 128});
 	// m_TextureTree				= Hazel::SubTextureManager::CreateTexture2DFromCoords(m_SpriteSheet, { 2, 1 }, { 128, 128 }, { 1,2 });
 	// m_TextureGrass				= Hazel::SubTextureManager::CreateTexture2DFromCoords(m_SpriteSheet, { 1, 11 }, { 128, 128 }, { 1,2 });
 
-	m_TextureMap['D'] = Hazel::SubTextureManager::CreateTexture2DFromCoords(m_SpriteSheet, { 6, 11 }, { 128, 128 });
-	m_TextureMap['W'] = Hazel::SubTextureManager::CreateTexture2DFromCoords(m_SpriteSheet, { 11, 11 }, { 128, 128 });
+	// m_TextureMap['D'] = Hazel::SubTextureManager::CreateTexture2DFromCoords(m_SpriteSheet, { 6, 11 }, { 128, 128 });
+	// m_TextureMap['W'] = Hazel::SubTextureManager::CreateTexture2DFromCoords(m_SpriteSheet, { 11, 11 }, { 128, 128 });
 
 	m_MapWidth = s_mapWidth;
 	m_MapHeight = strlen(s_MapTiles) / s_mapWidth;
