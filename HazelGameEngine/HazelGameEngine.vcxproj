@@ -23,22 +23,22 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -54,22 +54,25 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
     <OutDir>..\bin\Debug-windows-x86_64\HazelGameEngine\</OutDir>
     <IntDir>..\bin-int\Debug-windows-x86_64\HazelGameEngine\</IntDir>
     <TargetName>HazelGameEngine</TargetName>
-    <TargetExt>.lib</TargetExt>
+    <TargetExt>.dll</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
     <OutDir>..\bin\Release-windows-x86_64\HazelGameEngine\</OutDir>
     <IntDir>..\bin-int\Release-windows-x86_64\HazelGameEngine\</IntDir>
     <TargetName>HazelGameEngine</TargetName>
-    <TargetExt>.lib</TargetExt>
+    <TargetExt>.dll</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
+    <LinkIncremental>false</LinkIncremental>
     <OutDir>..\bin\Dist-windows-x86_64\HazelGameEngine\</OutDir>
     <IntDir>..\bin-int\Dist-windows-x86_64\HazelGameEngine\</IntDir>
     <TargetName>HazelGameEngine</TargetName>
-    <TargetExt>.lib</TargetExt>
+    <TargetExt>.dll</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -86,10 +89,9 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-    </Link>
-    <Lib>
       <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-    </Lib>
+      <ImportLibrary>..\bin\Debug-windows-x86_64\HazelGameEngine\HazelGameEngine.lib</ImportLibrary>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -110,10 +112,9 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-    </Link>
-    <Lib>
       <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-    </Lib>
+      <ImportLibrary>..\bin\Release-windows-x86_64\HazelGameEngine\HazelGameEngine.lib</ImportLibrary>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
     <ClCompile>
@@ -134,19 +135,18 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-    </Link>
-    <Lib>
       <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-    </Lib>
+      <ImportLibrary>..\bin\Dist-windows-x86_64\HazelGameEngine\HazelGameEngine.lib</ImportLibrary>
+    </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Hazel\Core\Allocation\Allocator\DefaultHeapAllocator.h" />
-    <ClInclude Include="src\Hazel\Core\Object\ObjectPtr.h" />
-    <ClInclude Include="src\Hazel\Core\Object\ObjectID.h" />
-    <ClInclude Include="src\Hazel\Core\Object\ObjectDB.h" />
-    <ClInclude Include="src\Hazel\Asset\ResourceManager.h" />
     <ClInclude Include="src\Hazel.h" />
     <ClInclude Include="src\Hazel\Asset\Image\ImageUtils.h" />
+    <ClInclude Include="src\Hazel\Asset\Image\SubTexture2D.h" />
+    <ClInclude Include="src\Hazel\Asset\Image\Texture.h" />
+    <ClInclude Include="src\Hazel\Asset\ResourceManager.h" />
+    <ClInclude Include="src\Hazel\Asset\Shader\Shader.h" />
+    <ClInclude Include="src\Hazel\Core\Allocation\Allocator\DefaultHeapAllocator.h" />
     <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\Allocator\FreeListAllocator.h" />
     <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\Allocator\MemoryPoolAllocator.h" />
     <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\Allocator\PoolAllocator.h" />
@@ -170,6 +170,10 @@
     <ClInclude Include="src\Hazel\Core\Layer\Layer.h" />
     <ClInclude Include="src\Hazel\Core\Layer\LayerStack.h" />
     <ClInclude Include="src\Hazel\Core\Memory\Channel.h" />
+    <ClInclude Include="src\Hazel\Core\Object\BaseObject.h" />
+    <ClInclude Include="src\Hazel\Core\Object\ObjectDB.h" />
+    <ClInclude Include="src\Hazel\Core\Object\ObjectID.h" />
+    <ClInclude Include="src\Hazel\Core\Object\ObjectPtr.h" />
     <ClInclude Include="src\Hazel\Core\Reflection\FieldInfo.h" />
     <ClInclude Include="src\Hazel\Core\Reflection\Reflection.h" />
     <ClInclude Include="src\Hazel\Core\Reflection\TypeId.h" />
@@ -178,6 +182,7 @@
     <ClInclude Include="src\Hazel\Core\Serialization\JsonSerializer.h" />
     <ClInclude Include="src\Hazel\Core\Serialization\SerializeTarget.h" />
     <ClInclude Include="src\Hazel\Core\Serialization\Serializer.h" />
+    <ClInclude Include="src\Hazel\Core\Thread\ThreadUtil.h" />
     <ClInclude Include="src\Hazel\Core\Window.h" />
     <ClInclude Include="src\Hazel\Debug\Instrumentor.h" />
     <ClInclude Include="src\Hazel\Event\ApplicationEvent.h" />
@@ -192,7 +197,6 @@
     <ClInclude Include="src\Hazel\Input\KeyCodes.h" />
     <ClInclude Include="src\Hazel\Input\MouseButtonCodes.h" />
     <ClInclude Include="src\Hazel\Math\Math.h" />
-    <ClInclude Include="src\Hazel\Core\Object\BaseObject.h" />
     <ClInclude Include="src\Hazel\Scene\Component\CameraComponent.h" />
     <ClInclude Include="src\Hazel\Scene\Component\Collider\BoxCollider2DComponent.h" />
     <ClInclude Include="src\Hazel\Scene\Component\Collider\CircleCollider2DComponent.h" />
@@ -239,12 +243,8 @@
     <ClInclude Include="src\Renderer\Renderer.h" />
     <ClInclude Include="src\Renderer\Renderer2D.h" />
     <ClInclude Include="src\Renderer\RendererAPI.h" />
-    <ClInclude Include="src\Hazel\Asset\Shader\Shader.h" />
-    <ClInclude Include="src\Hazel\Asset\Image\SubTexture2D.h" />
-    <ClInclude Include="src\Hazel\Asset\Image\Texture.h" />
     <ClInclude Include="src\Renderer\VertexArray.h" />
     <ClInclude Include="src\hzpch.h" />
-    <ClInclude Include="src\Hazel\Core\Thread\ThreadUtil.h" />
     <ClInclude Include="vendor\ImGuizmo\ImGuizmo.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_features.hpp" />
@@ -526,11 +526,11 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Hazel\Core\Allocation\Allocator\DefaultHeapAllocator.cpp" />
-    <ClCompile Include="src\Hazel\Core\Object\ObjectPtr.cpp" />
-    <ClCompile Include="src\Hazel\Core\Object\ObjectID.cpp" />
-    <ClCompile Include="src\Hazel\Core\Object\ObjectDB.cpp" />
+    <ClCompile Include="src\Hazel\Asset\Image\SubTexture2D.cpp" />
+    <ClCompile Include="src\Hazel\Asset\Image\Texture.cpp" />
     <ClCompile Include="src\Hazel\Asset\ResourceManager.cpp" />
+    <ClCompile Include="src\Hazel\Asset\Shader\Shader.cpp" />
+    <ClCompile Include="src\Hazel\Core\Allocation\Allocator\DefaultHeapAllocator.cpp" />
     <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\Allocator\FreeListAllocator.cpp" />
     <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\Allocator\MemoryPoolAllocator.cpp" />
     <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\Allocator\PoolAllocator.cpp" />
@@ -545,19 +545,23 @@
     <ClCompile Include="src\Hazel\Core\ID\UUID.cpp" />
     <ClCompile Include="src\Hazel\Core\Layer\Layer.cpp" />
     <ClCompile Include="src\Hazel\Core\Layer\LayerStack.cpp" />
+    <ClCompile Include="src\Hazel\Core\Object\BaseObject.cpp" />
+    <ClCompile Include="src\Hazel\Core\Object\ObjectDB.cpp" />
+    <ClCompile Include="src\Hazel\Core\Object\ObjectID.cpp" />
+    <ClCompile Include="src\Hazel\Core\Object\ObjectPtr.cpp" />
     <ClCompile Include="src\Hazel\Core\Reflection\Reflection.cpp" />
     <ClCompile Include="src\Hazel\Core\Reflection\TypeUtils.cpp" />
     <ClCompile Include="src\Hazel\Core\Reflection\VariableId.cpp" />
     <ClCompile Include="src\Hazel\Core\Serialization\JsonSerializer.cpp" />
     <ClCompile Include="src\Hazel\Core\Serialization\SerializeTarget.cpp" />
     <ClCompile Include="src\Hazel\Core\Serialization\Serializer.cpp" />
+    <ClCompile Include="src\Hazel\Core\Thread\ThreadUtil.cpp" />
     <ClCompile Include="src\Hazel\Core\Window.cpp" />
     <ClCompile Include="src\Hazel\FileSystem\DirectorySystem.cpp" />
     <ClCompile Include="src\Hazel\FileSystem\FileMemory.cpp" />
     <ClCompile Include="src\Hazel\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\Hazel\ImGui\ImGuilBuild.cpp" />
     <ClCompile Include="src\Hazel\Math\Math.cpp" />
-    <ClCompile Include="src\Hazel\Core\Object\BaseObject.cpp" />
     <ClCompile Include="src\Hazel\Scene\Component\CameraComponent.cpp" />
     <ClCompile Include="src\Hazel\Scene\Component\Collider\BoxCollider2DComponent.cpp" />
     <ClCompile Include="src\Hazel\Scene\Component\Collider\CircleCollider2DComponent.cpp" />
@@ -600,14 +604,10 @@
     <ClCompile Include="src\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Renderer\Renderer2D.cpp" />
     <ClCompile Include="src\Renderer\RendererAPI.cpp" />
-    <ClCompile Include="src\Hazel\Asset\Shader\Shader.cpp" />
-    <ClCompile Include="src\Hazel\Asset\Image\SubTexture2D.cpp" />
-    <ClCompile Include="src\Hazel\Asset\Image\Texture.cpp" />
     <ClCompile Include="src\Renderer\VertexArray.cpp" />
     <ClCompile Include="src\hzpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\Hazel\Core\Thread\ThreadUtil.cpp" />
     <ClCompile Include="vendor\ImGuizmo\ImGuizmo.cpp" />
     <ClCompile Include="vendor\stb_image\stb_image.cpp" />
   </ItemGroup>

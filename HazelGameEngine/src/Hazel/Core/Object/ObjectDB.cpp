@@ -5,6 +5,13 @@
 
 namespace Hazel
 {
+	DefaultHeapAllocator ObjectDB::m_Allocator;
+	SpinLock ObjectDB::m_SpinLock;
+	uint32_t ObjectDB::m_SlotCnt;
+	uint32_t ObjectDB::m_SlotMax;
+	ObjectDB::ObjectSlot* ObjectDB::m_ObjectSlotArray;
+	uint64_t ObjectDB::m_ValidateNumber;
+
 	void ObjectDB::Clean()
 	{
 		if (m_ObjectSlotArray) {

@@ -7,6 +7,15 @@
     <Filter Include="src\Hazel">
       <UniqueIdentifier>{F0370AB3-5CA2-BE29-A5E0-6FCF118A9C7E}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Hazel\Asset">
+      <UniqueIdentifier>{7F20ACB2-EBAB-1977-F4BC-9C6B60C77577}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Hazel\Asset\Image">
+      <UniqueIdentifier>{B12571EE-1D92-2CE9-E685-C44652B14E51}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Hazel\Asset\Shader">
+      <UniqueIdentifier>{45EB8ED3-31E5-B725-1A52-4E3606EB1D92}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Hazel\Core">
       <UniqueIdentifier>{48D253A8-34A0-47AE-1D34-B8D409A12313}</UniqueIdentifier>
     </Filter>
@@ -18,6 +27,9 @@
     </Filter>
     <Filter Include="src\Hazel\Core\Allocation\MemoryPool">
       <UniqueIdentifier>{9F1570E0-8BFC-31D8-344D-98F52013AB3E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Hazel\Core\Allocation\MemoryPool\Allocator">
+      <UniqueIdentifier>{AFF3E61C-9B71-37B6-8469-F54D708679DE}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Hazel\Core\DataStructure">
       <UniqueIdentifier>{429BBD6B-2E56-AD17-D70D-2662C3A7F7A7}</UniqueIdentifier>
@@ -34,11 +46,17 @@
     <Filter Include="src\Hazel\Core\Memory">
       <UniqueIdentifier>{B02807FD-1C95-C2F7-E588-5A5551B4E45F}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Hazel\Core\Object">
+      <UniqueIdentifier>{CE5E7901-3ACB-34FC-03BF-CC596FEA5664}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Hazel\Core\Reflection">
       <UniqueIdentifier>{028CA5A0-6E4E-D92A-B7FE-67B72300B208}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Hazel\Core\Serialization">
       <UniqueIdentifier>{D588303F-C143-20EB-6AFB-983556956A7B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Hazel\Core\Thread">
+      <UniqueIdentifier>{AF1F940D-1B8C-4F08-E47F-E76550AB7170}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Hazel\Debug">
       <UniqueIdentifier>{6676DAB2-D201-4877-DB12-CB6B471DA477}</UniqueIdentifier>
@@ -94,12 +112,6 @@
     <Filter Include="src\Renderer\Camera">
       <UniqueIdentifier>{8BE6B0F4-F747-8E02-80B5-D4B4EC15C5C1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Renderer\Shader">
-      <UniqueIdentifier>{B9817B1A-25E3-5828-AE50-9FDA1AB18FE7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\Renderer\Texture">
-      <UniqueIdentifier>{D3B98FB1-BF48-197B-6867-2D7654D52921}</UniqueIdentifier>
-    </Filter>
     <Filter Include="vendor">
       <UniqueIdentifier>{B3738122-9F15-ACF8-88D0-BF4C74113349}</UniqueIdentifier>
     </Filter>
@@ -132,17 +144,35 @@
     <ClInclude Include="src\Hazel.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\Allocator\FreeListAllocator.h">
+    <ClInclude Include="src\Hazel\Asset\Image\ImageUtils.h">
+      <Filter>src\Hazel\Asset\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Asset\Image\SubTexture2D.h">
+      <Filter>src\Hazel\Asset\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Asset\Image\Texture.h">
+      <Filter>src\Hazel\Asset\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Asset\ResourceManager.h">
+      <Filter>src\Hazel\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Asset\Shader\Shader.h">
+      <Filter>src\Hazel\Asset\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Core\Allocation\Allocator\DefaultHeapAllocator.h">
       <Filter>src\Hazel\Core\Allocation\Allocator</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\Allocator\FreeListAllocator.h">
+      <Filter>src\Hazel\Core\Allocation\MemoryPool\Allocator</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\Allocator\MemoryPoolAllocator.h">
-      <Filter>src\Hazel\Core\Allocation\Allocator</Filter>
+      <Filter>src\Hazel\Core\Allocation\MemoryPool\Allocator</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\Allocator\PoolAllocator.h">
-      <Filter>src\Hazel\Core\Allocation\Allocator</Filter>
+      <Filter>src\Hazel\Core\Allocation\MemoryPool\Allocator</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\Allocator\StackAllocator.h">
-      <Filter>src\Hazel\Core\Allocation\Allocator</Filter>
+      <Filter>src\Hazel\Core\Allocation\MemoryPool\Allocator</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\Core\Allocation\MemoryPool\BaseMemoryPool.h">
       <Filter>src\Hazel\Core\Allocation\MemoryPool</Filter>
@@ -201,6 +231,18 @@
     <ClInclude Include="src\Hazel\Core\Memory\Channel.h">
       <Filter>src\Hazel\Core\Memory</Filter>
     </ClInclude>
+    <ClInclude Include="src\Hazel\Core\Object\BaseObject.h">
+      <Filter>src\Hazel\Core\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Core\Object\ObjectDB.h">
+      <Filter>src\Hazel\Core\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Core\Object\ObjectID.h">
+      <Filter>src\Hazel\Core\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Core\Object\ObjectPtr.h">
+      <Filter>src\Hazel\Core\Object</Filter>
+    </ClInclude>
     <ClInclude Include="src\Hazel\Core\Reflection\FieldInfo.h">
       <Filter>src\Hazel\Core\Reflection</Filter>
     </ClInclude>
@@ -224,6 +266,9 @@
     </ClInclude>
     <ClInclude Include="src\Hazel\Core\Serialization\Serializer.h">
       <Filter>src\Hazel\Core\Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Core\Thread\ThreadUtil.h">
+      <Filter>src\Hazel\Core\Thread</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\Core\Window.h">
       <Filter>src\Hazel\Core</Filter>
@@ -267,9 +312,6 @@
     <ClInclude Include="src\Hazel\Math\Math.h">
       <Filter>src\Hazel\Math</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hazel\Core\Object\BaseObject.h">
-      <Filter>src\Hazel\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="src\Hazel\Scene\Component\CameraComponent.h">
       <Filter>src\Hazel\Scene\Component</Filter>
     </ClInclude>
@@ -280,6 +322,9 @@
       <Filter>src\Hazel\Scene\Component\Collider</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\Scene\Component\Component.h">
+      <Filter>src\Hazel\Scene\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hazel\Scene\Component\ComponentFlag.h">
       <Filter>src\Hazel\Scene\Component</Filter>
     </ClInclude>
     <ClInclude Include="src\Hazel\Scene\Component\Identifier\IDComponent.h">
@@ -404,15 +449,6 @@
     </ClInclude>
     <ClInclude Include="src\Renderer\RendererAPI.h">
       <Filter>src\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Hazel\Asset\Shader\Shader.h">
-      <Filter>src\Renderer\Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Hazel\Asset\Image\SubTexture2D.h">
-      <Filter>src\Renderer\Texture</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Hazel\Asset\Image\Texture.h">
-      <Filter>src\Renderer\Texture</Filter>
     </ClInclude>
     <ClInclude Include="src\Renderer\VertexArray.h">
       <Filter>src\Renderer</Filter>
@@ -1257,27 +1293,34 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Hazel\Scene\Component\ComponentFlag.h" />
-    <ClInclude Include="src\Hazel\Asset\Image\ImageUtils.h" />
-    <ClInclude Include="src\Hazel\Asset\ResourceManager.h" />
-    <ClInclude Include="src\Hazel\Core\Object\ObjectDB.h" />
-    <ClInclude Include="src\Hazel\Core\Object\ObjectID.h" />
-    <ClInclude Include="src\Hazel\Core\Object\ObjectPtr.h" />
-    <ClInclude Include="src\Hazel\Core\Allocation\Allocator\DefaultHeapAllocator.h" />
-    <ClInclude Include="src\Hazel\Core\Thread\ThreadUtil.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\Allocator\FreeListAllocator.cpp">
+    <ClCompile Include="src\Hazel\Asset\Image\SubTexture2D.cpp">
+      <Filter>src\Hazel\Asset\Image</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\Asset\Image\Texture.cpp">
+      <Filter>src\Hazel\Asset\Image</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\Asset\ResourceManager.cpp">
+      <Filter>src\Hazel\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\Asset\Shader\Shader.cpp">
+      <Filter>src\Hazel\Asset\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\Core\Allocation\Allocator\DefaultHeapAllocator.cpp">
       <Filter>src\Hazel\Core\Allocation\Allocator</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\Allocator\FreeListAllocator.cpp">
+      <Filter>src\Hazel\Core\Allocation\MemoryPool\Allocator</Filter>
     </ClCompile>
     <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\Allocator\MemoryPoolAllocator.cpp">
-      <Filter>src\Hazel\Core\Allocation\Allocator</Filter>
+      <Filter>src\Hazel\Core\Allocation\MemoryPool\Allocator</Filter>
     </ClCompile>
     <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\Allocator\PoolAllocator.cpp">
-      <Filter>src\Hazel\Core\Allocation\Allocator</Filter>
+      <Filter>src\Hazel\Core\Allocation\MemoryPool\Allocator</Filter>
     </ClCompile>
     <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\Allocator\StackAllocator.cpp">
-      <Filter>src\Hazel\Core\Allocation\Allocator</Filter>
+      <Filter>src\Hazel\Core\Allocation\MemoryPool\Allocator</Filter>
     </ClCompile>
     <ClCompile Include="src\Hazel\Core\Allocation\MemoryPool\BaseMemoryPool.cpp">
       <Filter>src\Hazel\Core\Allocation\MemoryPool</Filter>
@@ -1309,6 +1352,18 @@
     <ClCompile Include="src\Hazel\Core\Layer\LayerStack.cpp">
       <Filter>src\Hazel\Core\Layer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Hazel\Core\Object\BaseObject.cpp">
+      <Filter>src\Hazel\Core\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\Core\Object\ObjectDB.cpp">
+      <Filter>src\Hazel\Core\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\Core\Object\ObjectID.cpp">
+      <Filter>src\Hazel\Core\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hazel\Core\Object\ObjectPtr.cpp">
+      <Filter>src\Hazel\Core\Object</Filter>
+    </ClCompile>
     <ClCompile Include="src\Hazel\Core\Reflection\Reflection.cpp">
       <Filter>src\Hazel\Core\Reflection</Filter>
     </ClCompile>
@@ -1327,6 +1382,9 @@
     <ClCompile Include="src\Hazel\Core\Serialization\Serializer.cpp">
       <Filter>src\Hazel\Core\Serialization</Filter>
     </ClCompile>
+    <ClCompile Include="src\Hazel\Core\Thread\ThreadUtil.cpp">
+      <Filter>src\Hazel\Core\Thread</Filter>
+    </ClCompile>
     <ClCompile Include="src\Hazel\Core\Window.cpp">
       <Filter>src\Hazel\Core</Filter>
     </ClCompile>
@@ -1344,9 +1402,6 @@
     </ClCompile>
     <ClCompile Include="src\Hazel\Math\Math.cpp">
       <Filter>src\Hazel\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Hazel\Core\Object\BaseObject.cpp">
-      <Filter>src\Hazel\Scene</Filter>
     </ClCompile>
     <ClCompile Include="src\Hazel\Scene\Component\CameraComponent.cpp">
       <Filter>src\Hazel\Scene\Component</Filter>
@@ -1474,15 +1529,6 @@
     <ClCompile Include="src\Renderer\RendererAPI.cpp">
       <Filter>src\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\Hazel\Asset\Shader\Shader.cpp">
-      <Filter>src\Renderer\Shader</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Hazel\Asset\Image\SubTexture2D.cpp">
-      <Filter>src\Renderer\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Hazel\Asset\Image\Texture.cpp">
-      <Filter>src\Renderer\Texture</Filter>
-    </ClCompile>
     <ClCompile Include="src\Renderer\VertexArray.cpp">
       <Filter>src\Renderer</Filter>
     </ClCompile>
@@ -1495,11 +1541,5 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Hazel\Asset\ResourceManager.cpp" />
-    <ClCompile Include="src\Hazel\Core\Object\ObjectDB.cpp" />
-    <ClCompile Include="src\Hazel\Core\Object\ObjectID.cpp" />
-    <ClCompile Include="src\Hazel\Core\Object\ObjectPtr.cpp" />
-    <ClCompile Include="src\Hazel\Core\Allocation\Allocator\DefaultHeapAllocator.cpp" />
-    <ClCompile Include="src\Hazel\Core\Thread\ThreadUtil.cpp" />
   </ItemGroup>
 </Project>

@@ -125,7 +125,7 @@ void SandBox2D::OnUpdate(Hazel::Timestep ts)
 		// Particle 들을 별도의 Batch 처리로 진행한다.
 		// 즉, 위쪽의 일반 Render Batch 처리 한번.
 		// 이후 Particle Render Batch 처리 한번. 이런 식으로 진행하는 것이다.
-		if (Hazel::Input::IsMouseButtonPressed(HZ_MOUSE_BUTTON_LEFT))
+		if (Hazel::Input::IsMouseButtonPressed(Hazel::Mouse::ButtonLeft))
 		{
 			auto [x, y] = Hazel::Input::GetMousePosition();
 			auto width = Hazel::Application::Get().GetWindow().GetWidth();

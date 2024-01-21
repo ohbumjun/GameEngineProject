@@ -13,6 +13,8 @@ namespace Hazel
 		if (type == "fragment" || "pixel") return GL_FRAGMENT_SHADER;
 
 		HZ_CORE_ASSERT(false, "Unknown Shader Type");
+
+		return GL_NONE;
 	}
 
 	std::string OpenGLShader::ReadFile(std::string_view filePath)

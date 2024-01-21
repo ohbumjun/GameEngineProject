@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../MemoryPool/MemoryPoolInfo.h"
+#include "../MemoryPoolInfo.h"
 #include "MemoryPoolAllocator.h"
 #include "Hazel/Core/DataStructure/DoublyLinkedList.h"
 #include "Hazel/Core/DataStructure/AVLTree.h"

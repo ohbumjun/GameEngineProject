@@ -37,7 +37,7 @@ group ""
 
 project "HazelGameEngine"       --프로젝트 이름
     location "HazelGameEngine"
-    kind "StaticLib" -- static lib / kind "SharedLib" : dll      
+    kind "SharedLib" -- static lib / kind "SharedLib" : dll      
     language "C++"
     cppdialect "C++17"
     staticruntime "off" -- static lib 일 경우 on, shared lib 일 경우 off    
