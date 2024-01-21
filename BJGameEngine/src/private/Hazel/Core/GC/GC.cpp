@@ -1,6 +1,6 @@
 ﻿
 #include "hzpch.h"
-#include "GC.h"
+#include "Hazel/Core/GC/GC.h"
 #include "GCObject.h"
 #include "../Reflection/Reflection.h"
 
