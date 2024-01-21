@@ -21,14 +21,15 @@ file(
     "${CMAKE_SOURCE_DIR}/external/ImGuizmo/ImGuizmo.cpp"
 )
 
-# set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-# set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-# set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+# is this lib file ?
+# Set the output directory for the binaries
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE}/${EDITOR_NAME})
 
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/${outputdir}/${PROJECT_NAME})
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/${outputdir}/${PROJECT_NAME})
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/${outputdir}/${PROJECT_NAME})
-    
+# is this obj file ?
+# Set the output directory for the intermediate files
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin-int/${CMAKE_BUILD_TYPE}/${EDITOR_NAME})
+
+
 set(ENGINE_INCLUDES
     "./"
     "${CMAKE_SOURCE_DIR}/external/spdlog/include"
@@ -103,10 +104,11 @@ target_link_libraries(
     ${ENGINE_NAME}
     PUBLIC # other libraries
            # ex) projectname::libraryname (refer to other github cmakelists.txt)
-    box2d
+    box2d  # find project name in actual cmakefile
     imgui
     GLFW
     Glad
+    glm
     opengl32.lib
     stb_image
     )
@@ -126,8 +128,6 @@ set_source_files_properties(
 
 # Windows specific settings
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
-
-    message(STATUS "Using Windows")
     # Set the system version to the latest
     set(CMAKE_SYSTEM_VERSION "latest")
 
@@ -140,17 +140,8 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
         HZ_BUILD_DLL
         GLFW_INCLUDE_NONE
     )
-
-    # Copy the HazelGameEngine DLL to the ApplicationProject directory
-    # add_custom_command(
-    #     TARGET 
-    #     ${EXECUTABLE_NAME} 
-    #     POST_BUILD
-    #     COMMAND ${CMAKE_COMMAND} -E copy_if_different
-    #     $<TARGET_FILE:BJGameEngine>
-    #     $<TARGET_FILE_DIR:ApplicationProject>
-    # )
 endif()
+
 
 # Debug configuration
 if(CMAKE_BUILD_TYPE MATCHES "Debug")

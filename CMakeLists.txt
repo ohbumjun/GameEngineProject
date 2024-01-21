@@ -49,6 +49,7 @@ endif()
 ## -- Subdirectories -- ##
 # search for other CMakeLists.txt files in subdirectories
 add_subdirectory(BJGameEngine)          # Engine
+# add_subdirectory(BJEditor)  
 add_subdirectory(ApplicationProject)    # Application
 add_subdirectory(external)              # external libraries
 # add_subdirectory(tests)                 # tests
@@ -57,8 +58,8 @@ add_subdirectory(external)              # external libraries
 # Do not Use below code since do not want to
 # add as sub directory...
 # add sub modules cmake files
-add_subdirectory(${CMAKE_SOURCE_DIR}/external/Box2D)
-# add_git_submodule(external/Box2D)
+add_git_submodule(external/Box2D)
+add_git_submodule(external/imgui)
 
 # clang format, cmake format
 # add_cmake_format_target()
