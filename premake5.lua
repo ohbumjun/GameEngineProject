@@ -112,10 +112,10 @@ project "HazelGameEngine"       --프로젝트 이름
         }
 
         -- dll 파일을 만드는 것이 아니기 때문에 더이상 필요없다.
-        -- postbuildcommands
-        -- {
-        --    ("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/ApplicationProject/\"")
-        -- }
+        postbuildcommands
+        {
+           ("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/ApplicationProject/\"")
+        }
 
     filter "configurations:Debug" --디버그구성일 때 설정
         defines "HZ_DEBUG"

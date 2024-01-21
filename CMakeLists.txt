@@ -57,21 +57,21 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/bin")
 include(Tools)
 
 if(ENABLE_LTO)
-    include(LTO)
+    # include(LTO)
 endif()
 
 if(ENABLE_SANITIZE_ADDR OR ENABLE_SANITIZE_UNDEF)
-    include(Sanitizer)
-    add_sanitizer_flags()
+    # include(Sanitizer)
+    # add_sanitizer_flags()
 endif()
 
 # clang format, cmake format
-add_cmake_format_target()
-add_clang_format_target()
+# add_cmake_format_target()
+# add_clang_format_target()
 
 # search for other CMakeLists.txt files in subdirectories
 add_subdirectory(BJGameEngine)          # Engine
-add_subdirectory(Hazel-Editor)          # Editor
+add_subdirectory(BJEditor)          # Editor
 add_subdirectory(ApplicationProject)    # Executable
 add_subdirectory(external)              # external libraries
 add_subdirectory(tests)                 # tests

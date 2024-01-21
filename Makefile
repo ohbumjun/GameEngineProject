@@ -2,7 +2,11 @@ dependency:
 	cd build && cmake .. --graphviz=graph.dot && dot -Tpng graph.dot -o graphImage.png
 
 prepare:
+ifeq ($(OS),Windows_NT)
+	if exist build rmdir /s /q build
+else
 	rm -rf build
+endif
 	mkdir build
 	
 conan_d:
