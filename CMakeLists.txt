@@ -37,6 +37,13 @@ option(ENABLE_LTO "Enable LTO/IPO" ON)
 
 option(ENABLE_CLANG_TIDY "Enable to add clang tidy." ON)
 
+# if not cmake project ? stick to AddGitSubmodule function
+# then define own library target
+# ex) call function in cmake module file
+#     - add_git_submodule(external/json)
+option(ENABLE_TESTING "Enable Unit Testing Build" ON)
+
+# Variable Definitions
 set(ENGINE_NAME "Engine")
 set(EDITOR_NAME "Editor")
 set(EXECUTABLE_NAME "Executable")
@@ -46,45 +53,25 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/bin")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/bin")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/bin")
 
-# Include directories
-include_directories(
-    "${PROJECT_SOURCE_DIR}/src"
-    "${PROJECT_SOURCE_DIR}/vendor/spdlog/include"
-    "${PROJECT_SOURCE_DIR}/vendor/glm"
-    "${PROJECT_SOURCE_DIR}/vendor/entt/include"
-    "${PROJECT_SOURCE_DIR}/vendor/rapidJson"
-    "${PROJECT_SOURCE_DIR}/vendor/ImGuizmo"
-    "${PROJECT_SOURCE_DIR}/vendor/Box2D/include"
-)
+# cmake files
+include(Tools)
 
-# Sources
-set(SOURCES
-    "${PROJECT_SOURCE_DIR}/src/hzpch.h"
-    "${PROJECT_SOURCE_DIR}/src/hzpch.cpp"
-    "${PROJECT_SOURCE_DIR}/src/Application.h"
-    "${PROJECT_SOURCE_DIR}/src/Application.cpp"
-)
+if(ENABLE_LTO)
+    include(LTO)
+endif()
 
-# Dependencies
-add_subdirectory(vendor/Box2D)
-add_subdirectory(vendor/GLFW)
-add_subdirectory(vendor/Glad)
-add_subdirectory(vendor/imgui)
+if(ENABLE_SANITIZE_ADDR OR ENABLE_SANITIZE_UNDEF)
+    include(Sanitizer)
+    add_sanitizer_flags()
+endif()
 
-# Targets
-add_library(HazelGameEngine SHARED ${SOURCES})
-target_link_libraries(HazelGameEngine
-    Box2D
-    GLFW
-    Glad
-    imgui
-    opengl32.lib
-)
+# clang format, cmake format
+add_cmake_format_target()
+add_clang_format_target()
 
-# Application project
-add_executable(ApplicationProject ${PROJECT_SOURCE_DIR}/ApplicationProject/src/main.cpp)
-target_link_libraries(ApplicationProject HazelGameEngine)
-
-# Hazel-Editor project
-add_executable(Hazel-Editor ${PROJECT_SOURCE_DIR}/Hazel-Editor/src/main.cpp)
-target_link_libraries(Hazel-Editor HazelGameEngine)
+# search for other CMakeLists.txt files in subdirectories
+add_subdirectory(BJGameEngine)          # Engine
+add_subdirectory(Hazel-Editor)          # Editor
+add_subdirectory(ApplicationProject)    # Executable
+add_subdirectory(external)              # external libraries
+add_subdirectory(tests)                 # tests

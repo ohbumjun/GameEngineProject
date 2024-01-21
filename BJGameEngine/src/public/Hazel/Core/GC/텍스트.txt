@@ -1,0 +1,55 @@
+아이디어
+>> object db 는 전역 포인터 형태로 만든다.
+
+>> GC class 를 따로 만들고
+- 여기에는 object_db ?? 사실상 GC Class 가 object_db 가 되도록 한다.
+- 그리고 이 안에  object_db_rec 들도 다 들고 있을 수 있게 한다.
+- GCAllocator 도 별도로 만든다.
+object header, header , padding (알아서)
+object header 에는 
+1) refCnt
+2) markBit
+
+정보를 세팅할 수 있도록 한다.
+- freeList 형태의 allocator 를 만들 수 있도록 한다.
+- markBit 혹은 refCnt 값이 얼마인지도 리턴할 수 있도록 해줘야 한다.
+
+>> struct_db_rec 는 사실상 TypeInfo 라고 할 수 있다
+여기에 pointer field 형태를 regist 할 때
+GC 
+
+>> 특정 class 의 포인터 변수에 값을 세팅하는 함수에서
+어떤 작업을 추가적으로 진행해줘야 하는가 ?
+
+>> dangling 이 나는 경우, dangling 검사하는 로직에서
+pointer 관계..? 를 별도로 처리해줘야 할 것 같다.
+즉, setter 함수에서 dangling 함수를 매번 처리하는 것이 아니라
+GC 에서 알아서 진행해주도록 해야 한다.
+
+----------------------------------------------------------------
+Test 할 사항들
+
+-----------------------------------------------------------------
+
+???
+>> root 로 지정한 object 들은 따로 어떻게 관리해줄 것인가.
+
+- 그냥 object_db 가 모든 object_db_rec 를 들고 있게 하고
+거기게 root 이냐 아니냐를 표시한다.
+- 즉, 별도로 root 들만을 관리하는 것은 아니라는 의미이다.
+그런데 이거 그냥 list 같은 형태로 root 만 따로 관리하는 것이
+좋지 않을까 ?
+
+>> units 는 어떻게 관리하지 ?
+- 즉, Udemy 에서 진행해준 것처럼 배열..? 형태로 할당한 것을
+별도의 형태로 만들어줘야만 하는 것인가 ?
+이거는 동적인 배열을 다루는데에 있어서는 좋은 아이디어가
+아닌것으로 보이는데..?
+
+>> 새로운 포인터 필드값을 세팅하는 setter 함수를 호출하면
+그때 GC pointer field 정보는 어떻게 update 
+해줄 것인가 ?
+
+>> 포인터들의 배열에, object * 를 추가한다고 했을 때
+이때 GC Graph 는 어떻게 관리할 것인가 ?
+- 우선 해당 list type 에 맞는 field info 를 찾고
