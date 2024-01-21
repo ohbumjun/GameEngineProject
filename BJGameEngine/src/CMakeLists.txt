@@ -113,18 +113,14 @@ target_link_libraries(
     stb_image
     )
 
-file(GLOB 
-IMGUIZMO_SOURCES 
-"${CMAKE_SOURCE_DIR}/external/ImGuizmo/*.cpp")
-
 # 아래 두 줄을 통해서 해당 경로에 있는 모든 cpp 파일들을 pch 를 사용하지 않을 것이라고 하는 것이다
 # 그러면 hazel engine 은 현재 hzpch.cpp 를 무조건 모든 cpp 파일에서 include 하게 해놨는데
 # 이것을 imgui 코드들은 하지 않도록 하는 것이다.
 set_source_files_properties(
-    ${IMGUIZMO_SOURCES} 
-    PROPERTIES SKIP_PRECOMPILE_HEADERS 
-    ON
-    )
+    ${CMAKE_CURRENT_SOURCE_DIR}/external/ImGuizmo/**.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/stb_image/ImGuizmo/**.cpp
+    PROPERTIES COMPILE_FLAGS "/Yc;pch.h"
+)
 
 # Windows specific settings
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")

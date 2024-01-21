@@ -69,6 +69,10 @@ set(GLFW_BUILD_DOCS OFF CACHE INTERNAL "Build the GLFW documentation")
 set(GLFW_INSTALL OFF CACHE INTERNAL "Generate installation target")
 
 add_git_submodule(external/GLFW)
+add_git_submodule(external/ImGuizmo)
+# add_git_submodule(external/RapidJson)
+add_git_submodule(external/spdlog)
+add_git_submodule(external/stb_image)
 
 # clang format, cmake format
 # add_cmake_format_target()

@@ -19,7 +19,7 @@ ${IMGUI_SOURCES}
 ${IMGUI_HEADERS})
 
 file(GLOB IMGUI_INCLUDES
-"backend/*.h"
+"backends/*.h"
 )
 
 target_include_directories(imgui
