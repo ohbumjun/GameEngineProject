@@ -1,5 +1,5 @@
 ﻿#include "hzpch.h"
-#include "NativeScriptComponent.h"
+#include "Hazel/Scene/Component/NativeScriptComponent.h"
 #include "Hazel/Core/Reflection/Reflection.h"
 #include "Hazel/Core/Serialization/Serializer.h"
 

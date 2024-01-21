@@ -1,5 +1,6 @@
 ﻿#include "hzpch.h"
-#include "Entity.h"
+
+#include "Hazel/Scene/Entity.h"
 
 namespace Hazel
 {

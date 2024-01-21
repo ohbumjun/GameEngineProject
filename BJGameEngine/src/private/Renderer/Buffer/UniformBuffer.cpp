@@ -1,5 +1,5 @@
 #include "hzpch.h"
-#include "UniformBuffer.h"
+#include "Renderer/Buffer/UniformBuffer.h"
 
 #include "Renderer/Renderer.h"
 #include "Platform/OpenGL/OpenGLUniformBuffer.h"

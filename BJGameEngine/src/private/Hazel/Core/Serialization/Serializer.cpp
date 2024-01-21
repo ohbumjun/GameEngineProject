@@ -1,6 +1,6 @@
 ﻿#include "hzpch.h"
-#include "Serializer.h"
-#include "SerializeTarget.h"
+#include "Hazel/Core/Serialization/Serializer.h"
+#include "Hazel/Core/Serialization/SerializeTarget.h"
 
 std::set<TypeId> Serializer::m_CustomDefaultTypes;
 

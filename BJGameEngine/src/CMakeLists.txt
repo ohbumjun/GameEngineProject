@@ -1,12 +1,19 @@
 # CONFIGURE_DEPENDS : when file is added or removed, cmake will be reconfigured
 # set(ENGINE_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/private/**.cpp")
-file(GLOB_RECURSE ENGINE_HEADERS CONFIGURE_DEPENDS 
+file(
+    GLOB_RECURSE 
+    ENGINE_HEADERS 
+    CONFIGURE_DEPENDS 
 "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
 
-file(GLOB_RECURSE ENGINE_SOURCES 
+file(
+    GLOB_RECURSE 
+    ENGINE_SOURCES 
 "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
 
-file(GLOB ENGINE_EXTERNAL_SOURCES 
+file(
+    GLOB 
+    ENGINE_EXTERNAL_SOURCES 
     "${CMAKE_SOURCE_DIR}/external/stb_image/*.cpp"
     "${CMAKE_SOURCE_DIR}/external/stb_image/*.h"
     "${CMAKE_SOURCE_DIR}/external/glm/glm/*.hpp"
@@ -96,11 +103,7 @@ target_link_libraries(
     ${ENGINE_NAME}
     PUBLIC # other libraries
            # ex) projectname::libraryname (refer to other github cmakelists.txt)
-    Box2D
-    GLFW
-    Glad
-    ImGui
-    opengl32.lib)
+    Box2D)
 
 file(GLOB 
 IMGUIZMO_SOURCES 

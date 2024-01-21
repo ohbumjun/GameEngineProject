@@ -1,5 +1,5 @@
 ﻿#include "hzpch.h"
-#include "StringUtil.h"
+#include "Hazel/Utils/StringUtil.h"
 
 namespace Utils
 {

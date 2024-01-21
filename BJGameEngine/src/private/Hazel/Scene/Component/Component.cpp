@@ -1,5 +1,5 @@
 ﻿#include "hzpch.h"
-#include "Component.h"
+#include "Hazel/Scene/Component/Component.h"
 
 Hazel::Component::Component()
 {

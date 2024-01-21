@@ -1,5 +1,5 @@
 ﻿#include "hzpch.h"
-#include "WindowsWindow.h"
+#include "Platform/Windows/WindowsWindow.h"
 #include "Hazel/Event/MouseEvent.h"
 #include "Hazel/Event/ApplicationEvent.h"
 #include "Hazel/Event/KeyEvent.h"

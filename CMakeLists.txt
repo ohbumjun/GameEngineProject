@@ -19,18 +19,21 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 #     based on compile_commands.json
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# can pass variable to set 'COMPILE_EXECUTABLE' value in command line
-# ex) cmake .. -DCOMPILE_EXECUTABLE=ON
-option(COMPILE_EXECUTABLE "Whether to compile the executable" ON)
-
-# Variable Definitions
+## -- Variable Definitions -- ##
 set(ENGINE_NAME "Engine")
 set(EDITOR_NAME "Editor")
 set(EXECUTABLE_NAME "Executable")
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
-# cmake files
+## -- Options -- ##
+# can pass variable to set 'COMPILE_EXECUTABLE' value in command line
+# ex) cmake .. -DCOMPILE_EXECUTABLE=ON
+option(COMPILE_EXECUTABLE "Whether to compile the executable" ON)
+
+## -- include cmake files -- ##
 # include(Tools)
+
+include(AddGitSubmodule)
 
 if(ENABLE_LTO)
     # include(LTO)
@@ -41,12 +44,17 @@ if(ENABLE_SANITIZE_ADDR OR ENABLE_SANITIZE_UNDEF)
     # add_sanitizer_flags()
 endif()
 
-# clang format, cmake format
-# add_cmake_format_target()
-# add_clang_format_target()
-
+## -- Subdirectories -- ##
 # search for other CMakeLists.txt files in subdirectories
 add_subdirectory(BJGameEngine)          # Engine
 add_subdirectory(ApplicationProject)    # Application
 add_subdirectory(external)              # external libraries
 # add_subdirectory(tests)                 # tests
+
+## -- SubModules -- ##
+# add sub modules cmake files
+add_git_submodule(external/Box2D)
+
+# clang format, cmake format
+# add_cmake_format_target()
+# add_clang_format_target()

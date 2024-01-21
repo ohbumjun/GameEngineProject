@@ -1,5 +1,5 @@
 ﻿#include "hzpch.h"
-#include "TransformComponent.h"
+#include "Hazel/Scene/Component/TransformComponent.h"
 #include "Hazel/Core/Reflection/Reflection.h"
 #include "Hazel/Core/Serialization/Serializer.h"
 

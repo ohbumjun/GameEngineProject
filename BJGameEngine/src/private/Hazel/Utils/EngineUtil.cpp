@@ -1,5 +1,5 @@
 #include "hzpch.h"
-#include "EngineUtil.h"
+#include "Hazel/Utils/EngineUtil.h"
 
 namespace Utils
 {

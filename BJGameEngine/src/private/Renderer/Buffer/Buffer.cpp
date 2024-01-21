@@ -1,5 +1,5 @@
 #include "hzpch.h"
-#include "Buffer.h"
+#include "Renderer/Buffer/Buffer.h"
 #include "Platform/OpenGL/OpenGLBuffer.h"
 #include "Renderer/Renderer.h"
 #include "Renderer/RendererAPI.h"

@@ -1,5 +1,5 @@
 #include "hzpch.h"
-#include "OpenGLContext.h"
+#include "Platform/OpenGL/OpenGLContext.h"
 
 // not open gl specific, also support vulkan
 #include <GLFW/glfw3.h>

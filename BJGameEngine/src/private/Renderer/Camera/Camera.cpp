@@ -1,5 +1,5 @@
 ﻿#include "hzpch.h"
-#include "Camera.h"
+#include "Renderer/Camera/Camera.h"
 #include "Hazel/Core/Reflection/Reflection.h"
 #include "Hazel/Core/Serialization/Serializer.h"
 

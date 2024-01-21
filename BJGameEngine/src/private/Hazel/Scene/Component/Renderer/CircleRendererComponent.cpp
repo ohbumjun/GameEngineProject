@@ -1,5 +1,5 @@
 #include "hzpch.h"
-#include "CircleRendererComponent.h"
+#include "Hazel/Scene/Component/Renderer/CircleRendererComponent.h"
 #include "Hazel/Core/Serialization/Serializer.h"
 
 Hazel::CircleRendererComponent::CircleRendererComponent()

@@ -1,5 +1,5 @@
 #include "hzpch.h"
-#include "EditorCamera.h"
+#include "Renderer/Camera/EditorCamera.h"
 
 #include "Hazel/Input/Input.h"
 #include "Hazel/Input/KeyCodes.h"
