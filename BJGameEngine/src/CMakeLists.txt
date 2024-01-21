@@ -28,19 +28,20 @@ file(
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/${outputdir}/${PROJECT_NAME})
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/${outputdir}/${PROJECT_NAME})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/${outputdir}/${PROJECT_NAME})
-
+    
 set(ENGINE_INCLUDES
     "./"
-    "${CMAKE_BINARY_DIR}/external/spdlog/include"
-    "${CMAKE_BINARY_DIR}/external/GLFW/include"
-    "${CMAKE_BINARY_DIR}/external/imgui"
-    "${CMAKE_BINARY_DIR}/external/glm"
-    "${CMAKE_BINARY_DIR}/external/stb_imagee"
-    "${CMAKE_BINARY_DIR}/external/entt/include"
-    "${CMAKE_BINARY_DIR}/external/RapidJson"
-    "${CMAKE_BINARY_DIR}/external/ImGuizmo"
-    "${CMAKE_BINARY_DIR}/external/Box2D/include"
-    "${CMAKE_CURRENT_SOURCE_DIR}/public" # Add this line
+    "${CMAKE_SOURCE_DIR}/external/spdlog/include"
+    "${CMAKE_SOURCE_DIR}/external/GLFW/include"
+    "${CMAKE_SOURCE_DIR}/external/Glad/include"
+    "${CMAKE_SOURCE_DIR}/external/imgui"
+    "${CMAKE_SOURCE_DIR}/external/glm"
+    "${CMAKE_SOURCE_DIR}/external/stb_image"
+    "${CMAKE_SOURCE_DIR}/external/entt/include"
+    "${CMAKE_SOURCE_DIR}/external/RapidJson"
+    "${CMAKE_SOURCE_DIR}/external/ImGuizmo"
+    "${CMAKE_SOURCE_DIR}/external/Box2D/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/public" 
     )
 
 # Create filters for Visual Studio
@@ -88,9 +89,8 @@ target_compile_definitions(
     PRIVATE 
     _CRT_SECURE_NO_WARNINGS 
     GLFW_INCLUDE_NONE
+    _SILENCE_STDEXT_ARR_ITERS_DEPRECATION_WARNING
     )
-
-
 # where to find header files
 # cpp file can include header files from "./~~"
 target_include_directories(
@@ -103,11 +103,17 @@ target_link_libraries(
     ${ENGINE_NAME}
     PUBLIC # other libraries
            # ex) projectname::libraryname (refer to other github cmakelists.txt)
-    Box2D)
+    box2d
+    imgui
+    GLFW
+    Glad
+    opengl32.lib
+    stb_image
+    )
 
 file(GLOB 
 IMGUIZMO_SOURCES 
-"${CMAKE_BINARY_DIR}/external/ImGuizmo/*.cpp")
+"${CMAKE_SOURCE_DIR}/external/ImGuizmo/*.cpp")
 
 # 아래 두 줄을 통해서 해당 경로에 있는 모든 cpp 파일들을 pch 를 사용하지 않을 것이라고 하는 것이다
 # 그러면 hazel engine 은 현재 hzpch.cpp 를 무조건 모든 cpp 파일에서 include 하게 해놨는데

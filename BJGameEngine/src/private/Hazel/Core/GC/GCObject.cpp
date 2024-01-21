@@ -1,4 +1,4 @@
-
+﻿
 #include "hzpch.h"
 #include "Hazel/Core/GC/GCObject.h"
 

@@ -1,3 +1,4 @@
+# set(CMAKE_CONFIGURATION_TYPES "Debug;RelWithDebInfo" CACHE STRING "" FORCE)
 cmake_minimum_required(VERSION 3.22)
 
 project(
@@ -30,6 +31,7 @@ set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 # ex) cmake .. -DCOMPILE_EXECUTABLE=ON
 option(COMPILE_EXECUTABLE "Whether to compile the executable" ON)
 
+
 ## -- include cmake files -- ##
 # include(Tools)
 
@@ -52,8 +54,11 @@ add_subdirectory(external)              # external libraries
 # add_subdirectory(tests)                 # tests
 
 ## -- SubModules -- ##
+# Do not Use below code since do not want to
+# add as sub directory...
 # add sub modules cmake files
-add_git_submodule(external/Box2D)
+add_subdirectory(${CMAKE_SOURCE_DIR}/external/Box2D)
+# add_git_submodule(external/Box2D)
 
 # clang format, cmake format
 # add_cmake_format_target()

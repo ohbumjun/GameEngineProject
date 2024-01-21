@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "../MemoryPoolInfo.h"
 #include "MemoryPoolAllocator.h"

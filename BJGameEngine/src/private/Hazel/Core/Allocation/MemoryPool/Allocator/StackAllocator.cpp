@@ -1,4 +1,4 @@
-#include "hzpch.h"
+﻿#include "hzpch.h"
 #include "Hazel/Core/Allocation/MemoryPool/Allocator/StackAllocator.h"
 #include "Hazel/Utils/EngineUtil.h"
 

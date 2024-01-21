@@ -1,7 +1,6 @@
 # dir : input directory
 
 function(add_git_submodule dir)
-
     # if git not installed on computer. this function will error out
     # find git in computer. set variable
     find_package(Git REQUIRED)
@@ -24,7 +23,7 @@ function(add_git_submodule dir)
         message("Adding : ${dir}/CMakeLists.txt")
         add_subdirectory(${CMAKE_SOURCE_DIR}/${dir}/)
     else()
-        message("Could not add : ${dir}/CMakeLists.txt")
+        message("${dir}/CMakeLists.txt does not exist. Cannot Add It")
     endif()
 
 endfunction(add_git_submodule)

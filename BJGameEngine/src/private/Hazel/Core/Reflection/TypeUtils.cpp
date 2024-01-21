@@ -1,4 +1,4 @@
-#include "hzpch.h"
+﻿#include "hzpch.h"
 #include "Hazel/Core/Reflection/TypeUtils.h"
 
 std::size_t TypeUtils::wrapped_type_name_prefix_length()

@@ -1,4 +1,4 @@
-#include "hzpch.h"
+﻿#include "hzpch.h"
 #include "Hazel/Core/Reflection/VariableId.h"
 #include "Hazel/Core/Reflection/Reflection.h"
 #include "Hazel/Core/Reflection/TypeUtils.h"
