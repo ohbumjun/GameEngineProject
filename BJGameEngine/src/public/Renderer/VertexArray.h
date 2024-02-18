@@ -4,7 +4,7 @@
 
 namespace Hazel
 {
-	class VertexArray
+class HAZEL_API VertexArray
 	{
 	public :
 		virtual ~VertexArray() {};

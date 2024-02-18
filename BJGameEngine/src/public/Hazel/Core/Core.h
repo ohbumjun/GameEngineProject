@@ -12,15 +12,15 @@ Engine 프로젝트는 HZ_BUILD_DLL 이 정의되어 있다. export 를 할 것�
 Client 는 정의 x, 따라서 import 할 것이다.
 */
 #ifdef HZ_PLATFORM_WINDOWS
-#if HZ_DYNAMIC_LINK // hazel game engine 을 dll 로 만드는 경우
-	#ifdef HZ_BUILD_DLL
-		#define HAZEL_API __declspec(dllexport)
-	#else 
-		#define HAZEL_API __declspec(dllimport)
+	#if HZ_DYNAMIC_LINK // hazel game engine 을 dll 로 만드는 경우
+		#ifdef HZ_BUILD_DLL
+			#define HAZEL_API __declspec(dllexport)
+		#else 
+			#define HAZEL_API __declspec(dllimport)
+		#endif
+	#else
+		#define HAZEL_API // 아무것으로도 정의되지 않게 된다.
 	#endif
-#else
-	#define HAZEL_API // 아무것으로도 정의되지 않게 된다.
-#endif
 #else 
 	#error Hazel only support windows
 #endif
@@ -56,7 +56,7 @@ Client 는 정의 x, 따라서 import 할 것이다.
 namespace Hazel
 {
 	template<typename T>
-	using Ref = std::shared_ptr<T>;
+	using  Ref = std::shared_ptr<T>;
 	template<typename T>
 	using Scope = std::unique_ptr<T>;
 

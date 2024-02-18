@@ -13,7 +13,7 @@ namespace Hazel
 	ex) Earth Rotating 
 	*/
 
-	class Rigidbody2DComponent : public Component
+	class HAZEL_API Rigidbody2DComponent : public Component
 	{
 		friend class Scene;
 	public :

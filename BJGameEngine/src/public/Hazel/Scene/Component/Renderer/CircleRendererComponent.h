@@ -7,7 +7,7 @@ class Serializer;
 
 namespace Hazel
 {
-	class CircleRendererComponent : public Component
+class HAZEL_API CircleRendererComponent : public Component
 	{
 		friend class Scene;
 	public :

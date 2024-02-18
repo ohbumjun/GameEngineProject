@@ -5,7 +5,7 @@
 namespace Hazel
 {
 	// 실제 raw render related command 를 처리하는 class
-	class RenderCommand
+class HAZEL_API RenderCommand
 	{
 	public :
 		inline static void SetClearColor(const glm::vec4& color)

@@ -30,7 +30,7 @@ namespace Hazel
 		return 0;
 	}
 
-	struct BufferElement
+	struct HAZEL_API BufferElement
 	{
 		std::string Name;
 		// offset of element inside layout
@@ -72,7 +72,7 @@ namespace Hazel
 		}
 	};
 
-	class BufferLayout
+	class HAZEL_API BufferLayout
 	{
 	public :
 		/*
@@ -113,7 +113,7 @@ namespace Hazel
 		uint32_t m_Stride = 0;
 	};
 
-	class VertexBuffer
+	class HAZEL_API VertexBuffer
 	{
 	public  :
 		virtual ~VertexBuffer(){}
@@ -133,7 +133,7 @@ namespace Hazel
 		static Ref<VertexBuffer> Create(float* vertices, uint32_t size);
 	};
 
-	class IndexBuffer
+	class HAZEL_API IndexBuffer
 	{
 	public:
 		virtual ~IndexBuffer() {}

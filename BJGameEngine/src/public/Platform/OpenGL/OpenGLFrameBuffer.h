@@ -4,7 +4,7 @@
 
 namespace Hazel
 {
-	class OpenGLFrameBuffer : public FrameBuffer 
+class HAZEL_API OpenGLFrameBuffer : public FrameBuffer 
 	{
 	public :
 		OpenGLFrameBuffer(const FrameBufferSpecification& spec);

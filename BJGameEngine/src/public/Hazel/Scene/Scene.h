@@ -22,7 +22,7 @@ namespace Hazel
 		entt::registry m_Registry;
 	};
 
-	class Scene : public SerializeTarget
+	class HAZEL_API Scene : public SerializeTarget
 	{
 		friend class Entity;
 		/*Engine code 인데 Editor Class 를 여기에 friend 로 선언해도 되는 건가 ?*/

@@ -1,6 +1,6 @@
 #include "hzpch.h"
 #include "ContentBrowserPanel.h"
-#include <imgui/imgui.h>
+#include <imgui.h>
 
 namespace HazelEditor {
 

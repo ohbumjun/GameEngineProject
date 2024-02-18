@@ -11,7 +11,7 @@ class Serializer;
 
 namespace Hazel
 {
-	class Component : public BaseObject
+class HAZEL_API Component : public BaseObject
 	{
 	public:
 		Component();

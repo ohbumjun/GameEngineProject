@@ -71,7 +71,7 @@ struct IsIterable<std::unordered_map<Key, T, Hash, KeyEqual, Alloc>> {
 	static constexpr bool value = true;
 };
 
-class TypeUtils
+class HAZEL_API TypeUtils
 {
 public:
 	// 현재는 Reflection.h에서만 해당 함수들을 사용중이지만 

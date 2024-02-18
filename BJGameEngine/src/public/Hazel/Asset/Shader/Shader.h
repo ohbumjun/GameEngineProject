@@ -4,7 +4,7 @@
 
 namespace Hazel
 {
-	class Shader
+class HAZEL_API Shader
 	{
 	public :
 		virtual ~Shader() = default;

@@ -6,7 +6,7 @@ class Serializer;
 
 namespace Hazel
 {
-	class SceneCamera : public Camera
+class HAZEL_API SceneCamera : public Camera
 	{
 	public :
 		enum class ProjectionType { Projective = 0, Orthographic = 1 };

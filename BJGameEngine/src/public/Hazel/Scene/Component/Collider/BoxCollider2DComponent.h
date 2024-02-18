@@ -11,7 +11,7 @@ namespace Hazel
 	      그에 대응되는 BoxCollider2D 는 extend 가 0.5, 0.5
 	*/
 
-	class BoxCollider2DComponent : public Component
+	class HAZEL_API BoxCollider2DComponent : public Component
 	{
 		friend class Scene;
 	public :

@@ -13,7 +13,7 @@
 // hazel 은 dll 형태로 뽑아지게 된다.
 // (hazel -> dll)
 // client 는 dll 형태의 hazel 을 include 하는 것이다.
-#include "imgui/imgui.h"
+#include "imgui.h"
 #include <glm/gtc/type_ptr.hpp>
 
 #include "SandBox2D.h"

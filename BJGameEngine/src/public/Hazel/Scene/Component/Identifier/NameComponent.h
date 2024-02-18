@@ -5,7 +5,7 @@
 
 namespace Hazel
 {
-	class NameComponent : public Component
+class HAZEL_API NameComponent : public Component
 	{
 		friend class Scene;
 	public:

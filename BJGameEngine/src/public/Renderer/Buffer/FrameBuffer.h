@@ -60,7 +60,7 @@ namespace Hazel
 		FrameBufferAttachmentSpecification Attachments;
 	};
 
-	class FrameBuffer
+	class HAZEL_API FrameBuffer
 	{
 	public :
 		virtual ~FrameBuffer() {};

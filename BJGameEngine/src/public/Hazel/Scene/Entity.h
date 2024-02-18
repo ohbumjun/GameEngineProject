@@ -9,7 +9,7 @@
 
 namespace Hazel
 {
-	class Entity
+class HAZEL_API Entity
 	{
 		friend class Scene;
 	public:

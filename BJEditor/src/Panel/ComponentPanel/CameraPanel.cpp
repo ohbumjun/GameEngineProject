@@ -1,6 +1,6 @@
 #include "hzpch.h"
 #include "CameraPanel.h"
-#include <imgui/imgui.h>
+#include <imgui.h>
 #include "Hazel/Scene/Component/CameraComponent.h"
 #include "Renderer/Camera/EditorCamera.h"
 

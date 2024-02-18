@@ -52,7 +52,7 @@ endif()
 
 # search for other CMakeLists.txt files in subdirectories
 add_subdirectory(BJGameEngine)          # Engine
-add_subdirectory(BJEditor)          # Editor
+add_subdirectory(BJEditor)              # Editor
 add_subdirectory(ApplicationProject)    # Executable
 add_subdirectory(external)              # external libraries
 # add_subdirectory(tests)                 # tests
@@ -70,7 +70,7 @@ add_git_submodule(external/glm)
 set(GLFW_BUILD_EXAMPLES OFF CACHE INTERNAL "Build the GLFW example programs")
 set(GLFW_BUILD_TESTS OFF CACHE INTERNAL "Build the GLFW test programs")
 set(GLFW_BUILD_DOCS OFF CACHE INTERNAL "Build the GLFW documentation")
-set(GLFW_INSTALL OFF CACHE INTERNAL "Generate installation target")
+set(GLFW_INSTALL ON CACHE INTERNAL "Generate installation target")
 
 add_git_submodule(external/GLFW)
 add_git_submodule(external/ImGuizmo)

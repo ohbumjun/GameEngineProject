@@ -4,7 +4,7 @@
 
 namespace Hazel
 {
-	class CircleCollider2DComponent : public Component
+class HAZEL_API CircleCollider2DComponent : public Component
 	{
 		friend class Scene;
 	public :

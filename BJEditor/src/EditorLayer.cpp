@@ -2,7 +2,7 @@
 
 // 3rd
 #include <filesystem>
-#include "imgui/imgui.h"
+#include "imgui.h"
 #include "ImGuizmo.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>

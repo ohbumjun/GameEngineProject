@@ -2,10 +2,10 @@
 
 #include <random>
 
-class Random
+class HAZEL_API Random
 {
 public:
-	static void Init()
+    static void Init()
 	{
 		s_RandomEngine.seed(std::random_device()());
 	}

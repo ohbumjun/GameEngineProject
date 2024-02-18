@@ -4,7 +4,7 @@
 
 namespace Hazel
 {
-	class ScriptableEntity
+class HAZEL_API ScriptableEntity
 	{
 	public:
 		template<typename T>

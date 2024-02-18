@@ -21,7 +21,7 @@
 #include "Hazel/Scene/Component/Renderer/CircleRendererComponent.h"
 
 #include <filesystem>
-#include <imgui/imgui.h>
+#include <imgui.h>
 
 namespace HazelEditor {
 	extern const std::filesystem::path g_AssetPath;

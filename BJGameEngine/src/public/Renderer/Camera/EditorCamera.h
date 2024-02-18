@@ -9,7 +9,7 @@
 
 namespace Hazel {
 
-	class EditorCamera : public Camera
+	class HAZEL_API EditorCamera : public Camera
 	{
 	public:
 		EditorCamera() = default;

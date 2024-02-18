@@ -4,7 +4,7 @@
 
 namespace Hazel
 {
-	class SceneSerializer
+class HAZEL_API SceneSerializer
 	{
 	public :
 		SceneSerializer(const Ref<Scene>& scene);

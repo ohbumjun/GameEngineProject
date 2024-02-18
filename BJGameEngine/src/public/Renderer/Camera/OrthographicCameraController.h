@@ -8,7 +8,7 @@
 
 namespace Hazel
 {
-	struct OrthographicCameraBounds
+	struct  OrthographicCameraBounds
 	{
 		float Left, Right;
 		float Bottom, Top;
@@ -16,7 +16,7 @@ namespace Hazel
 		float GetWidth() { return Right - Left; }
 		float GetHeight() { return Top - Bottom; }
 	};
-	class OrthographicCameraController
+    class HAZEL_API OrthographicCameraController
 	{
 	public :
 		OrthographicCameraController(float aspectRatio, float rotation = false); // aspect ratio * 2 units

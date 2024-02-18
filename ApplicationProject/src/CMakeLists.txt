@@ -20,7 +20,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
     # Define Hazel specific preprocessor macros
     target_compile_definitions(
         ${ENGINE_NAME} 
-        PRIVATE
+        PUBLIC
         HZ_PLATFORM_WINDOWS
     )
 

@@ -6,7 +6,7 @@
 
 namespace Hazel
 {
-	class TransformComponent : public Component
+class HAZEL_API TransformComponent : public Component
 	{
 		friend class Scene;
 		// glm::mat4 transform = glm::mat4(1.f);

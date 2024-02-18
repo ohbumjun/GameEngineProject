@@ -14,7 +14,7 @@
 
 namespace Hazel
 {
-	class HAZEL_API Log
+class HAZEL_API Log
 	{
 	public :
 		Log();
@@ -26,8 +26,8 @@ namespace Hazel
 		inline static Ref<spdlog::logger>& GetClientLogger() { return s_ClientLogger; }
 
 	private :
-		static Ref<spdlog::logger> s_CoreLogger;
-		static Ref<spdlog::logger> s_ClientLogger;
+         static Ref<spdlog::logger> s_CoreLogger;
+         static Ref<spdlog::logger> s_ClientLogger;
 	};
 }
 

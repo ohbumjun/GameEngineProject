@@ -5,7 +5,7 @@
 namespace Hazel
 {
 	// 2d camera
-	class OrthographicCamera
+class HAZEL_API OrthographicCamera
 	{
 	public :
 		// 가로, 세로 폭을 지정하는 것이다.

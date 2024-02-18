@@ -1,14 +1,41 @@
 # CONFIGURE_DEPENDS : when file is added or removed, cmake will be reconfigured
 # set(ENGINE_SOURCES "my_lib.cc")
-file(GLOB EDITOR_SOURCES 
-"./*.cpp"
-"./*.h"
+file(
+    GLOB_RECURSE 
+    EDITOR_HEADERS 
+    CONFIGURE_DEPENDS 
+"${CMAKE_CURRENT_SOURCE_DIR}/*.h")
+
+file(
+    GLOB_RECURSE 
+    EDITOR_SOURCES 
+    CONFIGURE_DEPENDS 
+"${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
+
+set(EDITOR_INCLUDES 
+"${CMAKE_SOURCE_DIR}/BJGameEngine/src"
+"${CMAKE_SOURCE_DIR}/external/spdlog/include"
+"${CMAKE_SOURCE_DIR}/external/glm"
+"${CMAKE_SOURCE_DIR}/external/entt/include"
+"${CMAKE_SOURCE_DIR}/external/RapidJson"
+"${CMAKE_SOURCE_DIR}/external/ImGuizmo"
 )
+
 add_executable(
-    ${EDITOR_NAME} ${EDITOR_SOURCES})
+    ${EDITOR_NAME} 
+
+    ${EDITOR_HEADERS}
+    ${EDITOR_SOURCES}
+)
+
+target_include_directories(
+    ${EDITOR_NAME} 
+    PUBLIC ${EDITOR_INCLUDES})
 
 target_link_libraries(
     ${EDITOR_NAME} 
+    PUBLIC # other libraries
+           # ex) projectname::libraryname (refer to other github cmakelists.txt)
     ${ENGINE_NAME})
 
 # 아래 두 줄을 통해서 해당 경로에 있는 모든 cpp 파일들을 pch 를 사용하지 않을 것이라고 하는 것이다
@@ -34,8 +61,8 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 
     # Define Hazel specific preprocessor macros
     target_compile_definitions(
-        ${ENGINE_NAME} 
-        PRIVATE
+        ${EDITOR_NAME} 
+        PUBLIC
         HZ_PLATFORM_WINDOWS
     )
 endif()
@@ -43,25 +70,25 @@ endif()
 
 # Debug configuration
 if(CMAKE_BUILD_TYPE MATCHES "Debug")
-    target_compile_definitions(${ENGINE_NAME} 
+    target_compile_definitions(${EDITOR_NAME} 
     PUBLIC 
     HZ_DEBUG)
 
     # game engine을 dll 로 만드는 경우 세팅
     # /MDd for MT runtime library in Debug
-    target_compile_options(${ENGINE_NAME} 
+    target_compile_options(${EDITOR_NAME} 
     PUBLIC 
     /MDd)  # For MT runtime library
 
     # DEBUG_POSTFIX: Appends "d" 
     # to the library name in Debug configuration.
     set_target_properties(
-        ${ENGINE_NAME} 
+        ${EDITOR_NAME} 
     PROPERTIES 
     DEBUG_POSTFIX "d")
 
     set_target_properties(
-        ${ENGINE_NAME} 
+        ${EDITOR_NAME} 
     PROPERTIES 
     # RUNTIME_OUTPUT_DIRECTORY_DEBUG ?
     # = Specifies output directory for Debug binaries.
@@ -73,11 +100,11 @@ endif()
 # Release configuration
 if(CMAKE_BUILD_TYPE MATCHES "Release")
     target_compile_definitions(
-        ${ENGINE_NAME} 
+        ${EDITOR_NAME} 
         PUBLIC 
         HZ_RELEASE)
     set_target_properties(
-        ${ENGINE_NAME} 
+        ${EDITOR_NAME} 
         PROPERTIES 
         RUNTIME_OUTPUT_DIRECTORY_RELEASE 
         "${CMAKE_BINARY_DIR}/bin/Release")
@@ -86,11 +113,11 @@ endif()
 # Dist configuration
 if(CMAKE_BUILD_TYPE MATCHES "Dist")
     target_compile_definitions(
-        ${ENGINE_NAME}  
+        ${EDITOR_NAME}  
         PUBLIC 
         HZ_DIST)
     set_target_properties(
-        ${ENGINE_NAME}  
+        ${EDITOR_NAME}  
         PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELEASE 
         "${CMAKE_BINARY_DIR}/bin/Dist")
 endif()

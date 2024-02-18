@@ -114,7 +114,7 @@ namespace Hazel {
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
-		ImGuizmo::BeginFrame();
+		 ImGuizmo::BeginFrame();
 	}
 
 	void ImGuiLayer::End()

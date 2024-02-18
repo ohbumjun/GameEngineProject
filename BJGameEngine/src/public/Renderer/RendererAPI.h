@@ -5,10 +5,10 @@
 
 namespace Hazel
 {
-	class RendererAPI
+class HAZEL_API RendererAPI
 	{
 	public :
-		enum class API
+        enum class HAZEL_API API
 		{
 			None = 0, OpenGL = 1
 		};
@@ -28,9 +28,5 @@ namespace Hazel
 		static API s_API;
 	};
 }
-
-class RendererAPI
-{
-};
 
 

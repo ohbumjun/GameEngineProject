@@ -8,7 +8,7 @@ class Serializer;
 
 namespace Hazel
 {
-	class SpriteRenderComponent : public Component
+class HAZEL_API SpriteRenderComponent : public Component
 	{
 		friend class Scene;
 	public:

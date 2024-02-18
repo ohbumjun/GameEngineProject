@@ -21,11 +21,15 @@
 // SOFTWARE.
 
 
+// #include "../imgui/imgui.h"
 #include "imgui.h"
 #ifndef IMGUI_DEFINE_MATH_OPERATORS
 #define IMGUI_DEFINE_MATH_OPERATORS
 #endif
+
+// #include "../imgui/imgui_internal.h"
 #include "imgui_internal.h"
+
 #include "ImGuizmo.h"
 #if !defined(_WIN32) 
 #define _malloca(x) alloca(x)
@@ -851,6 +855,7 @@ namespace ImGuizmo
    {
       gContext.mDrawList = drawlist ? drawlist : ImGui::GetWindowDrawList();
 }
+
 
    void BeginFrame()
    {

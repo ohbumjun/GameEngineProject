@@ -4,7 +4,7 @@
 
 namespace Hazel
 {
-	class SubTexture2D
+class HAZEL_API SubTexture2D
 	{
 	public  :
 		// texture : 해당 subTexture 를 감싸고 있는 대상

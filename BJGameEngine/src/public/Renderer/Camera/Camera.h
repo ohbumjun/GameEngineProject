@@ -7,7 +7,7 @@ class Serializer;
 
 namespace Hazel
 {
-	class Camera : public SerializeTarget
+class HAZEL_API Camera : public SerializeTarget
 	{
 	public :
 		Camera() = default;

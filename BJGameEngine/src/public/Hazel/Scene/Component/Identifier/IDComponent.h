@@ -7,7 +7,7 @@
 
 namespace Hazel
 {
-	class IDComponent : public Component
+class HAZEL_API IDComponent : public Component
 	{
 		friend class Scene;
 	public :

@@ -3,7 +3,7 @@
 #include <string>
 #include "Hazel/Scene/Entity.h"
 #include <glm/glm.hpp>
-#include <imgui/imgui.h>
+#include <imgui.h>
 
 namespace HazelEditor {
 

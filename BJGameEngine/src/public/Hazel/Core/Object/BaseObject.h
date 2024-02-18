@@ -6,7 +6,7 @@
 namespace Hazel
 {
 
-	class BaseObject : public SerializeTarget
+	class HAZEL_API BaseObject : public SerializeTarget
 	{
 	public:
 

@@ -816,45 +816,64 @@ namespace Hazel
 		static_assert(false);
 	}
 	template<>
-	void Scene::OnComponentAdded<TransformComponent>(Entity entity, TransformComponent& component)
+    void HAZEL_API
+    Scene::OnComponentAdded<TransformComponent>(Entity entity,
+                                                TransformComponent &component)
 	{
 	}
 	template<>
-	void Scene::OnComponentAdded<SpriteRenderComponent>(Entity entity, SpriteRenderComponent& component)
+    void HAZEL_API Scene::OnComponentAdded<SpriteRenderComponent>(
+        Entity entity,
+        SpriteRenderComponent &component)
 	{
 	}
 	template<>
-	void Scene::OnComponentAdded<CameraComponent>(Entity entity, CameraComponent& component)
+    void HAZEL_API
+    Scene::OnComponentAdded<CameraComponent>(Entity entity,
+                                             CameraComponent &component)
 	{
 		if (m_ViewportWidth > 0 && m_ViewportHeight > 0)
 			component.camera.SetViewportSize(m_ViewportWidth, m_ViewportHeight);
 	}
 	template<>
-	void Scene::OnComponentAdded<NameComponent>(Entity entity, NameComponent& component)
+    void HAZEL_API
+    Scene::OnComponentAdded<NameComponent>(Entity entity,
+                                           NameComponent &component)
 	{
 	}
 	template<>
-	void Scene::OnComponentAdded<NativeScriptComponent>(Entity entity, NativeScriptComponent& component)
+    void HAZEL_API Scene::OnComponentAdded<NativeScriptComponent>(
+        Entity entity,
+        NativeScriptComponent &component)
 	{
 	}
 	template<>
-	void Scene::OnComponentAdded<Rigidbody2DComponent>(Entity entity, Rigidbody2DComponent& component)
+    void HAZEL_API Scene::OnComponentAdded<Rigidbody2DComponent>(
+        Entity entity,
+        Rigidbody2DComponent &component)
 	{
 	}
 	template<>
-	void Scene::OnComponentAdded<BoxCollider2DComponent>(Entity entity, BoxCollider2DComponent& component)
+    void HAZEL_API Scene::OnComponentAdded<BoxCollider2DComponent>(
+        Entity entity,
+        BoxCollider2DComponent &component)
 	{
 	}
 	template<>
-	void Scene::OnComponentAdded<IDComponent>(Entity entity, IDComponent& component)
+    void HAZEL_API Scene::OnComponentAdded<IDComponent>(Entity entity,
+                                                        IDComponent &component)
 	{
 	}
 	template<>
-	void Scene::OnComponentAdded<CircleRendererComponent>(Entity entity, CircleRendererComponent& component)
+    void HAZEL_API Scene::OnComponentAdded<CircleRendererComponent>(
+        Entity entity,
+        CircleRendererComponent &component)
 	{
 	}
 	template<>
-	void Scene::OnComponentAdded<CircleCollider2DComponent>(Entity entity, CircleCollider2DComponent& component)
+    void HAZEL_API Scene::OnComponentAdded<CircleCollider2DComponent>(
+        Entity entity,
+        CircleCollider2DComponent &component)
 	{
 	}
 }

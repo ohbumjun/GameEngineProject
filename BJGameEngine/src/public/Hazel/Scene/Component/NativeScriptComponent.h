@@ -6,7 +6,7 @@
 
 namespace Hazel
 {
-	class NativeScriptComponent : public Component
+class HAZEL_API NativeScriptComponent : public Component
 	{
 		friend class Scene;
 	public:

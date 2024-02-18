@@ -11,16 +11,6 @@ file(
     ENGINE_SOURCES 
 "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
 
-file(
-    GLOB 
-    ENGINE_EXTERNAL_SOURCES 
-    "${CMAKE_SOURCE_DIR}/external/stb_image/*.cpp"
-    "${CMAKE_SOURCE_DIR}/external/stb_image/*.h"
-    "${CMAKE_SOURCE_DIR}/external/glm/glm/*.hpp"
-    "${CMAKE_SOURCE_DIR}/external/ImGuizmo/ImGuizmo.h"
-    "${CMAKE_SOURCE_DIR}/external/ImGuizmo/ImGuizmo.cpp"
-)
-
 # is this lib file ?
 # Set the output directory for the binaries
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY 
@@ -31,9 +21,8 @@ ${CMAKE_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE}/${EDITOR_NAME})
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY 
 ${CMAKE_SOURCE_DIR}/bin-int/${CMAKE_BUILD_TYPE}/${EDITOR_NAME})
 
-
 set(ENGINE_INCLUDES
-    "./"
+    "${CMAKE_SOURCE_DIR}/BJGameEngine/src"
     "${CMAKE_SOURCE_DIR}/external/spdlog/include"
     "${CMAKE_SOURCE_DIR}/external/GLFW/include"
     "${CMAKE_SOURCE_DIR}/external/Glad/include"
@@ -91,10 +80,14 @@ target_precompile_headers(
 target_compile_definitions(
     ${ENGINE_NAME} 
     PRIVATE 
+    HZ_ENABLE_ASSERTS
     _CRT_SECURE_NO_WARNINGS 
     GLFW_INCLUDE_NONE
-    HZ_DYNAMIC_LINK
     _SILENCE_STDEXT_ARR_ITERS_DEPRECATION_WARNING
+
+    # DLL
+    HZ_BUILD_DLL
+    HZ_DYNAMIC_LINK
     )
 # where to find header files
 # cpp file can include header files from "./~~"
@@ -110,11 +103,12 @@ target_link_libraries(
            # ex) projectname::libraryname (refer to other github cmakelists.txt)
     box2d  # find project name in actual cmakefile
     imgui
-    glfw
+    ImGuizmo
     Glad
     glm
     opengl32.lib
     stb_image
+    glfw
     )
 
 # 아래 두 줄을 통해서 해당 경로에 있는 모든 cpp 파일들을 pch 를 사용하지 않을 것이라고 하는 것이다
@@ -130,15 +124,15 @@ set_source_files_properties(
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
     # Set the system version to the latest
     set(CMAKE_SYSTEM_VERSION "latest")
-
+    message(STATUS "Engine CMake System : Windows")
     # Define Hazel specific preprocessor macros
     target_compile_definitions(
         ${ENGINE_NAME} 
-        PRIVATE
+        PUBLIC
         HZ_PROFILE
-        HZ_PLATFORM_WINDOWS
-        HZ_BUILD_DLL
         GLFW_INCLUDE_NONE
+        HZ_PLATFORM_WINDOWS
+
     )
 endif()
 

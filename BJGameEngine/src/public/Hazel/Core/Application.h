@@ -17,7 +17,7 @@
 // Engine 단에서 제어하고 싶은 것
 namespace Hazel
 {
-	struct ApplicationCommandLineArgs
+struct HAZEL_API ApplicationCommandLineArgs
 	{
 		int Count = 0;
 		char** Args = nullptr;
@@ -27,7 +27,7 @@ namespace Hazel
 			return Args[index];
 		}
 	};
-	struct ApplicationSpecification
+    struct HAZEL_API ApplicationSpecification
 	{
 		std::string Name = "Hazel Application";
 		std::string WorkingDirectory = "";

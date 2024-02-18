@@ -2,6 +2,9 @@
 
 // 클라이언트 프로젝트에서만 필요한 헤더 파일 정보
 
+/*Core*/
+#include "Hazel/Core/Core.h"
+
 /*Application*/
 #include "Hazel/Core/Application.h"
 

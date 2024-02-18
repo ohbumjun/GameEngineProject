@@ -1,4 +1,5 @@
-﻿#include <Hazel.h>
+﻿
+#include <Hazel.h>
 
 /*Entry Point -> Application 프로젝트 한 곳에서만 include 해야 한다.
 따라서main app 이 있는 곳으로 include 처리한다.

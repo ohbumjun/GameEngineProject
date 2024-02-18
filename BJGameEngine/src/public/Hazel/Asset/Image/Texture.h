@@ -4,7 +4,7 @@ namespace Hazel
 {
 	// Texture 라는 최상위 Class 를 두는 이유
 	// - Texture2D, 3D 등 여부가 관계없이 Texture 라는 것 자체를 사용할 때가 있으므로
-	class Texture
+class HAZEL_API Texture
 	{
 	public :
 		virtual ~Texture() = default;
@@ -19,9 +19,11 @@ namespace Hazel
 		virtual bool operator == (const Texture& other) const = 0;
 	};
 
-	class Texture2D : public Texture{};
+	class HAZEL_API Texture2D : public Texture
+    {
+    };
 
-	class TextureManager
+	class HAZEL_API TextureManager
 	{
 	public :
 		static Ref<Texture2D> CreateTexture2D(const std::string& path);
