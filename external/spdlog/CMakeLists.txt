@@ -53,41 +53,66 @@ if(NOT DEFINED SPDLOG_MASTER_PROJECT)
     endif()
 endif()
 
-option(SPDLOG_BUILD_ALL "Build all artifacts" OFF)
+option(SPDLOG_BUILD_ALL  "Build all artifacts" OFF)
+
+# hide option from cmake-gui
+mark_as_advanced(FORCE SPDLOG_BUILD_ALL)
 
 # build shared option
 option(SPDLOG_BUILD_SHARED "Build shared library" OFF)
+mark_as_advanced(FORCE SPDLOG_BUILD_SHARED)
 
 # precompiled headers option
 option(SPDLOG_ENABLE_PCH "Build static or shared library using precompiled header to speed up compilation time" OFF)
+mark_as_advanced(FORCE SPDLOG_ENABLE_PCH)
 
 # build position independent code
 option(SPDLOG_BUILD_PIC "Build position independent code (-fPIC)" OFF)
+mark_as_advanced(FORCE SPDLOG_BUILD_PIC)
 
 # example options
 option(SPDLOG_BUILD_EXAMPLE "Build example" ${SPDLOG_MASTER_PROJECT})
+mark_as_advanced(FORCE SPDLOG_BUILD_EXAMPLE)
 option(SPDLOG_BUILD_EXAMPLE_HO "Build header only example" OFF)
+mark_as_advanced(FORCE SPDLOG_BUILD_EXAMPLE_HO)
 
 # testing options
 option(SPDLOG_BUILD_TESTS "Build tests" OFF)
+mark_as_advanced(FORCE SPDLOG_BUILD_TESTS)
 option(SPDLOG_BUILD_TESTS_HO "Build tests using the header only version" OFF)
+mark_as_advanced(FORCE SPDLOG_BUILD_TESTS_HO)
 
 # bench options
 option(SPDLOG_BUILD_BENCH "Build benchmarks (Requires https://github.com/google/benchmark.git to be installed)" OFF)
+mark_as_advanced(FORCE SPDLOG_BUILD_BENCH)
 
 # sanitizer options
 option(SPDLOG_SANITIZE_ADDRESS "Enable address sanitizer in tests" OFF)
+mark_as_advanced(FORCE SPDLOG_SANITIZE_ADDRESS)
 
 # warning options
 option(SPDLOG_BUILD_WARNINGS "Enable compiler warnings" OFF)
+mark_as_advanced(FORCE SPDLOG_BUILD_WARNINGS)
 
 # install options
 option(SPDLOG_SYSTEM_INCLUDES "Include as system headers (skip for clang-tidy)." OFF)
+mark_as_advanced(FORCE SPDLOG_SYSTEM_INCLUDES)
+
 option(SPDLOG_INSTALL "Generate the install target" ${SPDLOG_MASTER_PROJECT})
+mark_as_advanced(FORCE SPDLOG_INSTALL)
+
 option(SPDLOG_USE_STD_FORMAT "Use std::format instead of fmt library." OFF)
+mark_as_advanced(FORCE SPDLOG_USE_STD_FORMAT)
+
 option(SPDLOG_FMT_EXTERNAL "Use external fmt library instead of bundled" OFF)
+mark_as_advanced(FORCE SPDLOG_FMT_EXTERNAL)
+
 option(SPDLOG_FMT_EXTERNAL_HO "Use external fmt header-only library instead of bundled" OFF)
-option(SPDLOG_NO_EXCEPTIONS "Compile with -fno-exceptions. Call abort() on any spdlog exceptions" OFF)
+mark_as_advanced(FORCE SPDLOG_FMT_EXTERNAL_HO)
+
+option(SPDLOG_NO_EXCEPTIONS 
+"Compile with -fno-exceptions. Call abort() on any spdlog exceptions" OFF)
+mark_as_advanced(FORCE SPDLOG_NO_EXCEPTIONS)
 
 if(SPDLOG_FMT_EXTERNAL AND SPDLOG_FMT_EXTERNAL_HO)
     message(FATAL_ERROR "SPDLOG_FMT_EXTERNAL and SPDLOG_FMT_EXTERNAL_HO are mutually exclusive")
@@ -104,30 +129,45 @@ endif()
 # misc tweakme options
 if(WIN32)
     option(SPDLOG_WCHAR_SUPPORT "Support wchar api" OFF)
+    mark_as_advanced(SPDLOG_WCHAR_SUPPORT)
     option(SPDLOG_WCHAR_FILENAMES "Support wchar filenames" OFF)
+    mark_as_advanced(SPDLOG_WCHAR_FILENAMES)
 else()
     set(SPDLOG_WCHAR_SUPPORT OFF CACHE BOOL "non supported option" FORCE)
+
     set(SPDLOG_WCHAR_FILENAMES OFF CACHE BOOL "non supported option" FORCE)
-endif()
+endif()                     
 
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
     option(SPDLOG_CLOCK_COARSE "Use CLOCK_REALTIME_COARSE instead of the regular clock," OFF)
+    mark_as_advanced(SPDLOG_CLOCK_COARSE)
 else()
     set(SPDLOG_CLOCK_COARSE OFF CACHE BOOL "non supported option" FORCE)
+    mark_as_advanced(SPDLOG_CLOCK_COARSE)
 endif()
 
 option(SPDLOG_PREVENT_CHILD_FD "Prevent from child processes to inherit log file descriptors" OFF)
+mark_as_advanced(SPDLOG_PREVENT_CHILD_FD)
+
 option(SPDLOG_NO_THREAD_ID "prevent spdlog from querying the thread id on each log call if thread id is not needed" OFF)
+mark_as_advanced(SPDLOG_NO_THREAD_ID)
+
 option(SPDLOG_NO_TLS "prevent spdlog from using thread local storage" OFF)
+mark_as_advanced(SPDLOG_NO_TLS)
+
 option(
     SPDLOG_NO_ATOMIC_LEVELS
     "prevent spdlog from using of std::atomic log levels (use only if your code never modifies log levels concurrently"
     OFF)
+mark_as_advanced(SPDLOG_NO_ATOMIC_LEVELS)
+
 option(SPDLOG_DISABLE_DEFAULT_LOGGER "Disable default logger creation" OFF)
+mark_as_advanced(SPDLOG_DISABLE_DEFAULT_LOGGER)
 
 # clang-tidy
 if(${CMAKE_VERSION} VERSION_GREATER "3.5")
     option(SPDLOG_TIDY "run clang-tidy" OFF)
+    mark_as_advanced(SPDLOG_TIDY)
 endif()
 
 if(SPDLOG_TIDY)

@@ -23,11 +23,13 @@ file(
 
 # is this lib file ?
 # Set the output directory for the binaries
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE}/${EDITOR_NAME})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY 
+${CMAKE_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE}/${EDITOR_NAME})
 
 # is this obj file ?
 # Set the output directory for the intermediate files
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin-int/${CMAKE_BUILD_TYPE}/${EDITOR_NAME})
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY 
+${CMAKE_SOURCE_DIR}/bin-int/${CMAKE_BUILD_TYPE}/${EDITOR_NAME})
 
 
 set(ENGINE_INCLUDES
@@ -74,6 +76,7 @@ add_library(
     SHARED 
     ${ENGINE_HEADERS}
     ${ENGINE_SOURCES}
+    ${ENGINE_INCLUDES}
     )
 
 # Add precompiled header source file
@@ -90,6 +93,7 @@ target_compile_definitions(
     PRIVATE 
     _CRT_SECURE_NO_WARNINGS 
     GLFW_INCLUDE_NONE
+    HZ_DYNAMIC_LINK
     _SILENCE_STDEXT_ARR_ITERS_DEPRECATION_WARNING
     )
 # where to find header files

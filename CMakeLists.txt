@@ -47,12 +47,12 @@ if(ENABLE_SANITIZE_ADDR OR ENABLE_SANITIZE_UNDEF)
 endif()
 
 # clang format, cmake format
-add_cmake_format_target()
-add_clang_format_target()
+# add_cmake_format_target()
+# add_clang_format_target()
 
 # search for other CMakeLists.txt files in subdirectories
 add_subdirectory(BJGameEngine)          # Engine
-add_subdirectory(Hazel-Editor)          # Editor
+add_subdirectory(BJEditor)          # Editor
 add_subdirectory(ApplicationProject)    # Executable
 add_subdirectory(external)              # external libraries
 # add_subdirectory(tests)                 # tests
@@ -62,6 +62,7 @@ add_subdirectory(external)              # external libraries
 # add as sub directory...
 # add sub modules cmake files
 add_git_submodule(external/Box2D)
+
 add_git_submodule(external/imgui)
 add_git_submodule(external/Glad)
 add_git_submodule(external/glm)

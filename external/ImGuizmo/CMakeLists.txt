@@ -16,8 +16,8 @@ IMGUIZMO_IMGUI_INCLUDES
 target_include_directories(
     ImGuizmo
     PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/ImGuizmo
-    ${CMAKE_SOURCE_DIR}/external/imgui
+    "${CMAKE_CURRENT_SOURCE_DIR}/ImGuizmo"
+    "${CMAKE_SOURCE_DIR}/external/imgui"
     # "${CMAKE_SOURCE_DIR}/external/imgui/backends/imgui_impl_glfw.h"
     # "${CMAKE_SOURCE_DIR}/external/imgui/backends/imgui_impl_opengl3.h"
     )
