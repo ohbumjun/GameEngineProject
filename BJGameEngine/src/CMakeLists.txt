@@ -118,7 +118,7 @@ target_link_libraries(
 # 이것을 imgui 코드들은 하지 않도록 하는 것이다.
 set_source_files_properties(
     ${CMAKE_CURRENT_SOURCE_DIR}/external/ImGuizmo/**.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/stb_image/ImGuizmo/**.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/external/stb_image/**.cpp
     PROPERTIES COMPILE_FLAGS "/Yc;pch.h"
 )
 
