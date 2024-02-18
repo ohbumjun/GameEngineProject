@@ -1,8 +1,8 @@
 ﻿
 #include "hzpch.h"
-#include "GC.h"
-#include "GCObject.h"
-#include "../Reflection/Reflection.h"
+#include "Hazel/Core/GC/GC.h"
+#include "Hazel/Core/GC/GCObject.h"
+#include "Hazel/Core/Reflection/Reflection.h"
 
 GC::GC()
 {

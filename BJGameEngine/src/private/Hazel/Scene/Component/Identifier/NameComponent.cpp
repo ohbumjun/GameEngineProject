@@ -1,5 +1,6 @@
 ﻿#include "hzpch.h"
-#include "NameComponent.h"
+#include "Hazel/Scene/Component/Identifier/NameComponent.h"
+
 #include "Hazel/Core/Serialization/Serializer.h"
 
 Hazel::NameComponent::NameComponent()

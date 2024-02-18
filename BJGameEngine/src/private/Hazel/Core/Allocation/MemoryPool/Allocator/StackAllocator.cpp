@@ -1,5 +1,5 @@
-#include "hzpch.h"
-#include "StackAllocator.h"
+﻿#include "hzpch.h"
+#include "Hazel/Core/Allocation/MemoryPool/Allocator/StackAllocator.h"
 #include "Hazel/Utils/EngineUtil.h"
 
 StackAllocator::StackAllocator(size_t totalSize) :

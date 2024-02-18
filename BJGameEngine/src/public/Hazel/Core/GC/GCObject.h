@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "../Reflection/Reflection.h"
 #include "GCInfo.h"

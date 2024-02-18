@@ -1,5 +1,5 @@
 ﻿#include "hzpch.h"
-#include "OpenGLShader.h"
+#include "Platform/OpenGL/OpenGLShader.h"
 #include "Renderer/Renderer.h"
 #include <fstream>
 #include <glad/glad.h>

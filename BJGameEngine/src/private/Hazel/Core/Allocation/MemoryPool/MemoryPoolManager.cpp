@@ -1,7 +1,7 @@
 #include "hzpch.h"
-#include "MemoryPoolManager.h"
-#include "FixedMemoryPool.h"
-#include "VariantMemoryPool.h"
+#include "Hazel/Core/Allocation/MemoryPool/MemoryPoolManager.h"
+#include "Hazel/Core/Allocation/MemoryPool/FixedMemoryPool.h"
+#include "Hazel/Core/Allocation/MemoryPool/VariantMemoryPool.h"
 
 MemoryPoolManager::MemoryPoolManager()
 {

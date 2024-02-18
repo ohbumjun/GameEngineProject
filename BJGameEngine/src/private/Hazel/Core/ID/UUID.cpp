@@ -1,6 +1,5 @@
 #include "hzpch.h"
-#include "UUID.h"
-
+#include "Hazel/Core/ID/UUID.h"
 #include <random>
 
 #include <unordered_map>

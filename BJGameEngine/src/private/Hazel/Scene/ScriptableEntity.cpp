@@ -1,2 +1,2 @@
 #include "hzpch.h"
-#include "ScriptableEntity.h"
+#include "Hazel/Scene/ScriptableEntity.h"

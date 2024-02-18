@@ -1,6 +1,6 @@
 #include "hzpch.h"
-#include "VariantMemoryPool.h"
-#include "Allocator/FreeListAllocator.h"
+#include "Hazel/Core/Allocation/MemoryPool/VariantMemoryPool.h"
+#include "Hazel/Core/Allocation/MemoryPool/Allocator/FreeListAllocator.h"
 
 VariantMemoryPool::VariantMemoryPool()
 {

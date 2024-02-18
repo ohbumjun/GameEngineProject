@@ -1,8 +1,8 @@
 #include "hzpch.h"
-#include "VertexArray.h"
+#include "Renderer/VertexArray.h"
 #include "Platform/OpenGL/OpenGLVertexArray.h"
-#include "Renderer.h"
-#include "RendererAPI.h"
+#include "Renderer/Renderer.h"
+#include "Renderer/RendererAPI.h"
 
 namespace Hazel
 {

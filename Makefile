@@ -8,7 +8,7 @@ else
 	rm -rf build
 endif
 	mkdir build
-	
+
 conan_d:
 	rm -rf build
 	mkdir build

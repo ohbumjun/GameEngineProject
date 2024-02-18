@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <cassert>
 
 template <typename KEY, typename VALUE>

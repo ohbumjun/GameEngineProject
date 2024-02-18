@@ -1,5 +1,5 @@
 #include "hzpch.h"
-#include "BoxCollider2DComponent.h"
+#include "Hazel/Scene/Component/Collider/BoxCollider2DComponent.h"
 #include "Hazel/Core/Serialization/Serializer.h"
 
 Hazel::BoxCollider2DComponent::BoxCollider2DComponent()

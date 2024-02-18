@@ -1,7 +1,7 @@
 #include "hzpch.h"
-#include "ObjectDB.h"
-#include "BaseObject.h"
-#include "ObjectID.h"
+#include "Hazel/Core/Object/ObjectDB.h"
+#include "Hazel/Core/Object/BaseObject.h"
+#include "Hazel/Core/Object/ObjectID.h"
 
 namespace Hazel
 {

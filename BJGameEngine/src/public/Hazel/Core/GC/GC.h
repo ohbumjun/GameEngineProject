@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "hzpch.h"
 #include "../Allocation/MemoryPool/MemoryPoolManager.h"

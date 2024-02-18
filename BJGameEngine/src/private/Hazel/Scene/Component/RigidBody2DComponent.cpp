@@ -1,5 +1,6 @@
 #include "hzpch.h"
-#include "RigidBody2DComponent.h"
+
+#include "Hazel/Scene/Component/RigidBody2DComponent.h"
 #include "Hazel/Core/Serialization/Serializer.h"
 
 namespace Hazel

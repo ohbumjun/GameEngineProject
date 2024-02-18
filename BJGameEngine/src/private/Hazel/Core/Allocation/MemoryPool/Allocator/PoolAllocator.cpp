@@ -1,5 +1,5 @@
 ﻿#include "hzpch.h"
-#include "PoolAllocator.h"
+#include "Hazel/Core/Allocation/MemoryPool/Allocator/PoolAllocator.h"
 
 PoolAllocator::PoolAllocator(const size_t totalSize, const size_t chunkSize)
 	: MemoryPoolAllocator(totalSize),

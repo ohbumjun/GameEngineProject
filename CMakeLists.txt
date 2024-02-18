@@ -1,3 +1,4 @@
+# set(CMAKE_CONFIGURATION_TYPES "Debug;RelWithDebInfo" CACHE STRING "" FORCE)
 cmake_minimum_required(VERSION 3.22)
 
 project(
@@ -19,42 +20,22 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 #     based on compile_commands.json
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# can pass variable to set 'COMPILE_EXECUTABLE' value in command line
-# ex) cmake .. -DCOMPILE_EXECUTABLE=ON
-option(COMPILE_EXECUTABLE "Whether to compile the executable" ON)
-
-# compiler warning not off !
-option(ENABLE_WARNINGS "Enable to add warnings to a target." ON)# always should be on
-
-# if single one warning occurs, compilation will fail
-option(ENABLE_WARNINGS_AS_ERRORS "Enable to treat warnings as errors." OFF)
-
-# sanitizer : runtime tool that helps to find memory corruption, memory leak etc.
-option(ENABLE_SANITIZE_ADDR "Enable address sanitizer" ON)
-option(ENABLE_SANITIZE_UNDEF "Enable undefined sanitizer" ON)
-
-option(ENABLE_LTO "Enable LTO/IPO" ON)
-
-option(ENABLE_CLANG_TIDY "Enable to add clang tidy." ON)
-
-# if not cmake project ? stick to AddGitSubmodule function
-# then define own library target
-# ex) call function in cmake module file
-#     - add_git_submodule(external/json)
-option(ENABLE_TESTING "Enable Unit Testing Build" ON)
-
-# Variable Definitions
+## -- Variable Definitions -- ##
 set(ENGINE_NAME "Engine")
 set(EDITOR_NAME "Editor")
 set(EXECUTABLE_NAME "Executable")
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/bin")
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/bin")
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/bin")
+## -- Options -- ##
+# can pass variable to set 'COMPILE_EXECUTABLE' value in command line
+# ex) cmake .. -DCOMPILE_EXECUTABLE=ON
+option(COMPILE_EXECUTABLE "Whether to compile the executable" ON)
 
-# cmake files
-include(Tools)
+
+## -- include cmake files -- ##
+# include(Tools)
+
+include(AddGitSubmodule)
 
 if(ENABLE_LTO)
     # include(LTO)
@@ -66,12 +47,36 @@ if(ENABLE_SANITIZE_ADDR OR ENABLE_SANITIZE_UNDEF)
 endif()
 
 # clang format, cmake format
-# add_cmake_format_target()
-# add_clang_format_target()
+add_cmake_format_target()
+add_clang_format_target()
 
 # search for other CMakeLists.txt files in subdirectories
 add_subdirectory(BJGameEngine)          # Engine
-add_subdirectory(BJEditor)          # Editor
+add_subdirectory(Hazel-Editor)          # Editor
 add_subdirectory(ApplicationProject)    # Executable
 add_subdirectory(external)              # external libraries
-add_subdirectory(tests)                 # tests
+# add_subdirectory(tests)                 # tests
+
+## -- SubModules -- ##
+# Do not Use below code since do not want to
+# add as sub directory...
+# add sub modules cmake files
+add_git_submodule(external/Box2D)
+add_git_submodule(external/imgui)
+add_git_submodule(external/Glad)
+add_git_submodule(external/glm)
+
+set(GLFW_BUILD_EXAMPLES OFF CACHE INTERNAL "Build the GLFW example programs")
+set(GLFW_BUILD_TESTS OFF CACHE INTERNAL "Build the GLFW test programs")
+set(GLFW_BUILD_DOCS OFF CACHE INTERNAL "Build the GLFW documentation")
+set(GLFW_INSTALL OFF CACHE INTERNAL "Generate installation target")
+
+add_git_submodule(external/GLFW)
+add_git_submodule(external/ImGuizmo)
+# add_git_submodule(external/RapidJson)
+add_git_submodule(external/spdlog)
+add_git_submodule(external/stb_image)
+
+# clang format, cmake format
+# add_cmake_format_target()
+# add_clang_format_target()

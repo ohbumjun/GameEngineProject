@@ -1,5 +1,5 @@
 #include "hzpch.h"
-#include "CircleCollider2DComponent.h"
+#include "Hazel/Scene/Component/Collider/CircleCollider2DComponent.h"
 #include "Hazel/Core/Serialization/Serializer.h"
 
 
