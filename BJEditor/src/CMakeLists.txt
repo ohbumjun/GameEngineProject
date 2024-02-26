@@ -53,10 +53,10 @@ LIST(APPEND TOTAL_EDITOR_FILES ${EDITOR_SOURCES})
 # ADD_LIBRARY(${EDITOR_NAME}  SHARED ${TOTAL_EDITOR_FILES})
 ADD_EXECUTABLE(${EDITOR_NAME} ${TOTAL_EDITOR_FILES})
 
-target_include_directories(
-    ${EDITOR_NAME} 
-    PUBLIC 
-    ${EDITOR_INCLUDES})
+# target_include_directories(
+#     ${EDITOR_NAME} 
+#     PUBLIC 
+#     ${EDITOR_INCLUDES})
 
 target_link_libraries(
     ${EDITOR_NAME} 
