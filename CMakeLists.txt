@@ -67,7 +67,7 @@ add_subdirectory(external)              # external libraries
 # add sub modules cmake files
 add_git_submodule(external/Box2D)
 
-add_git_submodule(external/imgui)
+# add_git_submodule(external/imgui)
 add_git_submodule(external/Glad)
 add_git_submodule(external/glm)
 
@@ -77,7 +77,7 @@ set(GLFW_BUILD_DOCS OFF CACHE INTERNAL "Build the GLFW documentation")
 set(GLFW_INSTALL ON CACHE INTERNAL "Generate installation target")
 
 add_git_submodule(external/GLFW)
-add_git_submodule(external/ImGuizmo)
+# add_git_submodule(external/ImGuizmo)
 # add_git_submodule(external/RapidJson)
 add_git_submodule(external/spdlog)
 add_git_submodule(external/stb_image)

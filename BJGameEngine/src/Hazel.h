@@ -6,7 +6,7 @@
 #include "Hazel/Core/Core.h"
 
 /*Application*/
-#include "Hazel/Core/Application.h"
+#include "Hazel/Core/Application/Application.h"
 
 /*Layer*/
 #include "Hazel/Core/Layer/Layer.h"
@@ -52,7 +52,7 @@
 #include "Renderer/RenderCommand.h"
 #include "Renderer/Buffer/Buffer.h"
 #include "Renderer/Buffer/FrameBuffer.h"
-#include "Renderer/VertexArray.h"
+#include "Renderer/Buffer/VertexArray.h"
 
 /*Camera*/
 #include "Renderer/Camera/OrthographicCameraController.h"

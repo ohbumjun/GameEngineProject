@@ -1,50 +1,83 @@
 # CONFIGURE_DEPENDS : when file is added or removed, cmake will be reconfigured
 # set(ENGINE_SOURCES "my_lib.cc")
-file(
-    GLOB_RECURSE 
-    EDITOR_HEADERS 
-"${CMAKE_CURRENT_SOURCE_DIR}/*.h")
 
-file(
-    GLOB_RECURSE 
-    EDITOR_SOURCES 
-"${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
+SET(TOTAL_EDITOR_FILES) # lv1engine 은 그냥 그대로 사용함 ;
 
-set(EDITOR_INCLUDES 
-"${CMAKE_SOURCE_DIR}/BJGameEngine/src"
-"${CMAKE_SOURCE_DIR}/external/spdlog/include"
-"${CMAKE_SOURCE_DIR}/external/glm"
-"${CMAKE_SOURCE_DIR}/external/entt/include"
-"${CMAKE_SOURCE_DIR}/external/RapidJson"
-"${CMAKE_SOURCE_DIR}/external/ImGuizmo"
+SET(FILE_HEADERS 
+    public/File/FileManager.h
+    public/File/PathManager.h
 )
+SOURCE_GROUP("file/public" FILES ${FILE_HEADERS})
+LIST(APPEND TOTAL_EDITOR_FILES ${FILE_HEADERS})
+
+SET(FILE_SOURCES
+    private/File/FileManager.cpp
+    private/File/PathManager.cpp
+)
+SOURCE_GROUP("file/private" FILES ${FILE_SOURCES})
+LIST(APPEND TOTAL_EDITOR_FILES ${FILE_SOURCES})
 
 # Create filters for Visual Studio
-foreach(FILE ${EDITOR_SOURCES} ${EDITOR_HEADERS}) 
-    # Get the directory of the source file
-    get_filename_component(PARENT_DIR "${FILE}" DIRECTORY)
+# foreach(FILE ${EDITOR_SOURCES} ${EDITOR_HEADERS}) 
+#     # Get the directory of the source file
+#     get_filename_component(PARENT_DIR "${FILE}" DIRECTORY)
+# 
+#     # Remove common directory prefix to make the group
+#     string(REPLACE "${CMAKE_CURRENT_SOURCE_DIR}" "" GROUP "${PARENT_DIR}")
+# 
+#     # Make sure we are using windows slashes
+#     string(REPLACE "/" "\\" GROUP "${GROUP}")
+# 
+#     # Group into "Source Files" and "Header Files"
+#     if ("${FILE}" MATCHES ".*\\.cpp")
+#         set(GROUP "Source Files${GROUP}")
+#     elseif("${FILE}" MATCHES ".*\\.h")
+#         set(GROUP "Header Files${GROUP}")
+#     endif()
+# 
+#     source_group("${GROUP}" FILES "${FILE}")
+# endforeach()
 
-    # Remove common directory prefix to make the group
-    string(REPLACE "${CMAKE_CURRENT_SOURCE_DIR}" "" GROUP "${PARENT_DIR}")
+SET(PANEL_HEADERS 
+    public/Panel/ComponentPanel/CameraPanel.h
+    public/Panel/ContentBrowserPanel.h
+    public/Panel/SceneHierarchyPanel.h
+)
+SOURCE_GROUP("panel/public" FILES ${PANEL_HEADERS})
+LIST(APPEND TOTAL_EDITOR_FILES ${PANEL_HEADERS})
 
-    # Make sure we are using windows slashes
-    string(REPLACE "/" "\\" GROUP "${GROUP}")
+SET(PANEL_SOURCES
+    private/Panel/ComponentPanel/CameraPanel.cpp
+    private/Panel/ContentBrowserPanel.cpp
+    private/Panel/SceneHierarchyPanel.cpp
+)
+SOURCE_GROUP("panel/private" FILES ${PANEL_SOURCES})
+LIST(APPEND TOTAL_ENGINE_FILES ${PANEL_SOURCES})
 
-    # Group into "Source Files" and "Header Files"
-    if ("${FILE}" MATCHES ".*\\.cpp")
-        set(GROUP "Source Files${GROUP}")
-    elseif("${FILE}" MATCHES ".*\\.h")
-        set(GROUP "Header Files${GROUP}")
-    endif()
 
-    source_group("${GROUP}" FILES "${FILE}")
-endforeach()
+SET(EDITOR_HEADERS
+    public/EditorLayer.h
+    public/ParticleSystem.h
+)
+SOURCE_GROUP("panel/private" FILES ${EDITOR_HEADERS})
+LIST(APPEND TOTAL_EDITOR_FILES ${EDITOR_HEADERS})
 
-add_executable(
-    ${EDITOR_NAME} 
 
-    ${EDITOR_HEADERS}
-    ${EDITOR_SOURCES}
+SET(EDITOR_SOURCES
+    private/EditorLayer.cpp
+    private/ParticleSystem.cpp
+    private/HazelEditorApp.cpp
+)
+SOURCE_GROUP("panel/private" FILES ${EDITOR_SOURCES})
+LIST(APPEND TOTAL_EDITOR_FILES ${EDITOR_SOURCES})
+
+set(EDITOR_INCLUDES 
+"${CMAKE_SOURCE_DIR}/BJEditor/src/public"
+)
+
+# ADD_LIBRARY(${EDITOR_NAME}  SHARED ${TOTAL_EDITOR_FILES})
+add_executable(${EDITOR_NAME} 
+${TOTAL_EDITOR_FILES}
 )
 
 target_compile_definitions(
@@ -60,10 +93,47 @@ target_include_directories(
     ${EDITOR_INCLUDES})
 
 target_link_libraries(
-    ${EDITOR_NAME} 
-    PUBLIC # other libraries
-           # ex) projectname::libraryname (refer to other github cmakelists.txt)
+    ${EDITOR_NAME}
+    PRIVATE
     ${ENGINE_NAME})
+
+# file(
+#     GLOB_RECURSE 
+#     EDITOR_HEADERS 
+#     CONFIGURE_DEPENDS 
+# "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
+# 
+# file(
+#     GLOB_RECURSE 
+#     EDITOR_SOURCES 
+#     CONFIGURE_DEPENDS 
+# "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
+# 
+# set(EDITOR_INCLUDES 
+# "${CMAKE_SOURCE_DIR}/BJGameEngine/src"
+# "${CMAKE_SOURCE_DIR}/external/spdlog/include"
+# "${CMAKE_SOURCE_DIR}/external/glm"
+# "${CMAKE_SOURCE_DIR}/external/entt/include"
+# "${CMAKE_SOURCE_DIR}/external/RapidJson"
+# "${CMAKE_SOURCE_DIR}/external/ImGuizmo"
+# )
+# 
+# add_executable(
+#     ${EDITOR_NAME} 
+# 
+#     ${EDITOR_HEADERS}
+#     ${EDITOR_SOURCES}
+# )
+# 
+# target_include_directories(
+#     ${EDITOR_NAME} 
+#     PUBLIC ${EDITOR_INCLUDES})
+# 
+# target_link_libraries(
+#     ${EDITOR_NAME} 
+#     PUBLIC # other libraries
+#            # ex) projectname::libraryname (refer to other github cmakelists.txt)
+#     ${ENGINE_NAME})
 
 # 아래 두 줄을 통해서 해당 경로에 있는 모든 cpp 파일들을 pch 를 사용하지 않을 것이라고 하는 것이다
 # 그러면 hazel engine 은 현재 hzpch.cpp 를 무조건 모든 cpp 파일에서 include 하게 해놨는데

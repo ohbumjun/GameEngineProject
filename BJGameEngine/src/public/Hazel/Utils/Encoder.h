@@ -6,34 +6,30 @@ namespace Utils
 
 /*------ Base64 encoding Table ------*/
 static const char MimeBase64[] = {
-    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
-    'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
-    'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
-    'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f',
-    'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
-    'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
-    'w', 'x', 'y', 'z', '0', '1', '2', '3',
-    '4', '5', '6', '7', '8', '9', '+', '/'
-};
+    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+    'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+    'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '/'};
 
 /*------ Base64 Decoding Table ------*/
 static int DecodeMimeBase64[256] = {
-    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,  /* 00-0F */
-    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,  /* 10-1F */
-    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,62,-1,-1,-1,63,  /* 20-2F */
-    52,53,54,55,56,57,58,59,60,61,-1,-1,-1,-1,-1,-1,  /* 30-3F */
-    -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,  /* 40-4F */
-    15,16,17,18,19,20,21,22,23,24,25,-1,-1,-1,-1,-1,  /* 50-5F */
-    -1,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,  /* 60-6F */
-    41,42,43,44,45,46,47,48,49,50,51,-1,-1,-1,-1,-1,  /* 70-7F */
-    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,  /* 80-8F */
-    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,  /* 90-9F */
-    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,  /* A0-AF */
-    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,  /* B0-BF */
-    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,  /* C0-CF */
-    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,  /* D0-DF */
-    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,  /* E0-EF */
-    -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1   /* F0-FF */
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, /* 00-0F */
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, /* 10-1F */
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 62, -1, -1, -1, 63, /* 20-2F */
+    52, 53, 54, 55, 56, 57, 58, 59, 60, 61, -1, -1, -1, -1, -1, -1, /* 30-3F */
+    -1, 0,  1,  2,  3,  4,  5,  6,  7,  8,  9,  10, 11, 12, 13, 14, /* 40-4F */
+    15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, -1, -1, -1, -1, -1, /* 50-5F */
+    -1, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, /* 60-6F */
+    41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, -1, -1, -1, -1, -1, /* 70-7F */
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, /* 80-8F */
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, /* 90-9F */
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, /* A0-AF */
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, /* B0-BF */
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, /* C0-CF */
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, /* D0-DF */
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, /* E0-EF */
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1  /* F0-FF */
 };
 
 /*
@@ -46,41 +42,45 @@ static int DecodeMimeBase64[256] = {
 // encodedText : 결과를 담을 변수 주소
 class Encoder
 {
-public :
-    static size_t calculateCharArraySize(char* array) {
+public:
+    static size_t calculateCharArraySize(char *array)
+    {
         size_t count = 0;
-        while (array[count] != '\0') {
+        while (array[count] != '\0')
+        {
             count++;
         }
         return count;
     }
 
-    static int base64_encode_length(char* text, int numBytes)
+    static int base64_encode_length(char *text, int numBytes)
     {
-        int   size;
+        int size;
         size = (4 * (numBytes / 3)) + (numBytes % 3 ? 4 : 0) + 1;
         return size;
     }
-    static int base64_encode(char* text, int numBytes, char** encodedText)
+    static int base64_encode(char *text, int numBytes, char **encodedText)
     {
-        char input[3] = { 0,0,0 };
-        char output[4] = { 0,0,0,0 };
-        int   index, i, j, size;
-        char* p, * plen;
+        char input[3] = {0, 0, 0};
+        char output[4] = {0, 0, 0, 0};
+        int index, i, j, size;
+        char *p, *plen;
         plen = text + numBytes - 1;
         size = (4 * (numBytes / 3)) + (numBytes % 3 ? 4 : 0) + 1;
-        (*encodedText) = (char*)malloc(size);
+        (*encodedText) = (char *)malloc(size);
         j = 0;
-        for (i = 0, p = text; p <= plen; i++, p++) {
+        for (i = 0, p = text; p <= plen; i++, p++)
+        {
             index = i % 3;
             input[index] = *p;
 
             // 3 개의 글자를 24 비트 버퍼에 담는다.
             // 이제 이것을 6 비트 * 4 형태로 변환할 것이다.
             // 3번째 글자를 다 입력했거나 / 문자열 끝에 도달했을 때
-            if (index == 2 || p == plen) {
+            if (index == 2 || p == plen)
+            {
                 // 상위 6비트 채우기
-                // 0xFC : 1111 1100 
+                // 0xFC : 1111 1100
                 // 1) input[0] 이라는 8 bit 중에서 상위 6개 bit 추출, 6 개 비트 형태로 만들기
                 output[0] = ((input[0] & 0xFC) >> 2);
 
@@ -123,21 +123,24 @@ public :
     - 만약 '=' 로 패딩되었다면 제외
     - ASCII 를 다시 문자열로 읽어 출력
     */
-    static int base64_decode(char* encodedText, int numBytes, char* decodedText)
+    static int base64_decode(char *encodedText, int numBytes, char *decodedText)
     {
-        const char* cp;
+        const char *cp;
         int space_idx = 0, phase;
         int d, prev_d = 0;
         unsigned char c;
         space_idx = 0;
         phase = 0;
-        for (cp = encodedText; *cp != '\0'; ++cp) {
+        for (cp = encodedText; *cp != '\0'; ++cp)
+        {
             // 문자열 하나를 해당값의 2진법으로 표현
             d = DecodeMimeBase64[(int)*cp];
 
             // 24비트 공간에 6비트씩 4개 값 넣기
-            if (d != -1) {
-                switch (phase) {
+            if (d != -1)
+            {
+                switch (phase)
+                {
                 case 0:
                     ++phase;
                     break;
@@ -170,10 +173,7 @@ public :
         return space_idx;
     }
 
-private :
- 
+private:
 };
 
-}
-
-
+} // namespace Utils

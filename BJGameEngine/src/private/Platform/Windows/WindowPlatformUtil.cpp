@@ -15,7 +15,7 @@ directly from the GLFW API.
 #define GLFW_EXPOSE_NATIVE_WIN32
 #include <GLFW/glfw3native.h>
 
-#include "Hazel/Core/Application.h"
+#include "Hazel/Core/Application/Application.h"
 
 namespace Hazel
 {

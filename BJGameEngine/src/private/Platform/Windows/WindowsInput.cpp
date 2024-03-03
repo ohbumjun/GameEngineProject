@@ -2,7 +2,7 @@
 #include "Hazel/Input/Input.h"
 
 #include <GLFW/glfw3.h>
-#include "Hazel/Core/Application.h"
+#include "Hazel/Core/Application/Application.h"
 
 namespace Hazel
 {

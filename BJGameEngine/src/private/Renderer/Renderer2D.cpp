@@ -1,6 +1,6 @@
 ﻿#include "hzpch.h"
 #include "Renderer/Renderer2D.h"
-#include "Renderer/VertexArray.h"
+#include "Renderer/Buffer/VertexArray.h"
 #include "Hazel/Asset/Shader/Shader.h"
 #include "Renderer/Buffer/UniformBuffer.h"
 #include "Renderer/RenderCommand.h"

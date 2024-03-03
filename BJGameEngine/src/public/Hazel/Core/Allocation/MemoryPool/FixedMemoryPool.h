@@ -1,7 +1,8 @@
 #pragma once
 
 #include "BaseMemoryPool.h"
-#include "Allocator/PoolAllocator.h"
+#include "Hazel/Core/Allocation/MemoryPool/BaseMemoryPool.h"
+#include "Hazel/Core/Allocation/Allocator/PoolAllocator.h"
 
 class FixedMemoryPool : public BaseMemoryPool
 {

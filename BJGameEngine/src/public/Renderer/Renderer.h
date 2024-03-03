@@ -1,6 +1,6 @@
 #pragma once
 
-#include "VertexArray.h"
+#include "Renderer/Buffer/VertexArray.h"
 #include "RendererAPI.h"
 #include "RenderCommand.h"
 #include "Camera/OrthographicCamera.h"
