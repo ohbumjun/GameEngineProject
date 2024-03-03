@@ -713,24 +713,13 @@ set_source_files_properties(
 )
 
 # Windows specific settings
-if(CMAKE_SYSTEM_NAME MATCHES "Windows")
+if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
 
     # Set the system version to the latest
     set(CMAKE_SYSTEM_VERSION "latest")
-    message(STATUS "Engine CMake System : Windows")
 
     # warning for user
     message(WARNING "Test Warning Message")
-
-    # warning for developer
-    # message(AUTHOR_WARNING "Test Warning Message")
-
-    # macro for suppressing developer warnings (ON : above AUTHOR_WARNING not shows)
-    # set(CMAKE_SUPPRESS_DEVELOPER_WARNINGS OFF CACHE INTERNAL "Suppress Developer Warnings")
-    
-    # error for developer
-    # configuration still continues but build file is not generated
-    # message(SEND_ERROR "Test Error Message")
 
     # Define Hazel specific preprocessor macros
     target_compile_definitions(

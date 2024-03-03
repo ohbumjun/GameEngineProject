@@ -20,6 +20,27 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 #     based on compile_commands.json
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+## -- Useful Predifined Variables -- ##
+# OS Name ex) Darwin(MacOS), Linux, Windows
+message(STATUS "CMAKE_SYSTEM_NAME : ${CMAKE_SYSTEM_NAME}")
+
+# OS Version
+message(STATUS "CMAKE_SYSTEM_VERSION : ${CMAKE_SYSTEM_VERSION}") 
+
+# OS Name - OS Version
+message(STATUS "CMAKE_SYSTEM : ${CMAKE_SYSTEM}")  
+
+# CPU-Architecture ex) x86, x86_64, arm, arm64
+message(STATUS "CMAKE_SYSTEM_PROCESSOR : ${CMAKE_SYSTEM_PROCESSOR}")  
+
+# CMake 를 "run" 하는 시스템의 이름
+# ex) Cross -Compiling 을 할 때, Build 시스템과 Run 시스템이 다를 수 있다.
+# ex) CMAKE_SYSTEM 은 "Build" 시스템의 이름을 나타낸다.
+# message(STATUS "CMAKE_HOST_SYSTEM               : ${CMAKE_HOST_SYSTEM}")  
+# message(STATUS "CMAKE_HOST_SYSTEM_NAME      : ${CMAKE_HOST_SYSTEM_NAME}")  
+# message(STATUS "CMAKE_HOST_SYSTEM_VERSION : ${CMAKE_HOST_SYSTEM_VERSION}")  
+# message(STATUS "CMAKE_HOST_SYSTEM_PROCESSOR : ${CMAKE_HOST_SYSTEM_PROCESSOR}")  
+
 ## -- Variable Definitions -- ##
 set(ENGINE_NAME "Engine")
 set(EDITOR_NAME "Editor")
@@ -55,10 +76,10 @@ add_definitions(-DNOMINMAX)
 # add_clang_format_target()
 
 # search for other CMakeLists.txt files in subdirectories
+add_subdirectory(external)              # external libraries
 add_subdirectory(BJGameEngine)          # Engine
 add_subdirectory(BJEditor)              # Editor
 add_subdirectory(ApplicationProject)    # Executable
-add_subdirectory(external)              # external libraries
 # add_subdirectory(tests)                 # tests
 
 ## -- SubModules -- ##
@@ -71,6 +92,8 @@ add_git_submodule(external/Box2D)
 add_git_submodule(external/Glad)
 add_git_submodule(external/glm)
 
+# CACHE : set variable as global variable
+# INTERNAL : not shown in cmake-gui
 set(GLFW_BUILD_EXAMPLES OFF CACHE INTERNAL "Build the GLFW example programs")
 set(GLFW_BUILD_TESTS OFF CACHE INTERNAL "Build the GLFW test programs")
 set(GLFW_BUILD_DOCS OFF CACHE INTERNAL "Build the GLFW documentation")
@@ -85,3 +108,53 @@ add_git_submodule(external/stb_image)
 # clang format, cmake format
 # add_cmake_format_target()
 # add_clang_format_target()
+
+
+
+## -- Studies -- ##
+
+### -- 'message' command -- ###
+# Set the system version to the latest
+# set(CMAKE_SYSTEM_VERSION "latest")
+# message(STATUS "Engine CMake System : Windows")
+
+# warning for user
+# message(WARNING "Test Warning Message")
+
+# warning for developer
+# message(AUTHOR_WARNING "Test Warning Message")
+
+# macro for suppressing developer warnings (ON : above AUTHOR_WARNING not shows)
+# set(CMAKE_SUPPRESS_DEVELOPER_WARNINGS OFF CACHE INTERNAL "Suppress Developer Warnings")
+    
+# error for developer
+# configuration still continues but build file is not generated
+# message(SEND_ERROR "Test Error Message")
+
+# fatal error for developer
+# build , configuration both fails
+# message(FATAL_ERROR "Test Fatal Error Message")
+
+
+### -- 'file system' command -- ###
+# CMAKE_SOURCE_DIR : top level cmake file directory
+# CMAKE_CURRENT_SOURCE_DIR : current cmake file directory
+# CMAKE_BINARY_DIR : built result top level directory ex) /build
+# CMAKE_CURRENT_BINARY_DIR : built result 'current'  directory ex) /build/engine
+# CMAKE_CURRENT_LIST_DIR : current being executed CMakeLists.txt file directory
+
+# diff between "CMAKE_CURRENT_BINARY_DIR" and "CMAKE_CURRENT_LIST_DIR"
+# ex) Hazel/cmake/example.cmake -> include(cmake/example.cmake)
+#       즉, 윗단에서 cmake 폴더에 있는 example.cmake를 include하여 실행
+#     CMAKE_CURRENT_BINARY_DIR    : /Hazel -> cmake 안에 있는 directory 까지만 출력
+#     CMAKE_CURRENT_LIST_DIR        : /Hazel/cmake  -> 전체 경로 모두 출력
+#     즉, cmake 를 타고 들어갔을 때 해당 폴더 안에 있는 내용을 찾아야 하는 경우 
+#    CMAKE_CURRENT_LIST_DIR를 사용해야 함
+
+# include : including .cmake file ex) similary to #include in C++
+# ex) include(example.cmake) : execute example.cmake file 
+
+
+### -- 'predefined global variable' command -- ###
+# >> Platform
+# 

@@ -8,14 +8,14 @@ SET(FILE_HEADERS
     public/File/PathManager.h
 )
 SOURCE_GROUP("file/public" FILES ${FILE_HEADERS})
-LIST(APPEND TOTAL_EDITOR_FILES ${FILE_HEADERS})
+LIST(APPEND TOTAL_ENGINE_FILES ${FILE_HEADERS})
 
 SET(FILE_SOURCES
     private/File/FileManager.cpp
     private/File/PathManager.cpp
 )
 SOURCE_GROUP("file/private" FILES ${FILE_SOURCES})
-LIST(APPEND TOTAL_EDITOR_FILES ${FILE_SOURCES})
+LIST(APPEND TOTAL_ENGINE_FILES ${FILE_SOURCES})
 
 # Create filters for Visual Studio
 # foreach(FILE ${EDITOR_SOURCES} ${EDITOR_HEADERS}) 
@@ -44,7 +44,7 @@ SET(PANEL_HEADERS
     public/Panel/SceneHierarchyPanel.h
 )
 SOURCE_GROUP("panel/public" FILES ${PANEL_HEADERS})
-LIST(APPEND TOTAL_EDITOR_FILES ${PANEL_HEADERS})
+LIST(APPEND TOTAL_ENGINE_FILES ${PANEL_HEADERS})
 
 SET(PANEL_SOURCES
     private/Panel/ComponentPanel/CameraPanel.cpp
@@ -60,7 +60,7 @@ SET(EDITOR_HEADERS
     public/ParticleSystem.h
 )
 SOURCE_GROUP("panel/private" FILES ${EDITOR_HEADERS})
-LIST(APPEND TOTAL_EDITOR_FILES ${EDITOR_HEADERS})
+LIST(APPEND TOTAL_ENGINE_FILES ${EDITOR_HEADERS})
 
 
 SET(EDITOR_SOURCES
@@ -69,7 +69,7 @@ SET(EDITOR_SOURCES
     private/HazelEditorApp.cpp
 )
 SOURCE_GROUP("panel/private" FILES ${EDITOR_SOURCES})
-LIST(APPEND TOTAL_EDITOR_FILES ${EDITOR_SOURCES})
+LIST(APPEND TOTAL_ENGINE_FILES ${EDITOR_SOURCES})
 
 set(EDITOR_INCLUDES 
 "${CMAKE_SOURCE_DIR}/BJEditor/src/public"
@@ -77,7 +77,7 @@ set(EDITOR_INCLUDES
 
 # ADD_LIBRARY(${EDITOR_NAME}  SHARED ${TOTAL_EDITOR_FILES})
 add_executable(${EDITOR_NAME} 
-${TOTAL_EDITOR_FILES}
+${TOTAL_ENGINE_FILES}
 )
 
 target_compile_definitions(
@@ -94,7 +94,6 @@ target_include_directories(
 
 target_link_libraries(
     ${EDITOR_NAME}
-    PRIVATE
     ${ENGINE_NAME})
 
 # file(
