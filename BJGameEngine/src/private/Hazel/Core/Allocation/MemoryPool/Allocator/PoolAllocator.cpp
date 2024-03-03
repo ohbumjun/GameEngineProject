@@ -59,7 +59,7 @@ void* PoolAllocator::Allocate(const size_t allocateSize, const size_t alignment)
 	m_StkAddress.pop();
 
 	m_Used += m_ChunkSize;
-	m_Peak = std::max(m_Used, m_Peak);
+    m_Peak = std::max(m_Used, m_Peak);
 
 	return (void*)AllocAddress;
 }
@@ -75,7 +75,7 @@ void PoolAllocator::Free(void* ptr)
 	m_StkAddress.push((size_t)ptr);
 
 	m_Used -= m_ChunkSize;
-	m_Peak = std::max(m_Used, m_Peak);
+    m_Peak = std::max(m_Used, m_Peak);
 }
 
 void PoolAllocator::Init()

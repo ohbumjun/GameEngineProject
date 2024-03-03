@@ -46,6 +46,10 @@ if(ENABLE_SANITIZE_ADDR OR ENABLE_SANITIZE_UNDEF)
     # add_sanitizer_flags()
 endif()
 
+# 전역 definition
+# Set preprocessor definitions to avoid conflicts with minwindef.h (max) versus "std::max"
+add_definitions(-DNOMINMAX)
+
 # clang format, cmake format
 # add_cmake_format_target()
 # add_clang_format_target()

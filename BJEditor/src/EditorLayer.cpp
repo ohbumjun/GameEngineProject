@@ -28,6 +28,7 @@
 #include "Hazel/Scene/Component/Collider/BoxCollider2DComponent.h"
 #include "Hazel/Scene/Component/Collider/CircleCollider2DComponent.h"
 
+
 // 24 wide map
 static const uint32_t s_mapWidth = 24;
 static const char* s_MapTiles = 

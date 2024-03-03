@@ -22,8 +22,8 @@ class HAZEL_API Log
 
 		static void Init();
 
-		inline static Ref<spdlog::logger>& GetCoreLogger() { return s_CoreLogger; }
-		inline static Ref<spdlog::logger>& GetClientLogger() { return s_ClientLogger; }
+		static Ref<spdlog::logger>& GetCoreLogger() { return s_CoreLogger; }
+		static Ref<spdlog::logger>& GetClientLogger() { return s_ClientLogger; }
 
 	private :
          static Ref<spdlog::logger> s_CoreLogger;

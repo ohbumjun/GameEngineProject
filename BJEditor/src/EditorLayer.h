@@ -9,7 +9,6 @@
 #include "Renderer/Buffer/FrameBuffer.h"
 #include "Panel/ContentBrowserPanel.h"
 
-
 namespace HazelEditor
 {
 	class EditorLayer : public Hazel::Layer

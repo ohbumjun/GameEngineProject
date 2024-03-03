@@ -12,13 +12,13 @@ class HAZEL_API NameComponent : public Component
 		NameComponent();
 		NameComponent(const NameComponent& other) :
 			name(other.name)
-		{
-			NameComponent();
+        {
+            Reflection::RegistType<NameComponent>();
 		}
 		NameComponent(const std::string& name) :
 			name(name) 
 		{
-			NameComponent();
+            Reflection::RegistType<NameComponent>();
 		}
 
 		operator const std::string& () const { return name; }

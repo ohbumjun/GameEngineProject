@@ -48,7 +48,7 @@ void* StackAllocator::Allocate(const size_t allocSize, const size_t alignment)
 	m_Offset += (padding + allocSize);
 
 	m_Used = m_Offset;
-	m_Peak = std::max(m_Used, m_Peak);
+    m_Peak = std::max(m_Used, m_Peak);
 
 	return (void*)nextAddres;
 }

@@ -14,12 +14,12 @@ file(
 # is this lib file ?
 # Set the output directory for the binaries
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY 
-${CMAKE_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE}/${EDITOR_NAME})
+${CMAKE_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE}/${ENGINE_NAME})
 
 # is this obj file ?
 # Set the output directory for the intermediate files
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY 
-${CMAKE_SOURCE_DIR}/bin-int/${CMAKE_BUILD_TYPE}/${EDITOR_NAME})
+${CMAKE_SOURCE_DIR}/bin-int/${CMAKE_BUILD_TYPE}/${ENGINE_NAME})
 
 set(ENGINE_INCLUDES
     "${CMAKE_SOURCE_DIR}/BJGameEngine/src"
@@ -65,7 +65,6 @@ add_library(
     SHARED 
     ${ENGINE_HEADERS}
     ${ENGINE_SOURCES}
-    ${ENGINE_INCLUDES}
     )
 
 # Add precompiled header source file
@@ -79,15 +78,15 @@ target_precompile_headers(
 
 target_compile_definitions(
     ${ENGINE_NAME} 
-    PRIVATE 
+    PUBLIC 
     HZ_ENABLE_ASSERTS
     _CRT_SECURE_NO_WARNINGS 
     GLFW_INCLUDE_NONE
     _SILENCE_STDEXT_ARR_ITERS_DEPRECATION_WARNING
 
     # DLL
-    HZ_BUILD_DLL
     HZ_DYNAMIC_LINK
+    HZ_BUILD_DLL
     )
 # where to find header files
 # cpp file can include header files from "./~~"
@@ -109,6 +108,7 @@ target_link_libraries(
     opengl32.lib
     stb_image
     glfw
+    spdlog
     )
 
 # 아래 두 줄을 통해서 해당 경로에 있는 모든 cpp 파일들을 pch 를 사용하지 않을 것이라고 하는 것이다
@@ -129,10 +129,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
     target_compile_definitions(
         ${ENGINE_NAME} 
         PUBLIC
-        HZ_PROFILE
-        GLFW_INCLUDE_NONE
         HZ_PLATFORM_WINDOWS
-
     )
 endif()
 
@@ -145,9 +142,11 @@ if(CMAKE_BUILD_TYPE MATCHES "Debug")
 
     # game engine을 dll 로 만드는 경우 세팅
     # /MDd for MT runtime library in Debug
-    target_compile_options(${ENGINE_NAME} 
+    target_compile_options(
+        ${ENGINE_NAME} 
     PUBLIC 
-    /MDd)  # For MT runtime library
+    # For MT runtime library
+    /MDd)  
 
     # DEBUG_POSTFIX: Appends "d" 
     # to the library name in Debug configuration.
