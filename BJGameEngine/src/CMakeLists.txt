@@ -647,32 +647,13 @@ target_compile_definitions(
     HZ_DYNAMIC_LINK
     HZ_BUILD_DLL
     )
-# where to find header files
-# cpp file can include header files from "./~~"
+
+# 해당 프로젝트에 include 경로를 add 해주는 기능이다. 
+# - 
 target_include_directories(
     ${ENGINE_NAME} 
     PUBLIC 
     ${ENGINE_INCLUDES})
-# Create filters for Visual Studio
-# foreach(FILE ${ENGINE_SOURCES} ${ENGINE_HEADERS}) 
-#     # Get the directory of the source file
-#     get_filename_component(PARENT_DIR "${FILE}" DIRECTORY)
-# 
-#     # Remove common directory prefix to make the group
-#     string(REPLACE "${CMAKE_CURRENT_SOURCE_DIR}" "" GROUP "${PARENT_DIR}")
-# 
-#     # Make sure we are using windows slashes
-#     string(REPLACE "/" "\\" GROUP "${GROUP}")
-# 
-#     # Group into "Source Files" and "Header Files"
-#     if ("${FILE}" MATCHES ".*\\.cpp")
-#        set(GROUP "Source Files${GROUP}")
-#     elseif("${FILE}" MATCHES ".*\\.h")
-#        set(GROUP "Header Files${GROUP}")
-#     endif()
-# 
-#     source_group("${GROUP}" FILES "${FILE}")
-# endforeach()
 
 # create target, but not executable == library
 # STATIC : staic library    ex) .lib
