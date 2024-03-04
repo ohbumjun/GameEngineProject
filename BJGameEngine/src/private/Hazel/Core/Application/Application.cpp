@@ -19,7 +19,7 @@ namespace Hazel
 #define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 
 	// make it as single ton
-	Application* Application::s_Instance = nullptr;
+	Application *Application::s_Instance = nullptr;
 
 	Application::Application(const ApplicationSpecification& specification)
 		: m_Specification(specification)

@@ -9,6 +9,7 @@ add_executable(
 
 target_link_libraries(
     ${EXECUTABLE_NAME} 
+    PRIVATE
     ${ENGINE_NAME})
 
 

@@ -645,34 +645,28 @@ target_compile_definitions(
 
     # DLL
     HZ_DYNAMIC_LINK
-    HZ_BUILD_DLL
     )
 
+target_compile_definitions(
+    ${ENGINE_NAME} 
+    PRIVATE 
+    HZ_BUILD_DLL
+   )
+
 # 해당 프로젝트에 include 경로를 add 해주는 기능이다. 
-# - 
+# - 해당 프로젝트에서 사용하는 header 경로 추가
+# - PUBLIC       : 현재 target 뿐만 아니라, 해당 경로에 dependent 한 target 에도 추가
+# - PRIVATE     : 현재 target only (종속성 전파 X)
+# - INTERFACE : 현재 target X, 해당 경로에 dependent 한 target 에만 추가
 target_include_directories(
     ${ENGINE_NAME} 
     PUBLIC 
     ${ENGINE_INCLUDES})
 
-# create target, but not executable == library
-# STATIC : staic library    ex) .lib
-# SHARED : dynamic library  ex) .dll
-# add_library(
-#     ${ENGINE_NAME} 
-#     SHARED 
-#     ${TOTAL_ENGINE_FILES}
-#     ${ENGINE_SOURCES}
-#     ${ENGINE_INCLUDES}
-#     )
-
-
-
 # link library to own library
 target_link_libraries(
     ${ENGINE_NAME}
-    PUBLIC # other libraries
-           # ex) projectname::libraryname (refer to other github cmakelists.txt)
+    PUBLIC 
     box2d  # find project name in actual cmakefile
     # imgui
     # ImGuizmo
@@ -684,6 +678,15 @@ target_link_libraries(
     spdlog
     )
 
+# target 에 컴파일 옵션을 add 할 때 사용하는 함수
+# PUBLIC : 현재 target 뿐만 아니라, 이 녀석을 link 건 다른 target 까지도 link
+# PRIVATE : 현재 target only
+# INTERFACE : 이 녀석을 link 건 다른 target "만"
+# target_compile_options(${ENGINE_NAME} 
+# PRIVATE
+# ${CPP_COMFILE_FLAGS}
+# )
+
 # 아래 두 줄을 통해서 해당 경로에 있는 모든 cpp 파일들을 pch 를 사용하지 않을 것이라고 하는 것이다
 # 그러면 hazel engine 은 현재 hzpch.cpp 를 무조건 모든 cpp 파일에서 include 하게 해놨는데
 # 이것을 imgui 코드들은 하지 않도록 하는 것이다.
@@ -693,14 +696,25 @@ set_source_files_properties(
     PROPERTIES COMPILE_FLAGS "/Yc;pch.h"
 )
 
+# MSVC 
+if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    #target_compile_options(
+    #   ${ENGINE_NAME} 
+    #   PUBLIC 
+    #   # game engine을 dll 로 만드는 경우 세팅
+    #   # /MDd : MSVC(Micosoft Visual Studio) 에서 
+    #   #           - target 의 runtime library 를 specify 하기 위한 컴파일러 flag
+    #   # /MD : 해당 target 을 dll 을 빌드할 때 사용
+    #   #           - 해당 dll 이 runtime 때 load 되고 이를 통해 compiled executable 혹은 dll 의 size 가 줄어든다.
+    #   # d     : 컴파일러가 Runtime Library 의 Debug 버전을 사용해야 함을 의미한다.
+    #    /MDd)  
+endif()
+
 # Windows specific settings
 if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
 
     # Set the system version to the latest
     set(CMAKE_SYSTEM_VERSION "latest")
-
-    # warning for user
-    message(WARNING "Test Warning Message")
 
     # Define Hazel specific preprocessor macros
     target_compile_definitions(
@@ -722,14 +736,6 @@ if(CMAKE_BUILD_TYPE MATCHES "Debug")
     target_compile_definitions(${ENGINE_NAME} 
     PUBLIC 
     HZ_DEBUG)
-
-    # game engine을 dll 로 만드는 경우 세팅
-    # /MDd for MT runtime library in Debug
-    target_compile_options(
-        ${ENGINE_NAME} 
-    PUBLIC 
-    # For MT runtime library
-    /MDd)  
 
     # DEBUG_POSTFIX: Appends "d" 
     # to the library name in Debug configuration.

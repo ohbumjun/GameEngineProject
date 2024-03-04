@@ -75,7 +75,7 @@ set(EDITOR_INCLUDES
 "${CMAKE_SOURCE_DIR}/BJEditor/src/public"
 )
 
-# ADD_LIBRARY(${EDITOR_NAME}  SHARED ${TOTAL_EDITOR_FILES})
+# executable : main 함수가 반드시 존재해야 한다.
 add_executable(${EDITOR_NAME} 
 ${TOTAL_ENGINE_FILES}
 )
@@ -92,47 +92,24 @@ target_include_directories(
     PUBLIC 
     ${EDITOR_INCLUDES})
 
+# 특정 target 에 library 를 종속 걸어주는 함수
+# PUBLIC   : 현재 target 뿐만 아니라, 이 녀석을 link 건 다른 target 까지도 link
+# PRIVATE : 현재 target only
+# INTERFACE : 이 녀석을 link 건 다른 target "만"
+# 참고 : library 안에 include 가 private 이 아니라, public 으로 추가된 경우
+# target_include_directories 필요 없이 target_link_libraries 만으로도 include 가 가능하다.
 target_link_libraries(
     ${EDITOR_NAME}
+    # 참고 : 되도록 PRIVATE. 아니면 종속성이 꼬이는 문제가 있다.
+    PRIVATE
     ${ENGINE_NAME})
 
-# file(
-#     GLOB_RECURSE 
-#     EDITOR_HEADERS 
-#     CONFIGURE_DEPENDS 
-# "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
-# 
-# file(
-#     GLOB_RECURSE 
-#     EDITOR_SOURCES 
-#     CONFIGURE_DEPENDS 
-# "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
-# 
-# set(EDITOR_INCLUDES 
-# "${CMAKE_SOURCE_DIR}/BJGameEngine/src"
-# "${CMAKE_SOURCE_DIR}/external/spdlog/include"
-# "${CMAKE_SOURCE_DIR}/external/glm"
-# "${CMAKE_SOURCE_DIR}/external/entt/include"
-# "${CMAKE_SOURCE_DIR}/external/RapidJson"
-# "${CMAKE_SOURCE_DIR}/external/ImGuizmo"
-# )
-# 
-# add_executable(
-#     ${EDITOR_NAME} 
-# 
-#     ${EDITOR_HEADERS}
-#     ${EDITOR_SOURCES}
-# )
-# 
-# target_include_directories(
-#     ${EDITOR_NAME} 
-#     PUBLIC ${EDITOR_INCLUDES})
-# 
-# target_link_libraries(
-#     ${EDITOR_NAME} 
-#     PUBLIC # other libraries
-#            # ex) projectname::libraryname (refer to other github cmakelists.txt)
-#     ${ENGINE_NAME})
+# Dependency Tree 를 만들어 준다.
+# - 어떤 target 을 build 할 때, 그 이전에 다른 target 을 build 해줘
+add_dependencies(
+    ${EDITOR_NAME} 
+    ${ENGINE_NAME}
+)
 
 # 아래 두 줄을 통해서 해당 경로에 있는 모든 cpp 파일들을 pch 를 사용하지 않을 것이라고 하는 것이다
 # 그러면 hazel engine 은 현재 hzpch.cpp 를 무조건 모든 cpp 파일에서 include 하게 해놨는데
@@ -171,12 +148,6 @@ if(CMAKE_BUILD_TYPE MATCHES "Debug")
     target_compile_definitions(${EDITOR_NAME} 
     PUBLIC 
     HZ_DEBUG)
-
-    # game engine을 dll 로 만드는 경우 세팅
-    # /MDd for MT runtime library in Debug
-    target_compile_options(${EDITOR_NAME} 
-    PUBLIC 
-    /MDd)  # For MT runtime library
 
     # DEBUG_POSTFIX: Appends "d" 
     # to the library name in Debug configuration.

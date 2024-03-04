@@ -101,11 +101,24 @@ set(EDITOR_NAME "Editor")
 set(EXECUTABLE_NAME "Executable")
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
+## -- Compiler Flags -- ##
+# 아래 컴파일러 flag 들은 빌드 과정 등에서의 오류를 더 정확하게 보여주는 flag
+set(CPP_COMFILE_FLAGS_WINDOWS /W4 /WX /permissive-)
+set(CPP_COMFILE_FLAGS_LINUX -Wall -Wpedantic -Wextra -Werror)
+
+if(NOT CPP_COMFILE_FLAGS)
+  if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+    set(CPP_COMFILE_FLAGS ${CPP_COMFILE_FLAGS_WINDOWS})
+  else()
+    set(CPP_COMFILE_FLAGS ${CPP_COMFILE_FLAGS_LINUX})
+  endif()
+endif()
+
+
 ## -- Options -- ##
 # can pass variable to set 'COMPILE_EXECUTABLE' value in command line
 # ex) cmake .. -DCOMPILE_EXECUTABLE=ON
 option(COMPILE_EXECUTABLE "Whether to compile the executable" ON)
-
 
 ## -- include cmake files -- ##
 # include(Tools)
