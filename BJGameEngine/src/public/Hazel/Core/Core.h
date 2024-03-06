@@ -2,9 +2,6 @@
 
 #include <memory>
 
-// 아래의 매크로들은 Engine 에 정의
-// 설정 -> c++ -> 전처리기. 추가 //
-
 /*
 __declspec(dllimport) : 해당 코드가 dll 로부터 import 된 것이라는 것을 표시
 
@@ -27,6 +24,9 @@ Client 는 정의 x, 따라서 import 할 것이다.
 
 #ifdef HZ_DEBUG
 	#define HZ_ENABLE_ASSERTS	
+#endif
+
+#ifdef EDITOR_RESOURCES
 #endif
 
 #ifdef HZ_ENABLE_ASSERTS

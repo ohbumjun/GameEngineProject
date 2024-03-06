@@ -1,18 +1,6 @@
 # CONFIGURE_DEPENDS : when file is added or removed, cmake will be reconfigured
-# set(ENGINE_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/private/**.cpp")
-# file(
-#     GLOB_RECURSE 
-#     ENGINE_HEADERS 
-#     CONFIGURE_DEPENDS 
-# "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
-# 
-SET(TOTAL_ENGINE_FILES)
 
-# file(
-#     GLOB_RECURSE 
-#     ENGINE_SOURCES 
-#     "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp"
-# )
+SET(TOTAL_ENGINE_FILES)
 
 SOURCE_GROUP("${CMAKE_CURRENT_SOURCE_DIR}/public" FILES     ${ENGINE_HEADERS})
 SOURCE_GROUP("${CMAKE_CURRENT_SOURCE_DIR}/private" FILES    ${ENGINE_SOURCES})
@@ -627,7 +615,6 @@ target_precompile_headers(
 target_compile_definitions(
     ${ENGINE_NAME} 
     PUBLIC 
-    HZ_ENABLE_ASSERTS
     _CRT_SECURE_NO_WARNINGS 
     GLFW_INCLUDE_NONE
     _SILENCE_STDEXT_ARR_ITERS_DEPRECATION_WARNING
@@ -642,6 +629,8 @@ target_compile_definitions(
     PRIVATE  
     HZ_BUILD_DLL
    )
+   
+add_definitions(-DRESOURCE_ROOT="${CMAKE_SOURCE_DIR}/BJResource/")
 
 # 해당 프로젝트에 include 경로를 add 해주는 기능이다. 
 # - 해당 프로젝트에서 사용하는 header 경로 추가

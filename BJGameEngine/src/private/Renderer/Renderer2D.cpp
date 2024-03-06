@@ -335,9 +335,10 @@ namespace Hazel
 	void Renderer2D::initShaders()
 	{
 		// Shader
-		s_Data.QuadShader = Shader::Create("assets/shaders/Renderer2D_Quad.glsl");
-		s_Data.CircleShader = Shader::Create("assets/shaders/Renderer2D_Circle.glsl");
-		s_Data.LineShader = Shader::Create("assets/shaders/Renderer2D_Line.glsl");
+        std::string resourceRootPath = RESOURCE_ROOT;
+        s_Data.QuadShader = Shader::Create(resourceRootPath + "assets/shaders/Renderer2D_Quad.glsl");
+        s_Data.CircleShader = Shader::Create(resourceRootPath + "assets/shaders/Renderer2D_Circle.glsl");
+        s_Data.LineShader = Shader::Create(resourceRootPath  + "assets/shaders/Renderer2D_Line.glsl");
 	}
 
 	void Renderer2D::initTextures()
