@@ -582,17 +582,6 @@ SOURCE_GROUP("${CMAKE_SOURCE_DIR}/external/ImGuizmo" FILES ${THIRDPARTY_IMGUIZMO
 SET(THIRDPARTY_BOX2D)
 SOURCE_GROUP("${CMAKE_SOURCE_DIR}/external/Box2D/include" FILES ${THIRDPARTY_BOX2D})
 
-
-# is this lib file ?
-# Set the output directory for the binaries
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY 
-${CMAKE_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE}/${ENGINE_NAME})
-
-# is this obj file ?
-# Set the output directory for the intermediate files
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY 
-${CMAKE_SOURCE_DIR}/bin-int/${CMAKE_BUILD_TYPE}/${ENGINE_NAME})
-
 set(ENGINE_INCLUDES
    "${CMAKE_SOURCE_DIR}/BJGameEngine/src"
    "${CMAKE_SOURCE_DIR}/external/spdlog/include"
@@ -648,8 +637,9 @@ target_compile_definitions(
     )
 
 target_compile_definitions(
-    ${ENGINE_NAME} 
-    PRIVATE 
+    ${ENGINE_NAME}
+    # HAZEL_API 가 Engine 에서는 export, editor 에서는 import 되게 하기 위함
+    PRIVATE  
     HZ_BUILD_DLL
    )
 
@@ -678,15 +668,6 @@ target_link_libraries(
     spdlog
     )
 
-# target 에 컴파일 옵션을 add 할 때 사용하는 함수
-# PUBLIC : 현재 target 뿐만 아니라, 이 녀석을 link 건 다른 target 까지도 link
-# PRIVATE : 현재 target only
-# INTERFACE : 이 녀석을 link 건 다른 target "만"
-# target_compile_options(${ENGINE_NAME} 
-# PRIVATE
-# ${CPP_COMFILE_FLAGS}
-# )
-
 # 아래 두 줄을 통해서 해당 경로에 있는 모든 cpp 파일들을 pch 를 사용하지 않을 것이라고 하는 것이다
 # 그러면 hazel engine 은 현재 hzpch.cpp 를 무조건 모든 cpp 파일에서 include 하게 해놨는데
 # 이것을 imgui 코드들은 하지 않도록 하는 것이다.
@@ -696,22 +677,60 @@ set_source_files_properties(
     PROPERTIES COMPILE_FLAGS "/Yc;pch.h"
 )
 
+# Set the output directory of the dll, exe
+set_target_properties(${ENGINE_NAME} 
+    PROPERTIES 
+    RUNTIME_OUTPUT_DIRECTORY
+    ${RUNTIME_OUTPUT_DIR}
+)
+
 # MSVC 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-    #target_compile_options(
-    #   ${ENGINE_NAME} 
-    #   PUBLIC 
-    #   # game engine을 dll 로 만드는 경우 세팅
-    #   # /MDd : MSVC(Micosoft Visual Studio) 에서 
-    #   #           - target 의 runtime library 를 specify 하기 위한 컴파일러 flag
-    #   # /MD : 해당 target 을 dll 을 빌드할 때 사용
-    #   #           - 해당 dll 이 runtime 때 load 되고 이를 통해 compiled executable 혹은 dll 의 size 가 줄어든다.
-    #   # d     : 컴파일러가 Runtime Library 의 Debug 버전을 사용해야 함을 의미한다.
-    #    /MDd)  
+    target_compile_options(
+       ${ENGINE_NAME} 
+       PUBLIC 
+       # game engine을 dll 로 만드는 경우 세팅
+       # /MDd : MSVC(Micosoft Visual Studio) 에서 
+       #           - target 의 runtime library 를 specify 하기 위한 컴파일러 flag
+       # /MD : 해당 target 을 dll 을 빌드할 때 사용
+       #           - 해당 dll 이 runtime 때 load 되고 이를 통해 compiled executable 혹은 dll 의 size 가 줄어든다.
+       # d     : 컴파일러가 Runtime Library 의 Debug 버전을 사용해야 함을 의미한다.
+        /MDd)  
+endif()
+
+
+if(CMAKE_BUILD_TYPE MATCHES "Debug")
+    target_compile_definitions(${ENGINE_NAME} 
+    PUBLIC 
+    HZ_DEBUG)
+
+    # DEBUG_POSTFIX: Appends "d" 
+    # to the library name in Debug configuration.
+    set_target_properties(
+        ${ENGINE_NAME} 
+    PROPERTIES 
+    DEBUG_POSTFIX "d")
+
+endif()
+
+# Release configuration
+if(CMAKE_BUILD_TYPE MATCHES "Release")
+    target_compile_definitions(
+        ${ENGINE_NAME} 
+        PUBLIC 
+        HZ_RELEASE)
+endif()
+
+# Dist configuration
+if(CMAKE_BUILD_TYPE MATCHES "Dist")
+    target_compile_definitions(
+        ${ENGINE_NAME}  
+        PUBLIC 
+        HZ_DIST)
 endif()
 
 # Windows specific settings
-if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+if(WIN32)
 
     # Set the system version to the latest
     set(CMAKE_SYSTEM_VERSION "latest")
@@ -728,53 +747,5 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
     set_target_properties( ${ENGINE_NAME} 
         PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS 
     ON )
-endif()
-
-
-# Debug configuration
-if(CMAKE_BUILD_TYPE MATCHES "Debug")
-    target_compile_definitions(${ENGINE_NAME} 
-    PUBLIC 
-    HZ_DEBUG)
-
-    # DEBUG_POSTFIX: Appends "d" 
-    # to the library name in Debug configuration.
-    set_target_properties(
-        ${ENGINE_NAME} 
-    PROPERTIES 
-    DEBUG_POSTFIX "d")
-
-    set_target_properties(
-        ${ENGINE_NAME} 
-    PROPERTIES 
-    # RUNTIME_OUTPUT_DIRECTORY_DEBUG ?
-    # = Specifies output directory for Debug binaries.
-    RUNTIME_OUTPUT_DIRECTORY_DEBUG 
-    "${CMAKE_BINARY_DIR}/bin/Debug")
-
-endif()
-
-# Release configuration
-if(CMAKE_BUILD_TYPE MATCHES "Release")
-    target_compile_definitions(
-        ${ENGINE_NAME} 
-        PUBLIC 
-        HZ_RELEASE)
-    set_target_properties(
-        ${ENGINE_NAME} 
-        PROPERTIES 
-        RUNTIME_OUTPUT_DIRECTORY_RELEASE 
-        "${CMAKE_BINARY_DIR}/bin/Release")
-endif()
-
-# Dist configuration
-if(CMAKE_BUILD_TYPE MATCHES "Dist")
-    target_compile_definitions(
-        ${ENGINE_NAME}  
-        PUBLIC 
-        HZ_DIST)
-    set_target_properties(
-        ${ENGINE_NAME}  
-        PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELEASE 
-        "${CMAKE_BINARY_DIR}/bin/Dist")
+    
 endif()

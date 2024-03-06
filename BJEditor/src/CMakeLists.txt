@@ -119,74 +119,20 @@ set_source_files_properties(
     PROPERTIES SKIP_PRECOMPILE_HEADERS 
     ON
     )
-
-# Set the output directory for the binaries
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY 
-${CMAKE_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE}/${EDITOR_NAME})
-
-# Set the output directory for the intermediate files
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY 
-${CMAKE_SOURCE_DIR}/bin-int/${CMAKE_BUILD_TYPE}/${EDITOR_NAME})
-
-# Set platform-specific variables
-# Windows specific settings
-if(CMAKE_SYSTEM_NAME MATCHES "Windows")
-    # Set the system version to the latest
-    set(CMAKE_SYSTEM_VERSION "latest")
-
-    # Define Hazel specific preprocessor macros
-    target_compile_definitions(
-        ${EDITOR_NAME} 
-        PUBLIC
-        HZ_PLATFORM_WINDOWS
-    )
-endif()
-
-
-# Debug configuration
-if(CMAKE_BUILD_TYPE MATCHES "Debug")
-    target_compile_definitions(${EDITOR_NAME} 
-    PUBLIC 
-    HZ_DEBUG)
-
-    # DEBUG_POSTFIX: Appends "d" 
-    # to the library name in Debug configuration.
-    set_target_properties(
-        ${EDITOR_NAME} 
+    
+set_target_properties(${EDITOR_NAME} 
     PROPERTIES 
-    DEBUG_POSTFIX "d")
+    RUNTIME_OUTPUT_DIRECTORY
+    ${RUNTIME_OUTPUT_DIR}
+)
 
-    set_target_properties(
-        ${EDITOR_NAME} 
-    PROPERTIES 
-    # RUNTIME_OUTPUT_DIRECTORY_DEBUG ?
-    # = Specifies output directory for Debug binaries.
-    RUNTIME_OUTPUT_DIRECTORY_DEBUG 
-    "${CMAKE_BINARY_DIR}/bin/Debug")
+if(MSVC)
+    message(STATUS "CMAKE_BUILD_TYPE : ${CMAKE_BUILD_TYPE}")
+    if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 
-endif()
+    elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
 
-# Release configuration
-if(CMAKE_BUILD_TYPE MATCHES "Release")
-    target_compile_definitions(
-        ${EDITOR_NAME} 
-        PUBLIC 
-        HZ_RELEASE)
-    set_target_properties(
-        ${EDITOR_NAME} 
-        PROPERTIES 
-        RUNTIME_OUTPUT_DIRECTORY_RELEASE 
-        "${CMAKE_BINARY_DIR}/bin/Release")
-endif()
-
-# Dist configuration
-if(CMAKE_BUILD_TYPE MATCHES "Dist")
-    target_compile_definitions(
-        ${EDITOR_NAME}  
-        PUBLIC 
-        HZ_DIST)
-    set_target_properties(
-        ${EDITOR_NAME}  
-        PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELEASE 
-        "${CMAKE_BINARY_DIR}/bin/Dist")
+    elseif(CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
+        
+    endif()
 endif()
