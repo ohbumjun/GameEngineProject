@@ -120,6 +120,7 @@ set_source_files_properties(
     ON
     )
     
+# Set the output directory of the dll, exe
 set_target_properties(${EDITOR_NAME} 
     PROPERTIES 
     RUNTIME_OUTPUT_DIRECTORY
