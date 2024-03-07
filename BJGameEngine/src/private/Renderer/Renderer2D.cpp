@@ -335,7 +335,7 @@ namespace Hazel
 	void Renderer2D::initShaders()
 	{
 		// Shader
-        std::string resourceRootPath = RESOURCE_ROOT;
+        static std::string resourceRootPath = RESOURCE_ROOT;
         s_Data.QuadShader = Shader::Create(resourceRootPath + "assets/shaders/Renderer2D_Quad.glsl");
         s_Data.CircleShader = Shader::Create(resourceRootPath + "assets/shaders/Renderer2D_Circle.glsl");
         s_Data.LineShader = Shader::Create(resourceRootPath  + "assets/shaders/Renderer2D_Line.glsl");

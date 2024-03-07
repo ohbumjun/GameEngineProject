@@ -90,13 +90,14 @@ namespace HazelEditor
 	}
 
 	void EditorLayer::OnAttach()
-	{
+    {
+		static std::string resourceRootPath = RESOURCE_ROOT;
 		//	m_CheckerboardTexture = Hazel::TextureManager::CreateTexture2D("assets/textures/sample.png");
 		// m_SpriteSheet = Hazel::TextureManager::CreateTexture2D("assets/game/textures/RPGpack_sheet_2X.png");
 
-		m_IconPlay =	  Hazel::TextureManager::CreateTexture2D("Resources/Icons/PlayButton.png");
-		m_IconStop = Hazel::TextureManager::CreateTexture2D("Resources/Icons/StopButton.png");
-		m_IconSimulate = Hazel::TextureManager::CreateTexture2D("Resources/Icons/SimulateButton.png");
+		m_IconPlay = Hazel::TextureManager::CreateTexture2D(resourceRootPath + "Resources/Icons/PlayButton.png");
+        m_IconStop = Hazel::TextureManager::CreateTexture2D(resourceRootPath + "Resources/Icons/StopButton.png");
+        m_IconSimulate = Hazel::TextureManager::CreateTexture2D(resourceRootPath + "Resources/Icons/SimulateButton.png");
 		// m_TextureStairs				= Hazel::SubTextureManager::CreateTexture2DFromCoords(m_SpriteSheet, {7, 6}, {128, 128});
 		// m_TextureTree				= Hazel::SubTextureManager::CreateTexture2DFromCoords(m_SpriteSheet, { 2, 1 }, { 128, 128 }, { 1,2 });
 		// m_TextureGrass				= Hazel::SubTextureManager::CreateTexture2DFromCoords(m_SpriteSheet, { 1, 11 }, { 128, 128 }, { 1,2 });

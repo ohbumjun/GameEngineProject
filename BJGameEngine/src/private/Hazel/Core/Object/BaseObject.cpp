@@ -28,6 +28,6 @@ namespace Hazel
 
 	void BaseObject::constructObject(bool p_reference)
 	{
-		m_InstanceID = ObjectDB::Add(this);
+		// m_InstanceID = ObjectDB::Add(this);
 	}
 }

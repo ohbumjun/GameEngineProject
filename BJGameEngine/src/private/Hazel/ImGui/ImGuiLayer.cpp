@@ -30,6 +30,9 @@ namespace Hazel {
 	{
 		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();
+
+        static std::string resourceRootPath = RESOURCE_ROOT;
+
 		ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
@@ -43,8 +46,17 @@ namespace Hazel {
 		// 1 : regular / 2 : bold
 
 		float fontSize = 18.0f;// *2.0f;
-		io.Fonts->AddFontFromFileTTF("assets/fonts/opensans/OpenSans-Bold.ttf", fontSize);
-		io.FontDefault = io.Fonts->AddFontFromFileTTF("assets/fonts/opensans/OpenSans-Regular.ttf", fontSize);
+        char openSansBoldPath[200]; 
+        char openSansRegularPath[200];
+
+        strcpy(openSansBoldPath, resourceRootPath.c_str()); // Copy str1 to result
+        strcat(openSansBoldPath, "assets/fonts/opensans/OpenSans-Bold.ttf");
+
+        strcpy(openSansRegularPath, resourceRootPath.c_str()); // Copy str1 to result
+        strcat(openSansRegularPath,"assets/fonts/opensans/OpenSans-Regular.ttf");
+        
+		io.Fonts->AddFontFromFileTTF(openSansBoldPath, fontSize);
+        io.FontDefault = io.Fonts->AddFontFromFileTTF(openSansRegularPath, fontSize);
 
 		// Setup Dear ImGui style
 		ImGui::StyleColorsDark();

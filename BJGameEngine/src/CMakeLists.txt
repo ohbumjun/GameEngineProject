@@ -618,7 +618,7 @@ target_compile_definitions(
     _CRT_SECURE_NO_WARNINGS 
     GLFW_INCLUDE_NONE
     _SILENCE_STDEXT_ARR_ITERS_DEPRECATION_WARNING
-
+    RESOURCE_ROOT="${CMAKE_SOURCE_DIR}/BJResource/"
     # DLL
     HZ_DYNAMIC_LINK
     )
@@ -629,8 +629,6 @@ target_compile_definitions(
     PRIVATE  
     HZ_BUILD_DLL
    )
-   
-add_definitions(-DRESOURCE_ROOT="${CMAKE_SOURCE_DIR}/BJResource/")
 
 # 해당 프로젝트에 include 경로를 add 해주는 기능이다. 
 # - 해당 프로젝트에서 사용하는 header 경로 추가
