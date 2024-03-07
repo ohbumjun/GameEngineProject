@@ -17,7 +17,7 @@ void Hazel::BoxCollider2DComponent::Serialize(Serializer *serializer)
 {
     serializer->BeginSaveMap(Reflection::GetTypeID<BoxCollider2DComponent>(),
                              this);
-    Reflection::TypeInfo *compTypeInfo = Reflection::GetTypeInfo(GetType());
+    TypeInfo *compTypeInfo = Reflection::GetTypeInfo(GetType());
     serializer->Save("compName", compTypeInfo->m_Name.c_str());
 
     serializer->Save("Offset", m_Offset);

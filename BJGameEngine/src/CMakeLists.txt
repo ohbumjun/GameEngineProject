@@ -157,6 +157,7 @@ LIST(APPEND TOTAL_ENGINE_FILES ${SRC_CORE_OBJECT})
 SET(HEADER_CORE_REFLECTION
     public/Hazel/Core/Reflection/Reflection.h
     public/Hazel/Core/Reflection/TypeUtils.h
+    public/Hazel/Core/Reflection/TypeInfo.h
     public/Hazel/Core/Reflection/VariableId.h
 )
 SOURCE_GROUP("core/Reflection/public" FILES ${HEADER_CORE_REFLECTION})

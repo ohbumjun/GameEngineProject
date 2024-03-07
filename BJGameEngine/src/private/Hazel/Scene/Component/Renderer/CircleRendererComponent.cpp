@@ -21,7 +21,7 @@ void Hazel::CircleRendererComponent::Serialize(Serializer *serializer)
     serializer->BeginSaveMap(Reflection::GetTypeID<CircleRendererComponent>(),
                              this);
 
-    Reflection::TypeInfo *compTypeInfo = Reflection::GetTypeInfo(GetType());
+    TypeInfo *compTypeInfo = Reflection::GetTypeInfo(GetType());
 
     serializer->Save("compName", compTypeInfo->m_Name.c_str());
 

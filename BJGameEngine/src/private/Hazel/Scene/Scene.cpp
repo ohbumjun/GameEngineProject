@@ -695,8 +695,7 @@ void Scene::serializeEntity(Serializer *serializer, Entity entity)
 
     for (const Component *constComp : components)
     {
-        Reflection::TypeInfo *compTypeInfo =
-            Reflection::GetTypeInfo(constComp->GetType());
+        TypeInfo *compTypeInfo = Reflection::GetTypeInfo(constComp->GetType());
         serializer->Save(compTypeInfo->m_Type.GetId());
     }
 

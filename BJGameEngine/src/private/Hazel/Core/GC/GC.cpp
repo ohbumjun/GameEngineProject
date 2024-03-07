@@ -179,7 +179,7 @@ void GC::markRecursively(GCObject *parentObject)
     FieldInfo *field_info = NULL;
 
     GCObject *child_object = NULL;
-    Reflection::TypeInfo *parentTypeInfo = parentObject->GetTypeInfo();
+    TypeInfo *parentTypeInfo = parentObject->GetTypeInfo();
 
     /*Parent object must have already visited*/
     assert(parentObject->IsVisited());

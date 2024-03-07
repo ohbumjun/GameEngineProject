@@ -5,7 +5,7 @@
 
 GCObject::GCObject(void *data,
                    GCAllocationHeader *header,
-                   Reflection::TypeInfo *pTypeInfo)
+                   TypeInfo *pTypeInfo)
 {
     m_DataPtr = data;
     m_HeaderAddr = header;

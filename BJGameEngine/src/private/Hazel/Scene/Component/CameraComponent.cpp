@@ -24,7 +24,7 @@ void Hazel::CameraComponent::Serialize(Serializer *serializer)
 {
     serializer->BeginSaveMap(Reflection::GetTypeID<CameraComponent>(), this);
 
-    Reflection::TypeInfo *compTypeInfo = Reflection::GetTypeInfo(GetType());
+    TypeInfo *compTypeInfo = Reflection::GetTypeInfo(GetType());
     serializer->Save("compName", compTypeInfo->m_Name.c_str());
 
     serializer->SaveKey("Camera");

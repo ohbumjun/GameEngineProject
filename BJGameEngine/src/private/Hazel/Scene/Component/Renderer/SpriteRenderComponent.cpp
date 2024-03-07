@@ -21,7 +21,7 @@ void Hazel::SpriteRenderComponent::Serialize(Serializer *serializer)
     serializer->BeginSaveMap(Reflection::GetTypeID<SpriteRenderComponent>(),
                              this);
 
-    Reflection::TypeInfo *compTypeInfo = Reflection::GetTypeInfo(GetType());
+    TypeInfo *compTypeInfo = Reflection::GetTypeInfo(GetType());
 
     serializer->Save("compName", compTypeInfo->m_Name.c_str());
 

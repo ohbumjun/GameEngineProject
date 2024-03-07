@@ -20,7 +20,7 @@ void Rigidbody2DComponent::Serialize(Serializer *serializer)
 {
     serializer->BeginSaveMap(Reflection::GetTypeID<Rigidbody2DComponent>(),
                              this);
-    Reflection::TypeInfo *compTypeInfo = Reflection::GetTypeInfo(GetType());
+    TypeInfo *compTypeInfo = Reflection::GetTypeInfo(GetType());
     serializer->Save("compName", compTypeInfo->m_Name.c_str());
 
     int bodyType = (int)m_Type;

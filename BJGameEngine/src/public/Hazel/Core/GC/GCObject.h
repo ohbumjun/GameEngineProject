@@ -3,14 +3,12 @@
 #include "../Reflection/Reflection.h"
 #include "GCInfo.h"
 
-struct Reflection::TypeInfo;
+struct TypeInfo;
 
 class GCObject
 {
 public:
-    GCObject(void *data,
-             GCAllocationHeader *header,
-             Reflection::TypeInfo *pTypeInfo);
+    GCObject(void *data, GCAllocationHeader *header, TypeInfo *pTypeInfo);
 
     void SetIsRoot(bool isRoot);
     void SetVisit(bool visit);
@@ -19,7 +17,7 @@ public:
     // nullptr 인지 혹은 Dangling 인지를 검사하는 함수
     bool IsValid();
 
-    inline Reflection::TypeInfo *GetTypeInfo() const
+    inline TypeInfo *GetTypeInfo() const
     {
         return m_TypeInfo;
     }
@@ -64,7 +62,7 @@ private:
     // 해당 object 가 속한 structure_db_rec 객체를 가리키는 포인터
     // xalloc 시 들어온 "string" 값을 이용하여 struct_db 에서 찾아내서 링크시켜주기
     // struct_db_rec_t* struct_rec;
-    Reflection::TypeInfo *m_TypeInfo;
+    TypeInfo *m_TypeInfo;
 
     // 아래 정보들은 Header 쪽에 배치해보자.
     // bool is_visited; /*Used for Graph traversal*/
