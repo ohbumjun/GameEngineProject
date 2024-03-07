@@ -144,8 +144,9 @@ endif()
 # ex) cmake .. -DCOMPILE_EXECUTABLE=ON
 option(COMPILE_EXECUTABLE "Whether to compile the executable" ON)
 
-# link time optimization : do not link function in certain obj file if it is not used
-option(ENABLE_LTO "Enable LTO/IPO" ON)
+# link time optimization (not compile time) 
+## - do not link function in certain obj file if that function is not used
+option(ENABLE_LTO "Enable LTO/IPO" OFF)
 
 ## -- include cmake files -- ##
 # include(Tools)
@@ -169,17 +170,17 @@ add_definitions(-DNOMINMAX)
 # add_clang_format_target()
 
 # search for other CMakeLists.txt files in subdirectories
-add_subdirectory(external)              # external libraries
-add_subdirectory(BJGameEngine)          # Engine
-add_subdirectory(BJEditor)              # Editor
-add_subdirectory(ApplicationProject)    # Executable
+add_subdirectory(external)              
+add_subdirectory(BJGameEngine)          
+add_subdirectory(BJEditor)              
+add_subdirectory(ApplicationProject)    
 # add_subdirectory(tests)                 # tests
 
 ## -- SubModules -- ##
 # Do not Use below code since do not want to
 # add as sub directory...
 # add sub modules cmake files
-# add_git_submodule(external/Glad)
+add_git_submodule(external/Glad)
 add_git_submodule(external/Box2D)
 add_git_submodule(external/glm)
 add_git_submodule(external/GLFW)

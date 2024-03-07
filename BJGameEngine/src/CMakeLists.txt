@@ -280,18 +280,18 @@ SOURCE_GROUP("stb_image/private" FILES ${SRC_STBIMAGE})
 LIST(APPEND TOTAL_ENGINE_FILES ${SRC_STBIMAGE})
 
 ## GLAD
-SET(HEADER_GLAD
-	${CMAKE_SOURCE_DIR}/external/Glad/include/glad/glad.h
-	${CMAKE_SOURCE_DIR}/external/Glad/include/KHR/khrplatform.h
-)
-SOURCE_GROUP("glad/public" FILES ${HEADER_GLAD})
-LIST(APPEND TOTAL_ENGINE_FILES ${HEADER_GLAD})
-
-SET(SRC_GLAD
-	${CMAKE_SOURCE_DIR}/external/Glad/src/glad.c
-)
-SOURCE_GROUP("glad/private" FILES ${SRC_GLAD})
-LIST(APPEND TOTAL_ENGINE_FILES ${SRC_GLAD})
+# SET(HEADER_GLAD
+# 	${CMAKE_SOURCE_DIR}/external/Glad/include/glad/glad.h
+# 	${CMAKE_SOURCE_DIR}/external/Glad/include/KHR/khrplatform.h
+# )
+# SOURCE_GROUP("glad/public" FILES ${HEADER_GLAD})
+# LIST(APPEND TOTAL_ENGINE_FILES ${HEADER_GLAD})
+# 
+# SET(SRC_GLAD
+# 	${CMAKE_SOURCE_DIR}/external/Glad/src/glad.cpp
+# )
+# SOURCE_GROUP("glad/private" FILES ${SRC_GLAD})
+# LIST(APPEND TOTAL_ENGINE_FILES ${SRC_GLAD})
 
 ## Imgui
 SET(HEADER_IMGUI
@@ -669,14 +669,16 @@ target_include_directories(
 # link library to own library
 target_link_libraries(
     ${ENGINE_NAME}
-    PUBLIC 
-    box2d  # find project name in actual cmakefile
+    PUBLIC
+    
+    # find project name in actual cmakefile
+    box2d  
     # imgui
     # ImGuizmo
+    # stb_image
     Glad
     glm
     opengl32.lib
-    stb_image
     glfw
     spdlog
     )
@@ -761,4 +763,11 @@ if(WIN32)
         PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS 
     ON )
     
+endif()
+
+if(${ENABLE_LTO})
+    target_enable_lto(
+        TARGET ${ENGINE_NAME}
+        ENABLE
+        ON)
 endif()
