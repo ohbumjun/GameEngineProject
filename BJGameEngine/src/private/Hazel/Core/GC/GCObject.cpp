@@ -3,9 +3,7 @@
 #include "hzpch.h"
 
 
-GCObject::GCObject(void *data,
-                   GCAllocationHeader *header,
-                   TypeInfo *pTypeInfo)
+GCObject::GCObject(void *data, GCAllocationHeader *header, TypeInfo *pTypeInfo)
 {
     m_DataPtr = data;
     m_HeaderAddr = header;

@@ -149,9 +149,11 @@ option(COMPILE_EXECUTABLE "Whether to compile the executable" ON)
 ## - Editor 상에서 Linking Error 가 난다.
 # option(ENABLE_LTO "Enable LTO/IPO" OFF)
 option(ENABLE_CLANG_FORMAT "Enable to add clang-format." ON)
+option(ENABLE_CLANG_TIDY "Enable to add clang-tidy." ON)
 
 ## -- include cmake files -- ##
 include(ClangFormat)
+include(ClangTidy)
 include(AddGitSubmodule)
 
 if(ENABLE_LTO)

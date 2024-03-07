@@ -700,6 +700,12 @@ set_target_properties(${ENGINE_NAME}
     ${RUNTIME_OUTPUT_DIR}
 )
 
+# apply clang-tidy
+if(${ENABLE_CLANG_TIDY})
+    add_clang_tidy_to_target(${ENGINE_NAME})
+endif()
+
+
 # MSVC 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     target_compile_options(

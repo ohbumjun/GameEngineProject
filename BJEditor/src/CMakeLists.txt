@@ -111,6 +111,11 @@ target_link_libraries(
 #        ON)
 #endif()
 
+# apply clang-tidy
+if(${ENABLE_CLANG_TIDY})
+    add_clang_tidy_to_target(${EDITOR_NAME})
+endif()
+
 # Dependency Tree 를 만들어 준다.
 # - 어떤 target 을 build 할 때, 그 이전에 다른 target 을 build 해줘
 add_dependencies(
