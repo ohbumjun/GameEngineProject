@@ -104,6 +104,13 @@ target_link_libraries(
     PRIVATE
     ${ENGINE_NAME})
 
+# if(${ENABLE_LTO})
+#    target_enable_lto(
+#        TARGET ${EDITOR_NAME} 
+#        ENABLE
+#        ON)
+#endif()
+
 # Dependency Tree 를 만들어 준다.
 # - 어떤 target 을 build 할 때, 그 이전에 다른 target 을 build 해줘
 add_dependencies(

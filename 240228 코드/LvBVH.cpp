@@ -1,283 +1,298 @@
-﻿#include "LvPrecompiled.h"
-#include "engine/LvBVH.h"
+﻿#include "engine/LvBVH.h"
+#include "LvPrecompiled.h"
 
 #include "system/LvLog.h"
 
 LV_NS_ENGINE_BEGIN
 
-LvIntersection LvIntersection::operator()(const LvBoxBound& bound, const LvRay& ray, uint32 id, DetectingIntersect detector) const noexcept
+LvIntersection LvIntersection::operator()(
+    const LvBoxBound &bound,
+    const LvRay &ray,
+    uint32 id,
+    DetectingIntersect detector) const noexcept
 {
-	return detector(bound, ray, id);
+    return detector(bound, ray, id);
 }
 
-LvIntersection LvIntersection::BasicDetectingIntersect(const LvBoxBound& bound, const LvRay& ray, uint32 id)
+LvIntersection LvIntersection::BasicDetectingIntersect(const LvBoxBound &bound,
+                                                       const LvRay &ray,
+                                                       uint32 id)
 {
-	float tnear, tfar;
-	if (bound.Intersect(ray, tnear, tfar))
-		return LvIntersection(tnear, bound, id);
-	else
-		return LvIntersection();
+    float tnear, tfar;
+    if (bound.Intersect(ray, tnear, tfar))
+        return LvIntersection(tnear, bound, id);
+    else
+        return LvIntersection();
 }
 
-LvBVH::LvBVH()
-	: _tree(512 * sizeof(LvBVH::Pair))
-{}
-
-LvBVH::LvBVH(LvBoxBound* datas, const uint32 size, LvList<uint32>& outIndices)
-	: _tree(LV_MAX(512, size) * sizeof(Pair))
+LvBVH::LvBVH() : _tree(512 * sizeof(LvBVH::Pair))
 {
-	Rebuild(datas, size, outIndices);
+}
+
+LvBVH::LvBVH(LvBoxBound *datas, const uint32 size, LvList<uint32> &outIndices)
+    : _tree(LV_MAX(512, size) * sizeof(Pair))
+{
+    Rebuild(datas, size, outIndices);
 }
 
 LvBVH::~LvBVH()
 {
-	_tree.Clear();
+    _tree.Clear();
 }
 
-uint32 LvBVH::Insert(const LvBoxBound& data) noexcept
+uint32 LvBVH::Insert(const LvBoxBound &data) noexcept
 {
-	LvVec3f center = data.GetCenter();
-	Pair npair(data);
+    LvVec3f center = data.GetCenter();
+    Pair npair(data);
 
-	if (_leafCount == 0)
-		return _tree.Add(npair);
+    if (_leafCount == 0)
+        return _tree.Add(npair);
 
-	Pair target = _tree.GetChilds()[0];
-	while (true)
-	{
-		uint32 parent = target.index;
-		float minDist = LV_FLT_MAX;
-		for (const Pair& pair : _tree.GetChildsAt(parent))
-		{
-			float distance = LvVec3f::Length(center - pair.b.GetCenter());
-			if (minDist > distance)
-			{
-				minDist = distance;
-				target = pair;
-			}
-		}
+    Pair target = _tree.GetChilds()[0];
+    while (true)
+    {
+        uint32 parent = target.index;
+        float minDist = LV_FLT_MAX;
+        for (const Pair &pair : _tree.GetChildsAt(parent))
+        {
+            float distance = LvVec3f::Length(center - pair.b.GetCenter());
+            if (minDist > distance)
+            {
+                minDist = distance;
+                target = pair;
+            }
+        }
 
-		uint32 child = target.index;
-		if (!_tree.HasChildAt(child)) //leaf
-		{
-			//if   : leaf's parent has enough space, just add
-			//else : leaf's parent has full leaf, make new branch and add child
-			if (_tree.DegreeAt(child) < _leafSize - 1)
-			{
-				uint32 index = _tree.AddAt(npair, parent);
-				_tree[index].index = index;
-				return index;
-			}
-			else
-			{
-				Pair origin = _tree[child];
+        uint32 child = target.index;
+        if (!_tree.HasChildAt(child)) //leaf
+        {
+            //if   : leaf's parent has enough space, just add
+            //else : leaf's parent has full leaf, make new branch and add child
+            if (_tree.DegreeAt(child) < _leafSize - 1)
+            {
+                uint32 index = _tree.AddAt(npair, parent);
+                _tree[index].index = index;
+                return index;
+            }
+            else
+            {
+                Pair origin = _tree[child];
 
-				uint32 first = _tree.AddAt(npair, parent);
-				uint32 second = _tree.AddAt(npair, first);
-				//To keep index unchanged
-				_tree.RemoveAt(child);
-				_tree.AddAt(origin, first);
+                uint32 first = _tree.AddAt(npair, parent);
+                uint32 second = _tree.AddAt(npair, first);
+                //To keep index unchanged
+                _tree.RemoveAt(child);
+                _tree.AddAt(origin, first);
 
-				_tree[first].index = first;
-				_tree[first].b.ExpandToInclude(origin.b);
-				_tree[second].index = second;
-				return second;
-			}
-		}
-		else //branch
-		{
-			_tree[child].b.ExpandToInclude(data);
-		}
+                _tree[first].index = first;
+                _tree[first].b.ExpandToInclude(origin.b);
+                _tree[second].index = second;
+                return second;
+            }
+        }
+        else //branch
+        {
+            _tree[child].b.ExpandToInclude(data);
+        }
 
-		target = _tree[child];
-	}
+        target = _tree[child];
+    }
 }
 
-bool LvBVH::Remove(const LvBoxBound& data) noexcept
+bool LvBVH::Remove(const LvBoxBound &data) noexcept
 {
-	Pair pair(data);
-	uint32 id = _tree.Find(pair);
-	if (id != uint32(-1))
-		return Remove(id);
-	return false;
+    Pair pair(data);
+    uint32 id = _tree.Find(pair);
+    if (id != uint32(-1))
+        return Remove(id);
+    return false;
 }
 
 bool LvBVH::Remove(uint32 id) noexcept
 {
-	if (_tree.HasChildAt(id))
-		return false;
+    if (_tree.HasChildAt(id))
+        return false;
 
-	uint32 p = _tree.GetParentIndexAt(id);
-	_tree.RemoveAt(id);
-	update(p);
-	return true;
+    uint32 p = _tree.GetParentIndexAt(id);
+    _tree.RemoveAt(id);
+    update(p);
+    return true;
 }
 
-void LvBVH::Rebuild(LvBoxBound* datas, const uint32 size, LvList<uint32>& outIndices) noexcept
+void LvBVH::Rebuild(LvBoxBound *datas,
+                    const uint32 size,
+                    LvList<uint32> &outIndices) noexcept
 {
-	if (datas == nullptr || size == 0) return;
+    if (datas == nullptr || size == 0)
+        return;
 
-	_tree.Clear();
-	outIndices.Clear();
-	outIndices.Resize(size);
+    _tree.Clear();
+    outIndices.Clear();
+    outIndices.Resize(size);
 
-	BuildNode root{ _tree.GetRoot(), 0, size };
-	LvStack<BuildNode> nodes;
-	LvStack<LvPair<uint32, uint32>> swapped;
-	nodes.Push(root);
+    BuildNode root{_tree.GetRoot(), 0, size};
+    LvStack<BuildNode> nodes;
+    LvStack<LvPair<uint32, uint32>> swapped;
+    nodes.Push(root);
 
-	while (!nodes.IsEmpty())
-	{
-		const BuildNode& node = nodes.Pop();
+    while (!nodes.IsEmpty())
+    {
+        const BuildNode &node = nodes.Pop();
 
-		uint32 parent = node.parent;
-		uint32 start = node.start;
-		uint32 end = node.end;
-		uint32 count = end - start;
+        uint32 parent = node.parent;
+        uint32 start = node.start;
+        uint32 end = node.end;
+        uint32 count = end - start;
 
-		if (count < _leafSize)
-		{
-			for (uint32 i = start; i < end; ++i)
-			{
-				Pair pair(datas[i]);
-				outIndices[i] = _tree.AddAt(pair, parent);
-				_tree[outIndices[i]].index = outIndices[i];
-				++_leafCount;
-			}
-			continue;
-		}
+        if (count < _leafSize)
+        {
+            for (uint32 i = start; i < end; ++i)
+            {
+                Pair pair(datas[i]);
+                outIndices[i] = _tree.AddAt(pair, parent);
+                _tree[outIndices[i]].index = outIndices[i];
+                ++_leafCount;
+            }
+            continue;
+        }
 
-		LvBoxBound nodeBox = datas[start];
-		LvBoxBound nodeCenter;//(nodeBox.GetCenter());
-		nodeCenter.minp = nodeCenter.maxp = nodeBox.GetCenter();
-		for (uint32 i = start + 1; i < end; ++i)
-		{
-			nodeBox.ExpandToInclude(datas[i]);
-			nodeCenter.ExpandToInclude(datas[i].GetCenter());
-		}
+        LvBoxBound nodeBox = datas[start];
+        LvBoxBound nodeCenter; //(nodeBox.GetCenter());
+        nodeCenter.minp = nodeCenter.maxp = nodeBox.GetCenter();
+        for (uint32 i = start + 1; i < end; ++i)
+        {
+            nodeBox.ExpandToInclude(datas[i]);
+            nodeCenter.ExpandToInclude(datas[i].GetCenter());
+        }
 
-		uint32 index = _tree.AddAt(nodeBox, parent);
-		_tree[index].index = index;
+        uint32 index = _tree.AddAt(nodeBox, parent);
+        _tree[index].index = index;
 
-		uint32 splitDim = nodeCenter.MaxDimension();
-		float split = (nodeBox.minp[splitDim] + nodeBox.maxp[splitDim]) / 2;
+        uint32 splitDim = nodeCenter.MaxDimension();
+        float split = (nodeBox.minp[splitDim] + nodeBox.maxp[splitDim]) / 2;
 
-		uint32 mid = start;
-		for (uint32 i = start+1; i < end; ++i)
-		{
-			if (datas[i].GetCenter()[splitDim] < split)
-			{
-				LV_SWAP(datas[i], datas[mid], LvBoxBound);
-				swapped.Push(LvPair<uint32, uint32>(i, mid));
-				++mid;
-			}
-		}
+        uint32 mid = start;
+        for (uint32 i = start + 1; i < end; ++i)
+        {
+            if (datas[i].GetCenter()[splitDim] < split)
+            {
+                LV_SWAP(datas[i], datas[mid], LvBoxBound);
+                swapped.Push(LvPair<uint32, uint32>(i, mid));
+                ++mid;
+            }
+        }
 
-		if (mid == start || mid == end)
-			mid = (start + end) / 2;
+        if (mid == start || mid == end)
+            mid = (start + end) / 2;
 
-		nodes.Push(BuildNode{ index, start, mid });
-		nodes.Push(BuildNode{ index, mid, end });
-	}
+        nodes.Push(BuildNode{index, start, mid});
+        nodes.Push(BuildNode{index, mid, end});
+    }
 
-	while (!swapped.IsEmpty())
-	{
-		LvPair<uint32, uint32> swappair = swapped.Pop();
-		LV_SWAP(outIndices[swappair.first], outIndices[swappair.second], uint32);
-	}
+    while (!swapped.IsEmpty())
+    {
+        LvPair<uint32, uint32> swappair = swapped.Pop();
+        LV_SWAP(outIndices[swappair.first],
+                outIndices[swappair.second],
+                uint32);
+    }
 }
 
-LvIntersection LvBVH::Intersect(const LvRay& ray) noexcept
+LvIntersection LvBVH::Intersect(const LvRay &ray) noexcept
 {
-	LvIntersection intersection;
-	LvStack<uint32> nodes;
+    LvIntersection intersection;
+    LvStack<uint32> nodes;
 
-	const LvList<Pair>& pairs = _tree.GetChilds();
+    const LvList<Pair> &pairs = _tree.GetChilds();
 
-	if (pairs.Count() < 1)
-	{
-		return intersection;
-	}
+    if (pairs.Count() < 1)
+    {
+        return intersection;
+    }
 
-	for (const Pair& pair : pairs)
-		nodes.Push(pair.index);
+    for (const Pair &pair : pairs)
+        nodes.Push(pair.index);
 
-	while (!nodes.IsEmpty())
-	{
-		uint32 index = nodes.Pop();
+    while (!nodes.IsEmpty())
+    {
+        uint32 index = nodes.Pop();
 
-		if (!_tree.HasChildAt(index)) //leaf
-		{
-			LvIntersection nIntersection = intersection(_tree[index].b, ray, index, _detector);
-			if (nIntersection)
-				intersection = LvIntersection::Closest(intersection, nIntersection);
-		}
-		else //branch
-		{
-			for (const Pair& npair : _tree.GetChildsAt(index))
-			{
-				float nears, fars;
-				if (npair.b.Intersect(ray, nears, fars))
-					nodes.Push(npair.index);
-			}
-		}
-	}
-	return intersection;
+        if (!_tree.HasChildAt(index)) //leaf
+        {
+            LvIntersection nIntersection =
+                intersection(_tree[index].b, ray, index, _detector);
+            if (nIntersection)
+                intersection =
+                    LvIntersection::Closest(intersection, nIntersection);
+        }
+        else //branch
+        {
+            for (const Pair &npair : _tree.GetChildsAt(index))
+            {
+                float nears, fars;
+                if (npair.b.Intersect(ray, nears, fars))
+                    nodes.Push(npair.index);
+            }
+        }
+    }
+    return intersection;
 }
 
-LvIntersection LvBVH::Intersect(const LvRay& ray, RankingIntersect ranker) noexcept
+LvIntersection LvBVH::Intersect(const LvRay &ray,
+                                RankingIntersect ranker) noexcept
 {
-	LvIntersection intersection;
-	LvStack<uint32> nodes;
+    LvIntersection intersection;
+    LvStack<uint32> nodes;
 
-	const LvList<Pair>& pairs = _tree.GetChilds();
+    const LvList<Pair> &pairs = _tree.GetChilds();
 
-	if (pairs.Count() < 1)
-	{
-		LV_LOG(crash, "No elements in tree");
-		return intersection;
-	}
+    if (pairs.Count() < 1)
+    {
+        LV_LOG(crash, "No elements in tree");
+        return intersection;
+    }
 
-	for (const Pair& pair : pairs)
-		nodes.Push(pair.index);
+    for (const Pair &pair : pairs)
+        nodes.Push(pair.index);
 
-	while (!nodes.IsEmpty())
-	{
-		uint32 index = nodes.Pop();
+    while (!nodes.IsEmpty())
+    {
+        uint32 index = nodes.Pop();
 
-		if (!_tree.HasChildAt(index)) //leaf
-		{
-			LvIntersection nIntersection = intersection(_tree[index].b, ray, index, _detector);
-			if (nIntersection)
-				intersection = ranker(intersection, nIntersection);
-		}
-		else //branch
-		{
-			for (const Pair& npair : _tree.GetChildsAt(index))
-			{
-				float nears, fars;
-				if (npair.b.Intersect(ray, nears, fars))
-					nodes.Push(npair.index);
-			}
-		}
-	}
-	return intersection;
+        if (!_tree.HasChildAt(index)) //leaf
+        {
+            LvIntersection nIntersection =
+                intersection(_tree[index].b, ray, index, _detector);
+            if (nIntersection)
+                intersection = ranker(intersection, nIntersection);
+        }
+        else //branch
+        {
+            for (const Pair &npair : _tree.GetChildsAt(index))
+            {
+                float nears, fars;
+                if (npair.b.Intersect(ray, nears, fars))
+                    nodes.Push(npair.index);
+            }
+        }
+    }
+    return intersection;
 }
 
 void LvBVH::update(const uint32 id) noexcept
 {
-	uint32 parent = _tree.GetParentIndexAt(id);
-	uint32 root = _tree.GetRoot();
+    uint32 parent = _tree.GetParentIndexAt(id);
+    uint32 root = _tree.GetRoot();
 
-	while (parent != root)
-	{
-		LvBoxBound& bound = _tree[id].b;
-		bound.Clear();
-		for (const Pair& pair : _tree.GetChildsAt(id))
-			bound.ExpandToInclude(pair.b);
+    while (parent != root)
+    {
+        LvBoxBound &bound = _tree[id].b;
+        bound.Clear();
+        for (const Pair &pair : _tree.GetChildsAt(id))
+            bound.ExpandToInclude(pair.b);
 
-		parent = _tree.GetParentIndexAt(parent);
-	}
+        parent = _tree.GetParentIndexAt(parent);
+    }
 }
 
 const float LvDynamicAABBTree::aabbExtension = 0.01f;
@@ -303,7 +318,7 @@ LvDynamicAABBTree::LvDynamicAABBTree()
     _insertionCount = 0;
 
     _stackCapacity = 256;
-    _stack = static_cast<int*>(lv_malloc(sizeof(int) * _stackCapacity));
+    _stack = static_cast<int *>(lv_malloc(sizeof(int) * _stackCapacity));
 }
 
 LvDynamicAABBTree::LvDynamicAABBTree(int nodeCapacity)
@@ -327,19 +342,19 @@ LvDynamicAABBTree::LvDynamicAABBTree(int nodeCapacity)
     _insertionCount = 0;
 
     _stackCapacity = 256;
-    _stack = static_cast<int*>(lv_malloc(sizeof(int) * _stackCapacity));
+    _stack = static_cast<int *>(lv_malloc(sizeof(int) * _stackCapacity));
 }
 
 LvDynamicAABBTree::~LvDynamicAABBTree()
 {
     lv_free(_stack);
-	_stack = nullptr;
+    _stack = nullptr;
 
     delete[] _nodes;
     _nodes = nullptr;
 }
 
-int LvDynamicAABBTree::CreateProxy(const LvBoxBound& aabb, void* userData)
+int LvDynamicAABBTree::CreateProxy(const LvBoxBound &aabb, void *userData)
 {
     int proxyId = allocateNode();
 
@@ -364,7 +379,9 @@ void LvDynamicAABBTree::DestroyProxy(int proxyId)
     freeNode(proxyId);
 }
 
-bool LvDynamicAABBTree::UpdateProxy(int proxyId, const Engine::LvBoxBound& aabb, const LvVec3f displacement)
+bool LvDynamicAABBTree::UpdateProxy(int proxyId,
+                                    const Engine::LvBoxBound &aabb,
+                                    const LvVec3f displacement)
 {
     LV_CHECK(0 <= proxyId && proxyId < _nodeCapacity, "Invalid Proxy Id");
     LV_CHECK(_nodes[proxyId].isLeaf(), "Invalid Proxy Id");
@@ -383,14 +400,20 @@ bool LvDynamicAABBTree::UpdateProxy(int proxyId, const Engine::LvBoxBound& aabb,
     // Predict AABB displacement
     LvVec3f d = displacement * float(aabbExtension);
 
-    if (d.x < 0.f) b.minp.x += d.x;
-    else b.maxp.x += d.x;
+    if (d.x < 0.f)
+        b.minp.x += d.x;
+    else
+        b.maxp.x += d.x;
 
-    if (d.y < 0.f) b.minp.y += d.y;
-    else b.maxp.y += d.y;
+    if (d.y < 0.f)
+        b.minp.y += d.y;
+    else
+        b.maxp.y += d.y;
 
-    if (d.z < 0.f) b.minp.z += d.z;
-    else b.maxp.z += d.z;
+    if (d.z < 0.f)
+        b.minp.z += d.z;
+    else
+        b.maxp.z += d.z;
 
     _nodes[proxyId].aabb = b;
 
@@ -398,7 +421,7 @@ bool LvDynamicAABBTree::UpdateProxy(int proxyId, const Engine::LvBoxBound& aabb,
     return true;
 }
 
-bool LvDynamicAABBTree::UpdateProxy(int proxyId, const LvBoxBound& aabb)
+bool LvDynamicAABBTree::UpdateProxy(int proxyId, const LvBoxBound &aabb)
 {
     LV_CHECK(0 <= proxyId && proxyId < _nodeCapacity, "Invalid Proxy Id");
     LV_CHECK(_nodes[proxyId].isLeaf(), "Invalid Proxy Id");
@@ -419,13 +442,13 @@ bool LvDynamicAABBTree::UpdateProxy(int proxyId, const LvBoxBound& aabb)
     return true;
 }
 
-void* LvDynamicAABBTree::GetUserData(int proxyId) const
+void *LvDynamicAABBTree::GetUserData(int proxyId) const
 {
     LV_CHECK(0 <= proxyId && proxyId < _nodeCapacity, "Invalid Proxy Id");
     return _nodes[proxyId].userData;
 }
 
-const LvBoxBound& LvDynamicAABBTree::GetFatAABB(int proxyId) const
+const LvBoxBound &LvDynamicAABBTree::GetFatAABB(int proxyId) const
 {
     LV_CHECK(0 <= proxyId && proxyId < _nodeCapacity, "Invalid Proxy Id");
     return _nodes[proxyId].aabb;
@@ -462,13 +485,14 @@ int LvDynamicAABBTree::allocateNode()
     // Expand the node pool as needed.
     if (_freeList == nodeNull)
     {
-        LV_CHECK(_nodeCount == _nodeCapacity, "node count should be full with node capcity");
+        LV_CHECK(_nodeCount == _nodeCapacity,
+                 "node count should be full with node capcity");
 
         // The free list is empty. Rebuild a bigger pool
-        TreeNode* oldNodes = _nodes;
+        TreeNode *oldNodes = _nodes;
         _nodeCapacity *= 2;
         _nodes = new TreeNode[_nodeCapacity];
-        memcpy((void*)_nodes, (void*)oldNodes, _nodeCount * sizeof(TreeNode));
+        memcpy((void *)_nodes, (void *)oldNodes, _nodeCount * sizeof(TreeNode));
         delete[] oldNodes;
         oldNodes = nullptr;
 
@@ -576,8 +600,10 @@ void LvDynamicAABBTree::insertLeaf(int leaf)
             break;
 
         // Descend
-        if (cost1 < cost2) index = left;
-        else index = right;
+        if (cost1 < cost2)
+            index = left;
+        else
+            index = right;
     }
 
     int sibling = index;
@@ -629,8 +655,10 @@ void LvDynamicAABBTree::insertLeaf(int leaf)
         ASSERT(left != nodeNull);
         ASSERT(right != nodeNull);
 
-        _nodes[index].height = 1 + LV_MAX(_nodes[left].height, _nodes[right].height);
-        _nodes[index].aabb.ExpandToInclude(_nodes[left].aabb, _nodes[right].aabb);
+        _nodes[index].height =
+            1 + LV_MAX(_nodes[left].height, _nodes[right].height);
+        _nodes[index].aabb.ExpandToInclude(_nodes[left].aabb,
+                                           _nodes[right].aabb);
 
         index = _nodes[index].parent;
     }
@@ -673,8 +701,10 @@ void LvDynamicAABBTree::removeLeaf(int leaf)
             int left = _nodes[index].left;
             int right = _nodes[index].right;
 
-            _nodes[index].aabb.ExpandToInclude(_nodes[left].aabb, _nodes[right].aabb);
-            _nodes[index].height = 1 + LV_MAX(_nodes[left].height, _nodes[right].height);
+            _nodes[index].aabb.ExpandToInclude(_nodes[left].aabb,
+                                               _nodes[right].aabb);
+            _nodes[index].height =
+                1 + LV_MAX(_nodes[left].height, _nodes[right].height);
 
             index = _nodes[index].parent;
         }
@@ -686,14 +716,13 @@ void LvDynamicAABBTree::removeLeaf(int leaf)
         _nodes[sibling].parent = nodeNull;
         freeNode(parent);
     }
-
 }
 
 int LvDynamicAABBTree::makeBalance(int iA)
 {
     LV_CHECK(iA != nodeNull, "Invalid Node Index");
 
-    TreeNode* nodeA = _nodes + iA;
+    TreeNode *nodeA = _nodes + iA;
     if (nodeA->isLeaf() || nodeA->height < 2)
     {
         return iA;
@@ -704,8 +733,8 @@ int LvDynamicAABBTree::makeBalance(int iA)
     LV_CHECK(0 <= iB && iB < _nodeCapacity, "Invalid Node Index");
     LV_CHECK(0 <= iC && iC < _nodeCapacity, "Invalid Node Index");
 
-    TreeNode* nodeB = _nodes + iB;
-    TreeNode* nodeC = _nodes + iC;
+    TreeNode *nodeB = _nodes + iB;
+    TreeNode *nodeC = _nodes + iC;
 
     int balance = nodeC->height - nodeB->height;
 
@@ -714,8 +743,8 @@ int LvDynamicAABBTree::makeBalance(int iA)
     {
         int iF = nodeC->left;
         int iG = nodeC->right;
-        TreeNode* nodeF = _nodes + iF;
-        TreeNode* nodeG = _nodes + iG;
+        TreeNode *nodeF = _nodes + iF;
+        TreeNode *nodeG = _nodes + iG;
         LV_CHECK(0 <= iF && iF < _nodeCapacity, "Invalid Node Index");
         LV_CHECK(0 <= iG && iG < _nodeCapacity, "Invalid Node Index");
 
@@ -733,7 +762,8 @@ int LvDynamicAABBTree::makeBalance(int iA)
             }
             else
             {
-                LV_CHECK(_nodes[nodeC->parent].right == iA, "Invalid Node Index");
+                LV_CHECK(_nodes[nodeC->parent].right == iA,
+                         "Invalid Node Index");
                 _nodes[nodeC->parent].right = iC;
             }
         }
@@ -774,8 +804,8 @@ int LvDynamicAABBTree::makeBalance(int iA)
     {
         int iD = nodeB->left;
         int iE = nodeB->right;
-        TreeNode* nodeD = _nodes + iD;
-        TreeNode* nodeE = _nodes + iE;
+        TreeNode *nodeD = _nodes + iD;
+        TreeNode *nodeE = _nodes + iE;
         LV_CHECK(0 <= iD && iD < _nodeCapacity, "Invalid Node Index");
         LV_CHECK(0 <= iE && iE < _nodeCapacity, "Invalid Node Index");
 
@@ -793,7 +823,8 @@ int LvDynamicAABBTree::makeBalance(int iA)
             }
             else
             {
-                LV_CHECK(_nodes[nodeB->parent].right == iA, "Invalid Node Index");
+                LV_CHECK(_nodes[nodeB->parent].right == iA,
+                         "Invalid Node Index");
                 _nodes[nodeB->parent].right = iB;
             }
         }

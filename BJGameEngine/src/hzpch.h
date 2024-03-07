@@ -2,42 +2,42 @@
 
 
 // Standard
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <string.h>
 #include <assert.h>
 #include <bitset>
-#include <string>
-#include <sstream>
-#include <iostream>
 #include <cstdint>
+#include <iostream>
+#include <sstream>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <string>
 
 // Utils
-#include <memory>
 #include <algorithm>
-#include <type_traits>
 #include <functional>
-#include <utility>
+#include <memory>
 #include <string_view>
+#include <type_traits>
+#include <utility>
 
 // Platform
 #include <process.h>
 
 // DS
-#include <vector>
-#include <set>
-#include <map>
-#include <stack>
-#include <deque>
-#include <queue>
 #include <array>
+#include <deque>
+#include <map>
+#include <queue>
+#include <set>
+#include <stack>
+#include <tuple>
 #include <unordered_map>
 #include <unordered_set>
-#include <tuple>
+#include <vector>
 
-#include "Hazel/Utils/Log.h"
 #include "Hazel/Debug/Instrumentor.h"
+#include "Hazel/Utils/Log.h"
 
 #ifdef HZ_PLATFORM_WINDOWS
 #include <Windows.h>
@@ -58,4 +58,9 @@ typedef unsigned long ulong;
 typedef unsigned long long uint64;
 
 // Exception
-#define THROW(fmt, ...) do { fprintf(stderr, fmt "\n", ##__VA_ARGS__); __debugbreak(); } while (false)
+#define THROW(fmt, ...)                                                        \
+    do                                                                         \
+    {                                                                          \
+        fprintf(stderr, fmt "\n", ##__VA_ARGS__);                              \
+        __debugbreak();                                                        \
+    } while (false)

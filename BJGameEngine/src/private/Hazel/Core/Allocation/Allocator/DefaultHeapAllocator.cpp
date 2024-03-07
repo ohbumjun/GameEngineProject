@@ -1,35 +1,35 @@
+ï»¿#include "Hazel/Core/Allocation/Allocator/DefaultHeapAllocator.h"
 #include "hzpch.h"
-#include "Hazel/Core/Allocation/Allocator/DefaultHeapAllocator.h"
 #include <malloc.h>
 
 namespace Hazel
 {
-	void* DefaultHeapAllocator::Allocate(size_t size)
-	{
-		return malloc(size);
-	}
-
-	void* DefaultHeapAllocator::Reallocate(void* ptr, size_t size)
-	{
-		// resize previous allocated block
-		// 1) pointer to original memory block
-		// 2) new size
-
-		/*_aligned_realloc Àº ¿©±â¼­ alignment ¸¸ ¸ÂÃçÁÖ´Â ±â´É*/
-		return realloc(ptr, size);
-
-		/*
-		realloc ÀÌ³ª _aligned_realloc ¸ğµÎ resize µÈ ¸Ş¸ğ¸® ºí·ÏÀÇ »õ·Î¿î Æ÷ÀÎÅÍ¸¦ ¸®ÅÏÇÒ ¼ö ÀÖ´Ù´Â °ÍÀÌ´Ù.
-		Áï, ±âÁ¸ À§Ä¡¿¡¼­ resize µÉ ¼ö ¾ø´Ù¸é, »õ·Î¿î block À» ÇÒ´çÇÏ´Â ¹æ½ÄÀÌ´Ù.
-		±×¸®°í ±âÁ¸ block ÀÇ ³»¿ëÀ», »õ·Î¿î block À¸·Î º¹»çÇØÁÖ´Â ¹æ½ÄÀÌ´Ù.
-
-		±×·¯¹Ç·Î, ÇØ´ç ÇÔ¼öÀÇ °á°ú°ªÀ» original pointer ¿¡ ´Ù½Ã ¼¼ÆÃÇÏ¿©
-		dangling ÀÌ ³ªÁö ¾Ê°Ô ÇØ¾ß ÇÑ´Ù.
-		*/
-	}
-
-	void DefaultHeapAllocator::Free(void* ptr)
-	{
-		free(ptr);
-	}
+void *DefaultHeapAllocator::Allocate(size_t size)
+{
+    return malloc(size);
 }
+
+void *DefaultHeapAllocator::Reallocate(void *ptr, size_t size)
+{
+    // resize previous allocated block
+    // 1) pointer to original memory block
+    // 2) new size
+
+    /*_aligned_realloc ì€ ì—¬ê¸°ì„œ alignment ë§Œ ë§ì¶°ì£¼ëŠ” ê¸°ëŠ¥*/
+    return realloc(ptr, size);
+
+    /*
+		realloc ì´ë‚˜ _aligned_realloc ëª¨ë‘ resize ëœ ë©”ëª¨ë¦¬ ë¸”ë¡ì˜ ìƒˆë¡œìš´ í¬ì¸í„°ë¥¼ ë¦¬í„´í•  ìˆ˜ ìˆë‹¤ëŠ” ê²ƒì´ë‹¤.
+		ì¦‰, ê¸°ì¡´ ìœ„ì¹˜ì—ì„œ resize ë  ìˆ˜ ì—†ë‹¤ë©´, ìƒˆë¡œìš´ block ì„ í• ë‹¹í•˜ëŠ” ë°©ì‹ì´ë‹¤.
+		ê·¸ë¦¬ê³  ê¸°ì¡´ block ì˜ ë‚´ìš©ì„, ìƒˆë¡œìš´ block ìœ¼ë¡œ ë³µì‚¬í•´ì£¼ëŠ” ë°©ì‹ì´ë‹¤.
+
+		ê·¸ëŸ¬ë¯€ë¡œ, í•´ë‹¹ í•¨ìˆ˜ì˜ ê²°ê³¼ê°’ì„ original pointer ì— ë‹¤ì‹œ ì„¸íŒ…í•˜ì—¬
+		dangling ì´ ë‚˜ì§€ ì•Šê²Œ í•´ì•¼ í•œë‹¤.
+		*/
+}
+
+void DefaultHeapAllocator::Free(void *ptr)
+{
+    free(ptr);
+}
+} // namespace Hazel

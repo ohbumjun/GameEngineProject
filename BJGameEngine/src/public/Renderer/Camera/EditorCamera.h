@@ -1,155 +1,193 @@
-#pragma once
+ï»¿#pragma once
 
 #include "Camera.h"
-#include "Hazel/Utils/TimeStep.h"
 #include "Hazel/Event/Event.h"
 #include "Hazel/Event/MouseEvent.h"
+#include "Hazel/Utils/TimeStep.h"
 
 #include <glm/glm.hpp>
 
-namespace Hazel {
+namespace Hazel
+{
 
-	class HAZEL_API EditorCamera : public Camera
-	{
-	public:
-		EditorCamera() = default;
-		EditorCamera(float fov, float aspectRatio, float nearClip, float farClip);
+class HAZEL_API EditorCamera : public Camera
+{
+public:
+    EditorCamera() = default;
+    EditorCamera(float fov, float aspectRatio, float nearClip, float farClip);
 
-		void OnUpdate(Timestep ts);
-		void OnEvent(Event& e);
+    void OnUpdate(Timestep ts);
+    void OnEvent(Event &e);
 
-		// Getter
-		inline float GetDistance() const { return m_Distance; }
+    // Getter
+    inline float GetDistance() const
+    {
+        return m_Distance;
+    }
 
-		inline const glm::mat4& GetViewMatrix() const { return m_ViewMatrix; }
-		glm::mat4 GetViewProjection() const { return m_ProjectionMatrix * m_ViewMatrix; }
+    inline const glm::mat4 &GetViewMatrix() const
+    {
+        return m_ViewMatrix;
+    }
+    glm::mat4 GetViewProjection() const
+    {
+        return m_ProjectionMatrix * m_ViewMatrix;
+    }
 
-		glm::vec3 GetUpDirection() const;
-		glm::vec3 GetRightDirection() const;
-		/*
-		World »ó¿¡¼­ ¿øÁ¡ ±âÁØÀ¸·Î
-		Ä«¸Ş¶ó°¡ ¹Ù¶óº¸´Â ¹æÇâ º¤ÅÍ°ªÀ» ¸®ÅÏÇÑ´Ù.
+    glm::vec3 GetUpDirection() const;
+    glm::vec3 GetRightDirection() const;
+    /*
+		World ìƒì—ì„œ ì›ì  ê¸°ì¤€ìœ¼ë¡œ
+		ì¹´ë©”ë¼ê°€ ë°”ë¼ë³´ëŠ” ë°©í–¥ ë²¡í„°ê°’ì„ ë¦¬í„´í•œë‹¤.
 		*/
-		glm::vec3 GetForwardDirection() const;
-		inline const glm::vec3& GetPosition() const { return m_Position; }
+    glm::vec3 GetForwardDirection() const;
+    inline const glm::vec3 &GetPosition() const
+    {
+        return m_Position;
+    }
 
-		/*
-		´Ü¼øÈ÷ x,y È¸Àü°ªÀÌ ¾ó¸¶ÀÎÁö
+    /*
+		ë‹¨ìˆœíˆ x,y íšŒì „ê°’ì´ ì–¼ë§ˆì¸ì§€
 		*/
-		glm::quat GetOrientation() const;
+    glm::quat GetOrientation() const;
 
-		inline float GetPerspectiveFov() const { return m_FOV; }
-		inline float GetPerspectiveNear() const { return m_NearClip; }
-		inline float GetPerspectiveFar() const { return m_FarClip; }
+    inline float GetPerspectiveFov() const
+    {
+        return m_FOV;
+    }
+    inline float GetPerspectiveNear() const
+    {
+        return m_NearClip;
+    }
+    inline float GetPerspectiveFar() const
+    {
+        return m_FarClip;
+    }
 
-		inline float GetPitch() const { return m_Pitch; }
-		inline float GetYaw() const { return m_Yaw; }
+    inline float GetPitch() const
+    {
+        return m_Pitch;
+    }
+    inline float GetYaw() const
+    {
+        return m_Yaw;
+    }
 
-		// Setter
-		inline void SetDistance(float distance) { m_Distance = distance; }
-		inline void SetViewportSize(float width, float height) 
-		{ 
-			m_ViewportWidth = width; m_ViewportHeight = height; updateProjection(); 
-		}
-		inline void SetPerspectiveFov(float FOV)  
-		{  
-			m_FOV = FOV;  updateProjection();
-		}
-		inline void SetPerspectiveNearClip(float Near)
-		{
-			m_NearClip = Near;  updateProjection();
-		}
-		inline void SetPerspectiveFarClip(float Far)
-		{
-			m_FarClip = Far;  updateProjection();
-		}
-	private:
-		void updateProjection();
-		void updateView();
+    // Setter
+    inline void SetDistance(float distance)
+    {
+        m_Distance = distance;
+    }
+    inline void SetViewportSize(float width, float height)
+    {
+        m_ViewportWidth = width;
+        m_ViewportHeight = height;
+        updateProjection();
+    }
+    inline void SetPerspectiveFov(float FOV)
+    {
+        m_FOV = FOV;
+        updateProjection();
+    }
+    inline void SetPerspectiveNearClip(float Near)
+    {
+        m_NearClip = Near;
+        updateProjection();
+    }
+    inline void SetPerspectiveFarClip(float Far)
+    {
+        m_FarClip = Far;
+        updateProjection();
+    }
 
-		bool onMouseScroll(MouseScrolledEvent& e);
+private:
+    void updateProjection();
+    void updateView();
 
-		/*
-		Á¤¸®
-		1) MousePan, MouseZoom Àº °£´ÜÇÏ°Ô ¸»ÇÏ¸é
-		Camera ÀÇ Transition À» ÀÌµ¿½ÃÅ°´Â °Í 
-		2) MouseRotate ´Â 
-		Camera ÀÇ Rotation À» º¯°æ½ÃÅ°´Â °Í
+    bool onMouseScroll(MouseScrolledEvent &e);
 
-		°¢°¢À» Transition, Rotate ·Î °í·ÁÇØ¼­
-		World º¯È¯ Çà·Ä S,R,T ¸¦ ¸¸µå´Â °ÍÀÌ´Ù.
+    /*
+		ì •ë¦¬
+		1) MousePan, MouseZoom ì€ ê°„ë‹¨í•˜ê²Œ ë§í•˜ë©´
+		Camera ì˜ Transition ì„ ì´ë™ì‹œí‚¤ëŠ” ê²ƒ 
+		2) MouseRotate ëŠ” 
+		Camera ì˜ Rotation ì„ ë³€ê²½ì‹œí‚¤ëŠ” ê²ƒ
+
+		ê°ê°ì„ Transition, Rotate ë¡œ ê³ ë ¤í•´ì„œ
+		World ë³€í™˜ í–‰ë ¬ S,R,T ë¥¼ ë§Œë“œëŠ” ê²ƒì´ë‹¤.
 		*/
-		// ¸¶¿ì½º¸¦ ÀÌµ¿½ÃÅ°´Â ÇÔ¼ö
-		void mousePan(const glm::vec2& delta);
-		// ¸¶¿ì½º¸¦ È¸Àü½ÃÅ°´Â ÇÔ¼ö
-		void mouseRotate(const glm::vec2& delta);
-		// ¸¶¿ì½º ÁÜÀÎÀ» ÇØÁÖ´Â ÇÔ¼ö
-		void mouseZoom(float delta);
+    // ë§ˆìš°ìŠ¤ë¥¼ ì´ë™ì‹œí‚¤ëŠ” í•¨ìˆ˜
+    void mousePan(const glm::vec2 &delta);
+    // ë§ˆìš°ìŠ¤ë¥¼ íšŒì „ì‹œí‚¤ëŠ” í•¨ìˆ˜
+    void mouseRotate(const glm::vec2 &delta);
+    // ë§ˆìš°ìŠ¤ ì¤Œì¸ì„ í•´ì£¼ëŠ” í•¨ìˆ˜
+    void mouseZoom(float delta);
 
-		glm::vec3 calculatePosition() const;
+    glm::vec3 calculatePosition() const;
 
-		std::pair<float, float> panSpeed() const;
-		float rotationSpeed() const;
+    std::pair<float, float> panSpeed() const;
+    float rotationSpeed() const;
 
-		/*
-		Mouse Scroll ÇÏ¸é¼­ Camera ÀÇ Zoom Speed ¸¦
-		Á¶ÀıÇØÁÖ´Â ÇÔ¼ö
+    /*
+		Mouse Scroll í•˜ë©´ì„œ Camera ì˜ Zoom Speed ë¥¼
+		ì¡°ì ˆí•´ì£¼ëŠ” í•¨ìˆ˜
 
-		z = 0 ¿¡ °¡±î¿ï ¼ö·Ï, zoom speed ´Â ÁÙ¾îµé¾î¼­
-		ÃµÃµÈ÷ °¡±î¿öÁö°í
+		z = 0 ì— ê°€ê¹Œìš¸ ìˆ˜ë¡, zoom speed ëŠ” ì¤„ì–´ë“¤ì–´ì„œ
+		ì²œì²œíˆ ê°€ê¹Œì›Œì§€ê³ 
 
-		z = 0 À¸·ÎºÎÅÍ ¸Ö¼ö·Ï, zoom speed ´Â »¡¶óÁ®¼­
-		»¡¸® °¡±î¿öÁø´Ù.
+		z = 0 ìœ¼ë¡œë¶€í„° ë©€ìˆ˜ë¡, zoom speed ëŠ” ë¹¨ë¼ì ¸ì„œ
+		ë¹¨ë¦¬ ê°€ê¹Œì›Œì§„ë‹¤.
 		*/
-		float ZoomSpeed() const;
+    float ZoomSpeed() const;
 
 
-		float m_FOV = 45.0f, m_AspectRatio = 1.778f, m_NearClip = 0.1f, m_FarClip = 1000.0f;
+    float m_FOV = 45.0f, m_AspectRatio = 1.778f, m_NearClip = 0.1f,
+          m_FarClip = 1000.0f;
 
-		glm::mat4 m_ViewMatrix;
-		
-		/*
-		World »ó¿¡¼­ Camera ÀÇ Pos ¶ó°í »ı°¢ÇÏ¸é µÈ´Ù.
-		Translation Á¤º¸
+    glm::mat4 m_ViewMatrix;
+
+    /*
+		World ìƒì—ì„œ Camera ì˜ Pos ë¼ê³  ìƒê°í•˜ë©´ ëœë‹¤.
+		Translation ì •ë³´
 		*/
-		glm::vec3 m_Position = { 0.0f, 0.0f, 0.0f };
+    glm::vec3 m_Position = {0.0f, 0.0f, 0.0f};
 
-		/*
-		Focal point ¶ó´Â °ÍÀÇ ÀÇ¹Ì´Â, ÇØ´ç ÁöÁ¡
-		beyond ·Î ³Ñ¾î°¥ ¼ö ¾ø´Ù´Â °ÍÀ» ÀÇ¹ÌÇÑ´Ù.
+    /*
+		Focal point ë¼ëŠ” ê²ƒì˜ ì˜ë¯¸ëŠ”, í•´ë‹¹ ì§€ì 
+		beyond ë¡œ ë„˜ì–´ê°ˆ ìˆ˜ ì—†ë‹¤ëŠ” ê²ƒì„ ì˜ë¯¸í•œë‹¤.
 
-		½±°Ô ¸»ÇØ Camera °¡ Focusing ÇÏ´Â Áß¾Ó ÁöÁ¡ÀÌ¶ó°í
-		»ı°¢ÇØµµ µÈ´Ù.
+		ì‰½ê²Œ ë§í•´ Camera ê°€ Focusing í•˜ëŠ” ì¤‘ì•™ ì§€ì ì´ë¼ê³ 
+		ìƒê°í•´ë„ ëœë‹¤.
 
-		MousePan ÇÔ¼ö¿¡¼­ Focal Point ¸¦ ÀÌµ¿½ÃÅ²´Ù.
-		Camera ÀÇ Æ¯Á¤ Position  À» ÀÌµ¿½ÃÅ°´Â °³³äÀÌ ¾Æ´Ï´Ù.
+		MousePan í•¨ìˆ˜ì—ì„œ Focal Point ë¥¼ ì´ë™ì‹œí‚¨ë‹¤.
+		Camera ì˜ íŠ¹ì • Position  ì„ ì´ë™ì‹œí‚¤ëŠ” ê°œë…ì´ ì•„ë‹ˆë‹¤.
 		*/
-		glm::vec3 m_FocalPoint = { 0.0f, 0.0f, 0.0f };
+    glm::vec3 m_FocalPoint = {0.0f, 0.0f, 0.0f};
 
-		glm::vec2 m_InitialMousePosition = { 0.0f, 0.0f };
+    glm::vec2 m_InitialMousePosition = {0.0f, 0.0f};
 
-		/*
-		Scene ÀÇ ¿øÁ¡ (0,0,0) À» focusing ÇÏ¸é¼­
-		µ¿½Ã¿¡ Á¶±İ µÚ¿¡¼­ ÇØ´ç ¿øÁ¡À» ¹Ù¶óº¸°Ô ÇÏ´Â °ÍÀÌ´Ù.
+    /*
+		Scene ì˜ ì›ì  (0,0,0) ì„ focusing í•˜ë©´ì„œ
+		ë™ì‹œì— ì¡°ê¸ˆ ë’¤ì—ì„œ í•´ë‹¹ ì›ì ì„ ë°”ë¼ë³´ê²Œ í•˜ëŠ” ê²ƒì´ë‹¤.
 
-		z °¡ 1º¸´Ù ÀÛÁö ¾Ê°Ô Á¶ÀıÇÑ´Ù.
-		Áï, ³Ê¹« ¾ÕÀ¸·Î °¡¼­ ¹°Ã¼µé µÚ·Î ³Ñ¾î°¡´Â °ÍÀ»
-		¹æÁöÇÏ±â À§ÇÑ °Í °°±âµµ ÇÏ´Ù.
+		z ê°€ 1ë³´ë‹¤ ì‘ì§€ ì•Šê²Œ ì¡°ì ˆí•œë‹¤.
+		ì¦‰, ë„ˆë¬´ ì•ìœ¼ë¡œ ê°€ì„œ ë¬¼ì²´ë“¤ ë’¤ë¡œ ë„˜ì–´ê°€ëŠ” ê²ƒì„
+		ë°©ì§€í•˜ê¸° ìœ„í•œ ê²ƒ ê°™ê¸°ë„ í•˜ë‹¤.
 		*/
-		float m_Distance = 10.0f;
+    float m_Distance = 10.0f;
 
-		/*
-		Pitch : Ä«¸Ş¶ó ¹æÇâÀÇ x Ãà (À§, ¾Æ·¡) È¸Àü °¢µµ
-		Yaw  : Ä«¸Ş¶ó ¹æÇâÀÇ y Ãà (¿Ş, ¿À) È¸Àü °¢µµ
-		z ÃàÀ¸·ÎÀÇ È¸ÀüÀº ¹æÁöÇÏ´Â °ÍÀ¸·Î º¸ÀÎ´Ù.
+    /*
+		Pitch : ì¹´ë©”ë¼ ë°©í–¥ì˜ x ì¶• (ìœ„, ì•„ë˜) íšŒì „ ê°ë„
+		Yaw  : ì¹´ë©”ë¼ ë°©í–¥ì˜ y ì¶• (ì™¼, ì˜¤) íšŒì „ ê°ë„
+		z ì¶•ìœ¼ë¡œì˜ íšŒì „ì€ ë°©ì§€í•˜ëŠ” ê²ƒìœ¼ë¡œ ë³´ì¸ë‹¤.
 
-		OPENGL ¿À¸¥¼Õ ÁÂÇ¥°è¿¡¼­´Â
-		°¢ ÃàÀ» ±âÁØÀ¸·Î, ¹İ½Ã°è ¹æÇâÀÌ
-		¾ç¼ö È¸Àü°ªÀÌ¶ó°í »ı°¢ÇÏ¸é µÈ´Ù.
+		OPENGL ì˜¤ë¥¸ì† ì¢Œí‘œê³„ì—ì„œëŠ”
+		ê° ì¶•ì„ ê¸°ì¤€ìœ¼ë¡œ, ë°˜ì‹œê³„ ë°©í–¥ì´
+		ì–‘ìˆ˜ íšŒì „ê°’ì´ë¼ê³  ìƒê°í•˜ë©´ ëœë‹¤.
 		*/
-		float m_Pitch = 0.0f, m_Yaw = 0.0f;
+    float m_Pitch = 0.0f, m_Yaw = 0.0f;
 
-		float m_ViewportWidth = 1280, m_ViewportHeight = 720;
-	};
+    float m_ViewportWidth = 1280, m_ViewportHeight = 720;
+};
 
-}
+} // namespace Hazel

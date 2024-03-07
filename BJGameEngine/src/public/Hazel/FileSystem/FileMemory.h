@@ -2,34 +2,34 @@
 
 #include "FileModes.h"
 
-class FileMemory 
+class FileMemory
 {
 
 public:
-	FileMemory(HANDLE file);
+    FileMemory(HANDLE file);
 
-	FileMemory(const char* path, FileOpenMode mode);
+    FileMemory(const char *path, FileOpenMode mode);
 
-	FileMemory(const char* path, FileOpenMode mode, FileAccessMode access);
+    FileMemory(const char *path, FileOpenMode mode, FileAccessMode access);
 
-	~FileMemory() ;
+    ~FileMemory();
 
-	int64 GetCurrentPos() ;
+    int64 GetCurrentPos();
 
-	void SetPos(int64 pos) ;
+    void SetPos(int64 pos);
 
-	void SerializeData(const void* ptr, size_t size) ;
+    void SerializeData(const void *ptr, size_t size);
 
-	void DeserializeData(void* ptr, size_t size) ;
+    void DeserializeData(void *ptr, size_t size);
 
-	void FlushToFile() const;
+    void FlushToFile() const;
 
-	void End() ;
+    void End();
 
-	size_t GetDataLength() const ;
+    size_t GetDataLength() const;
 
 private:
-	HANDLE m_FileHandle;
-	size_t m_Position = 0;
-	size_t m_Length = 0;
+    HANDLE m_FileHandle;
+    size_t m_Position = 0;
+    size_t m_Length = 0;
 };

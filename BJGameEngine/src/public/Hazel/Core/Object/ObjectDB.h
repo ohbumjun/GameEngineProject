@@ -1,4 +1,4 @@
-#pragma once
+Ôªø#pragma once
 /**************************************************************************/
 /*  object.h                                                              */
 /**************************************************************************/
@@ -29,70 +29,76 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                 */
 /**************************************************************************/
 
-#include "Hazel/Core/Object/ObjectID.h"
 #include "Hazel/Core/Allocation/Allocator/DefaultHeapAllocator.h"
+#include "Hazel/Core/Object/ObjectID.h"
 #include "Hazel/Core/Thread/ThreadUtil.h"
 
 namespace Hazel
 {
-	class BaseObject;
+class BaseObject;
 
-	class ObjectDB {
-		friend class BaseObject;
+class ObjectDB
+{
+    friend class BaseObject;
 
-		// This needs to add up to 63, 1 bit is for reference.
+    // This needs to add up to 63, 1 bit is for reference.
 #define OBJECTDB_VALIDATOR_BITS 39
 #define OBJECTDB_VALIDATOR_MASK ((uint64_t(1) << OBJECTDB_VALIDATOR_BITS) - 1)
 #define OBJECTDB_SLOT_MAX_COUNT_BITS 24
-#define OBJECTDB_SLOT_MAX_COUNT_MASK ((uint64_t(1) << OBJECTDB_SLOT_MAX_COUNT_BITS) - 1)
-#define OBJECTDB_REFERENCE_BIT (uint64_t(1) << (OBJECTDB_SLOT_MAX_COUNT_BITS + OBJECTDB_VALIDATOR_BITS))
+#define OBJECTDB_SLOT_MAX_COUNT_MASK                                           \
+    ((uint64_t(1) << OBJECTDB_SLOT_MAX_COUNT_BITS) - 1)
+#define OBJECTDB_REFERENCE_BIT                                                 \
+    (uint64_t(1) << (OBJECTDB_SLOT_MAX_COUNT_BITS + OBJECTDB_VALIDATOR_BITS))
 
 
-	public:
-		inline static BaseObject* GetObjectInstance(ObjectID p_instance_id) {
-			uint64_t id = p_instance_id;
-			uint32_t slot = id & OBJECTDB_SLOT_MAX_COUNT_MASK;
+public:
+    inline static BaseObject *GetObjectInstance(ObjectID p_instance_id)
+    {
+        uint64_t id = p_instance_id;
+        uint32_t slot = id & OBJECTDB_SLOT_MAX_COUNT_MASK;
 
-			// ±ª¿Ã spin lock ¿ª ∞…æÓ¡÷¥¬ ¿Ã¿Ø∞° ¿÷≥™ ?
-			// m_SpinLock.lock();
+        // Íµ≥Ïù¥ spin lock ÏùÑ Í±∏Ïñ¥Ï£ºÎäî Ïù¥Ïú†Í∞Ä ÏûàÎÇò ?
+        // m_SpinLock.lock();
 
-			uint64_t validator = (id >> OBJECTDB_SLOT_MAX_COUNT_BITS) & OBJECTDB_VALIDATOR_MASK;
+        uint64_t validator =
+            (id >> OBJECTDB_SLOT_MAX_COUNT_BITS) & OBJECTDB_VALIDATOR_MASK;
 
-			// if (unlikely(object_slots[slot].validator != validator)) {
-			if (m_ObjectSlotArray[slot].valid_num != validator)
-			{
-				// m_SpinLock.unlock();
-				return nullptr;
-			}
+        // if (unlikely(object_slots[slot].validator != validator)) {
+        if (m_ObjectSlotArray[slot].valid_num != validator)
+        {
+            // m_SpinLock.unlock();
+            return nullptr;
+        }
 
-			BaseObject* object = m_ObjectSlotArray[slot].object;
+        BaseObject *object = m_ObjectSlotArray[slot].object;
 
-			// m_SpinLock.unlock();
+        // m_SpinLock.unlock();
 
-			return object;
-		}
-		static int get_object_count();
+        return object;
+    }
+    static int get_object_count();
 
-	private:
-		struct ObjectSlot { // 128 bits per slot.
-			// «ÿ¥Á slot ø° µÈæÓ¿÷¥¬ address ∞°, ±‚¡∏ object id øÕ µø¿œ«— ≥‡ºÆ¿Œ¡ˆ.
-			uint64_t valid_num : OBJECTDB_VALIDATOR_BITS;
-			uint64_t next_free : OBJECTDB_SLOT_MAX_COUNT_BITS;
-			uint64_t is_ref_counted : 1;
-			BaseObject* object = nullptr;
-		};
+private:
+    struct ObjectSlot
+    { // 128 bits per slot.
+        // Ìï¥Îãπ slot Ïóê Îì§Ïñ¥ÏûàÎäî address Í∞Ä, Í∏∞Ï°¥ object id ÏôÄ ÎèôÏùºÌïú ÎÖÄÏÑùÏù∏ÏßÄ.
+        uint64_t valid_num : OBJECTDB_VALIDATOR_BITS;
+        uint64_t next_free : OBJECTDB_SLOT_MAX_COUNT_BITS;
+        uint64_t is_ref_counted : 1;
+        BaseObject *object = nullptr;
+    };
 
-		int GetObjectCount();
-		static void Clean();
+    int GetObjectCount();
+    static void Clean();
 
-		static ObjectID Add(BaseObject* p_object);
-		static void Remove(BaseObject* p_object);
+    static ObjectID Add(BaseObject *p_object);
+    static void Remove(BaseObject *p_object);
 
-		static DefaultHeapAllocator m_Allocator;
-		static SpinLock m_SpinLock;
-		static uint32_t m_SlotCnt;
-		static uint32_t m_SlotMax;
-		static ObjectSlot* m_ObjectSlotArray;
-		static uint64_t m_ValidateNumber;
-	};
-}
+    static DefaultHeapAllocator m_Allocator;
+    static SpinLock m_SpinLock;
+    static uint32_t m_SlotCnt;
+    static uint32_t m_SlotMax;
+    static ObjectSlot *m_ObjectSlotArray;
+    static uint64_t m_ValidateNumber;
+};
+} // namespace Hazel

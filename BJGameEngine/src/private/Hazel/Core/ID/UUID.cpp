@@ -1,39 +1,38 @@
+ï»¿#include "Hazel/Core/ID/UUID.h"
 #include "hzpch.h"
-#include "Hazel/Core/ID/UUID.h"
 #include <random>
 
 #include <unordered_map>
 
-namespace Hazel {
+namespace Hazel
+{
 
-	static std::random_device s_RandomDevice;
-	static std::mt19937_64 s_Engine(s_RandomDevice());
-	static std::uniform_int_distribution<uint64_t> s_UniformDistribution;
+static std::random_device s_RandomDevice;
+static std::mt19937_64 s_Engine(s_RandomDevice());
+static std::uniform_int_distribution<uint64_t> s_UniformDistribution;
 
-	/*
-	È¤¿©³ª uuid Ãæµ¹À» ¹æÁöÇÏ·Á¸é ? ¾Æ¹«¸® °¡´É¼ºÀÌ ÀÛ¾Æµµ ..
+/*
+	í˜¹ì—¬ë‚˜ uuid ì¶©ëŒì„ ë°©ì§€í•˜ë ¤ë©´ ? ì•„ë¬´ë¦¬ ê°€ëŠ¥ì„±ì´ ì‘ì•„ë„ ..
 
-	static unordered_set À» ¸¸µé¾î¼­, Áßº¹ uuid °¡ ÀÖÀ¸¸é ´Ù½Ã ¹ß±ŞÇÏ´Â µîÀ» ½ÃµµÇÒ ¼öµµ ÀÖ´Ù.
+	static unordered_set ì„ ë§Œë“¤ì–´ì„œ, ì¤‘ë³µ uuid ê°€ ìˆìœ¼ë©´ ë‹¤ì‹œ ë°œê¸‰í•˜ëŠ” ë“±ì„ ì‹œë„í•  ìˆ˜ë„ ìˆë‹¤.
 
-	Cherno °¡ ÀÌ°ÍÀ» ½ÃµµÇÏÁö ¾Ê´Â ÀÌÀ¯´Â
+	Cherno ê°€ ì´ê²ƒì„ ì‹œë„í•˜ì§€ ì•ŠëŠ” ì´ìœ ëŠ”
 
-	1) °¡´É¼ºÀÌ ÃæºĞÈ÷ ³·´Ù
-	performance ocst ¿Í °¡´É¼ºÀ» ºñ±³ÇÒ ¶§, Â÷¶ó¸® ³·Àº °¡´É¼ºÀ» ¼±ÅÃÇÑ °Í
+	1) ê°€ëŠ¥ì„±ì´ ì¶©ë¶„íˆ ë‚®ë‹¤
+	performance ocst ì™€ ê°€ëŠ¥ì„±ì„ ë¹„êµí•  ë•Œ, ì°¨ë¼ë¦¬ ë‚®ì€ ê°€ëŠ¥ì„±ì„ ì„ íƒí•œ ê²ƒ
 
-	2) ÀÌ°Í ¶ÇÇÑ ¿©ÀüÈ÷ local °üÁ¡¿¡¼­ µ¿ÀÛÇÒ »ÓÀÌ´Ù.
-	¿©·¯ »ç¶÷ÀÌ ÇÏ³ªÀÇ ÇÁ·ÎÁ§Æ®¿¡ ´ëÇØ¼­ ÀÛ¾÷À» ÇÑ´Ù¶ó°í ÇÑ´Ù¸é 
-	±×´ÙÁö È¿À²ÀûÀÌÁö ¾ÊÀ» ¼ö ÀÖ´Ù.
+	2) ì´ê²ƒ ë˜í•œ ì—¬ì „íˆ local ê´€ì ì—ì„œ ë™ì‘í•  ë¿ì´ë‹¤.
+	ì—¬ëŸ¬ ì‚¬ëŒì´ í•˜ë‚˜ì˜ í”„ë¡œì íŠ¸ì— ëŒ€í•´ì„œ ì‘ì—…ì„ í•œë‹¤ë¼ê³  í•œë‹¤ë©´ 
+	ê·¸ë‹¤ì§€ íš¨ìœ¨ì ì´ì§€ ì•Šì„ ìˆ˜ ìˆë‹¤.
 
 	*/
 
-	UUID::UUID()
-		: m_UUID(s_UniformDistribution(s_Engine))
-	{
-	}
-
-	UUID::UUID(uint64_t uuid)
-		: m_UUID(uuid)
-	{
-	}
-
+UUID::UUID() : m_UUID(s_UniformDistribution(s_Engine))
+{
 }
+
+UUID::UUID(uint64_t uuid) : m_UUID(uuid)
+{
+}
+
+} // namespace Hazel

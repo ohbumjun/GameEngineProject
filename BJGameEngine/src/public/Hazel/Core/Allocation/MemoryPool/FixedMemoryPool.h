@@ -1,46 +1,45 @@
 #pragma once
 
 #include "BaseMemoryPool.h"
-#include "Hazel/Core/Allocation/MemoryPool/BaseMemoryPool.h"
 #include "Hazel/Core/Allocation/Allocator/PoolAllocator.h"
+#include "Hazel/Core/Allocation/MemoryPool/BaseMemoryPool.h"
 
 class FixedMemoryPool : public BaseMemoryPool
 {
-public :
-	FixedMemoryPool();
-	virtual ~FixedMemoryPool();
-	
-	virtual void* Allocate(const size_t allocateSize);
+public:
+    FixedMemoryPool();
+    virtual ~FixedMemoryPool();
 
-	template<typename T>
-	void Init(const uint TotalNumber)
-	{
-		if (m_Allocator)
-		{
-			return;
-		}
+    virtual void *Allocate(const size_t allocateSize);
 
-		size_t AllocTotalSize = (size_t)(TotalNumber * sizeof(T));
+    template <typename T>
+    void Init(const uint TotalNumber)
+    {
+        if (m_Allocator)
+        {
+            return;
+        }
 
-		m_Allocator = new PoolAllocator(AllocTotalSize, sizeof(T));
+        size_t AllocTotalSize = (size_t)(TotalNumber * sizeof(T));
 
-		// m_Alignment = MemoryPoolInfo::ALIGNMENT;
+        m_Allocator = new PoolAllocator(AllocTotalSize, sizeof(T));
 
-		if (m_Allocator == nullptr)
-			assert(false);
+        // m_Alignment = MemoryPoolInfo::ALIGNMENT;
 
-		m_SingleDataSize = sizeof(T);
+        if (m_Allocator == nullptr)
+            assert(false);
 
-		m_Allocator->Init();
-	}
+        m_SingleDataSize = sizeof(T);
 
-	void Init(const uint TotalNumber, int SingleSize);
+        m_Allocator->Init();
+    }
 
-protected :
-	virtual void onFree(void* ptr);
+    void Init(const uint TotalNumber, int SingleSize);
 
-private :
-	size_t m_SingleDataSize;
-	PoolAllocator* m_Allocator;
+protected:
+    virtual void onFree(void *ptr);
+
+private:
+    size_t m_SingleDataSize;
+    PoolAllocator *m_Allocator;
 };
-

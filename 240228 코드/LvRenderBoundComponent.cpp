@@ -1,5 +1,5 @@
-﻿#include "LvPrecompiled.h"
-#include "engine/component/LvRenderBoundComponent.h"
+﻿#include "engine/component/LvRenderBoundComponent.h"
+#include "LvPrecompiled.h"
 
 #include "system/LvReflection.h"
 #include "system/math/LvMat3f.h"
@@ -16,15 +16,18 @@ LV_NS_ENGINE_BEGIN
 
 LvRenderBoundComponent::LvRenderBoundComponent()
 {
-	_localBound = LvBoxBound();
-	_worldBound = LvBoxBound();
+    _localBound = LvBoxBound();
+    _worldBound = LvBoxBound();
 }
 
-LvBoxBound LvRenderBoundComponent::calculateWorldBound(const LvVec3f& center, const LvVec3f& extent, const LvMat4f& localToWorldMat)
+LvBoxBound LvRenderBoundComponent::calculateWorldBound(
+    const LvVec3f &center,
+    const LvVec3f &extent,
+    const LvMat4f &localToWorldMat)
 {
-	LV_PROFILE_ENGINE();
-	// AABB update with transform
-	/*
+    LV_PROFILE_ENGINE();
+    // AABB update with transform
+    /*
 	* // Code fetched from Unreal Engine
 	_worldBound = _localBound;
 	const LvMat4f trans = transform.localToWorld;
@@ -64,49 +67,51 @@ LvBoxBound LvRenderBoundComponent::calculateWorldBound(const LvVec3f& center, co
 	_worldBound.radius = LV_MIN(_worldBound.radius, BoxExtentMagnitude);
 	*/
 
-	LvBoxBound worldBound;
-	LvMat3f absRotate;
-	for (uint i = 0; i < 3; ++i)
-	{
-		for (uint j = 0; j < 3; ++j)
-		{
-			absRotate[i][j] = LvMath::Abs(localToWorldMat[j][i]);
-		}
-	}
+    LvBoxBound worldBound;
+    LvMat3f absRotate;
+    for (uint i = 0; i < 3; ++i)
+    {
+        for (uint j = 0; j < 3; ++j)
+        {
+            absRotate[i][j] = LvMath::Abs(localToWorldMat[j][i]);
+        }
+    }
 
-	for (uint i = 0; i < 3; ++i)
-	{
-		worldBound.extent[i] = LvVec3f::Dot(absRotate[i], extent);
-	}
+    for (uint i = 0; i < 3; ++i)
+    {
+        worldBound.extent[i] = LvVec3f::Dot(absRotate[i], extent);
+    }
 
-	LvVec3f newCenter = localToWorldMat * LvVec4f(center, 1.f);
+    LvVec3f newCenter = localToWorldMat * LvVec4f(center, 1.f);
 
-	worldBound.minp = newCenter - worldBound.extent;
-	worldBound.maxp = newCenter + worldBound.extent;
-	worldBound.radius = LvVec3f::Length(worldBound.extent) * 0.5f;
-	
-	return worldBound;
+    worldBound.minp = newCenter - worldBound.extent;
+    worldBound.maxp = newCenter + worldBound.extent;
+    worldBound.radius = LvVec3f::Length(worldBound.extent) * 0.5f;
+
+    return worldBound;
 }
 
-void LvRenderBoundComponent::UpdateWorldBound(const LvMat4f& worldMtx)
+void LvRenderBoundComponent::UpdateWorldBound(const LvMat4f &worldMtx)
 {
-	_worldBound = calculateWorldBound(_localBound.GetCenter(), _localBound.extent, worldMtx);
+    _worldBound = calculateWorldBound(_localBound.GetCenter(),
+                                      _localBound.extent,
+                                      worldMtx);
 }
 
-void LvRenderBoundComponent::Serialize(LvArchive& archive)
+void LvRenderBoundComponent::Serialize(LvArchive &archive)
 {
-	archive.WriteStartObject( _type , this);
-	LV_WRITE(archive, enabled);
-	LV_WRITE(archive, _localBound);
-	archive.WriteEndObject();
+    archive.WriteStartObject(_type, this);
+    LV_WRITE(archive, enabled);
+    LV_WRITE(archive, _localBound);
+    archive.WriteEndObject();
 }
 
-void LvRenderBoundComponent::Deserialize(LvArchive& archive)
+void LvRenderBoundComponent::Deserialize(LvArchive &archive)
 {
-	archive.ReadStartObject( _type , this);
-	LV_READ(archive, enabled);
-	LV_READ(archive, _localBound);
-	archive.ReadEndObject();
+    archive.ReadStartObject(_type, this);
+    LV_READ(archive, enabled);
+    LV_READ(archive, _localBound);
+    archive.ReadEndObject();
 }
 
 LV_NS_ENGINE_END

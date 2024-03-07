@@ -1,38 +1,38 @@
-﻿#include "hzpch.h"
-#include "Hazel/Scene/Component/Identifier/NameComponent.h"
+﻿#include "Hazel/Scene/Component/Identifier/NameComponent.h"
+#include "hzpch.h"
 
 #include "Hazel/Core/Serialization/Serializer.h"
 
 Hazel::NameComponent::NameComponent()
 {
-	Reflection::RegistType<NameComponent>();
+    Reflection::RegistType<NameComponent>();
 }
 
-void Hazel::NameComponent::Serialize(Serializer* serializer)
+void Hazel::NameComponent::Serialize(Serializer *serializer)
 {
-	serializer->BeginSaveMap(Reflection::GetTypeID<NameComponent>(), this);
+    serializer->BeginSaveMap(Reflection::GetTypeID<NameComponent>(), this);
 
-	Reflection::TypeInfo* compTypeInfo = Reflection::GetTypeInfo(GetType());
-	serializer->Save("compName", compTypeInfo->m_Name.c_str());
+    Reflection::TypeInfo *compTypeInfo = Reflection::GetTypeInfo(GetType());
+    serializer->Save("compName", compTypeInfo->m_Name.c_str());
 
-	serializer->Save("Name", name);
+    serializer->Save("Name", name);
 
-	serializer->EndSaveMap();
+    serializer->EndSaveMap();
 }
 
-void Hazel::NameComponent::Deserialize(Serializer* serializer)
+void Hazel::NameComponent::Deserialize(Serializer *serializer)
 {
-	serializer->BeginLoadMap(Reflection::GetTypeID<NameComponent>(), this);
+    serializer->BeginLoadMap(Reflection::GetTypeID<NameComponent>(), this);
 
-	std::string compName;
-	serializer->Load("compName", compName);
+    std::string compName;
+    serializer->Load("compName", compName);
 
-	serializer->Load("Name", name);
+    serializer->Load("Name", name);
 
-	serializer->EndLoadMap();
+    serializer->EndLoadMap();
 }
 
 const TypeId Hazel::NameComponent::GetType() const
 {
-	return Reflection::GetTypeID<NameComponent>();
+    return Reflection::GetTypeID<NameComponent>();
 }

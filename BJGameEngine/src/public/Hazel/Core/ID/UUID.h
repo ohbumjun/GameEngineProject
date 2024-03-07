@@ -1,46 +1,52 @@
-#pragma once
+ï»¿#pragma once
 
-namespace Hazel {
+namespace Hazel
+{
 
-	/*
-	Game Engine ³»ÀÇ ¿©·¯ entity µéÀ»
-	unique ÇÏ°Ô identify ÇÒ ÇÊ¿ä°¡ ÀÖ´Ù.
+/*
+	Game Engine ë‚´ì˜ ì—¬ëŸ¬ entity ë“¤ì„
+	unique í•˜ê²Œ identify í•  í•„ìš”ê°€ ìˆë‹¤.
 
-	ecs system À» È°¿ëÇÏ´Â Çö ½ÃÁ¡¿¡¼­´Â
-	entity °¡ id component ¸¦ °¡Áö°Ô ÇÏ°í
-	±× id ¸¦ »ç¿ëÇÏ°Ô ÇÒ °ÍÀÌ´Ù.
+	ecs system ì„ í™œìš©í•˜ëŠ” í˜„ ì‹œì ì—ì„œëŠ”
+	entity ê°€ id component ë¥¼ ê°€ì§€ê²Œ í•˜ê³ 
+	ê·¸ id ë¥¼ ì‚¬ìš©í•˜ê²Œ í•  ê²ƒì´ë‹¤.
 
-	1) ¿Ö ±×³É entity »ı¼ºÇÒ ¶§ ¸¶´Ù ++ ÇØÁÖ¸é¼­
-	0, 1, 2, ... ÀÌ·¸°Ô ¸¸µé¾îÁÖÁö ¾Ê´Â °ÍÀÏ±î ?
-	- ÀÌ´Â locally ÇÏ°Ô ÀÛ¾÷ÇÒ ¶§´Â ±¦Âú´Ù
-	ÇÏÁö¸¸ ÇÏ³ªÀÇ °ÔÀÓÀ» ¿©·¯ ¸íÀÌ¼­, ¿©·¯ ÄÄÇ»ÅÍ¿¡¼­ ¸¸µç´Ù
-	±×·¯¸é A, B µÎ »ç¶÷ ¸ğµÎ 5°³ÀÇ entity ¸¦ 
-	¸¸µé¾ú´Âµ¥ uuid °¡ µ¿ÀÏÇÒ ¼ö ÀÖ´Ù.
-	ÀÌ·± ÄÉÀÌ½º¸¦ ¹æÁöÇÏ±â À§ÇÔÀÌ´Ù.
+	1) ì™œ ê·¸ëƒ¥ entity ìƒì„±í•  ë•Œ ë§ˆë‹¤ ++ í•´ì£¼ë©´ì„œ
+	0, 1, 2, ... ì´ë ‡ê²Œ ë§Œë“¤ì–´ì£¼ì§€ ì•ŠëŠ” ê²ƒì¼ê¹Œ ?
+	- ì´ëŠ” locally í•˜ê²Œ ì‘ì—…í•  ë•ŒëŠ” ê´œì°®ë‹¤
+	í•˜ì§€ë§Œ í•˜ë‚˜ì˜ ê²Œì„ì„ ì—¬ëŸ¬ ëª…ì´ì„œ, ì—¬ëŸ¬ ì»´í“¨í„°ì—ì„œ ë§Œë“ ë‹¤
+	ê·¸ëŸ¬ë©´ A, B ë‘ ì‚¬ëŒ ëª¨ë‘ 5ê°œì˜ entity ë¥¼ 
+	ë§Œë“¤ì—ˆëŠ”ë° uuid ê°€ ë™ì¼í•  ìˆ˜ ìˆë‹¤.
+	ì´ëŸ° ì¼€ì´ìŠ¤ë¥¼ ë°©ì§€í•˜ê¸° ìœ„í•¨ì´ë‹¤.
 	*/
-	class UUID
-	{
-	public:
-		UUID();
-		UUID(uint64_t uuid);
-		UUID(const UUID&) = default;
+class UUID
+{
+public:
+    UUID();
+    UUID(uint64_t uuid);
+    UUID(const UUID &) = default;
 
-		operator uint64_t() const { return m_UUID; }
-	private:
-		uint64_t m_UUID;
-	};
+    operator uint64_t() const
+    {
+        return m_UUID;
+    }
 
-}
+private:
+    uint64_t m_UUID;
+};
 
-namespace std {
+} // namespace Hazel
 
-	template<>
-	struct hash<Hazel::UUID>
-	{
-		std::size_t operator()(const Hazel::UUID& uuid) const
-		{
-			return (uint64_t)uuid;
-		}
-	};
+namespace std
+{
 
-}
+template <>
+struct hash<Hazel::UUID>
+{
+    std::size_t operator()(const Hazel::UUID &uuid) const
+    {
+        return (uint64_t)uuid;
+    }
+};
+
+} // namespace std

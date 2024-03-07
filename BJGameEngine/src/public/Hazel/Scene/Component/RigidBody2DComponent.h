@@ -1,57 +1,82 @@
-#pragma once
+ï»¿#pragma once
 
 #include "Component.h"
 
 namespace Hazel
 {
-	/*
+/*
 	Static
-	-  ¾Æ¿¹ Fixed µÈ ³à¼®. Gravity ¿¡ ¿µÇâ ¹ŞÁöµµ ¾Ê´Â´Ù.
+	-  ì•„ì˜ˆ Fixed ëœ ë…€ì„. Gravity ì— ì˜í–¥ ë°›ì§€ë„ ì•ŠëŠ”ë‹¤.
 
 	Dynamic
-	- Gravity µµ ¿µÇâ ¹Ş´Â µî
+	- Gravity ë„ ì˜í–¥ ë°›ëŠ” ë“±
 	ex) Earth Rotating 
 	*/
 
-	class HAZEL_API Rigidbody2DComponent : public Component
-	{
-		friend class Scene;
-	public :
-		enum class BodyType { Static = 0, Dynamic, Kinematic };
+class HAZEL_API Rigidbody2DComponent : public Component
+{
+    friend class Scene;
 
-		Rigidbody2DComponent();
-		Rigidbody2DComponent(const Rigidbody2DComponent&);
-	
-		virtual void Serialize(Serializer* serializer) override;
-		virtual void Deserialize(Serializer* serializer) override;
+public:
+    enum class BodyType
+    {
+        Static = 0,
+        Dynamic,
+        Kinematic
+    };
 
-		inline BodyType GetBodyType() { return m_Type; }
-		inline BodyType& GetBodyTypeRef() { return m_Type; }
+    Rigidbody2DComponent();
+    Rigidbody2DComponent(const Rigidbody2DComponent &);
 
-		inline bool GetFixedRotation() { return m_FixedRotation; }
-		inline bool& GetFixedRotationRef() { return m_FixedRotation; }
+    virtual void Serialize(Serializer *serializer) override;
+    virtual void Deserialize(Serializer *serializer) override;
 
-		inline void* GetRuntimeBody() const {return m_RuntimeBody;}
+    inline BodyType GetBodyType()
+    {
+        return m_Type;
+    }
+    inline BodyType &GetBodyTypeRef()
+    {
+        return m_Type;
+    }
 
-		inline void SetBodyType(BodyType type) { m_Type = type; }
-	
-		virtual const TypeId GetType() const 
-		{
-			return Reflection::GetTypeID<Rigidbody2DComponent>();
-		}
-	private:
-		BodyType m_Type = BodyType::Static;
+    inline bool GetFixedRotation()
+    {
+        return m_FixedRotation;
+    }
+    inline bool &GetFixedRotationRef()
+    {
+        return m_FixedRotation;
+    }
 
-		/*
+    inline void *GetRuntimeBody() const
+    {
+        return m_RuntimeBody;
+    }
+
+    inline void SetBodyType(BodyType type)
+    {
+        m_Type = type;
+    }
+
+    virtual const TypeId GetType() const
+    {
+        return Reflection::GetTypeID<Rigidbody2DComponent>();
+    }
+
+private:
+    BodyType m_Type = BodyType::Static;
+
+    /*
 		true : not able to rotate
 		*/
-		bool m_FixedRotation = false;
+    bool m_FixedRotation = false;
 
-		/*
+    /*
 		Storage for runtime
 		*/
-		void* m_RuntimeBody = nullptr;
-	};
+    void *m_RuntimeBody = nullptr;
+};
 
 
-}
+} // namespace Hazel

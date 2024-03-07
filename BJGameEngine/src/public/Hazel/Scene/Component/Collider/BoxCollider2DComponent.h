@@ -1,75 +1,111 @@
-#pragma once
+ï»¿#pragma once
 
 #include "Hazel/Scene/Component/Component.h"
 
 
 namespace Hazel
 {
-	/*
-	Rigid Body 2D ¸¦ µÑ·¯½Î°í ÀÖ´Â Collier Box2D 
-	ex) Rigid Body 2D °¡ °¡·Î, ¼¼·Î 1 ÀÇ ±æÀÌ¶ó¸é
-	      ±×¿¡ ´ëÀÀµÇ´Â BoxCollider2D ´Â extend °¡ 0.5, 0.5
+/*
+	Rigid Body 2D ë¥¼ ë‘˜ëŸ¬ì‹¸ê³  ìˆëŠ” Collier Box2D 
+	ex) Rigid Body 2D ê°€ ê°€ë¡œ, ì„¸ë¡œ 1 ì˜ ê¸¸ì´ë¼ë©´
+	      ê·¸ì— ëŒ€ì‘ë˜ëŠ” BoxCollider2D ëŠ” extend ê°€ 0.5, 0.5
 	*/
 
-	class HAZEL_API BoxCollider2DComponent : public Component
-	{
-		friend class Scene;
-	public :
-		BoxCollider2DComponent();
-		BoxCollider2DComponent(const BoxCollider2DComponent&);
+class HAZEL_API BoxCollider2DComponent : public Component
+{
+    friend class Scene;
 
-		virtual void Serialize(Serializer* serializer) override;
-		virtual void Deserialize(Serializer* serializer) override;
+public:
+    BoxCollider2DComponent();
+    BoxCollider2DComponent(const BoxCollider2DComponent &);
 
-		inline glm::vec2 GetOffset() { return m_Offset; }
-		inline glm::vec2& GetOffsetRef() { return m_Offset; }
+    virtual void Serialize(Serializer *serializer) override;
+    virtual void Deserialize(Serializer *serializer) override;
 
-		inline glm::vec2 GetSize() { return m_Size; }
-		inline glm::vec2& GetSizeRef() { return m_Size; }
+    inline glm::vec2 GetOffset()
+    {
+        return m_Offset;
+    }
+    inline glm::vec2 &GetOffsetRef()
+    {
+        return m_Offset;
+    }
 
-		inline float GetDensity() { return m_Density; }
-		inline float& GetDensityRef() { return m_Density; }
+    inline glm::vec2 GetSize()
+    {
+        return m_Size;
+    }
+    inline glm::vec2 &GetSizeRef()
+    {
+        return m_Size;
+    }
 
-		inline float GetFriction() { return m_Friction; }
-		inline float& GetFrictionRef() { return m_Friction; }
+    inline float GetDensity()
+    {
+        return m_Density;
+    }
+    inline float &GetDensityRef()
+    {
+        return m_Density;
+    }
 
-		inline float GetRestitution() { return m_Restitution; }
-		inline float& GetRestitutionRef() { return m_Restitution; }
+    inline float GetFriction()
+    {
+        return m_Friction;
+    }
+    inline float &GetFrictionRef()
+    {
+        return m_Friction;
+    }
 
-		inline float GetRestitutionThreshold() { return m_RestitutionThreshold; }
-		inline float& GetRestitutionThresholdRef() { return m_RestitutionThreshold; }
+    inline float GetRestitution()
+    {
+        return m_Restitution;
+    }
+    inline float &GetRestitutionRef()
+    {
+        return m_Restitution;
+    }
 
-		virtual const TypeId GetType() const
-		{
-			return Reflection::GetTypeID<BoxCollider2DComponent>();
-		}
+    inline float GetRestitutionThreshold()
+    {
+        return m_RestitutionThreshold;
+    }
+    inline float &GetRestitutionThresholdRef()
+    {
+        return m_RestitutionThreshold;
+    }
 
-	private :
-		glm::vec2 m_Offset = { 0.0f, 0.0f };
+    virtual const TypeId GetType() const
+    {
+        return Reflection::GetTypeID<BoxCollider2DComponent>();
+    }
 
-		/*
-		Half Extent ¿Í °°Àº °³³ä
+private:
+    glm::vec2 m_Offset = {0.0f, 0.0f};
+
+    /*
+		Half Extent ì™€ ê°™ì€ ê°œë…
 		*/
-		glm::vec2 m_Size = { 0.5f, 0.5f };
+    glm::vec2 m_Size = {0.5f, 0.5f};
 
-		// TODO(Yan): move into physics material in the future maybe
-		float m_Density = 1.0f;
-		float m_Friction = 0.5f;
+    // TODO(Yan): move into physics material in the future maybe
+    float m_Density = 1.0f;
+    float m_Friction = 0.5f;
 
-		/*
-		* Bouncy ness (¾ó¸¶³ª bouncy ÇÏ´ÂÁö)
+    /*
+		* Bouncy ness (ì–¼ë§ˆë‚˜ bouncy í•˜ëŠ”ì§€)
 		*/
-		float m_Restitution = 1.0f;
+    float m_Restitution = 1.0f;
 
-		/*
-		* ex) Box ¶³¾î¶ß¸®¸é ¿©·¯¹ø ÅëÅë Æ¢´Âµ¥
-		* Á¡Á¡ ³·°Ô ÅëÅë ¶Ù°Ô µÈ´Ù.
+    /*
+		* ex) Box ë–¨ì–´ëœ¨ë¦¬ë©´ ì—¬ëŸ¬ë²ˆ í†µí†µ íŠ€ëŠ”ë°
+		* ì ì  ë‚®ê²Œ í†µí†µ ë›°ê²Œ ëœë‹¤.
 		*/
-		float m_RestitutionThreshold = 0.5f;
+    float m_RestitutionThreshold = 0.5f;
 
-		// Storage for runtime
-		void* m_RuntimeFixture = nullptr;
+    // Storage for runtime
+    void *m_RuntimeFixture = nullptr;
+};
 
-	};
-
-}
+} // namespace Hazel

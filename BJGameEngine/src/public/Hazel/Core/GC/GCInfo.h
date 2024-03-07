@@ -1,10 +1,10 @@
-#pragma once
+ï»¿#pragma once
 
 struct GCAllocationHeader
 {
     size_t blockSize;
-    char padding;    // 1byte -> 8 bit -> 256 ±îÁö Ç¥Çö°¡´É
+    char padding; // 1byte -> 8 bit -> 256 ê¹Œì§€ í‘œí˜„ê°€ëŠ¥
     bool isRoot = false;
-    bool visited = false; // markBit ¿¡ ÇØ´ç
-    int   refCnt = 0;
+    bool visited = false; // markBit ì— í•´ë‹¹
+    int refCnt = 0;
 };

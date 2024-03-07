@@ -1,5 +1,5 @@
+ï»¿#include "Renderer/Camera/EditorCamera.h"
 #include "hzpch.h"
-#include "Renderer/Camera/EditorCamera.h"
 
 #include "Hazel/Input/Input.h"
 #include "Hazel/Input/KeyCodes.h"
@@ -11,250 +11,262 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
 
-namespace Hazel {
+namespace Hazel
+{
 
-	EditorCamera::EditorCamera(float fov, float aspectRatio, float nearClip, float farClip)
-		: m_FOV(fov), m_AspectRatio(aspectRatio), m_NearClip(nearClip), m_FarClip(farClip), Camera(glm::perspective(glm::radians(fov), aspectRatio, nearClip, farClip))
-	{
-		updateView();
-	}
+EditorCamera::EditorCamera(float fov,
+                           float aspectRatio,
+                           float nearClip,
+                           float farClip)
+    : m_FOV(fov), m_AspectRatio(aspectRatio), m_NearClip(nearClip),
+      m_FarClip(farClip),
+      Camera(
+          glm::perspective(glm::radians(fov), aspectRatio, nearClip, farClip))
+{
+    updateView();
+}
 
-	void EditorCamera::updateProjection()
-	{
-		m_AspectRatio = m_ViewportWidth / m_ViewportHeight;
-		m_ProjectionMatrix = glm::perspective(glm::radians(m_FOV), m_AspectRatio, m_NearClip, m_FarClip);
-	}
+void EditorCamera::updateProjection()
+{
+    m_AspectRatio = m_ViewportWidth / m_ViewportHeight;
+    m_ProjectionMatrix = glm::perspective(glm::radians(m_FOV),
+                                          m_AspectRatio,
+                                          m_NearClip,
+                                          m_FarClip);
+}
 
-	void EditorCamera::updateView()
-	{ 
-		// m_Yaw = m_Pitch = 0.0f; // Lock the camera's rotation
-		m_Position = calculatePosition();
+void EditorCamera::updateView()
+{
+    // m_Yaw = m_Pitch = 0.0f; // Lock the camera's rotation
+    m_Position = calculatePosition();
 
-		glm::quat orientation = GetOrientation();
+    glm::quat orientation = GetOrientation();
 
-		// S R T -> S ´Â ¾øÀ¸´Ï Á¦¿Ü -> Ä«¸Ş¶óÀÇ World º¯È¯ Çà·Ä
-		m_ViewMatrix = glm::translate(glm::mat4(1.0f), m_Position) * glm::toMat4(orientation);
-		m_ViewMatrix = glm::inverse(m_ViewMatrix);
-	}
+    // S R T -> S ëŠ” ì—†ìœ¼ë‹ˆ ì œì™¸ -> ì¹´ë©”ë¼ì˜ World ë³€í™˜ í–‰ë ¬
+    m_ViewMatrix =
+        glm::translate(glm::mat4(1.0f), m_Position) * glm::toMat4(orientation);
+    m_ViewMatrix = glm::inverse(m_ViewMatrix);
+}
 
-	std::pair<float, float> EditorCamera::panSpeed() const
-	{
-		// Cherno °¡ ¾îµğ¼±°¡ º¹»çÇÑ ÇÔ¼ö
-		float x = std::min(m_ViewportWidth / 1000.0f, 2.4f); // max = 2.4f
-		float xFactor = 0.0366f * (x * x) - 0.1778f * x + 0.3021f;
+std::pair<float, float> EditorCamera::panSpeed() const
+{
+    // Cherno ê°€ ì–´ë””ì„ ê°€ ë³µì‚¬í•œ í•¨ìˆ˜
+    float x = std::min(m_ViewportWidth / 1000.0f, 2.4f); // max = 2.4f
+    float xFactor = 0.0366f * (x * x) - 0.1778f * x + 0.3021f;
 
-		float y = std::min(m_ViewportHeight / 1000.0f, 2.4f); // max = 2.4f
-		float yFactor = 0.0366f * (y * y) - 0.1778f * y + 0.3021f;
+    float y = std::min(m_ViewportHeight / 1000.0f, 2.4f); // max = 2.4f
+    float yFactor = 0.0366f * (y * y) - 0.1778f * y + 0.3021f;
 
-		return { xFactor, yFactor };
-	}
+    return {xFactor, yFactor};
+}
 
-	float EditorCamera::rotationSpeed() const
-	{
-		return 0.8f;
-	}
+float EditorCamera::rotationSpeed() const
+{
+    return 0.8f;
+}
 
-	float EditorCamera::ZoomSpeed() const
-	{
-		float distance = m_Distance * 0.2f;
-        distance = std::max(distance, 0.0f);
-		float speed = distance * distance;
-        speed = std::min(speed, 100.0f); // max speed = 100
-		return speed;
-	}
+float EditorCamera::ZoomSpeed() const
+{
+    float distance = m_Distance * 0.2f;
+    distance = std::max(distance, 0.0f);
+    float speed = distance * distance;
+    speed = std::min(speed, 100.0f); // max speed = 100
+    return speed;
+}
 
-	void EditorCamera::OnUpdate(Timestep ts)
-	{
-		if (Input::IsKeyPressed(Key::LeftAlt))
-		{
-			const glm::vec2& mouse{ Input::GetMouseX(), Input::GetMouseY() };
+void EditorCamera::OnUpdate(Timestep ts)
+{
+    if (Input::IsKeyPressed(Key::LeftAlt))
+    {
+        const glm::vec2 &mouse{Input::GetMouseX(), Input::GetMouseY()};
 
-			/*
-			¸¶¿ì½º 
-			¿Ş -> ¿À : delta.x °¡ 0 º¸´Ù Å©´Ù 
-			¿À -> ¿Ş : delta.x °¡ 0 º¸´Ù ÀÛ´Ù
+        /*
+			ë§ˆìš°ìŠ¤ 
+			ì™¼ -> ì˜¤ : delta.x ê°€ 0 ë³´ë‹¤ í¬ë‹¤ 
+			ì˜¤ -> ì™¼ : delta.x ê°€ 0 ë³´ë‹¤ ì‘ë‹¤
 
-			À§ -> ¾Æ·¡ : delta.y °¡ ¾ç¼ö°ª
-			¾Æ·¡ -> À§ : delta.y °¡ À½¼ö°ª
+			ìœ„ -> ì•„ë˜ : delta.y ê°€ ì–‘ìˆ˜ê°’
+			ì•„ë˜ -> ìœ„ : delta.y ê°€ ìŒìˆ˜ê°’
 			*/
-			glm::vec2 delta = (mouse - m_InitialMousePosition) * 0.003f;
+        glm::vec2 delta = (mouse - m_InitialMousePosition) * 0.003f;
 
-			m_InitialMousePosition = mouse;
+        m_InitialMousePosition = mouse;
 
-			if (Input::IsMouseButtonPressed(Mouse::ButtonMiddle))
-				mousePan(delta);
-			else if (Input::IsMouseButtonPressed(Mouse::ButtonLeft))
-				mouseRotate(delta);
-			else if (Input::IsMouseButtonPressed(Mouse::ButtonRight))
-				mouseZoom(delta.y);
-		}
+        if (Input::IsMouseButtonPressed(Mouse::ButtonMiddle))
+            mousePan(delta);
+        else if (Input::IsMouseButtonPressed(Mouse::ButtonLeft))
+            mouseRotate(delta);
+        else if (Input::IsMouseButtonPressed(Mouse::ButtonRight))
+            mouseZoom(delta.y);
+    }
 
-		updateView();
-	}
+    updateView();
+}
 
-	void EditorCamera::OnEvent(Event& e)
-	{
-		EventDispatcher dispatcher(e);
-		dispatcher.Dispatch<MouseScrolledEvent>(HZ_BIND_EVENT_FN(EditorCamera::onMouseScroll));
-	}
+void EditorCamera::OnEvent(Event &e)
+{
+    EventDispatcher dispatcher(e);
+    dispatcher.Dispatch<MouseScrolledEvent>(
+        HZ_BIND_EVENT_FN(EditorCamera::onMouseScroll));
+}
 
-	bool EditorCamera::onMouseScroll(MouseScrolledEvent& e)
-	{
-		float delta = e.GetYOffset() * 0.1f;
-		mouseZoom(delta);
-		updateView();
-		return false;
-	}
+bool EditorCamera::onMouseScroll(MouseScrolledEvent &e)
+{
+    float delta = e.GetYOffset() * 0.1f;
+    mouseZoom(delta);
+    updateView();
+    return false;
+}
 
-	void EditorCamera::mousePan(const glm::vec2& delta)
-	{
-		auto [xSpeed, ySpeed] = panSpeed();
-		m_FocalPoint += -GetRightDirection() * delta.x * xSpeed * m_Distance;
-		m_FocalPoint += GetUpDirection() * delta.y * ySpeed * m_Distance;
-	}
+void EditorCamera::mousePan(const glm::vec2 &delta)
+{
+    auto [xSpeed, ySpeed] = panSpeed();
+    m_FocalPoint += -GetRightDirection() * delta.x * xSpeed * m_Distance;
+    m_FocalPoint += GetUpDirection() * delta.y * ySpeed * m_Distance;
+}
 
-	void EditorCamera::mouseRotate(const glm::vec2& delta)
-	{
-		/*
+void EditorCamera::mouseRotate(const glm::vec2 &delta)
+{
+    /*
 		GetUpDirection().y  == 0 ?
-		== Ä«¸Ş¶ó°¡ ¼öÁ÷ À§¸¦ º¸°í ÀÖ´Ù´Â ÀÇ¹Ì
+		== ì¹´ë©”ë¼ê°€ ìˆ˜ì§ ìœ„ë¥¼ ë³´ê³  ìˆë‹¤ëŠ” ì˜ë¯¸
 		
 		GetUpDirection().y < 0 ?
-		> ¾ÕÂÊÀ» ¹Ù¶óº¸°í ÀÖ´Ù´Â °Í
+		> ì•ìª½ì„ ë°”ë¼ë³´ê³  ìˆë‹¤ëŠ” ê²ƒ
 
 		GetUpDirection().y < 0 ?
-		> ¸öÀ» µÚ·Î Á¦²¸¼­ µÚÂÊÀ» ¹Ù¶óº¸°í ÀÖ´Ù´Â °Í
+		> ëª¸ì„ ë’¤ë¡œ ì œê»´ì„œ ë’¤ìª½ì„ ë°”ë¼ë³´ê³  ìˆë‹¤ëŠ” ê²ƒ
 
-		(Âü°í ¸µÅ©)
+		(ì°¸ê³  ë§í¬)
 		https://www.notion.so/OpenGL-Hazel-0415bd834e3c481ea358e9eb08ca52e5
 
-		"¸¶¿ì½º ±âÁØ"
+		"ë§ˆìš°ìŠ¤ ê¸°ì¤€"
 
-		¿©±â¼­ Áß¿äÇÑ °ÍÀº, Ä«¸Ş¶ó°¡ ÀÚ±â ÃàÀ» °¡Áö°í È¥ÀÚ 
-		»óÇÏ ÁÂ¿ì ±âÁØÀ¸·Î È¸ÀüÇÏ´Â °ÍÀÌ ¾Æ´Ï´Ù.
-		Áï, È¸Àü ÃàÀÇ ¿øÁ¡ÀÌ, Ä«¸Ş¶ó À§Ä¡°¡ ¾Æ´Ï¶ó
-		m_Focal Point ÀÌ´Ù.
+		ì—¬ê¸°ì„œ ì¤‘ìš”í•œ ê²ƒì€, ì¹´ë©”ë¼ê°€ ìê¸° ì¶•ì„ ê°€ì§€ê³  í˜¼ì 
+		ìƒí•˜ ì¢Œìš° ê¸°ì¤€ìœ¼ë¡œ íšŒì „í•˜ëŠ” ê²ƒì´ ì•„ë‹ˆë‹¤.
+		ì¦‰, íšŒì „ ì¶•ì˜ ì›ì ì´, ì¹´ë©”ë¼ ìœ„ì¹˜ê°€ ì•„ë‹ˆë¼
+		m_Focal Point ì´ë‹¤.
 
-		¿¹½Ã 1) ¸¶¿ì½º ¿À¸¥ÂÊ -> ¿ŞÂÊ
+		ì˜ˆì‹œ 1) ë§ˆìš°ìŠ¤ ì˜¤ë¥¸ìª½ -> ì™¼ìª½
 		- delta.x < 0 
-		- Ä«¸Ş¶ó°¡ ¿À¸¥ÂÊÀ¸·Î, ¿ìÃøÀ¸·Î È¸ÀüÇÏ´Â °³³äÀÌ ¾Æ´Ï´Ù
-		- ¾Õ¿¡ ¹Ú½º°¡ ÀÖÀ¸¸é, m_Focal Point ±âÁØÀ¸·Î ¿À¸¥ÂÊ ¹æÇâÀ¸·Î 
-		  µ¹¾Æ°¡¸é¼­, ¹Ú½ºÀÇ ¿ìÃøÀ» º¸´Â °ÍÀÌ´Ù.
-		- ±× ¸»Àº »ç½Ç, Ä«¸Ş¶ó°¡ Á¤¸éÀÌ ¾Æ´Ï¶ó, Á¡Â÷ ¿ŞÂÊÀ¸·Î È¸ÀüÇÑ´Ù´Â °ÍÀ»
-		  ÀÇ¹ÌÇÑ´Ù.
+		- ì¹´ë©”ë¼ê°€ ì˜¤ë¥¸ìª½ìœ¼ë¡œ, ìš°ì¸¡ìœ¼ë¡œ íšŒì „í•˜ëŠ” ê°œë…ì´ ì•„ë‹ˆë‹¤
+		- ì•ì— ë°•ìŠ¤ê°€ ìˆìœ¼ë©´, m_Focal Point ê¸°ì¤€ìœ¼ë¡œ ì˜¤ë¥¸ìª½ ë°©í–¥ìœ¼ë¡œ 
+		  ëŒì•„ê°€ë©´ì„œ, ë°•ìŠ¤ì˜ ìš°ì¸¡ì„ ë³´ëŠ” ê²ƒì´ë‹¤.
+		- ê·¸ ë§ì€ ì‚¬ì‹¤, ì¹´ë©”ë¼ê°€ ì •ë©´ì´ ì•„ë‹ˆë¼, ì ì°¨ ì™¼ìª½ìœ¼ë¡œ íšŒì „í•œë‹¤ëŠ” ê²ƒì„
+		  ì˜ë¯¸í•œë‹¤.
 		
-		ÀÚ. ±×·±µ¥ ¿©±â¼­ Á¶°ÇÀÌ ÇÏ³ª ´õ ºÙ´Â´Ù.
-		1_1) Áö±İ ¾ÕÂÊÀ» ¹Ù¶óº¸°í ÀÖ¾ú°Å³ª
-		- ÀÌ »óÅÂ¿¡¼­ Ä«¸Ş¶ó ¿ŞÂÊ È¸ÀüÀº, world ÀÇ y Ãà ¿ŞÂÊ È¸ÀüÀÌ´Ù.
-		  y Ãà ¿ŞÂÊ È¸ÀüÀº, ¹İ½Ã°è¹æÇâ È¸ÀüÀÌ°í
-		  ¿À¸¥¼Õ ÁÂÇ¥°è¿¡¼­ ÀÌ´Â ¾ç¼ö°ª È¸ÀüÀ» ÀÇ¹ÌÇÑ´Ù.
-		- µû¶ó¼­ Yaw ¿¡ ¾ç¼ö°ªÀ» ´õÇÏ´Â °ÍÀÌ´Ù.
+		ì. ê·¸ëŸ°ë° ì—¬ê¸°ì„œ ì¡°ê±´ì´ í•˜ë‚˜ ë” ë¶™ëŠ”ë‹¤.
+		1_1) ì§€ê¸ˆ ì•ìª½ì„ ë°”ë¼ë³´ê³  ìˆì—ˆê±°ë‚˜
+		- ì´ ìƒíƒœì—ì„œ ì¹´ë©”ë¼ ì™¼ìª½ íšŒì „ì€, world ì˜ y ì¶• ì™¼ìª½ íšŒì „ì´ë‹¤.
+		  y ì¶• ì™¼ìª½ íšŒì „ì€, ë°˜ì‹œê³„ë°©í–¥ íšŒì „ì´ê³ 
+		  ì˜¤ë¥¸ì† ì¢Œí‘œê³„ì—ì„œ ì´ëŠ” ì–‘ìˆ˜ê°’ íšŒì „ì„ ì˜ë¯¸í•œë‹¤.
+		- ë”°ë¼ì„œ Yaw ì— ì–‘ìˆ˜ê°’ì„ ë”í•˜ëŠ” ê²ƒì´ë‹¤.
 
-		1_2) ¸öÀ» Á¦²¸¼­ µÚÂÊÀ» »ç½Ç»ó ¹Ù¶óº¸°í ÀÖ¾ú°Å³ª
-		(°í°³¸¦ µé´Ù°¡ ¹Ù·Î À§º¸´Ù ´õ µÚÂÊÀ» ¹Ù¶óº¸´Â °Í)
+		1_2) ëª¸ì„ ì œê»´ì„œ ë’¤ìª½ì„ ì‚¬ì‹¤ìƒ ë°”ë¼ë³´ê³  ìˆì—ˆê±°ë‚˜
+		(ê³ ê°œë¥¼ ë“¤ë‹¤ê°€ ë°”ë¡œ ìœ„ë³´ë‹¤ ë” ë’¤ìª½ì„ ë°”ë¼ë³´ëŠ” ê²ƒ)
 
-		- ¹İ´ë·Î ÀÌ °æ¿ì´Â »ç½Ç world y Ãà ±âÁØ ¿À¸¥ÂÊ È¸Àü°ú °°´Ù.
-		  ½Ã°è ¹æÇâ È¸ÀüÀÌ°í
-		  ÀÌ´Â ¿À¸¥¼Õ ÁÂÇ¥°è ¿¡¼­, Yaw ¿¡ À½¼ö°ªÀ» ´õÇÏ´Â °ÍÀÌ´Ù.
+		- ë°˜ëŒ€ë¡œ ì´ ê²½ìš°ëŠ” ì‚¬ì‹¤ world y ì¶• ê¸°ì¤€ ì˜¤ë¥¸ìª½ íšŒì „ê³¼ ê°™ë‹¤.
+		  ì‹œê³„ ë°©í–¥ íšŒì „ì´ê³ 
+		  ì´ëŠ” ì˜¤ë¥¸ì† ì¢Œí‘œê³„ ì—ì„œ, Yaw ì— ìŒìˆ˜ê°’ì„ ë”í•˜ëŠ” ê²ƒì´ë‹¤.
 
-		¿¹½Ã 2) ¸¶¿ì½º ¾Æ·¡ -> À§
-		- delta.y °¡ À½¼ö°ªÀÌ´Ù. ÀÛÀº °ª¿¡¼­ Å« °ªÀ¸·Î °£ °Í.
-		½ÇÁ¦ ÇÁ·ÎÁ§Æ®¸¦ ½ÇÇàÇÏ¸é, Ä«¸Ş¶ó°¡ Á¡Â÷ Á¤¸é Box ÀÇ ¾Æ·§¸éÀ» ¹Ù¶óº¸±â
-		½ÃÀÛÇÑ´Ù.
-		¹Ù·Î ¾Õ¿¡¼­ ¾Æ·§¸éÀ» º»´Ù´Â °ÍÀº
+		ì˜ˆì‹œ 2) ë§ˆìš°ìŠ¤ ì•„ë˜ -> ìœ„
+		- delta.y ê°€ ìŒìˆ˜ê°’ì´ë‹¤. ì‘ì€ ê°’ì—ì„œ í° ê°’ìœ¼ë¡œ ê°„ ê²ƒ.
+		ì‹¤ì œ í”„ë¡œì íŠ¸ë¥¼ ì‹¤í–‰í•˜ë©´, ì¹´ë©”ë¼ê°€ ì ì°¨ ì •ë©´ Box ì˜ ì•„ë«ë©´ì„ ë°”ë¼ë³´ê¸°
+		ì‹œì‘í•œë‹¤.
+		ë°”ë¡œ ì•ì—ì„œ ì•„ë«ë©´ì„ ë³¸ë‹¤ëŠ” ê²ƒì€
 
-		»ç½Ç Ä«¸Ş¶ó ÀÔÀå¿¡¼­´Â, Á¡Á¡ À§ÂÊÀ» ¹Ù¶óº»´Ù´Â °ÍÀÌ´Ù.
-		Focal Point ´Â World ÁÂÇ¥°è (0,0,0) À¸·Î °íÁ¤µÇÁö¸¸
+		ì‚¬ì‹¤ ì¹´ë©”ë¼ ì…ì¥ì—ì„œëŠ”, ì ì  ìœ„ìª½ì„ ë°”ë¼ë³¸ë‹¤ëŠ” ê²ƒì´ë‹¤.
+		Focal Point ëŠ” World ì¢Œí‘œê³„ (0,0,0) ìœ¼ë¡œ ê³ ì •ë˜ì§€ë§Œ
 
-		Ä«¸Ş¶ó´Â »ç½Ç Á¡Â÷ À§ÂÊÀ» ÇâÇÏ°Ô µÈ´Ù´Â °ÍÀÌ´Ù.
+		ì¹´ë©”ë¼ëŠ” ì‚¬ì‹¤ ì ì°¨ ìœ„ìª½ì„ í–¥í•˜ê²Œ ëœë‹¤ëŠ” ê²ƒì´ë‹¤.
 
-		À§ÂÊÀ» ÇâÇÑ´Ù´Â °ÍÀº, X Ãà ±âÁØ ¹İ½Ã°è ¹æÇâ È¸ÀüÀÎ °ÍÀÌ°í
-		ÀÌ´Â ¿À¸¥¼Õ ÁÂÇ¥°è¿¡¼­ ¾ç¼ö°ª È¸ÀüÀÌ´Ù.
+		ìœ„ìª½ì„ í–¥í•œë‹¤ëŠ” ê²ƒì€, X ì¶• ê¸°ì¤€ ë°˜ì‹œê³„ ë°©í–¥ íšŒì „ì¸ ê²ƒì´ê³ 
+		ì´ëŠ” ì˜¤ë¥¸ì† ì¢Œí‘œê³„ì—ì„œ ì–‘ìˆ˜ê°’ íšŒì „ì´ë‹¤.
 
-		µû¶ó¼­ Pitch ¿¡ ¾ç¼ö°ªÀ» ´õÇÏ´Â °ÍÀÌ´Ù.
+		ë”°ë¼ì„œ Pitch ì— ì–‘ìˆ˜ê°’ì„ ë”í•˜ëŠ” ê²ƒì´ë‹¤.
 		*/
 
-		float yawSign = GetUpDirection().y < 0 ? -1.0f : 1.0f;
+    float yawSign = GetUpDirection().y < 0 ? -1.0f : 1.0f;
 
-		m_Yaw += yawSign * delta.x * rotationSpeed();
+    m_Yaw += yawSign * delta.x * rotationSpeed();
 
-		m_Pitch += delta.y * rotationSpeed();
+    m_Pitch += delta.y * rotationSpeed();
 
-		/*
+    /*
 		glm::vec3 forwardVec = GetForwardDirection();
 		HZ_CORE_INFO("Camera For Vector {0} {1} {2}", forwardVec.x, forwardVec.y, forwardVec.z);
 		*/
 
-		/*
+    /*
 		glm::vec3 orientVec = glm::vec3(-m_Pitch, -m_Yaw, 0.0f);
 		HZ_CORE_INFO("Camera For Vector {0} {1} {2}", orientVec.x, orientVec.y, orientVec.z);
 		*/
-	}
+}
 
-	void EditorCamera::mouseZoom(float delta)
-	{
-		m_Distance -= delta * ZoomSpeed();
+void EditorCamera::mouseZoom(float delta)
+{
+    m_Distance -= delta * ZoomSpeed();
 
-		if (m_Distance < 1.0f)
-		{
-			glm::vec3 forwardVec = GetForwardDirection();
-			m_FocalPoint += forwardVec;
-			m_Distance = 1.0f;
-		}
-	}
+    if (m_Distance < 1.0f)
+    {
+        glm::vec3 forwardVec = GetForwardDirection();
+        m_FocalPoint += forwardVec;
+        m_Distance = 1.0f;
+    }
+}
 
-	glm::vec3 EditorCamera::GetUpDirection() const
-	{
-		//  glm::vec3(0.0f, 1.0f, 0.0f)) : ÃÖÃÊ up direction
-		// ÃÖÃÊ up ÃàÀ» ±âÁØÀ¸·Î x,y ÃàÀ¸·Î ¾ó¸¸Å­ È¸ÀüÇß´Â°¡¿¡ ´ëÇÑ °ªÀÌ´Ù.
-		return glm::rotate(GetOrientation(), glm::vec3(0.0f, 1.0f, 0.0f));
-	}
+glm::vec3 EditorCamera::GetUpDirection() const
+{
+    //  glm::vec3(0.0f, 1.0f, 0.0f)) : ìµœì´ˆ up direction
+    // ìµœì´ˆ up ì¶•ì„ ê¸°ì¤€ìœ¼ë¡œ x,y ì¶•ìœ¼ë¡œ ì–¼ë§Œí¼ íšŒì „í–ˆëŠ”ê°€ì— ëŒ€í•œ ê°’ì´ë‹¤.
+    return glm::rotate(GetOrientation(), glm::vec3(0.0f, 1.0f, 0.0f));
+}
 
-	glm::vec3 EditorCamera::GetRightDirection() const
-	{
-		// x Ãà È¸Àü
-		return glm::rotate(GetOrientation(), glm::vec3(1.0f, 0.0f, 0.0f));
-	}
+glm::vec3 EditorCamera::GetRightDirection() const
+{
+    // x ì¶• íšŒì „
+    return glm::rotate(GetOrientation(), glm::vec3(1.0f, 0.0f, 0.0f));
+}
 
-	glm::vec3 EditorCamera::GetForwardDirection() const
-	{
-		/*
+glm::vec3 EditorCamera::GetForwardDirection() const
+{
+    /*
 		1) glm::vec3(0.0f, 0.0f, -1.0f)
-		- ÇöÀç ÇÁ·ÎÁ§Æ® »ó¿¡¼­ Ä«¸Ş¶óÀÇ Initiali ¹æÇâÀ¸·Î º¸ÀÎ´Ù.
-		- OpenGL Àº ¿À¸¥¼Õ ÁÂÇ¥°èÀÌ°í, Z ¹æÇâÀÌ ¿ì¸® ¾ÈÂÊ ¹æÇâÀÌ´Ù
-		- ±×·±µ¥ Ä«¸Ş¶ó´Â Á¤¸éÀ» ¹Ù¶óº¸±â ¶§¹®¿¡, -1 * Z ¹æÇâÀÌ
-		  ÃÖÃÊ Ä«¸Ş¶ó°¡ ¹Ù¶óº¸´Â ¹æÇâÀÌ´Ù.
-		- ÀÏÁ¾ÀÇ È¸Àü ±âÁØÀ» ¸¶·ÃÇØÁÖ´Â °ÍÀ¸·Î º¸ÀÎ´Ù.
+		- í˜„ì¬ í”„ë¡œì íŠ¸ ìƒì—ì„œ ì¹´ë©”ë¼ì˜ Initiali ë°©í–¥ìœ¼ë¡œ ë³´ì¸ë‹¤.
+		- OpenGL ì€ ì˜¤ë¥¸ì† ì¢Œí‘œê³„ì´ê³ , Z ë°©í–¥ì´ ìš°ë¦¬ ì•ˆìª½ ë°©í–¥ì´ë‹¤
+		- ê·¸ëŸ°ë° ì¹´ë©”ë¼ëŠ” ì •ë©´ì„ ë°”ë¼ë³´ê¸° ë•Œë¬¸ì—, -1 * Z ë°©í–¥ì´
+		  ìµœì´ˆ ì¹´ë©”ë¼ê°€ ë°”ë¼ë³´ëŠ” ë°©í–¥ì´ë‹¤.
+		- ì¼ì¢…ì˜ íšŒì „ ê¸°ì¤€ì„ ë§ˆë ¨í•´ì£¼ëŠ” ê²ƒìœ¼ë¡œ ë³´ì¸ë‹¤.
 
 		2) glm::rotate
-		- quarternion¿¡ ¸í½ÃµÈ È¸Àü°ªÀ» vec3 ÇüÅÂ·Î º¯È¯ÇØ¼­
-		  ¸®ÅÏÇØÁØ´Ù.
+		- quarternionì— ëª…ì‹œëœ íšŒì „ê°’ì„ vec3 í˜•íƒœë¡œ ë³€í™˜í•´ì„œ
+		  ë¦¬í„´í•´ì¤€ë‹¤.
 
 		*/
-		return glm::rotate(GetOrientation(), glm::vec3(0.0f, 0.0f, -1.0f));
-	}
-
-	glm::vec3 EditorCamera::calculatePosition() const
-	{
-		/*
-		ex) m_FocalPoint °¡ (0,0,0), Distance °¡ 10 ÀÌ¸é
-		Editor Camera ÀÇ World Pos ´Â »ç½Ç»ó z Ãà -10 ÀÌ µÇ°í
-		ÀÌ ¸»Àº Áï½¼ z = 0 º¸´Ù Á¶±İ µÚ¿¡¼­ World ¿¡ ÀÖ´Â
-		´ë»óµéÀ» ¹Ù¶óº¸°Ô µÈ´Ù´Â ÀÇ¹Ì°¡ µÈ´Ù.
-		*/
-		return m_FocalPoint - GetForwardDirection() * m_Distance;
-	}
-
-	glm::quat EditorCamera::GetOrientation() const
-	{
-		/*
-		1) ¸ÕÀú Ä«¸Ş¶óÀÇ Pitch, Yaw °ªÀ» ÀÌ¿ëÇØ¼­ 3D Vector ¸¦ ¸¸µå´Â °Í °°´Ù.
-		- È¸Àü°ªµéÀ» '-' ÇØ¼­ ¸¸µé¾îÁØ´Ù´Â °ÍÀÌ ÇÙ½ÉÀÌ´Ù
-		- ¿Ö '-' ¸¦ ÇØÁÖ´Â°¡´Â Àß ¸ğ¸£°Ú´Ù. 
-		2) glm::quat ÇÔ¼ö¸¦ ÀÌ¿ëÇØ¼­ 3d vector ¸¦
-		quarternion ÇüÅÂ·Î º¯È¯ÇÑ´Ù.
-		*/
-		return glm::quat(glm::vec3(-m_Pitch, -m_Yaw, 0.0f));
-	}
-
+    return glm::rotate(GetOrientation(), glm::vec3(0.0f, 0.0f, -1.0f));
 }
+
+glm::vec3 EditorCamera::calculatePosition() const
+{
+    /*
+		ex) m_FocalPoint ê°€ (0,0,0), Distance ê°€ 10 ì´ë©´
+		Editor Camera ì˜ World Pos ëŠ” ì‚¬ì‹¤ìƒ z ì¶• -10 ì´ ë˜ê³ 
+		ì´ ë§ì€ ì¦‰ìŠ¨ z = 0 ë³´ë‹¤ ì¡°ê¸ˆ ë’¤ì—ì„œ World ì— ìˆëŠ”
+		ëŒ€ìƒë“¤ì„ ë°”ë¼ë³´ê²Œ ëœë‹¤ëŠ” ì˜ë¯¸ê°€ ëœë‹¤.
+		*/
+    return m_FocalPoint - GetForwardDirection() * m_Distance;
+}
+
+glm::quat EditorCamera::GetOrientation() const
+{
+    /*
+		1) ë¨¼ì € ì¹´ë©”ë¼ì˜ Pitch, Yaw ê°’ì„ ì´ìš©í•´ì„œ 3D Vector ë¥¼ ë§Œë“œëŠ” ê²ƒ ê°™ë‹¤.
+		- íšŒì „ê°’ë“¤ì„ '-' í•´ì„œ ë§Œë“¤ì–´ì¤€ë‹¤ëŠ” ê²ƒì´ í•µì‹¬ì´ë‹¤
+		- ì™œ '-' ë¥¼ í•´ì£¼ëŠ”ê°€ëŠ” ì˜ ëª¨ë¥´ê² ë‹¤. 
+		2) glm::quat í•¨ìˆ˜ë¥¼ ì´ìš©í•´ì„œ 3d vector ë¥¼
+		quarternion í˜•íƒœë¡œ ë³€í™˜í•œë‹¤.
+		*/
+    return glm::quat(glm::vec3(-m_Pitch, -m_Yaw, 0.0f));
+}
+
+} // namespace Hazel

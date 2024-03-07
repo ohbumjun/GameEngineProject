@@ -4,7 +4,7 @@
 
 namespace Hazel
 {
-	/*
+/*
 	>> Input Class 구성 방식
 	- Windows, Linux, Mac 등 다양한 platform 에 따라 다른 방식의 Input 로직  및
 	  코드를 실행해야 한다.
@@ -25,22 +25,21 @@ namespace Hazel
 	Definition 들이 여기 선언한 Declaration 과 Link 되어
 	컴파일 되는 방식을 취할 것이다.
 	*/
-	class HAZEL_API Input
-	{
-	public :
-		static bool IsKeyPressed(int keyCode) ;
-		static bool IsMouseButtonPressed(int button);
-		static float GetMouseX();
-		static float GetMouseY();
-		static std::pair<float, float> GetMousePosition();
+class HAZEL_API Input
+{
+public:
+    static bool IsKeyPressed(int keyCode);
+    static bool IsMouseButtonPressed(int button);
+    static float GetMouseX();
+    static float GetMouseY();
+    static std::pair<float, float> GetMousePosition();
 
-	protected :
-		// 각 플랫폼 별로 구현할 함수 ex) linux, openGL
-		// virtual bool IsKeyPressedImpl(int keyCode) = 0;
-		// virtual bool IsMouseButtonPressedImpl(int button) = 0;
-		// virtual float GetMouseXImpl() = 0;
-		// virtual float GetMouseYImpl() = 0;
-		// virtual std::pair<float, float> GetMousePositionImpl() = 0;
-
-	};
-}
+protected:
+    // 각 플랫폼 별로 구현할 함수 ex) linux, openGL
+    // virtual bool IsKeyPressedImpl(int keyCode) = 0;
+    // virtual bool IsMouseButtonPressedImpl(int button) = 0;
+    // virtual float GetMouseXImpl() = 0;
+    // virtual float GetMouseYImpl() = 0;
+    // virtual std::pair<float, float> GetMousePositionImpl() = 0;
+};
+} // namespace Hazel

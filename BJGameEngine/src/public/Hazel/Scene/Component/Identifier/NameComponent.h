@@ -6,32 +6,39 @@
 namespace Hazel
 {
 class HAZEL_API NameComponent : public Component
-	{
-		friend class Scene;
-	public:
-		NameComponent();
-		NameComponent(const NameComponent& other) :
-			name(other.name)
-        {
-            Reflection::RegistType<NameComponent>();
-		}
-		NameComponent(const std::string& name) :
-			name(name) 
-		{
-            Reflection::RegistType<NameComponent>();
-		}
+{
+    friend class Scene;
 
-		operator const std::string& () const { return name; }
-		operator std::string& () { return name; }
-		inline const std::string& GetName() { return name; }
+public:
+    NameComponent();
+    NameComponent(const NameComponent &other) : name(other.name)
+    {
+        Reflection::RegistType<NameComponent>();
+    }
+    NameComponent(const std::string &name) : name(name)
+    {
+        Reflection::RegistType<NameComponent>();
+    }
 
-		virtual void Serialize(Serializer* serializer);
-		virtual void Deserialize(Serializer* serializer);
-	
-		virtual const TypeId GetType() const;
-	private:
-		std::string name = "";
-	};
-}
+    operator const std::string &() const
+    {
+        return name;
+    }
+    operator std::string &()
+    {
+        return name;
+    }
+    inline const std::string &GetName()
+    {
+        return name;
+    }
 
+    virtual void Serialize(Serializer *serializer);
+    virtual void Deserialize(Serializer *serializer);
 
+    virtual const TypeId GetType() const;
+
+private:
+    std::string name = "";
+};
+} // namespace Hazel

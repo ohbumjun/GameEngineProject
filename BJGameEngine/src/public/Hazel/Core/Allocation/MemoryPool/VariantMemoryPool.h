@@ -6,17 +6,18 @@
 class VariantMemoryPool : public BaseMemoryPool
 {
 public:
-	VariantMemoryPool();
-	virtual ~VariantMemoryPool();
+    VariantMemoryPool();
+    virtual ~VariantMemoryPool();
 
-	virtual void* Allocate(const size_t allocateSize);
-	void Init(uint TotalSize, FreeListAllocatorPlacementPolicy policy = FreeListAllocatorPlacementPolicy::FIND_SPEED);
+    virtual void *Allocate(const size_t allocateSize);
+    void Init(uint TotalSize,
+              FreeListAllocatorPlacementPolicy policy =
+                  FreeListAllocatorPlacementPolicy::FIND_SPEED);
 
 protected:
-	virtual void onFree(void* ptr);
+    virtual void onFree(void *ptr);
 
 private:
-	size_t m_SingleDataSize;
-	class FreeListAllocator* m_Allocator;
+    size_t m_SingleDataSize;
+    class FreeListAllocator *m_Allocator;
 };
-

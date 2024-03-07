@@ -1,7 +1,7 @@
-﻿#include "hzpch.h"
-#include "Hazel/Scene/Component/Component.h"
+﻿#include "Hazel/Scene/Component/Component.h"
+#include "hzpch.h"
 
 Hazel::Component::Component()
 {
-	Reflection::RegistType<Component>();
+    Reflection::RegistType<Component>();
 }

@@ -1,46 +1,51 @@
 #pragma once
 
-template<typename T>
+template <typename T>
 class StackLinkedList
 {
-	friend class CPoolAllocator;
+    friend class CPoolAllocator;
+
 public:
-	struct Node
-	{
-		T data;
-		Node* Next = nullptr;
-	};
+    struct Node
+    {
+        T data;
+        Node *Next = nullptr;
+    };
+
 private:
-	int m_TestSize;
-	Node* m_Head;
+    int m_TestSize;
+    Node *m_Head;
+
 public:
-	StackLinkedList() : m_Head(nullptr) {}
-	StackLinkedList(StackLinkedList& List) = delete;
-	void push(Node* newNode);
-	Node* pop();
+    StackLinkedList() : m_Head(nullptr)
+    {
+    }
+    StackLinkedList(StackLinkedList &List) = delete;
+    void push(Node *newNode);
+    Node *pop();
 };
 
-template<typename T>
-inline void StackLinkedList<T>::push(Node* newNode)
+template <typename T>
+inline void StackLinkedList<T>::push(Node *newNode)
 {
-	if (!newNode)
-		return;
+    if (!newNode)
+        return;
 
-	newNode->Next = m_Head;
-	m_Head = newNode;
+    newNode->Next = m_Head;
+    m_Head = newNode;
 
-	m_TestSize += 1;
+    m_TestSize += 1;
 };
 
-template<typename T>
-inline typename StackLinkedList<T>::Node* StackLinkedList<T>::pop()
+template <typename T>
+inline typename StackLinkedList<T>::Node *StackLinkedList<T>::pop()
 {
-	m_TestSize -= 1;
+    m_TestSize -= 1;
 
-	Node* PopNode = m_Head;
+    Node *PopNode = m_Head;
 
-	if (m_Head)
-		m_Head = m_Head->Next;
+    if (m_Head)
+        m_Head = m_Head->Next;
 
-	return PopNode;
+    return PopNode;
 };

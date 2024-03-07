@@ -1,22 +1,22 @@
 ﻿
-#include "hzpch.h"
 #include "Hazel/Core/GC/GC.h"
 #include "Hazel/Core/GC/GCObject.h"
 #include "Hazel/Core/Reflection/Reflection.h"
+#include "hzpch.h"
 
 GC::GC()
 {
-	// 인자로 TotalSize 는 사실 의미에 맞지 않는다.
-	// GCAllocator 안에 PoolAllocator , freeList Allocator
-	// 2개가 있는데 이 중에서 FreeList 만 사용하는 size 이다.
+    // 인자로 TotalSize 는 사실 의미에 맞지 않는다.
+    // GCAllocator 안에 PoolAllocator , freeList Allocator
+    // 2개가 있는데 이 중에서 FreeList 만 사용하는 size 이다.
     m_GCAllocator = new MemoryPoolManager();
     m_GCAllocator->SetFixedSize(sizeof(GCObject));
 }
 
 GC::~GC()
 {
-	delete m_GCAllocator;
-	m_GCAllocator = nullptr;
+    delete m_GCAllocator;
+    m_GCAllocator = nullptr;
 }
 
 void GC::Run()
@@ -24,37 +24,37 @@ void GC::Run()
     mark();
     sweep();
 }
-void GC::AddCollectTarget(GCObject* object)
+void GC::AddCollectTarget(GCObject *object)
 {
-	m_CollectTargets.push_back(object);
+    m_CollectTargets.push_back(object);
 }
 
-GCObject* GC::FindGCObject(void* dataPtr)
+GCObject *GC::FindGCObject(void *dataPtr)
 {
-	auto iter = m_CollectTargets.begin();
-	auto iterEnd = m_CollectTargets.end();
+    auto iter = m_CollectTargets.begin();
+    auto iterEnd = m_CollectTargets.end();
 
-	for (; iter != iterEnd; ++iter)
-	{
-		GCObject* curGCObject = *iter;
+    for (; iter != iterEnd; ++iter)
+    {
+        GCObject *curGCObject = *iter;
 
-		if (curGCObject->GetDataPtr() == dataPtr)
-			return curGCObject;
-	}
+        if (curGCObject->GetDataPtr() == dataPtr)
+            return curGCObject;
+    }
 
-	return nullptr;
+    return nullptr;
 }
 
-template<typename T>
-void  GC::Allocate(bool isRoot)
+template <typename T>
+void GC::Allocate(bool isRoot)
 {
     // isRoot 은 GCObject 를 리턴받고 세팅해줄 것이다.
     m_GCAllocator->Allocate<T>();
 }
 
-void GC::Free(GCObject* gcObject)
+void GC::Free(GCObject *gcObject)
 {
-    m_GCAllocator->Free<GCObject>(static_cast<void*>(gcObject));
+    m_GCAllocator->Free<GCObject>(static_cast<void *>(gcObject));
 }
 
 void GC::reset()
@@ -66,7 +66,7 @@ void GC::reset()
 
     for (iter; iter != iterEnd; ++iter)
     {
-        GCObject* object = *iter;
+        GCObject *object = *iter;
         object->SetVisit(false);
     }
 }
@@ -80,12 +80,14 @@ void GC::mark()
      * present anywhere in object db. If there are multiple roots in object db
      * return the first one, we can start mld algorithm from any root object*/
 
-    GCObject* root_obj = getFirstRootObject();
+    GCObject *root_obj = getFirstRootObject();
 
-    while (root_obj) {
+    while (root_obj)
+    {
 
         // 이미 방문한 root node 재귀 방지
-        if (root_obj->IsVisited()) {
+        if (root_obj->IsVisited())
+        {
             //  해당 root object 로부터 시작되는 graph 내의 모든 노드는 탐색이 끝난 상황
             root_obj = getNextRootObject(root_obj);
             continue;
@@ -108,14 +110,14 @@ void GC::mark()
 
 void GC::sweep()
 {
-    auto iter       = m_CollectTargets.begin();
+    auto iter = m_CollectTargets.begin();
     auto iterEnd = m_CollectTargets.end();
 
-    GCObject* prevObject = nullptr;
+    GCObject *prevObject = nullptr;
 
     for (; iter != iterEnd;)
     {
-        GCObject* gcObject = *iter;
+        GCObject *gcObject = *iter;
 
         if (gcObject->IsVisited() == false)
         {
@@ -128,7 +130,7 @@ void GC::sweep()
             // 메모리 해제해주기
             m_GCAllocator->Free<GCObject>(prevObject);
 
-            // list 상에서 지워주기 
+            // list 상에서 지워주기
             iter = m_CollectTargets.erase(iter);
         }
         else
@@ -142,14 +144,14 @@ void GC::sweep()
     }
 }
 
-GCObject* GC::getFirstRootObject()
+GCObject *GC::getFirstRootObject()
 {
     auto iter = m_CollectTargets.begin();
     auto iterEnd = m_CollectTargets.end();
 
     for (iter; iter != iterEnd; ++iter)
     {
-        GCObject* object = *iter;
+        GCObject *object = *iter;
 
         if (object->IsRoot())
         {
@@ -160,23 +162,24 @@ GCObject* GC::getFirstRootObject()
     return nullptr;
 }
 
-GCObject* GC::getNextRootObject(GCObject* curGCObject)
+GCObject *GC::getNextRootObject(GCObject *curGCObject)
 {
-	if (curGCObject->GetNext() == nullptr)  return nullptr;
+    if (curGCObject->GetNext() == nullptr)
+        return nullptr;
 
-	return curGCObject->GetNext();
+    return curGCObject->GetNext();
 }
 
-void GC::markRecursively(GCObject* parentObject)
+void GC::markRecursively(GCObject *parentObject)
 {
-    void* parent_obj_ptr = nullptr;
-        // * child_obj_offset = NULL;
+    void *parent_obj_ptr = nullptr;
+    // * child_obj_offset = NULL;
 
-    void* child_object_ptr = nullptr;
-    FieldInfo* field_info = NULL;
+    void *child_object_ptr = nullptr;
+    FieldInfo *field_info = NULL;
 
-    GCObject* child_object = NULL;
-    Reflection::TypeInfo* parentTypeInfo = parentObject->GetTypeInfo();
+    GCObject *child_object = NULL;
+    Reflection::TypeInfo *parentTypeInfo = parentObject->GetTypeInfo();
 
     /*Parent object must have already visited*/
     assert(parentObject->IsVisited());
@@ -189,18 +192,20 @@ void GC::markRecursively(GCObject* parentObject)
     // 현재 조사중인 object 의 메모리 주소에 접근한다.
     parent_obj_ptr = parentObject->GetDataPtr();
 
-    // 해당 object type 의 모든 field 를 순회한다. 
-    auto iter          = parentTypeInfo->m_fieldInfos.begin();
-    auto iterEnd    = parentTypeInfo->m_fieldInfos.end();
+    // 해당 object type 의 모든 field 를 순회한다.
+    auto iter = parentTypeInfo->m_fieldInfos.begin();
+    auto iterEnd = parentTypeInfo->m_fieldInfos.end();
 
     for (; iter != iterEnd; ++iter)
     {
-        const FieldInfo* fieldInfo = &(*iter);
+        const FieldInfo *fieldInfo = &(*iter);
 
-        DataType fieldDataType = Reflection::GetDataType(fieldInfo->GetTypeId());
+        DataType fieldDataType =
+            Reflection::GetDataType(fieldInfo->GetTypeId());
 
-        if (fieldDataType != DataType::OBJECT) continue;
-        
+        if (fieldDataType != DataType::OBJECT)
+            continue;
+
         /* 현재 parent object 가 직접 가리키고 있는 pointer object 가 바로 child object 이다.
               ex) parent_obj_ptr = 0x1000 = parent object 의 메모리 주소 를 담기 위해 쓰인다.
                   그리고 parent object 가 이와 같은 형태를 취했다고 해보자. {[float][int][char[30]][0x2000]}
@@ -212,8 +217,10 @@ void GC::markRecursively(GCObject* parentObject)
 
               * child_obj_offset is the memory location inside parent object
               * where address of next level object is stored*/
-        uint64_t child_obj_offset_value = (uint64_t)parent_obj_ptr + field_info->GetOffset();
-        char* child_obj_offset              = reinterpret_cast<char*>(child_obj_offset_value);
+        uint64_t child_obj_offset_value =
+            (uint64_t)parent_obj_ptr + field_info->GetOffset();
+        char *child_obj_offset =
+            reinterpret_cast<char *>(child_obj_offset_value);
 
         /*
             child_object_address 변수에 담는 값은 무엇이 될까 ?
@@ -237,7 +244,7 @@ void GC::markRecursively(GCObject* parentObject)
             이 말은 즉슨, child_object_address 에 chlid 객체의 메모리 주소. 값을 대입한다는 것이고
             *(child_object_address) = child object. 가 된다는 것이다.
         */
-        memcpy(&child_object_ptr, child_obj_offset, sizeof(void*));
+        memcpy(&child_object_ptr, child_obj_offset, sizeof(void *));
 
         /*child_object_address now stores the address of the next object in the
             * graph. It could be NULL, Handle that as well*/
@@ -246,7 +253,7 @@ void GC::markRecursively(GCObject* parentObject)
             continue;
         }
 
-        GCObject* childObject = GC::FindGCObject(child_object_ptr);
+        GCObject *childObject = GC::FindGCObject(child_object_ptr);
 
         assert(childObject);
 

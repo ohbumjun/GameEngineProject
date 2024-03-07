@@ -1,7 +1,7 @@
-#pragma once
+ï»¿#pragma once
 
 /*
-Object Handle ·Î »ç¿ëµÇ´Â ÇÔ¼ö
+Object Handle ë¡œ ì‚¬ìš©ë˜ëŠ” í•¨ìˆ˜
 
 https://forums.unrealengine.com/t/why-should-i-replace-raw-pointers-with-tobjectptr/232781/5
 https://docs.unrealengine.com/5.0/ko/unreal-engine-5-migration-guide/
@@ -9,8 +9,8 @@ https://docs.unrealengine.com/5.0/ko/unreal-engine-5-migration-guide/
 
 namespace Hazel
 {
-	class ObjectPtr
-	{
-	};
+class ObjectPtr
+{
+};
 
-}
+} // namespace Hazel

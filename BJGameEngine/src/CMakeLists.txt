@@ -764,10 +764,3 @@ if(WIN32)
     ON )
     
 endif()
-
-if(${ENABLE_LTO})
-    target_enable_lto(
-        TARGET ${ENGINE_NAME}
-        ENABLE
-        ON)
-endif()

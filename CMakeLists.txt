@@ -146,10 +146,12 @@ option(COMPILE_EXECUTABLE "Whether to compile the executable" ON)
 
 # link time optimization (not compile time) 
 ## - do not link function in certain obj file if that function is not used
-option(ENABLE_LTO "Enable LTO/IPO" OFF)
+## - Editor 상에서 Linking Error 가 난다.
+# option(ENABLE_LTO "Enable LTO/IPO" OFF)
+option(ENABLE_CLANG_FORMAT "Enable to add clang-format." ON)
 
 ## -- include cmake files -- ##
-# include(Tools)
+include(ClangFormat)
 include(AddGitSubmodule)
 
 if(ENABLE_LTO)
@@ -161,13 +163,23 @@ if(ENABLE_SANITIZE_ADDR OR ENABLE_SANITIZE_UNDEF)
     # add_sanitizer_flags()
 endif()
 
+# add_cmake_format_target()
+
+if(ENABLE_CLANG_FORMAT)
+    add_clang_format_target()
+endif()
+
 ## -- 전역 definition -- ##
 # Set preprocessor definitions to avoid conflicts with minwindef.h (max) versus "std::max"
 add_definitions(-DNOMINMAX)
 
-## -- clang format, cmake format -- ##
-# add_cmake_format_target()
-# add_clang_format_target()
+# CACHE : set variable as global variable
+# INTERNAL : not shown in cmake-gui
+set(GLFW_BUILD_EXAMPLES OFF CACHE INTERNAL "Build the GLFW example programs")
+set(GLFW_BUILD_TESTS OFF CACHE INTERNAL "Build the GLFW test programs")
+set(GLFW_BUILD_DOCS OFF CACHE INTERNAL "Build the GLFW documentation")
+set(GLFW_INSTALL ON CACHE INTERNAL "Generate installation target")
+
 
 # search for other CMakeLists.txt files in subdirectories
 add_subdirectory(external)              
@@ -189,18 +201,6 @@ add_git_submodule(external/spdlog)
 # add_git_submodule(external/ImGuizmo)
 # add_git_submodule(external/RapidJson)
 # add_git_submodule(external/stb_image)
-
-# CACHE : set variable as global variable
-# INTERNAL : not shown in cmake-gui
-set(GLFW_BUILD_EXAMPLES OFF CACHE INTERNAL "Build the GLFW example programs")
-set(GLFW_BUILD_TESTS OFF CACHE INTERNAL "Build the GLFW test programs")
-set(GLFW_BUILD_DOCS OFF CACHE INTERNAL "Build the GLFW documentation")
-set(GLFW_INSTALL ON CACHE INTERNAL "Generate installation target")
-
-
-# clang format, cmake format
-# add_cmake_format_target()
-# add_clang_format_target()
 
 message(STATUS "Finished CMake for ${PROJECT_NAME})")
 

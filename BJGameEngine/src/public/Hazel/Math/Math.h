@@ -1,16 +1,16 @@
-#pragma once
+ï»¿#pragma once
 
 #include <glm/glm.hpp>
 
 namespace Hazel
- {
-    namespace  Math
-    {
+{
+namespace Math
+{
 
-    // Transform mat4 ¿¡¼­ s, r, t Á¤º¸¸¦ »Ì¾Æ³»ÁÖ´Â ÇÔ¼ö
-    bool HAZEL_API  DecomposeTransform(const glm::mat4 &transform,
-                                      glm::vec3 &outTranslation,
-                                      glm::vec3 &outRotation,
-                                      glm::vec3 &outScale);
-    } // namespace Math
-}
+// Transform mat4 ì—ì„œ s, r, t ì •ë³´ë¥¼ ë½‘ì•„ë‚´ì£¼ëŠ” í•¨ìˆ˜
+bool HAZEL_API DecomposeTransform(const glm::mat4 &transform,
+                                  glm::vec3 &outTranslation,
+                                  glm::vec3 &outRotation,
+                                  glm::vec3 &outScale);
+} // namespace Math
+} // namespace Hazel
