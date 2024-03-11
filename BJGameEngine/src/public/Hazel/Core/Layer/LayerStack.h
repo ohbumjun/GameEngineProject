@@ -14,9 +14,9 @@ public:
     LayerStack() = default;
     ~LayerStack();
 
-    // 일반 Layer => 초반 50%, OverLay 이전에 push 되길 원한다.
-    void PushLayer(Layer *layer);
     // OverLayer 는 나중에 그리고 싶은 대상들 => 후반 50%
+    void PushLayer(Layer *layer);
+    // 일반 Layer => 초반 50%, OverLay 이전에 push 되길 원한다.
     void PushOverlay(Layer *overlay);
     void PopLayer(Layer *layer);
     void PopOverlay(Layer *overlay);

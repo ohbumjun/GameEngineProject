@@ -98,7 +98,8 @@ void WindowsWindow::Init(const WindowProps &props)
     m_Context = new OpenGLContext(m_Window);
     m_Context->Init();
 
-    // m_Data 라는 구조체를 인자로 넘겨서, m_Data.EventCallback 이라는 변수에 데이터 세팅
+    // m_Data 라는 구조체를 인자로 넘기면, m_Data 라는 변수가 Event 실행을 위한
+    // 매개체 변수가 된다. 그리고 이를 통해 EventCallback 함수를 호출할 수 있게 된다.
     glfwSetWindowUserPointer(m_Window, &m_Data);
 
     SetVSync(true);
@@ -133,6 +134,7 @@ void WindowsWindow::Init(const WindowProps &props)
         data.EventCallback(event);
     });
 
+    // Key 를 누룰 때 호출되는 콜백
     glfwSetKeyCallback(
         m_Window,
         [](GLFWwindow *window, int key, int scancode, int action, int mods) {

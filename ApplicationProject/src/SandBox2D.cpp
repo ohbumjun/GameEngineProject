@@ -1,6 +1,6 @@
 ﻿#include "SandBox2D.h"
 #include "Platform/OpenGL/OpenGLShader.h"
-#include "imgui/imgui.h"
+#include "imgui.h"
 #include <glm/gtc/type_ptr.hpp>
 
 // 24 wide map
@@ -38,9 +38,9 @@ SandBox2D::SandBox2D()
 void SandBox2D::OnAttach()
 {
     m_CheckerboardTexture =
-        Hazel::TextureManager::CreateTexture2D("assets/textures/sample.png");
+        Hazel::TextureManager::CreateTexture2D(RESOURCE_ROOT"assets/textures/sample.png");
     m_SpriteSheet = Hazel::TextureManager::CreateTexture2D(
-        "assets/game/textures/RPGpack_sheet_2X.png");
+        RESOURCE_ROOT "assets/game/textures/RPGpack_sheet_2X.png");
     // m_TextureStairs				= Hazel::SubTextureManager::CreateTexture2DFromCoords(m_SpriteSheet, {7, 6}, {128, 128});
     // m_TextureBarrel				= Hazel::SubTextureManager::CreateTexture2DFromCoords(m_SpriteSheet, {8, 2}, {128, 128});
     // m_TextureTree				= Hazel::SubTextureManager::CreateTexture2DFromCoords(m_SpriteSheet, { 2, 1 }, { 128, 128 }, { 1,2 });

@@ -586,6 +586,7 @@ void EditorLayer::drawSetting()
     // Settings
     ImGui::Begin("Settings");
     ImGui::Checkbox("Show physics colliders", &m_ShowPhysicsColliders);
+    ImGui::Checkbox("Highlight Selected Entity", &m_HighlightSelectEntity);
     ImGui::End();
 
     // State
@@ -927,15 +928,17 @@ void EditorLayer::onOverlayRender()
     }
 
     // Draw selected entity outline
-    if (Hazel::Entity selectedEntity =
-            m_SceneHierachyPanel->GetSelectedEntity())
+    if (m_HighlightSelectEntity)
     {
-        Hazel::TransformComponent transform =
-            selectedEntity.GetComponent<Hazel::TransformComponent>();
+        if (Hazel::Entity selectedEntity = m_SceneHierachyPanel->GetSelectedEntity())
+        {
+            Hazel::TransformComponent transform =
+                selectedEntity.GetComponent<Hazel::TransformComponent>();
 
-        //Red
-        Hazel::Renderer2D::DrawRect(transform.GetTransform(),
-                                    glm::vec4(1, 0, 0, 1));
+            //Red
+            Hazel::Renderer2D::DrawRect(transform.GetTransform(),
+                                        glm::vec4(1, 0, 0, 1));
+        }
     }
 
     Hazel::Renderer2D::EndScene();

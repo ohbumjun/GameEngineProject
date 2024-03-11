@@ -682,6 +682,7 @@ target_link_libraries(
     opengl32.lib
     glfw
     spdlog
+    # -fsanitize=address
     )
 
 # 아래 두 줄을 통해서 해당 경로에 있는 모든 cpp 파일들을 pch 를 사용하지 않을 것이라고 하는 것이다

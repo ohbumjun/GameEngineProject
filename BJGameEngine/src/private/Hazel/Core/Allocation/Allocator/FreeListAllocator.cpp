@@ -72,6 +72,9 @@ void *FreeListAllocator::Allocate(const size_t allocSize,
     // 가장 마지막에 할당된 datablock 의 끝 위치가 나온다는 의미
     HeaderPtr->padding = (char)alignmentPadding;
 
+    int x[2];
+    x[2] = 3;
+
     m_Used += requiredSize;
     m_Peak = m_Used;
 

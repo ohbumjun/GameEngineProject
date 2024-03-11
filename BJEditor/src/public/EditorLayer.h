@@ -90,6 +90,7 @@ private:
     bool m_VieportInteracted = false;
 
     bool m_ShowPhysicsColliders = false;
+    bool m_HighlightSelectEntity = false;
 
     glm::vec2 m_ViewportSize = {0, 0};
     glm::vec2 m_ViewportBounds[2];

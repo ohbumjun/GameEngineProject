@@ -44,6 +44,7 @@ function(add_sanitizer_flags)
         # Windows
     elseif(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
         if(ENABLE_SANITIZE_ADDR)
+            message(STATUS "Address Sanitizer Added for MSVC!")
             add_compile_options("/fsanitize=address")
         endif()
 

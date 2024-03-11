@@ -75,9 +75,7 @@ private:
     std::unique_ptr<Window> m_Window;
     ImGuiLayer *m_ImGuiLayer;
     bool m_Running = true;
-    ;
     bool m_Minimized = false;
-    ;
     LayerStack m_LayerStack;
     Timestep m_Timestep;
     float m_LastFrameTime = 0.f;

@@ -105,6 +105,7 @@ message(STATUS "Started CMake for ${PROJECT_NAME}")
 set(ENGINE_NAME "Engine")
 set(EDITOR_NAME "Editor")
 set(EXECUTABLE_NAME "Executable")
+set(EXE_IMGUIChat "IMGUIChat")
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
 ## -- Build Type -- ##
@@ -148,8 +149,13 @@ option(COMPILE_EXECUTABLE "Whether to compile the executable" ON)
 ## - do not link function in certain obj file if that function is not used
 ## - Editor 상에서 Linking Error 가 난다.
 # option(ENABLE_LTO "Enable LTO/IPO" OFF)
-option(ENABLE_CLANG_FORMAT "Enable to add clang-format." ON)
-option(ENABLE_CLANG_TIDY "Enable to add clang-tidy." ON)
+# option(ENABLE_CLANG_FORMAT "Enable to add clang-format." ON)
+# option(ENABLE_CLANG_TIDY "Enable to add clang-tidy." OFF)
+
+# sanitizer : runtime tool that helps to find memory corruption, memory leak etc.
+## - mvsc 에서 glm run time 에러가 난다.
+option(ENABLE_SANITIZE_ADDR "Enable address sanitizer" OFF)
+option(ENABLE_SANITIZE_UNDEF "Enable undefined sanitizer" OFF)
 
 ## -- include cmake files -- ##
 include(ClangFormat)
@@ -161,8 +167,8 @@ if(ENABLE_LTO)
 endif()
 
 if(ENABLE_SANITIZE_ADDR OR ENABLE_SANITIZE_UNDEF)
-    # include(Sanitizer)
-    # add_sanitizer_flags()
+    include(Sanitizer)
+    add_sanitizer_flags()
 endif()
 
 # add_cmake_format_target()
@@ -187,6 +193,7 @@ set(GLFW_INSTALL ON CACHE INTERNAL "Generate installation target")
 add_subdirectory(external)              
 add_subdirectory(BJGameEngine)          
 add_subdirectory(BJEditor)              
+add_subdirectory(IMGUIChat)
 add_subdirectory(ApplicationProject)    
 # add_subdirectory(tests)                 # tests
 

@@ -85,6 +85,7 @@ void Application::Run()
             }
         }
 
+        // IMGUI 관련 세팅 시작
         m_ImGuiLayer->Begin();
         {
             HZ_PROFILE_SCOPE("LayerStack ImguiRender");
@@ -94,6 +95,8 @@ void Application::Run()
                 layer->OnImGuiRender();
             }
         }
+
+        // IMGUI 관련 세팅 끝
         m_ImGuiLayer->End();
 
         // 해당 줄이 위 줄보다 아래에 와야 한다

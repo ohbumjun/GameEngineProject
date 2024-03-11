@@ -659,6 +659,7 @@ void Scene::renderScene(EditorCamera &camera)
     }
 
     // Draw Line
+    /*
     {
         Renderer2D::SetLineWidth(3.f);
         Renderer2D::DrawLine(glm::vec3(0.f),
@@ -670,13 +671,17 @@ void Scene::renderScene(EditorCamera &camera)
                              glm::vec3(2.f, 0.f, 0.f),
                              glm::vec4(0, 1, 1, 1));
     }
+    */
+
 
     // Draw Rect
+    /*
     {
         Renderer2D::DrawRect(glm::vec3(0.f),
                              glm::vec3(3.f),
                              glm::vec4(1, 0, 0, 1));
     }
+    */
 
     Renderer2D::EndScene();
 }
