@@ -2,8 +2,11 @@
 SET(TOTAL_IMGUICHAT_FILES) # lv1engine 은 그냥 그대로 사용함 ;
 
 SET(LAYER 
-    Layer/ChatLayer.h
-    Layer/ChatLayer.cpp
+    Layer/ChatServerLayer.h
+    Layer/ChatClientLayer.h
+
+    Layer/ChatServerLayer.cpp
+    Layer/ChatClientLayer.cpp
 )
 SOURCE_GROUP("layer" FILES ${LAYER})
 LIST(APPEND TOTAL_IMGUICHAT_FILES ${LAYER})

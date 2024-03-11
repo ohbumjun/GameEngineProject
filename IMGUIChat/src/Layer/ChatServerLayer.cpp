@@ -1,11 +1,7 @@
 #include <backends/imgui_impl_glfw.h>
 #include <imgui.h>
 #include <stdio.h>
-// #include <winsock2.h> // For Windows (replace with appropriate headers for other platforms)
-#include "ChatLayer.h"
-// #include <arpa/inet.h> // For Linux/macOS (uncomment if needed)
-
-// #pragma comment(lib, "ws2_32.lib") // For Windows (link with Winsock library)
+#include "ChatServerLayer.h"
 
 // Network-related variables
 #define SERVER_PORT 12345
@@ -17,13 +13,90 @@ bool connected = false;
 char recvBuffer[1024];
 int recvBufferSize = 0;
 
+
 // ImGui-related variables
 ImGuiTextBuffer chatHistory;
 bool showConnectWindow = true;
 char username[32] = "";
 char messageBuffer[256] = "";
 
-void IMGUIChatLayer::ImGuiChatWindow()
+
+void ErrorHandling(const char* message)
+{
+    fputs(message, stderr);
+    fputc('\n', stderr);
+    exit(1);
+}
+
+void ChatServerLayer::OnAttach()
+{
+    int szClntAddr;
+    char message[] = "Hello world!";
+
+    if (argc != 2)
+    {
+        printf("Usage : %s <port> \n", argv[0]);
+        exit(1);
+    }
+
+    // 소켓 라이브러리 초기화
+    if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
+        ErrorHandling("WSAStartUp() Error");
+
+    // TCP 소켓 생성
+    hServSock = socket(
+        PF_INET,            // domain : 소켓이 사용할 프로토콜 체계(Protocol Family) 정보 전달
+        SOCK_STREAM,  // type : 소켓의 데이터 전송 방식에 대한 정보 전달
+        0                       // protocol : 두 컴퓨터간 통신에 사용되는 프로토콜 정보 전달
+    );
+
+    // 소켓 생성
+    if (hServSock == INVALID_SOCKET)
+        ErrorHandling("socket() Error");
+
+    memset(&servAddr, 0, sizeof(servAddr));
+    servAddr.sin_family = AF_INET;
+    servAddr.sin_addr.s_addr = htonl(INADDR_ANY);
+    servAddr.sin_port = htons(atoi(argv[1]));
+
+    // IP 주소, PORT 번호 할당 목적 (즉, 소켓에 주소 할당)
+    if (bind(hServSock, (SOCKADDR *)&servAddr, sizeof(servAddr)) ==
+        SOCKET_ERROR)
+        ErrorHandling("bind Error");
+
+    // 연결 요청 수락 상태로 만들기
+    if (listen(hServSock, 5) == SOCKET_ERROR)   // 연결 요청 수락 상태로 만들기
+        ErrorHandling("listen Error");
+
+    szClntAddr = sizeof(clntAddr);
+
+    // 클라이언트 프로그램에서의 연결 요청 수락
+    hClntSock = accept(hServSock, (SOCKADDR *)&clntAddr, &szClntAddr);
+
+    if (hClntSock == INVALID_SOCKET)
+        ErrorHandling("accept() Error");
+
+    // 연결된 클라리언트에 데이터 전송
+    send(hClntSock, message, sizeof(message), 0);
+
+}
+
+void ChatServerLayer::OnDetach()
+{
+    closesocket(hClntSock);
+    closesocket(hServSock);
+    WSACleanup(); // 윈속 라이브러리 해제
+}
+
+void ChatServerLayer::OnUpdate(Hazel::Timestep ts)
+{
+}
+
+void ChatServerLayer::OnEvent(Hazel::Event &event)
+{
+}
+
+void ChatServerLayer::ImGuiChatWindow()
 {
     ImGui::Begin("Chat", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
 
@@ -67,7 +140,7 @@ void IMGUIChatLayer::ImGuiChatWindow()
     ImGui::End();
 }
 
-void IMGUIChatLayer::ImGuiConnectWindow()
+void ChatServerLayer::ImGuiConnectWindow()
 {
     ImGui::Begin("Connect", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
 
