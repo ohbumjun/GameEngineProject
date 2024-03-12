@@ -1,10 +1,10 @@
+#include "EchoTCPClientLayer.h"
 #include <backends/imgui_impl_glfw.h>
 #include <imgui.h>
 #include <stdio.h>
-#include "ChatClientLayer.h"
 
 #define SERVER_PORT "12345"
-#define SERVER_ADDRESS "127.0.0.1"
+#define SERVER_IP_ADDRESS "127.0.0.1"
 bool connected = false;
 char recvBuffer[1024];
 int recvBufferSize = 0;
@@ -17,7 +17,7 @@ char username[32] = "";
 char messageBuffer[256] = "";
 
 
-void ErrorHandling(const char* message)
+void ErrorHandling(const char *message)
 {
     fputs(message, stderr);
     fputc('\n', stderr);
@@ -25,18 +25,12 @@ void ErrorHandling(const char* message)
 }
 
 
-void ChatClientLayer::OnAttach()
+void EchoTCPClientLayer::OnAttach()
 {
     SOCKADDR_IN servAddr;
 
     char message[30];
     int strLen = 0, idx = 0, readLen = 0;
-
-    if (argc != 3)
-    {
-        printf("Usage : %s <port> \n", argv[0]);
-        exit(1);
-    }
 
     // 소켓 라이브러리 초기화
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
@@ -70,10 +64,9 @@ void ChatClientLayer::OnAttach()
     }
 
     printf("Message from server : %s \n", message);
-
 }
 
-void ChatClientLayer::OnDetach()
+void EchoTCPClientLayer::OnDetach()
 {
     // 생성된 소켓 라이브러리 해제
     closesocket(hClntSock);
@@ -81,15 +74,15 @@ void ChatClientLayer::OnDetach()
     WSACleanup();
 }
 
-void ChatClientLayer::OnUpdate(Hazel::Timestep ts)
+void EchoTCPClientLayer::OnUpdate(Hazel::Timestep ts)
 {
 }
 
-void ChatClientLayer::OnEvent(Hazel::Event &event)
+void EchoTCPClientLayer::OnEvent(Hazel::Event &event)
 {
 }
 
-void ChatClientLayer::ImGuiChatWindow()
+void EchoTCPClientLayer::ImGuiChatWindow()
 {
     ImGui::Begin("Chat", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
 
@@ -121,19 +114,19 @@ void ChatClientLayer::ImGuiChatWindow()
         if (strlen(messageBuffer) > 0)
         {
             // Send message to server
-           // send(sock, messageBuffer, strlen(messageBuffer), 0);
-           // memset(
-           //     messageBuffer,
-           //     0,
-           //     sizeof(
-           //         messageBuffer)); // Clear message buffer after sending
+            // send(sock, messageBuffer, strlen(messageBuffer), 0);
+            // memset(
+            //     messageBuffer,
+            //     0,
+            //     sizeof(
+            //         messageBuffer)); // Clear message buffer after sending
         }
     }
 
     ImGui::End();
 }
 
-void ChatClientLayer::ImGuiConnectWindow()
+void EchoTCPClientLayer::ImGuiConnectWindow()
 {
     ImGui::Begin("Connect", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
 

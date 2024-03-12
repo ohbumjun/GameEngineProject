@@ -1,10 +1,10 @@
 #pragma once
 #include <Hazel.h>
 
-class ChatServerLayer : public Hazel::Layer
+class EchoTCPServerLayer : public Hazel::Layer
 {
 public:
-    ChatServerLayer() : Layer("ChatServerLayer")
+    EchoTCPServerLayer() : Layer("ChatServerLayer")
     {
     }
     virtual void OnAttach() override;
@@ -16,17 +16,18 @@ public:
     {
         ImGuiChatWindow();
     }
-    
+
     void ImGuiChatWindow();
 
     void ImGuiConnectWindow();
 
 private:
-
+    static const int BUF_SIZE = 1024;
     // 소켓 라이브러리 초기화
     WSADATA wsaData;
-    SOCKET hServSock;   // 서버 소켓
-    SOCKET hClntSock;   // 수락된 클라이언트 소켓
+    SOCKET hServSock;       // 서버 소켓
+    SOCKET hClntSock[5];    // 수락된 클라이언트 소켓
+    int         hClntStrLen[5]; // 수락된 클라이언트 소켓
     /*
     IPv4 의 주소정보를 담기 위해 정의된 구조체
 

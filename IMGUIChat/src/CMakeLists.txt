@@ -4,9 +4,13 @@ SET(TOTAL_IMGUICHAT_FILES) # lv1engine 은 그냥 그대로 사용함 ;
 SET(LAYER 
     Layer/ChatServerLayer.h
     Layer/ChatClientLayer.h
+    Layer/EchoTCPClientLayer.h
+    Layer/EchoTCPServerLayer.h
 
     Layer/ChatServerLayer.cpp
     Layer/ChatClientLayer.cpp
+    Layer/EchoTCPClientLayer.cpp
+    Layer/EchoTCPServerLayer.cpp
 )
 SOURCE_GROUP("layer" FILES ${LAYER})
 LIST(APPEND TOTAL_IMGUICHAT_FILES ${LAYER})
