@@ -33,6 +33,17 @@ void ErrorHandling(const char* message)
 // unsigned short ntohs(unsigned short);
 // unsigned long htonl(unsigned long);
 // unsigned long ntohl(unsigned long);
+// short 형 데이터를,
+//    호스트 바이트 순서에서 네트워크 바이트 순서로 변환해라.
+//
+//    short 형 데이터를,
+//    네트워크 바이트 순서에서 호스트 바이트 순서 로 변환해라.
+//
+//    long 형 데이터를,
+//    호스트 바이트 순서에서 네트워크 바이트 순서로 변환해라.
+//
+//    long 형 데이터를,
+//    네트워크 바이트 순서에서 호스트 바이트 순서 로 변환해라.
 
 void ChatServerLayer::OnAttach()
 {
@@ -64,7 +75,7 @@ void ChatServerLayer::OnAttach()
         ErrorHandling("socket() Error");
 
     memset(&servAddr, 0, sizeof(servAddr));
-    servAddr.sin_family = AF_INET;                          // 주소 체계 지정
+    servAddr.sin_family = AF_INET;                          // 주소 체계 지정 (IPv4  : 4바이트 주소체계)
     servAddr.sin_addr.s_addr = inet_addr(serv_ip);   // 문자열 -> 네트워크 바이트 순서로 변환한 주소
     // servAddr.sin_port = htons(atoi(argv[1]));
     servAddr.sin_port = htons(atoi(serv_port));         // 문자열 기반 PORT 번호 지정
