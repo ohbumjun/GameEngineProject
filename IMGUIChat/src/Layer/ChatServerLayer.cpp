@@ -65,9 +65,9 @@ void ChatServerLayer::OnAttach()
 
     // TCP 소켓 생성
     hServSock = socket(
-        PF_INET,            // domain : 소켓이 사용할 프로토콜 체계(Protocol Family) 정보 전달 (IPv4 : PF_INET)
+        PF_INET,      // domain : 소켓이 사용할 프로토콜 체계(Protocol Family) 정보 전달 (IPv4 : PF_INET)
         SOCK_STREAM,  // type : 소켓의 데이터 전송 방식에 대한 정보 전달 (TCP : SOCK_STREAM)
-        0                       // protocol : 두 컴퓨터간 통신에 사용되는 프로토콜 정보 전달
+        0             // protocol : 두 컴퓨터간 통신에 사용되는 프로토콜 정보 전달
     );
 
     // 소켓 생성
@@ -75,40 +75,38 @@ void ChatServerLayer::OnAttach()
         ErrorHandling("socket() Error");
 
     memset(&servAddr, 0, sizeof(servAddr));
-    servAddr.sin_family = AF_INET;                          // 주소 체계 지정 (IPv4  : 4바이트 주소체계)
+    servAddr.sin_family = AF_INET;                   // 주소 체계 지정 (IPv4  : 4바이트 주소체계)
+
+    // inet_addr : 문자열 ip 주소를 네트워크 바이트 순서로 정렬된 32 비트 정수로 표현
     servAddr.sin_addr.s_addr = inet_addr(serv_ip);   // 문자열 -> 네트워크 바이트 순서로 변환한 주소
     // servAddr.sin_port = htons(atoi(argv[1]));
-    servAddr.sin_port = htons(atoi(serv_port));         // 문자열 기반 PORT 번호 지정
+    servAddr.sin_port = htons(atoi(serv_port));      // 문자열 기반 PORT 번호 지정
 
     // IP 주소, PORT 번호 할당 목적 (즉, 소켓에 주소 할당)
     if (bind(
-        hServSock,                      // 주소정보 (IP, PORT)를 할당할 소켓의 파일 디스크립터
-        (SOCKADDR*)&servAddr, // 할당하고자 하는 주소정보를 지니는, 구조체 변수의 주소값
-        sizeof(servAddr))             // 2번째 인자 길이 정보
+        hServSock,              // 주소정보 (IP, PORT)를 할당할 소켓의 파일 디스크립터
+        (SOCKADDR*)&servAddr,   // 할당하고자 하는 주소정보를 지니는, 구조체 변수의 주소값
+        sizeof(servAddr))       // 2번째 인자 길이 정보
         == SOCKET_ERROR)
     {
         ErrorHandling("bind Error");
     }
 
-
-    // 연결 요청 수락 상태로 만들기
     if (listen(hServSock, 5) == SOCKET_ERROR)   // 연결 요청 수락 상태로 만들기
     {
         ErrorHandling("listen Error");
     }
 
     szClntAddr = sizeof(clntAddr);
-
-    // 클라이언트 프로그램에서의 연결 요청 수락
-    hClntSock = accept(hServSock, (SOCKADDR *)&clntAddr, &szClntAddr);
+   
+    hClntSock = accept(hServSock, (SOCKADDR *)&clntAddr, &szClntAddr); // 클라이언트 프로그램에서의 연결 요청 수락
 
     if (hClntSock == INVALID_SOCKET)
     {
         ErrorHandling("accept() Error");
     }
-
-    // 연결된 클라리언트에 데이터 전송
-    send(hClntSock, message, sizeof(message), 0);
+   
+    send(hClntSock, message, sizeof(message), 0); // 연결된 클라리언트에 데이터 전송
 }
 
 void ChatServerLayer::OnDetach()
