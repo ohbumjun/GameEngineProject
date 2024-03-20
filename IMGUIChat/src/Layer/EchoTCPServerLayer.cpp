@@ -1,14 +1,24 @@
+/*
+Iterative Echo 서버
+1. 서버는 한 순간에 하나의 클라이언트와 연결되어 에코 서비스 제공
+2. 서버는 총 5개의 클라이언트에게 순차적으로 서비스 제공하고 종료
+3. 클라이언트는 프로그램 사용자로부터 문자열 데이터를 입력 받아서 서버에 전송
+4. 서버는 전송 받은 문자열 데이터를 클라이언트에게 재전송. 즉, 에코 시킨다.
+5. 서버와 클라이언트와의 문자열 에코는 클라이언트가 Q를 입력할 때까지 계속
+
+*/
+
+#include "EchoTCPServerLayer.h"
 #include <backends/imgui_impl_glfw.h>
 #include <imgui.h>
 #include <stdio.h>
-#include "ChatClientLayer.h"
 
 #define SERVER_PORT "12345"
-#define SERVER_ADDRESS "127.0.0.1"
+#define SERVER_IP_ADDRESS "127.0.0.1"
+
 bool connected = false;
 char recvBuffer[1024];
 int recvBufferSize = 0;
-
 
 // ImGui-related variables
 ImGuiTextBuffer chatHistory;
@@ -16,80 +26,109 @@ bool showConnectWindow = true;
 char username[32] = "";
 char messageBuffer[256] = "";
 
-
-void ErrorHandling(const char* message)
+void ErrorHandling(const char *message)
 {
     fputs(message, stderr);
     fputc('\n', stderr);
     exit(1);
 }
 
-
-void ChatClientLayer::OnAttach()
+void EchoTCPServerLayer::OnAttach()
 {
-    SOCKADDR_IN servAddr;
+    int szClntAddr;
+    char message[] = "Hello world!";
 
-    char message[30];
-    int strLen = 0, idx = 0, readLen = 0;
-
-    if (argc != 3)
-    {
-        printf("Usage : %s <port> \n", argv[0]);
-        exit(1);
-    }
+    // if (argc != 2)
+    // {
+    //     printf("Usage : %s <port> \n", argv[0]);
+    //     exit(1);
+    // }
 
     // 소켓 라이브러리 초기화
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
         ErrorHandling("WSAStartUp() Error");
 
-    // TCP 소켓
-    hClntSock = socket(PF_INET, SOCK_STREAM, 0);
+    // TCP 소켓 생성
+    hServSock = socket(
+        PF_INET, // domain : 소켓이 사용할 프로토콜 체계(Protocol Family) 정보 전달 (IPv4 : PF_INET)
+        SOCK_STREAM, // type : 소켓의 데이터 전송 방식에 대한 정보 전달 (TCP : SOCK_STREAM)
+        0 // protocol : 두 컴퓨터간 통신에 사용되는 프로토콜 정보 전달
+    );
 
     // 소켓 생성
-    if (hClntSock == INVALID_SOCKET)
+    if (hServSock == INVALID_SOCKET)
         ErrorHandling("socket() Error");
 
     memset(&servAddr, 0, sizeof(servAddr));
-    servAddr.sin_family = AF_INET;
-    servAddr.sin_addr.s_addr = inet_addr(argv[1]);
-    servAddr.sin_port = htons(atoi(argv[1]));
+    servAddr.sin_family          = AF_INET; // 주소 체계 지정 (IPv4  : 4바이트 주소체계)
+    servAddr.sin_addr.s_addr = inet_addr(SERVER_IP_ADDRESS); // 문자열 -> 네트워크 바이트 순서로 변환한 주소
+    servAddr.sin_port            = htons(atoi(SERVER_PORT)); // 문자열 기반 PORT 번호 지정
 
-    // 생성한 소켓을 바탕으로 서버에 연결 요청
-    if (connect(hClntSock, (SOCKADDR *)&servAddr, sizeof(servAddr)) ==
-        SOCKET_ERROR)
-        ErrorHandling("connect() Error");
-
-    // 여러번의 read 함수 호출 (데이터의 경계 없음 확인하기)
-    // 수신된 데이터를 1 바이트씩 읽기
-    while (readLen = recv(hClntSock, &message[idx++], 1, 0))
+    // IP 주소, PORT 번호 할당 목적 (즉, 소켓에 주소 할당)
+    if (bind(
+            hServSock,                      // 주소정보 (IP, PORT)를 할당할 소켓의 파일 디스크립터
+            (SOCKADDR*)&servAddr, // 할당하고자 하는 주소정보를 지니는, 구조체 변수의 주소값
+            sizeof(servAddr))             // 2번째 인자 길이 정보
+        == SOCKET_ERROR)
     {
-        if (readLen == -1)
-            ErrorHandling("read() Error");
-
-        strLen += readLen;
+        ErrorHandling("bind Error");
     }
 
-    printf("Message from server : %s \n", message);
+    // 연결 요청 수락 상태로 만들기
+    if (listen(hServSock, 5) == SOCKET_ERROR) // 연결 요청 수락 상태로 만들기
+    {
+        ErrorHandling("listen Error");
+    }
 
+    // 클라이언트 연결 요청 수락하기
+    szClntAddr = sizeof(clntAddr);
+
+    for (int i = 0; i < 5; ++i)
+    {
+        hClntSock[i] = accept(hServSock, (SOCKADDR *)&clntAddr, &szClntAddr);
+
+        if (hClntSock[i] == -1)
+            ErrorHandling("accept() error");
+        else
+            printf("Connected client %d\n", i + 1);
+
+        while (true)
+        {
+            hClntStrLen[i] = recv(hClntSock[i], message, BUF_SIZE, 0);
+
+            if (hClntStrLen[i] == 0)
+                continue;
+
+            // printf("Message From Client %s\n", message);
+
+            send(hClntSock[i], message, hClntStrLen[i], 0);
+
+            break;
+        }
+
+        closesocket(hClntSock[i]);
+    }
 }
 
-void ChatClientLayer::OnDetach()
+void EchoTCPServerLayer::OnDetach()
 {
-    // 생성된 소켓 라이브러리 해제
-    closesocket(hClntSock);
-
-    WSACleanup();
+    for (int i = 0; i < 5; ++i)
+    {
+        closesocket(hClntSock[i]);
+    }
+    closesocket(hServSock);
+    WSACleanup(); // 윈속 라이브러리 해제
 }
 
-void ChatClientLayer::OnUpdate(Hazel::Timestep ts)
+void EchoTCPServerLayer::OnUpdate(Hazel::Timestep ts)
 {
 }
 
-void ChatClientLayer::OnEvent(Hazel::Event &event)
+void EchoTCPServerLayer::OnEvent(Hazel::Event &event)
 {
 }
 
-void ChatClientLayer::ImGuiChatWindow()
+void EchoTCPServerLayer::ImGuiChatWindow()
 {
     ImGui::Begin("Chat", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
 
@@ -121,19 +160,19 @@ void ChatClientLayer::ImGuiChatWindow()
         if (strlen(messageBuffer) > 0)
         {
             // Send message to server
-           // send(sock, messageBuffer, strlen(messageBuffer), 0);
-           // memset(
-           //     messageBuffer,
-           //     0,
-           //     sizeof(
-           //         messageBuffer)); // Clear message buffer after sending
+            // send(sock, messageBuffer, strlen(messageBuffer), 0);
+            // memset(
+            //     messageBuffer,
+            //     0,
+            //     sizeof(
+            //         messageBuffer)); // Clear message buffer after sending
         }
     }
 
     ImGui::End();
 }
 
-void ChatClientLayer::ImGuiConnectWindow()
+void EchoTCPServerLayer::ImGuiConnectWindow()
 {
     ImGui::Begin("Connect", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
 
