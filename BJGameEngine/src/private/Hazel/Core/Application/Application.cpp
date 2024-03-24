@@ -22,7 +22,7 @@ namespace Hazel
 // make it as single ton
 Application *Application::s_Instance = nullptr;
 
-static ThreadExecuter::ThreadHandle *s_ThreadExecuterHandle = nullptr;
+static ThreadExecuter::ThreadHandle *s_MainThreadExecuter = nullptr;
 
 Application::Application(const ApplicationSpecification &specification)
     : m_Specification(specification)
@@ -45,6 +45,11 @@ Application::Application(const ApplicationSpecification &specification)
 Application::~Application()
 {
     HZ_PROFILE_FUNCTION();
+
+    if (s_MainThreadExecuter)
+    {
+        delete s_MainThreadExecuter;
+    }
 
     Renderer::ShutDown();
 }
@@ -93,6 +98,9 @@ void Application::Run()
         // 아래 함수에 swap buffer 함수가 있어서,
         // Front Buffer 에 그려진 Scene 을 Back Buffer 와 바꿔버리는 역할을 하기 때문이다.
         m_Window->OnUpdate();
+
+        // MainThread 에 예약된 작업을 Frame 마지막에 추가한다.
+        s_MainThreadExecuter->ExecuteHandle();
     }
 }
 void Application::Close()
@@ -126,6 +134,9 @@ void Application::OnEvent(Event &e)
         (*--it)->OnEvent(e);
     }
 }
+void Application::Finalize()
+{
+}
 void Application::Initialize()
 {
     // Window 생성자 호출 => WIndowsWindow 생성
@@ -135,7 +146,7 @@ void Application::Initialize()
     // WindowsWindow.WindowsData.EventCallback 에 해당 함수 세팅
     m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
 
-    s_ThreadExecuterHandle = ThreadExecuter::Init();
+    s_MainThreadExecuter = ThreadExecuter::Init();
 
     // 해당 ImGuiLayer 에 대한 소유권이 LayerStack 에 있어야하므로
     // Unique Pointer로 생성하면 안된다.
