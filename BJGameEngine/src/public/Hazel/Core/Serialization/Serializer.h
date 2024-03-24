@@ -4,6 +4,9 @@
 #include "hzpch.h"
 #include <glm/glm.hpp>
 
+namespace Hazel
+{
+
 class BaseObject;
 class BaseComponent;
 class SerializeTarget;
@@ -291,3 +294,5 @@ protected:
     int32 m_Version = -1;
     static std::set<TypeId> m_CustomDefaultTypes;
 };
+
+} // namespace Hazel

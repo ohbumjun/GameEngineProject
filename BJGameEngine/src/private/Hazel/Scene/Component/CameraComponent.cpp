@@ -3,59 +3,63 @@
 #include "Hazel/Core/Serialization/Serializer.h"
 #include "hzpch.h"
 
-Hazel::CameraComponent::CameraComponent()
+namespace Hazel
 {
-    Reflection::RegistType<CameraComponent>();
-}
 
-Hazel::CameraComponent::CameraComponent(const CameraComponent &other)
-    : camera(other.camera), isFixedAspectRatio(other.isFixedAspectRatio),
-      isPrimary(other.isPrimary)
-{
-    Reflection::RegistType<CameraComponent>();
-}
+    CameraComponent::CameraComponent()
+    {
+        Reflection::RegistType<CameraComponent>();
+    }
 
-Hazel::CameraComponent::CameraComponent(const glm::mat4 &projection)
-    : camera(projection)
-{
-}
+    CameraComponent::CameraComponent(const CameraComponent &other)
+        : camera(other.camera), isFixedAspectRatio(other.isFixedAspectRatio),
+          isPrimary(other.isPrimary)
+    {
+        Reflection::RegistType<CameraComponent>();
+    }
 
-void Hazel::CameraComponent::Serialize(Serializer *serializer)
-{
-    serializer->BeginSaveMap(Reflection::GetTypeID<CameraComponent>(), this);
+    CameraComponent::CameraComponent(const glm::mat4 &projection)
+        : camera(projection)
+    {
+    }
 
-    TypeInfo *compTypeInfo = Reflection::GetTypeInfo(GetType());
-    serializer->Save("compName", compTypeInfo->m_Name.c_str());
+    void CameraComponent::Serialize(Serializer *serializer)
+    {
+        serializer->BeginSaveMap(Reflection::GetTypeID<CameraComponent>(), this);
 
-    serializer->SaveKey("Camera");
-    camera.Serialize(serializer);
+        TypeInfo *compTypeInfo = Reflection::GetTypeInfo(GetType());
+        serializer->Save("compName", compTypeInfo->m_Name.c_str());
 
-    serializer->Save("isPrimary", isPrimary);
+        serializer->SaveKey("Camera");
+        camera.Serialize(serializer);
 
-    serializer->Save("isFixedAspectRatio", isFixedAspectRatio);
+        serializer->Save("isPrimary", isPrimary);
 
-    serializer->EndSaveMap();
-}
+        serializer->Save("isFixedAspectRatio", isFixedAspectRatio);
 
-void Hazel::CameraComponent::Deserialize(Serializer *serializer)
-{
-    serializer->BeginLoadMap(Reflection::GetTypeID<CameraComponent>(), this);
+        serializer->EndSaveMap();
+    }
 
-    std::string compName;
-    serializer->Load("compName", compName);
+    void CameraComponent::Deserialize(Serializer *serializer)
+    {
+        serializer->BeginLoadMap(Reflection::GetTypeID<CameraComponent>(), this);
 
-    serializer->LoadKey("Camera");
+        std::string compName;
+        serializer->Load("compName", compName);
 
-    camera.Deserialize(serializer);
+        serializer->LoadKey("Camera");
 
-    serializer->Load("isPrimary", isPrimary);
+        camera.Deserialize(serializer);
 
-    serializer->Load("isFixedAspectRatio", isFixedAspectRatio);
+        serializer->Load("isPrimary", isPrimary);
 
-    serializer->EndLoadMap();
-}
+        serializer->Load("isFixedAspectRatio", isFixedAspectRatio);
 
-const TypeId Hazel::CameraComponent::GetType() const
-{
-    return Reflection::GetTypeID<CameraComponent>();
-}
+        serializer->EndLoadMap();
+    }
+
+    const TypeId CameraComponent::GetType() const
+    {
+        return Reflection::GetTypeID<CameraComponent>();
+    }
+} // namespace Hazel

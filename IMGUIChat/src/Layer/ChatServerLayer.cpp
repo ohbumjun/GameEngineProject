@@ -5,7 +5,7 @@
 
 // Network-related variables
 #define SERVER_PORT "12345"
-#define SERVER_ADDRESS  "127.0.0.1" 
+#define SERVER_IP_ADDRESS "127.0.0.1"
 bool connected = false;
 char recvBuffer[1024];
 int recvBufferSize = 0;

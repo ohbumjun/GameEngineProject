@@ -1,5 +1,8 @@
 #pragma once
 
+namespace Hazel
+{
+
 template <typename T>
 class SinglyLinkedList
 {
@@ -68,3 +71,4 @@ inline void SinglyLinkedList<T>::remove(Node *prevNode, Node *&deleteNode)
         prevNode->next = deleteNode->next;
     }
 }
+} // namespace Hazel

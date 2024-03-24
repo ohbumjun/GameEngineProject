@@ -5,6 +5,8 @@
 #include "VariableId.h"
 #include "hzpch.h"
 
+namespace Hazel
+{
 enum TypeFlags
 {
     TypeFlags_IsFundamental,
@@ -165,3 +167,4 @@ struct TypeInfo final
 
     bool m_IsEnum = false;
 };
+} // namespace Hazel

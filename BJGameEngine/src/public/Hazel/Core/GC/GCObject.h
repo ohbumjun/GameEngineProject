@@ -3,6 +3,9 @@
 #include "../Reflection/Reflection.h"
 #include "GCInfo.h"
 
+
+namespace Hazel
+{
 struct TypeInfo;
 
 class GCObject
@@ -69,3 +72,5 @@ private:
     // bool is_root;
     // int   refCount;  /*Used for Graph traversal*/
 };
+
+} // namespace Hazel

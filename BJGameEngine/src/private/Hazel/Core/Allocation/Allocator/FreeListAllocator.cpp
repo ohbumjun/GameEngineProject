@@ -4,6 +4,8 @@
 #include <limits> /* limits_max */
 
 #define INF int(1e9)
+namespace Hazel
+{
 
 FreeListAllocator::FreeListAllocator(const size_t totalSize,
                                      FreeListAllocatorPlacementPolicy Policy)
@@ -375,3 +377,4 @@ void FreeListAllocator::removeNode(Node *prev, Node *current)
         m_SizeAVLTree.Erase(current->data.blockSize, current);
     }
 }
+} // namespace Hazel

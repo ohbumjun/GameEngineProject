@@ -3,20 +3,25 @@
 #include "Hazel/Core/Serialization/Serializer.h"
 #include "hzpch.h"
 
-Hazel::NativeScriptComponent::NativeScriptComponent()
+namespace Hazel
+{
+
+NativeScriptComponent::NativeScriptComponent()
 {
     Reflection::RegistType<NativeScriptComponent>();
 }
 
-void Hazel::NativeScriptComponent::Serialize(Serializer *serializer)
+void NativeScriptComponent::Serialize(Serializer *serializer)
 {
 }
 
-void Hazel::NativeScriptComponent::Deserialize(Serializer *serializer)
+void NativeScriptComponent::Deserialize(Serializer *serializer)
 {
 }
 
-const TypeId Hazel::NativeScriptComponent::GetType() const
+const TypeId NativeScriptComponent::GetType() const
 {
     return Reflection::GetTypeID<NativeScriptComponent>();
 }
+
+} // namespace Hazel

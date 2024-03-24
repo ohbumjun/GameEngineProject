@@ -4,6 +4,8 @@
 #include "Hazel/Core/DataStructure/AVLTree.h"
 #include "Hazel/Core/DataStructure/DoublyLinkedList.h"
 #include "MemoryPoolAllocator.h"
+namespace Hazel
+{
 
 class FreeListAllocator : public MemoryPoolAllocator
 {
@@ -71,3 +73,4 @@ private:
     FreeListAllocatorPlacementPolicy m_Policy;
     AVLTree<size_t, void *> m_SizeAVLTree;
 };
+} // namespace Hazel

@@ -4,23 +4,22 @@
 따라서main app 이 있는 곳으로 include 처리한다.
 */
 #include "Hazel/Core/EntryPoint.h"
-#include "./Layer/ChatLayer.h"
+#include "Layer/ChatServerLayer.h"
 
-class Sandbox : public Hazel::Application
+class ChatServerApp : public Hazel::Application
 {
 public:
-    Sandbox(const Hazel::ApplicationSpecification &specification)
+    ChatServerApp(const Hazel::ApplicationSpecification &specification)
         : Hazel::Application(specification)
     {
-        // PushLayer(new ExampleLayer());
-        PushLayer(new IMGUIChatLayer());
+        PushLayer(new ChatServerLayer());
 
         // Client 측에서 ImGuiLayer 를 세팅하게 해주고 싶지 않다.
         // Engine 측 Application 에서 추가하게 할 것이다.
         // PushOverlay(new Hazel::ImGuiLayer());
     }
 
-    ~Sandbox()
+    ~ChatServerApp()
     {
     }
 };
@@ -30,8 +29,8 @@ Hazel::Application *Hazel::CreateApplication(
 {
     Hazel::ApplicationSpecification spec;
     spec.Name = "Sandbox";
-    spec.WorkingDirectory = "../Hazelnut";
+    spec.WorkingDirectory = "IMGUIChat";
     spec.CommandLineArgs = args;
 
-    return new Sandbox(spec);
+    return new ChatServerApp(spec);
 }

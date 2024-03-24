@@ -1,5 +1,8 @@
 #pragma once
 
+namespace Hazel
+{
+
 class MemoryPoolAllocator
 {
     friend class MemoryPool;
@@ -15,3 +18,4 @@ protected:
     virtual void *Allocate(const size_t allocationSize,
                            const size_t alignment = 0);
 };
+} // namespace Hazel

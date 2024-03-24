@@ -3,6 +3,9 @@
 #include "Hazel/Core/Allocation/MemoryPool/VariantMemoryPool.h"
 #include "hzpch.h"
 
+namespace Hazel
+{
+
 MemoryPoolManager::MemoryPoolManager()
 {
     m_FixedPool = new FixedMemoryPool;
@@ -20,3 +23,5 @@ MemoryPoolManager::~MemoryPoolManager()
     if (m_VariantPool)
         delete m_VariantPool;
 }
+
+} // namespace Hazel

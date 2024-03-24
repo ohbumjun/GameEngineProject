@@ -3,6 +3,8 @@
 #include "BaseMemoryPool.h"
 #include "MemoryPoolInfo.h"
 
+namespace Hazel
+{
 class VariantMemoryPool : public BaseMemoryPool
 {
 public:
@@ -21,3 +23,4 @@ private:
     size_t m_SingleDataSize;
     class FreeListAllocator *m_Allocator;
 };
+} // namespace Hazel

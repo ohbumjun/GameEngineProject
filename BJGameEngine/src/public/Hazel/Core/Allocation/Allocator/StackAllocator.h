@@ -3,6 +3,10 @@
 #include "MemoryPoolAllocator.h"
 #include <cstddef>
 
+namespace Hazel
+{
+
+
 class StackAllocator : public MemoryPoolAllocator
 {
     typedef unsigned char byte;
@@ -36,3 +40,4 @@ private:
     //char m_LastPadding;
     std::vector<size_t> vecAdds;
 };
+} // namespace Hazel

@@ -3,12 +3,15 @@
 #include "hzpch.h"
 
 
-Hazel::CircleCollider2DComponent::CircleCollider2DComponent()
+namespace Hazel
+{
+
+CircleCollider2DComponent::CircleCollider2DComponent()
 {
     Reflection::RegistType<CircleCollider2DComponent>();
 }
 
-Hazel::CircleCollider2DComponent::CircleCollider2DComponent(
+CircleCollider2DComponent::CircleCollider2DComponent(
     const CircleCollider2DComponent &other)
     : m_Offset(other.m_Offset), m_Radius(other.m_Radius),
       m_Density(other.m_Density), m_Friction(other.m_Friction),
@@ -18,7 +21,7 @@ Hazel::CircleCollider2DComponent::CircleCollider2DComponent(
     Reflection::RegistType<CircleCollider2DComponent>();
 }
 
-void Hazel::CircleCollider2DComponent::Serialize(Serializer *serializer)
+void CircleCollider2DComponent::Serialize(Serializer *serializer)
 {
     serializer->BeginSaveMap(Reflection::GetTypeID<CircleCollider2DComponent>(),
                              this);
@@ -36,7 +39,7 @@ void Hazel::CircleCollider2DComponent::Serialize(Serializer *serializer)
     serializer->EndSaveMap();
 }
 
-void Hazel::CircleCollider2DComponent::Deserialize(Serializer *serializer)
+void CircleCollider2DComponent::Deserialize(Serializer *serializer)
 {
     serializer->BeginLoadMap(Reflection::GetTypeID<CircleCollider2DComponent>(),
                              this);
@@ -55,7 +58,9 @@ void Hazel::CircleCollider2DComponent::Deserialize(Serializer *serializer)
     serializer->EndLoadMap();
 }
 
-const TypeId Hazel::CircleCollider2DComponent::GetType() const
+const TypeId CircleCollider2DComponent::GetType() const
 {
     return Reflection::GetTypeID<CircleCollider2DComponent>();
 }
+
+} // namespace Hazel

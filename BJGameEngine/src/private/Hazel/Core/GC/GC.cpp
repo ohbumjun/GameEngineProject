@@ -2,7 +2,11 @@
 #include "Hazel/Core/GC/GC.h"
 #include "Hazel/Core/GC/GCObject.h"
 #include "Hazel/Core/Reflection/Reflection.h"
+#include "Hazel/Core/Reflection/TypeInfo.h"
 #include "hzpch.h"
+
+namespace Hazel
+{
 
 GC::GC()
 {
@@ -271,3 +275,4 @@ void GC::markRecursively(GCObject *parentObject)
         markRecursively(childObject);
     }
 }
+} // namespace Hazel

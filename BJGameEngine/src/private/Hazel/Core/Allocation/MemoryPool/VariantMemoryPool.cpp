@@ -2,6 +2,8 @@
 #include "Hazel/Core/Allocation/Allocator/FreeListAllocator.h"
 #include "hzpch.h"
 
+namespace Hazel
+{
 
 VariantMemoryPool::VariantMemoryPool()
 {
@@ -26,3 +28,4 @@ void VariantMemoryPool::onFree(void *ptr)
 {
     m_Allocator->Free(ptr);
 }
+} // namespace Hazel

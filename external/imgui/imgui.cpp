@@ -15412,7 +15412,7 @@ namespace ImGui
 
     // Settings
     static void             DockSettingsRenameNodeReferences(ImGuiID old_node_id, ImGuiID new_node_id);
-    static void             DockSettingsRemoveNodeReferences(ImGuiID* node_ids, int node_ids_count);
+    static void             DockSettingsRemoveNodeReferences(ImGuiID* node_threadIds, int node_threadIds_count);
     static ImGuiDockNodeSettings*   DockSettingsFindNodeSettings(ImGuiContext* ctx, ImGuiID node_id);
     static void             DockSettingsHandler_ClearAll(ImGuiContext*, ImGuiSettingsHandler*);
     static void             DockSettingsHandler_ApplyAll(ImGuiContext*, ImGuiSettingsHandler*);
@@ -18905,18 +18905,18 @@ static void ImGui::DockSettingsRenameNodeReferences(ImGuiID old_node_id, ImGuiID
 }
 
 // Remove references stored in ImGuiWindowSettings to the given ImGuiDockNodeSettings
-static void ImGui::DockSettingsRemoveNodeReferences(ImGuiID* node_ids, int node_ids_count)
+static void ImGui::DockSettingsRemoveNodeReferences(ImGuiID* node_threadIds, int node_threadIds_count)
 {
     ImGuiContext& g = *GImGui;
     int found = 0;
     //// FIXME-OPT: We could remove this loop by storing the index in the map
     for (ImGuiWindowSettings* settings = g.SettingsWindows.begin(); settings != NULL; settings = g.SettingsWindows.next_chunk(settings))
-        for (int node_n = 0; node_n < node_ids_count; node_n++)
-            if (settings->DockId == node_ids[node_n])
+        for (int node_n = 0; node_n < node_threadIds_count; node_n++)
+            if (settings->DockId == node_threadIds[node_n])
             {
                 settings->DockId = 0;
                 settings->DockOrder = -1;
-                if (++found < node_ids_count)
+                if (++found < node_threadIds_count)
                     break;
                 return;
             }

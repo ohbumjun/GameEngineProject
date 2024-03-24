@@ -1,5 +1,7 @@
 ﻿#include "Hazel/Core/Allocation/Allocator/PoolAllocator.h"
 #include "hzpch.h"
+namespace Hazel
+{
 
 PoolAllocator::PoolAllocator(const size_t totalSize, const size_t chunkSize)
     : MemoryPoolAllocator(totalSize), m_ChunkSize(chunkSize)
@@ -99,3 +101,4 @@ void PoolAllocator::Reset()
         // m_FreeList.push((Node*)address);
     }
 }
+} // namespace Hazel

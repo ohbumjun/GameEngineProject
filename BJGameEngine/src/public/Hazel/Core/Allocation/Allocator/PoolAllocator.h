@@ -4,6 +4,9 @@
 #include "MemoryPoolAllocator.h"
 #include "hzpch.h"
 
+namespace Hazel
+{
+
 class PoolAllocator : public MemoryPoolAllocator
 {
 private:
@@ -24,3 +27,4 @@ public:
     virtual void Init();
     virtual void Reset();
 };
+} // namespace Hazel

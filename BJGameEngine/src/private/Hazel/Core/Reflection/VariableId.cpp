@@ -3,15 +3,18 @@
 #include "Hazel/Core/Reflection/TypeUtils.h"
 #include "hzpch.h"
 
+
 template <>
-struct std::hash<VariableId>
+struct std::hash<Hazel::VariableId>
 {
-    std::size_t operator()(const VariableId &variableId) const
+    std::size_t operator()(const Hazel::VariableId &variableId) const
     {
         return std::hash<uint64_t>{}(variableId.GetTypeId().GetId());
     }
 };
 
+namespace Hazel
+{
 std::string VariableId::GetVariableName(const VariableId &variableId)
 {
     static std::unordered_map<VariableId, std::string> VariableNames{};
@@ -141,3 +144,5 @@ VariableId VariableId::Create()
 
     return variable;
 }
+
+} // namespace Hazel

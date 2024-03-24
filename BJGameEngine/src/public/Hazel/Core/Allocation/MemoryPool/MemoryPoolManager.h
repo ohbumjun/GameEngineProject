@@ -3,6 +3,9 @@
 #include "MemoryPoolInfo.h"
 #include "VariantMemoryPool.h"
 
+namespace Hazel
+{
+
 // 전역으로 사용하는 MemoryPool
 class MemoryPoolManager
 {
@@ -57,3 +60,5 @@ inline void MemoryPoolManager::Free(void *dataPtr)
         m_VariantPool->Free(dataPtr);
     }
 }
+
+} // namespace Hazel

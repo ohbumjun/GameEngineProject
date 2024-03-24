@@ -1,6 +1,8 @@
 ﻿#include "Hazel/Core/Allocation/Allocator/StackAllocator.h"
 #include "Hazel/Utils/EngineUtil.h"
 #include "hzpch.h"
+namespace Hazel
+{
 
 StackAllocator::StackAllocator(size_t totalSize)
     : MemoryPoolAllocator(totalSize), m_StartPtr(nullptr), m_Offset(0)
@@ -108,3 +110,4 @@ void StackAllocator::ResizeAlloc()
 
     m_TotalSize *= 2;
 }
+} // namespace Hazel

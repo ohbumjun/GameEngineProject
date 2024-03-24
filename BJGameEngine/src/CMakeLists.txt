@@ -53,6 +53,8 @@ LIST(APPEND TOTAL_ENGINE_FILES ${SRC_ASSET})
 ## Core
 # Core - Allocator
 SET(HEADER_CORE_ALLOCATOR
+    public/Hazel/Core/Allocation/Allocator/Allocable.h
+    public/Hazel/Core/Allocation/Allocator/GeneralAllocator.h
     public/Hazel/Core/Allocation/Allocator/DefaultHeapAllocator.h
     public/Hazel/Core/Allocation/Allocator/FreeListAllocator.h
     public/Hazel/Core/Allocation/Allocator/MemoryPoolAllocator.h
@@ -63,6 +65,8 @@ SOURCE_GROUP("core/allocation/allocator/public" FILES ${HEADER_CORE_ALLOCATOR})
 LIST(APPEND TOTAL_ENGINE_FILES ${HEADER_CORE_ALLOCATOR})
 
 SET(SRC_CORE_ALLOCATOR
+    private/Hazel/Core/Allocation/Allocator/Allocable.cpp
+    private/Hazel/Core/Allocation/Allocator/GeneralAllocator.cpp
     private/Hazel/Core/Allocation/Allocator/DefaultHeapAllocator.cpp
     private/Hazel/Core/Allocation/Allocator/FreeListAllocator.cpp
     private/Hazel/Core/Allocation/Allocator/MemoryPoolAllocator.cpp
@@ -90,6 +94,24 @@ SET(SRC_CORE_MEMORYPOOL
 )
 SOURCE_GROUP("core/allocation/memorypool/private" FILES ${SRC_CORE_MEMORYPOOL})
 LIST(APPEND TOTAL_ENGINE_FILES ${SRC_CORE_MEMORYPOOL})
+
+# Core - DataStructure
+SET(HEADER_CORE_DS
+    public/Hazel/Core/DataStructure/AVLTree.h
+    public/Hazel/Core/DataStructure/DoublyLinkedList.h
+    public/Hazel/Core/DataStructure/SinglyLinkedList.h
+    public/Hazel/Core/DataStructure/StackLinkedList.h
+    public/Hazel/Core/DataStructure/RingBuffer.h
+)
+SOURCE_GROUP("core/DS/public" FILES ${HEADER_CORE_DS})
+LIST(APPEND TOTAL_ENGINE_FILES ${HEADER_CORE_DS})
+
+SET(SRC_CORE_DS
+    private/Hazel/Core/DataStructure/RingBuffer.cpp
+)
+SOURCE_GROUP("core/DS/private" FILES ${SRC_CORE_DS})
+LIST(APPEND TOTAL_ENGINE_FILES ${SRC_CORE_DS})
+
 
 # Core - GC
 SET(HEADER_CORE_GC
@@ -133,6 +155,21 @@ SET(SRC_CORE_LAYER
 )
 SOURCE_GROUP("core/Layer/private" FILES ${SRC_CORE_LAYER})
 LIST(APPEND TOTAL_ENGINE_FILES ${SRC_CORE_LAYER})
+
+# Core - Memory
+SET(HEADER_CORE_MEMORY
+    public/Hazel/Core/Memory/Channel.h
+    public/Hazel/Core/Memory/CustomMemory.h
+)
+SOURCE_GROUP("core/Memory/public" FILES ${HEADER_CORE_MEMORY})
+LIST(APPEND TOTAL_ENGINE_FILES ${HEADER_CORE_MEMORY})
+
+SET(SRC_CORE_MEMORY
+    private/Hazel/Core/Memory/CustomMemory.cpp
+)
+SOURCE_GROUP("core/Memory/private" FILES ${SRC_CORE_MEMORY})
+LIST(APPEND TOTAL_ENGINE_FILES ${SRC_CORE_MEMORY})
+
 
 # Core - Object
 SET(HEADER_CORE_OBJECT
@@ -191,12 +228,26 @@ LIST(APPEND TOTAL_ENGINE_FILES ${SRC_CORE_SERIALIZATION})
 # Core - Thread
 SET(HEADER_CORE_THREAD
     public/Hazel/Core/Thread/ThreadUtil.h
+    public/Hazel/Core/Thread/ThreadPool.h
+    public/Hazel/Core/Thread/Thread.h
+    public/Hazel/Core/Thread/ThreadTask.h
+    public/Hazel/Core/Thread/ParallelProcessor.h
+    public/Hazel/Core/Thread/JobSystem.h
+    public/Hazel/Core/Thread/Jobs.h
+    public/Hazel/Core/Thread/ThreadExecuter.h
 )
 SOURCE_GROUP("core/Thread/public" FILES ${HEADER_CORE_THREAD})
 LIST(APPEND TOTAL_ENGINE_FILES ${HEADER_CORE_THREAD})
 
 SET(SRC_CORE_THREAD
     private/Hazel/Core/Thread/ThreadUtil.cpp
+    private/Hazel/Core/Thread/ThreadPool.cpp
+    private/Hazel/Core/Thread/Thread.cpp
+    private/Hazel/Core/Thread/ThreadTask.cpp
+    private/Hazel/Core/Thread/ParallelProcessor.cpp
+    private/Hazel/Core/Thread/JobSystem.cpp
+    private/Hazel/Core/Thread/Jobs.cpp
+    private/Hazel/Core/Thread/ThreadExecuter.cpp
 )
 SOURCE_GROUP("core/Thread/private" FILES ${SRC_CORE_THREAD})
 LIST(APPEND TOTAL_ENGINE_FILES ${SRC_CORE_THREAD})
@@ -434,6 +485,7 @@ LIST(APPEND TOTAL_ENGINE_FILES ${SRC_SCENE})
 
 ## Utils
 SET(HEADER_UTILS
+    public/Hazel/Utils/TimeUtil.h
     public/Hazel/Utils/Encoder.h
     public/Hazel/Utils/EngineUtil.h
     public/Hazel/Utils/Log.h
@@ -446,6 +498,7 @@ SOURCE_GROUP("utils/public" FILES ${HEADER_UTILS})
 LIST(APPEND TOTAL_ENGINE_FILES ${HEADER_UTILS})
 
 SET(SRC_UTILS
+    private/Hazel/Utils/TimeUtil.cpp
     private/Hazel/Utils/EngineUtil.cpp
     private/Hazel/Utils/Log.cpp
     private/Hazel/Utils/Random.cpp

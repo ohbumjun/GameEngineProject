@@ -1,5 +1,7 @@
 ﻿#pragma once
 #include <cassert>
+namespace Hazel
+{
 
 template <typename KEY, typename VALUE>
 class AVLTreeNode
@@ -988,3 +990,4 @@ private:
     PNODE m_End;
     int m_Size;
 };
+} // namespace Hazel

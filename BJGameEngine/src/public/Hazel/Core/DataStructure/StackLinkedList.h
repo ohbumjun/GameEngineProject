@@ -1,4 +1,6 @@
 #pragma once
+namespace Hazel
+{
 
 template <typename T>
 class StackLinkedList
@@ -49,3 +51,4 @@ inline typename StackLinkedList<T>::Node *StackLinkedList<T>::pop()
 
     return PopNode;
 };
+} // namespace Hazel

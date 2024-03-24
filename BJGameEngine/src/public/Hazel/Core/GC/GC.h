@@ -4,6 +4,9 @@
 #include "GCObject.h"
 #include "hzpch.h"
 
+namespace Hazel
+{
+
 class TypeInfo;
 class GCAllocator;
 
@@ -33,3 +36,5 @@ private:
     std::list<GCObject *> m_CollectTargets;
     std::mutex m_Mutex;
 };
+
+} // namespace Hazel

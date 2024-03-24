@@ -2,18 +2,21 @@
 #include "Hazel/Core/Serialization/Serializer.h"
 #include "hzpch.h"
 
-Hazel::BoxCollider2DComponent::BoxCollider2DComponent()
+namespace Hazel
+{
+
+BoxCollider2DComponent::BoxCollider2DComponent()
 {
     Reflection::RegistType<BoxCollider2DComponent>();
 }
 
-Hazel::BoxCollider2DComponent::BoxCollider2DComponent(
+BoxCollider2DComponent::BoxCollider2DComponent(
     const BoxCollider2DComponent &)
 {
     Reflection::RegistType<BoxCollider2DComponent>();
 }
 
-void Hazel::BoxCollider2DComponent::Serialize(Serializer *serializer)
+void BoxCollider2DComponent::Serialize(Serializer *serializer)
 {
     serializer->BeginSaveMap(Reflection::GetTypeID<BoxCollider2DComponent>(),
                              this);
@@ -31,7 +34,7 @@ void Hazel::BoxCollider2DComponent::Serialize(Serializer *serializer)
     serializer->EndSaveMap();
 }
 
-void Hazel::BoxCollider2DComponent::Deserialize(Serializer *serializer)
+void BoxCollider2DComponent::Deserialize(Serializer *serializer)
 {
     serializer->BeginLoadMap(Reflection::GetTypeID<BoxCollider2DComponent>(),
                              this);
@@ -49,3 +52,5 @@ void Hazel::BoxCollider2DComponent::Deserialize(Serializer *serializer)
 
     serializer->EndLoadMap();
 }
+
+} // namespace Hazel

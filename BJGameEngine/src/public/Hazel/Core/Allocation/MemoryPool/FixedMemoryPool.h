@@ -4,6 +4,8 @@
 #include "Hazel/Core/Allocation/Allocator/PoolAllocator.h"
 #include "Hazel/Core/Allocation/MemoryPool/BaseMemoryPool.h"
 
+namespace Hazel
+{
 class FixedMemoryPool : public BaseMemoryPool
 {
 public:
@@ -43,3 +45,4 @@ private:
     size_t m_SingleDataSize;
     PoolAllocator *m_Allocator;
 };
+} // namespace Hazel

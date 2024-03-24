@@ -3,12 +3,14 @@
 
 #include "Hazel/Core/Serialization/Serializer.h"
 
-Hazel::NameComponent::NameComponent()
+namespace Hazel
+{
+ NameComponent::NameComponent()
 {
     Reflection::RegistType<NameComponent>();
 }
 
-void Hazel::NameComponent::Serialize(Serializer *serializer)
+void NameComponent::Serialize(Serializer *serializer)
 {
     serializer->BeginSaveMap(Reflection::GetTypeID<NameComponent>(), this);
 
@@ -20,7 +22,7 @@ void Hazel::NameComponent::Serialize(Serializer *serializer)
     serializer->EndSaveMap();
 }
 
-void Hazel::NameComponent::Deserialize(Serializer *serializer)
+void NameComponent::Deserialize(Serializer *serializer)
 {
     serializer->BeginLoadMap(Reflection::GetTypeID<NameComponent>(), this);
 
@@ -32,7 +34,9 @@ void Hazel::NameComponent::Deserialize(Serializer *serializer)
     serializer->EndLoadMap();
 }
 
-const TypeId Hazel::NameComponent::GetType() const
+const TypeId NameComponent::GetType() const
 {
     return Reflection::GetTypeID<NameComponent>();
 }
+
+} // namespace Hazel

@@ -1,5 +1,7 @@
 #pragma once
 
+namespace Hazel
+{
 class TypeId
 {
 public:
@@ -36,12 +38,12 @@ public:
 private:
     uint64_t ID{};
 };
-
+} // namespace Hazel
 
 template <>
-struct std::hash<TypeId>
+struct std::hash<Hazel::TypeId>
 {
-    std::size_t operator()(const TypeId &typeId) const
+    std::size_t operator()(const Hazel::TypeId &typeId) const
     {
         return std::hash<uint64_t>{}(typeId.GetId());
     }

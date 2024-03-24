@@ -2,6 +2,9 @@
 #include "Hazel/Core/Serialization/SerializeTarget.h"
 #include "hzpch.h"
 
+namespace Hazel
+{
+
 std::set<TypeId> Serializer::m_CustomDefaultTypes;
 
 void Serializer::initCustomDefaultTypes()
@@ -723,3 +726,5 @@ void Serializer::onLoadLink(BaseObject *&object)
 void Serializer::onLoadLink(BaseComponent *&data)
 {
 }
+
+} // namespace Hazel

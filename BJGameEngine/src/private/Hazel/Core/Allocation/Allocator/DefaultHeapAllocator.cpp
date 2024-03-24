@@ -4,12 +4,17 @@
 
 namespace Hazel
 {
-void *DefaultHeapAllocator::Allocate(size_t size)
+void *DefaultHeapAllocator::Allocate(size_t size,
+                                     const char *file,
+                                     size_t line)
 {
     return malloc(size);
 }
 
-void *DefaultHeapAllocator::Reallocate(void *ptr, size_t size)
+void *DefaultHeapAllocator::Reallocate(void *ptr,
+                                       size_t size,
+                                       const char *file ,
+                                       size_t line )
 {
     // resize previous allocated block
     // 1) pointer to original memory block

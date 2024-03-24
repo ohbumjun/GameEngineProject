@@ -2,12 +2,15 @@
 #include "Hazel/Core/Serialization/Serializer.h"
 #include "hzpch.h"
 
-Hazel::CircleRendererComponent::CircleRendererComponent()
+namespace Hazel
+{
+
+CircleRendererComponent::CircleRendererComponent()
 {
     Reflection::RegistType<CircleRendererComponent>();
 }
 
-Hazel::CircleRendererComponent::CircleRendererComponent(
+CircleRendererComponent::CircleRendererComponent(
     const CircleRendererComponent &other)
     : m_Color(other.m_Color), m_Thickness(other.m_Thickness),
       m_Fade(other.m_Fade)
@@ -16,7 +19,7 @@ Hazel::CircleRendererComponent::CircleRendererComponent(
     Reflection::RegistType<CircleRendererComponent>();
 }
 
-void Hazel::CircleRendererComponent::Serialize(Serializer *serializer)
+void CircleRendererComponent::Serialize(Serializer *serializer)
 {
     serializer->BeginSaveMap(Reflection::GetTypeID<CircleRendererComponent>(),
                              this);
@@ -32,7 +35,7 @@ void Hazel::CircleRendererComponent::Serialize(Serializer *serializer)
     serializer->EndSaveMap();
 }
 
-void Hazel::CircleRendererComponent::Deserialize(Serializer *serializer)
+void CircleRendererComponent::Deserialize(Serializer *serializer)
 {
     serializer->BeginLoadMap(Reflection::GetTypeID<CircleRendererComponent>(),
                              this);
@@ -47,7 +50,9 @@ void Hazel::CircleRendererComponent::Deserialize(Serializer *serializer)
     serializer->EndLoadMap();
 }
 
-const TypeId Hazel::CircleRendererComponent::GetType() const
+const TypeId CircleRendererComponent::GetType() const
 {
     return Reflection::GetTypeID<CircleRendererComponent>();
 }
+
+} // namespace Hazel

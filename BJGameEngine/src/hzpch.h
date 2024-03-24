@@ -64,3 +64,6 @@ typedef unsigned long long uint64;
         fprintf(stderr, fmt "\n", ##__VA_ARGS__);                              \
         __debugbreak();                                                        \
     } while (false)
+
+
+#define ALIGNOF(...) __alignof(__VA_ARGS__)

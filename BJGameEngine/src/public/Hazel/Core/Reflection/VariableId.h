@@ -1,7 +1,8 @@
 ﻿#pragma once
 
 #include "TypeId.h"
-
+namespace Hazel
+{
 class VariableId final
 {
     /*
@@ -317,3 +318,4 @@ private:
     uint8_t
         m_TraitFlags{}; // Other flags (const, volatile, reference, RValReference)
 };
+} // namespace Hazel

@@ -1,7 +1,8 @@
 ﻿#pragma once
 
 #include "VariableId.h"
-
+namespace Hazel
+{
 class FieldInfo
 {
     friend class Reflection;
@@ -113,3 +114,5 @@ public:
 // 	TypeId		Id{ };
 // 	uint32_t	Offset{ };
 // };
+
+} // namespace Hazel

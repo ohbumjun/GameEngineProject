@@ -2,6 +2,8 @@
 #include "Hazel/Core/GC/GCObject.h"
 #include "hzpch.h"
 
+namespace Hazel
+{
 
 GCObject::GCObject(void *data, GCAllocationHeader *header, TypeInfo *pTypeInfo)
 {
@@ -41,3 +43,4 @@ bool GCObject::IsValid()
 
     return false;
 }
+} // namespace Hazel

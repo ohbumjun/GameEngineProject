@@ -116,7 +116,7 @@ void ImGuiLayer::OnEvent(Event &e)
     {
         ImGuiIO &io = ImGui::GetIO();
 
-        // - e.IsInCategory 와  io.WantCaptureMouse 가 둘다 true 여야만 e.m_Handles 가 true가 될 것이다.
+        // - e.IsInCategory 와  io.WantCaptureMouse 가 둘다 true 여야만 e.m_threadHandles 가 true가 될 것이다.
         // - io.WantCaptureMouse 등의 변수는 실제 imgui 와 유저의 interaction 에 의해서 실시간으로 변하는 값이다.
         //   ex) ImGui 에 마우스를 올리면  io.WantCaptureMouse 변수는 true, 아니면 false
         // - 만약 e.m_Handled 가 되면, 	void Application::OnEvent(Event& e) 에서 ImGuiLayer 가 해당

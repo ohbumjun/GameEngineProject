@@ -1,5 +1,7 @@
 #include "Hazel/Core/Allocation/Allocator/MemoryPoolAllocator.h"
 #include "hzpch.h"
+namespace Hazel
+{
 
 MemoryPoolAllocator::MemoryPoolAllocator(size_t TotalSize)
     : m_TotalSize(TotalSize)
@@ -16,3 +18,4 @@ void *MemoryPoolAllocator::Allocate(const size_t allocationSize,
 {
     return nullptr;
 }
+} // namespace Hazel

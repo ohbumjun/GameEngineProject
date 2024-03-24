@@ -6,19 +6,22 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
 
-Hazel::TransformComponent::TransformComponent()
+namespace Hazel
+{
+
+TransformComponent::TransformComponent()
 {
     Reflection::RegistType<TransformComponent>();
 }
 
-Hazel::TransformComponent::TransformComponent(const TransformComponent &other)
+TransformComponent::TransformComponent(const TransformComponent &other)
     : Translation(other.Translation), Rotation(other.Rotation),
       Scale(other.Scale)
 {
     Reflection::RegistType<TransformComponent>();
 }
 
-void Hazel::TransformComponent::Serialize(Serializer *serializer)
+void TransformComponent::Serialize(Serializer *serializer)
 {
     serializer->BeginSaveMap(Reflection::GetTypeID<TransformComponent>(), this);
 
@@ -32,7 +35,7 @@ void Hazel::TransformComponent::Serialize(Serializer *serializer)
     serializer->EndSaveMap();
 }
 
-void Hazel::TransformComponent::Deserialize(Serializer *serializer)
+void TransformComponent::Deserialize(Serializer *serializer)
 {
     serializer->BeginLoadMap(Reflection::GetTypeID<TransformComponent>(), this);
 
@@ -46,7 +49,7 @@ void Hazel::TransformComponent::Deserialize(Serializer *serializer)
     serializer->EndLoadMap();
 }
 
-glm::mat4 Hazel::TransformComponent::GetTransform() const
+glm::mat4 TransformComponent::GetTransform() const
 {
     // x,y,z 회전 적용한 quartenion 형태의 값 가져오기
     // glm::mat4 rotation = glm::rotate(glm::mat4(1.f), Rotation.x, { 1, 0, 0 })
@@ -71,7 +74,9 @@ glm::mat4 Hazel::TransformComponent::GetTransform() const
            glm::scale(glm::mat4(1.0f), Scale);
 }
 
-const TypeId Hazel::TransformComponent::GetType() const
+const TypeId TransformComponent::GetType() const
 {
     return Reflection::GetTypeID<TransformComponent>();
 }
+
+} // namespace Hazel

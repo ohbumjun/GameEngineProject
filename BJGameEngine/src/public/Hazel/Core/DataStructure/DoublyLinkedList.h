@@ -1,4 +1,6 @@
 ﻿#pragma once
+namespace Hazel
+{
 
 template <typename T>
 class DoublyLinkedList
@@ -90,3 +92,4 @@ inline void DoublyLinkedList<T>::remove(Node *prevNode, Node *&deleteNode)
         }
     }
 }
+} // namespace Hazel

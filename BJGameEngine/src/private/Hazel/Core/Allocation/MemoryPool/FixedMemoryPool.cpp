@@ -2,6 +2,8 @@
 #include "Hazel/Core/Allocation/MemoryPool/MemoryPoolInfo.h"
 #include "hzpch.h"
 
+namespace Hazel
+{
 FixedMemoryPool::FixedMemoryPool()
 {
 }
@@ -43,3 +45,4 @@ void FixedMemoryPool::onFree(void *ptr)
 {
     m_Allocator->Free(ptr);
 }
+} // namespace Hazel

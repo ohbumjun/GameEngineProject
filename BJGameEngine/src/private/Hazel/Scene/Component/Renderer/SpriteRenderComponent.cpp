@@ -4,19 +4,21 @@
 
 static std::string emptyTexture = "";
 
-Hazel::SpriteRenderComponent::SpriteRenderComponent()
+namespace Hazel
+{
+SpriteRenderComponent::SpriteRenderComponent()
 {
     Reflection::RegistType<SpriteRenderComponent>();
 }
 
-Hazel::SpriteRenderComponent::SpriteRenderComponent(
+SpriteRenderComponent::SpriteRenderComponent(
     const SpriteRenderComponent &other)
     : m_Color(other.m_Color), m_TilingFactor(other.m_TilingFactor)
 {
     Reflection::RegistType<SpriteRenderComponent>();
 }
 
-void Hazel::SpriteRenderComponent::Serialize(Serializer *serializer)
+void SpriteRenderComponent::Serialize(Serializer *serializer)
 {
     serializer->BeginSaveMap(Reflection::GetTypeID<SpriteRenderComponent>(),
                              this);
@@ -35,7 +37,7 @@ void Hazel::SpriteRenderComponent::Serialize(Serializer *serializer)
     serializer->EndSaveMap();
 }
 
-void Hazel::SpriteRenderComponent::Deserialize(Serializer *serializer)
+void SpriteRenderComponent::Deserialize(Serializer *serializer)
 {
     serializer->BeginLoadMap(Reflection::GetTypeID<SpriteRenderComponent>(),
                              this);
@@ -58,7 +60,9 @@ void Hazel::SpriteRenderComponent::Deserialize(Serializer *serializer)
     serializer->EndLoadMap();
 }
 
-const TypeId Hazel::SpriteRenderComponent::GetType() const
+const TypeId SpriteRenderComponent::GetType() const
 {
     return Reflection::GetTypeID<SpriteRenderComponent>();
 }
+
+} // namespace Hazel
