@@ -4,6 +4,7 @@
 #include "Hazel/Utils/PlatformUtils.h"
 #include "Renderer/RenderCommand.h"
 #include "Renderer/Renderer.h"
+#include "Hazel/Core/Thread/ThreadExecuter.h"
 #include "hzpch.h"
 #include <glad/glad.h>
 
@@ -21,6 +22,8 @@ namespace Hazel
 // make it as single ton
 Application *Application::s_Instance = nullptr;
 
+static ThreadExecuter::ThreadHandle *s_ThreadExecuterHandle = nullptr;
+
 Application::Application(const ApplicationSpecification &specification)
     : m_Specification(specification)
 {
@@ -36,21 +39,8 @@ Application::Application(const ApplicationSpecification &specification)
         // std::filesystem::current_path(m_Specification.WorkingDirectory);
     }
 
-    // Window 생성자 호출 => WIndowsWindow 생성
-    m_Window = std::unique_ptr<Window>(
-        Window::Create(WindowProps(m_Specification.Name)));
-
-    // WindowsWindow.WindowsData.EventCallback 에 해당 함수 세팅
-    m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
-
+    Initialize();
     Renderer::Init();
-
-    // 해당 ImGuiLayer 에 대한 소유권이 LayerStack 에 있어야하므로
-    // Unique Pointer로 생성하면 안된다.
-    // m_ImGuiLayer = std::make_unique<ImGuiLayer>();
-    m_ImGuiLayer = new ImGuiLayer();
-
-    PushOverlay(m_ImGuiLayer);
 }
 Application::~Application()
 {
@@ -135,6 +125,24 @@ void Application::OnEvent(Event &e)
             break;
         (*--it)->OnEvent(e);
     }
+}
+void Application::Initialize()
+{
+    // Window 생성자 호출 => WIndowsWindow 생성
+    m_Window = std::unique_ptr<Window>(
+        Window::Create(WindowProps(m_Specification.Name)));
+
+    // WindowsWindow.WindowsData.EventCallback 에 해당 함수 세팅
+    m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
+
+    s_ThreadExecuterHandle = ThreadExecuter::Init();
+
+    // 해당 ImGuiLayer 에 대한 소유권이 LayerStack 에 있어야하므로
+    // Unique Pointer로 생성하면 안된다.
+    // m_ImGuiLayer = std::make_unique<ImGuiLayer>();
+    m_ImGuiLayer = new ImGuiLayer();
+
+    PushOverlay(m_ImGuiLayer);
 };
 void Application::PushLayer(Layer *layer)
 {
