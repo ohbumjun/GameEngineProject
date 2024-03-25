@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-
 // Standard
 #include <assert.h>
 #include <bitset>

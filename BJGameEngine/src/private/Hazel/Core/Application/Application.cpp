@@ -51,6 +51,8 @@ Application::~Application()
         delete s_MainThreadExecuter;
     }
 
+    ThreadExecuter::Finalize();
+
     Renderer::ShutDown();
 }
 void Application::Run()

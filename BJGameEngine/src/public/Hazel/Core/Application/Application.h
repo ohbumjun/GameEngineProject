@@ -43,7 +43,8 @@ public:
     void Run();
     void Close();
     void OnEvent(Event &e);
-
+    void Finalize();
+    void Initialize();
     void PushLayer(Layer *layer);
     void PushOverlay(Layer *layer);
     void PopLayer(Layer *layer);

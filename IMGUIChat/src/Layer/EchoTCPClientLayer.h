@@ -1,10 +1,10 @@
 #pragma once
+#include "ServerInfo.h"
 #include <Hazel.h>
-
 class EchoTCPClientLayer : public Hazel::Layer
 {
 public:
-    EchoTCPClientLayer() : Layer("IMGUIChat")
+    EchoTCPClientLayer() : Layer("EchoTCPClientLayer")
     {
     }
     virtual void OnAttach() override;
@@ -27,4 +27,14 @@ private:
     WSADATA wsaData;
     SOCKET hClntSock;
     SOCKADDR_IN clntAddr;
+    
+    bool connected = false;
+    char recvBuffer[1024];
+    int recvBufferSize = 0;
+
+    // ImGui-related variables
+    // ImGuiTextBuffer chatHistory;
+    bool showConnectWindow = true;
+    char username[32] = "";
+    char messageBuffer[256] = "";
 };

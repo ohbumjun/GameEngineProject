@@ -1,10 +1,11 @@
 #pragma once
 #include <Hazel.h>
+#include "ServerInfo.h"
 
 class EchoTCPServerLayer : public Hazel::Layer
 {
 public:
-    EchoTCPServerLayer() : Layer("ChatServerLayer")
+    EchoTCPServerLayer() : Layer("EchoTCPServerLayer")
     {
     }
     virtual void OnAttach() override;
@@ -45,4 +46,15 @@ private:
     }
     */
     SOCKADDR_IN servAddr, clntAddr;
+
+    
+bool connected = false;
+    char recvBuffer[1024];
+    int recvBufferSize = 0;
+
+    // ImGui-related variables
+    // ImGuiTextBuffer chatHistory;
+    bool showConnectWindow = true;
+    char username[32] = "";
+    char messageBuffer[256] = "";
 };

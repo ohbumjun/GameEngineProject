@@ -90,7 +90,8 @@ target_compile_definitions(
 target_include_directories(
     ${EDITOR_NAME} 
     PUBLIC 
-    ${EDITOR_INCLUDES})
+    ${EDITOR_INCLUDES}
+)
 
 # 특정 target 에 library 를 종속 걸어주는 함수
 # PUBLIC   : 현재 target 뿐만 아니라, 이 녀석을 link 건 다른 target 까지도 link

@@ -1,29 +1,5 @@
-#include <backends/imgui_impl_glfw.h>
-#include <imgui.h>
-#include <stdio.h>
 #include "ChatServerLayer.h"
-
-// Network-related variables
-#define SERVER_PORT "12345"
-#define SERVER_IP_ADDRESS "127.0.0.1"
-bool connected = false;
-char recvBuffer[1024];
-int recvBufferSize = 0;
-
-
-// ImGui-related variables
-ImGuiTextBuffer chatHistory;
-bool showConnectWindow = true;
-char username[32] = "";
-char messageBuffer[256] = "";
-
-
-void ErrorHandling(const char* message)
-{
-    fputs(message, stderr);
-    fputc('\n', stderr);
-    exit(1);
-}
+#include "Util/Util.h"
 
 // 네트워크 바이트 순서로 변환해주는 함수
 // unsigned short htons(unsigned short);
@@ -47,9 +23,6 @@ void ChatServerLayer::OnAttach()
     int szClntAddr;
     char message[] = "Hello world!";
 
-    char *serv_ip = "211.217.168.13"; // IP 주소 문자열 지정
-    char *serv_port = "9190";         // PORT 번호 문자열 지정
-
     // if (argc != 2)
     // {
     //     printf("Usage : %s <port> \n", argv[0]);
@@ -58,7 +31,7 @@ void ChatServerLayer::OnAttach()
 
     // 소켓 라이브러리 초기화
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
-        ErrorHandling("WSAStartUp() Error");
+        NetworkUtil::ErrorHandling("WSAStartUp() Error");
 
     // TCP 소켓 생성
     hServSock = socket(
@@ -69,15 +42,15 @@ void ChatServerLayer::OnAttach()
 
     // 소켓 생성
     if (hServSock == INVALID_SOCKET)
-        ErrorHandling("socket() Error");
+        NetworkUtil::ErrorHandling("socket() Error");
 
     memset(&servAddr, 0, sizeof(servAddr));
     servAddr.sin_family = AF_INET;                   // 주소 체계 지정 (IPv4  : 4바이트 주소체계)
 
     // inet_addr : 문자열 ip 주소를 네트워크 바이트 순서로 정렬된 32 비트 정수로 표현
-    servAddr.sin_addr.s_addr = inet_addr(serv_ip);   // 문자열 -> 네트워크 바이트 순서로 변환한 주소
-    // servAddr.sin_port = htons(atoi(argv[1]));
-    servAddr.sin_port = htons(atoi(serv_port));      // 문자열 기반 PORT 번호 지정
+    servAddr.sin_addr.s_addr = inet_addr(
+        TEST_SERVER_IP_ADDRESS); // 문자열 -> 네트워크 바이트 순서로 변환한 주소
+    servAddr.sin_port = htons(atoi(TEST_SERVER_PORT)); // 문자열 기반 PORT 번호 지정
 
     // IP 주소, PORT 번호 할당 목적 (즉, 소켓에 주소 할당)
     if (bind(
@@ -86,12 +59,12 @@ void ChatServerLayer::OnAttach()
         sizeof(servAddr))       // 2번째 인자 길이 정보
         == SOCKET_ERROR)
     {
-        ErrorHandling("bind Error");
+        NetworkUtil::ErrorHandling("bind Error");
     }
 
     if (listen(hServSock, 5) == SOCKET_ERROR)   // 연결 요청 수락 상태로 만들기
     {
-        ErrorHandling("listen Error");
+        NetworkUtil::ErrorHandling("listen Error");
     }
 
     szClntAddr = sizeof(clntAddr);
@@ -100,7 +73,7 @@ void ChatServerLayer::OnAttach()
 
     if (hClntSock == INVALID_SOCKET)
     {
-        ErrorHandling("accept() Error");
+        NetworkUtil::ErrorHandling("accept() Error");
     }
    
     send(hClntSock, message, sizeof(message), 0); // 연결된 클라리언트에 데이터 전송

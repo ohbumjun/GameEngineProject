@@ -1,5 +1,6 @@
 #pragma once
 #include <Hazel.h>
+#include "ServerInfo.h"
 
 class ChatClientLayer : public Hazel::Layer
 {
@@ -26,4 +27,15 @@ private:
     WSADATA wsaData;
     SOCKET hClntSock;
     SOCKADDR_IN clntAddr;
+
+    bool connected = false;
+    char recvBuffer[1024];
+    int recvBufferSize = 0;
+
+
+    // ImGui-related variables
+    ImGuiTextBuffer chatHistory;
+    bool showConnectWindow = true;
+    char username[32] = "";
+    char messageBuffer[256] = "";
 };

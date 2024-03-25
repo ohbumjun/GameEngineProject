@@ -1,26 +1,5 @@
 #include "EchoTCPClientLayer.h"
-#include <backends/imgui_impl_glfw.h>
-#include <imgui.h>
-#include <stdio.h>
-
-#define SERVER_PORT "12345"
-#define SERVER_IP_ADDRESS "127.0.0.1"
-bool connected = false;
-char recvBuffer[1024];
-int recvBufferSize = 0;
-
-// ImGui-related variables
-ImGuiTextBuffer chatHistory;
-bool showConnectWindow = true;
-char username[32] = "";
-char messageBuffer[256] = "";
-
-void ErrorHandling(const char *message)
-{
-    fputs(message, stderr);
-    fputc('\n', stderr);
-    exit(1);
-}
+#include "Util/Util.h"
 
 void EchoTCPClientLayer::OnAttach()
 {
@@ -31,24 +10,24 @@ void EchoTCPClientLayer::OnAttach()
 
     // 소켓 라이브러리 초기화
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
-        ErrorHandling("WSAStartUp() Error");
+        NetworkUtil::ErrorHandling("WSAStartUp() Error");
 
     // TCP 소켓
     hClntSock = socket(PF_INET, SOCK_STREAM, 0);
 
     // 소켓 생성
     if (hClntSock == INVALID_SOCKET)
-        ErrorHandling("socket() Error");
+        NetworkUtil::ErrorHandling("socket() Error");
 
     memset(&servAddr, 0, sizeof(servAddr));
     servAddr.sin_family = AF_INET;
-    servAddr.sin_addr.s_addr = inet_addr(SERVER_IP_ADDRESS);
-    servAddr.sin_port = htons(atoi(SERVER_PORT));
+    servAddr.sin_addr.s_addr = inet_addr(TEST_SERVER_IP_ADDRESS);
+    servAddr.sin_port = htons(atoi(TEST_SERVER_PORT));
 
     // 생성한 소켓을 바탕으로 서버에 연결 요청
     if (connect(hClntSock, (SOCKADDR *)&servAddr, sizeof(servAddr)) ==
         SOCKET_ERROR)
-        ErrorHandling("connect() Error");
+        NetworkUtil::ErrorHandling("connect() Error");
 
     
 	while (1)
@@ -99,7 +78,7 @@ void EchoTCPClientLayer::OnAttach()
             hClntSock = recv(hClntSock, &message[readLen], BUF_SIZE - 1, 0);
 
             if (readCnt == -1)
-                ErrorHandling("recv() Error");
+                NetworkUtil::ErrorHandling("recv() Error");
 
             readLen += readCnt;
         }

@@ -15,8 +15,16 @@ SET(LAYER
 SOURCE_GROUP("layer" FILES ${LAYER})
 LIST(APPEND TOTAL_IMGUICHAT_FILES ${LAYER})
 
+SET(UTIL 
+    Util/Util.h
+    Util/Util.cpp
+)
+SOURCE_GROUP("layer" FILES ${UTIL})
+LIST(APPEND TOTAL_IMGUICHAT_FILES ${UTIL})
+
 SET(APP 
     mainApp.cpp
+    ServerInfo.h
 )
 SOURCE_GROUP("app" FILES ${APP})
 LIST(APPEND TOTAL_IMGUICHAT_FILES ${APP})
@@ -36,6 +44,10 @@ add_dependencies(
     ${EXE_IMGUIChat} 
     ${ENGINE_NAME}
 )
+
+set(IMGUICHAT_INCLUDES 
+"${CMAKE_SOURCE_DIR}/IMGUIChat/src"
+)
     
 # Set the output directory of the dll, exe
 set_target_properties(
@@ -45,4 +57,8 @@ set_target_properties(
     ${RUNTIME_OUTPUT_DIR}
 )
 
-
+target_include_directories(
+    ${EXE_IMGUIChat} 
+    PUBLIC 
+    ${IMGUICHAT_INCLUDES}
+)
