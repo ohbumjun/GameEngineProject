@@ -724,7 +724,7 @@ target_include_directories(
 target_link_libraries(
     ${ENGINE_NAME}
     PUBLIC
-    
+    Ws2_32.lib
     # find project name in actual cmakefile
     box2d  
     # imgui
@@ -734,7 +734,7 @@ target_link_libraries(
     glm
     opengl32.lib
     glfw
-    spdlog
+   spdlog
     # -fsanitize=address
     )
 

@@ -39,7 +39,8 @@
 #include "Hazel/Utils/Log.h"
 
 #ifdef HZ_PLATFORM_WINDOWS
-#include <Windows.h>
+    #include <WinSock2.h>
+    #include <Windows.h>
 #endif
 
 // Types
