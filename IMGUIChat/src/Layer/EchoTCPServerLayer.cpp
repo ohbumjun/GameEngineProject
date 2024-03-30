@@ -10,6 +10,7 @@ Iterative Echo 서버
 
 #include "EchoTCPServerLayer.h"
 #include "ServerInfo.h"
+#include "Hazel/Core/Application/Application.h"
 #include "Util/Util.h"
 
 class EchoTCPClientApp : public Hazel::Application
@@ -27,16 +28,6 @@ public:
     }
 };
 
-Hazel::Application *Hazel::CreateApplication(
-    Hazel::ApplicationCommandLineArgs args)
-{
-    Hazel::ApplicationSpecification spec;
-    spec.Name = "Sandbox";
-    spec.WorkingDirectory = "IMGUIChat";
-    spec.CommandLineArgs = args;
-
-    return new EchoTCPClientApp(spec);
-}
 
 void EchoTCPServerLayer::OnAttach()
 {
@@ -47,14 +38,16 @@ void EchoTCPServerLayer::OnDetach()
 {
     for (int i = 0; i < 5; ++i)
     {
-        closesocket(hClntSock[i]);
+        closesocket(m_ClntSocks[i]);
     }
-    closesocket(hServSock);
+    closesocket(m_InitServSock);
     WSACleanup(); // 윈속 라이브러리 해제
 }
 
 void EchoTCPServerLayer::OnUpdate(Hazel::Timestep ts)
 {
+    Hazel::RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1.f});
+    Hazel::RenderCommand::Clear();
 }
 
 void EchoTCPServerLayer::OnEvent(Hazel::Event &event)
@@ -63,7 +56,9 @@ void EchoTCPServerLayer::OnEvent(Hazel::Event &event)
 
 void EchoTCPServerLayer::OnImGuiRender()
 {
+    // TempIMGUIUtils::PrepareDockSpace();
     ImGuiChatWindow();
+    ImGuiCreateClientWindow();
 }
 
 void EchoTCPServerLayer::ImGuiChatWindow()
@@ -95,7 +90,7 @@ void EchoTCPServerLayer::ImGuiChatWindow()
     // Send button
     if (ImGui::Button("Send", ImVec2(100, 0)))
     {
-        if (strlen(messageBuffer) > 0)
+        if (strlen(m_MessageBuffer) > 0)
         {
             // Send message to server
             // send(sock, messageBuffer, strlen(messageBuffer), 0);
@@ -115,12 +110,12 @@ void EchoTCPServerLayer::ImGuiConnectWindow()
     ImGui::Begin("Connect", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
 
     ImGui::Text("Username:");
-    ImGui::InputText("", username, 32);
+    ImGui::InputText("", m_Username, 32);
 
     // Connect button
     if (ImGui::Button("Connect", ImVec2(100, 0)))
     {
-        if (strlen(username) > 0)
+        if (strlen(m_Username) > 0)
         {
             // Initialize Winsock (Windows-specific)
             // WSADATA wsaData;
@@ -164,13 +159,13 @@ void EchoTCPServerLayer::ImGuiConnectWindow()
 
 void EchoTCPServerLayer::ImGuiCreateClientWindow()
 {
-    ImGui::Begin("Chat");
+    ImGui::Begin("CreateClient");
 
     // Send button
     if (ImGui::Button("CreateClient", ImVec2(100, 0)))
     {
         createClient();
-        acceptConnection();
+        // acceptConnection();
     }
 
     ImGui::End();
@@ -178,6 +173,44 @@ void EchoTCPServerLayer::ImGuiCreateClientWindow()
 
 void EchoTCPServerLayer::createClient()
 {
+    if (ImGui::Button("CreateClient", ImVec2(100, 0)))
+    {
+        STARTUPINFO si;
+        PROCESS_INFORMATION pi;
+
+        ZeroMemory(&si, sizeof(si));
+        si.cb = sizeof(si);
+        ZeroMemory(&pi, sizeof(pi));
+
+        const Hazel::ApplicationSpecification &specification =
+            Hazel::Application::Get().GetSpecification();
+
+        const char *constCharExecutablePath = specification.CommandLineArgs[0];
+        LPSTR executablePath = _strdup(constCharExecutablePath);
+
+        // Start the child process.
+        if (!CreateProcess(NULL, // No module name (use command line)
+                           executablePath, // Command line
+                           NULL,  // Process handle not inheritable
+                           NULL,  // Thread handle not inheritable
+                           FALSE, // Set handle inheritance to FALSE
+                           0,     // No creation flags
+                           NULL,  // Use parent's environment block
+                           NULL,  // Use parent's starting directory
+                           &si,   // Pointer to STARTUPINFO structure
+                           &pi)   // Pointer to PROCESS_INFORMATION structure
+        )
+        {
+            printf("CreateProcess failed (%d).\n", GetLastError());
+            return;
+        }
+
+        free(executablePath);
+
+        // Close process and thread handles.
+        CloseHandle(pi.hProcess);
+        CloseHandle(pi.hThread);
+    }
 }
 
 void EchoTCPServerLayer::initializeConnection()
@@ -192,47 +225,49 @@ void EchoTCPServerLayer::initializeConnection()
     // }
 
     // 소켓 라이브러리 초기화
-    if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
+    if (WSAStartup(MAKEWORD(2, 2), &m_WsaData) != 0)
         NetworkUtil::ErrorHandling("WSAStartUp() Error");
 
     // TCP 소켓 생성
-    hServSock = socket(
+    m_InitServSock = socket(
         PF_INET, // domain : 소켓이 사용할 프로토콜 체계(Protocol Family) 정보 전달 (IPv4 : PF_INET)
         SOCK_STREAM, // type : 소켓의 데이터 전송 방식에 대한 정보 전달 (TCP : SOCK_STREAM)
         0 // protocol : 두 컴퓨터간 통신에 사용되는 프로토콜 정보 전달
     );
 
     // 소켓 생성
-    if (hServSock == INVALID_SOCKET)
+    if (m_InitServSock == INVALID_SOCKET)
         NetworkUtil::ErrorHandling("socket() Error");
 
-    memset(&servAddr, 0, sizeof(servAddr));
-    servAddr.sin_family = AF_INET; // 주소 체계 지정 (IPv4  : 4바이트 주소체계)
+    memset(&m_ServAddr, 0, sizeof(m_ServAddr));
+    m_ServAddr.sin_family =
+        AF_INET; // 주소 체계 지정 (IPv4  : 4바이트 주소체계)
     //  servAddr.sin_addr.s_addr = inet_addr(TEST_SERVER_IP_ADDRESS); // 문자열 -> 네트워크 바이트 순서로 변환한 주소
-    servAddr.sin_addr.s_addr =
+    m_ServAddr.sin_addr.s_addr =
         htonl(INADDR_ANY); // 문자열 -> 네트워크 바이트 순서로 변환한 주소
-    servAddr.sin_port =
+    m_ServAddr.sin_port =
         htons(atoi(TEST_SERVER_PORT)); // 문자열 기반 PORT 번호 지정
 
     // IP 주소, PORT 번호 할당 목적 (즉, 소켓에 주소 할당)
     if (bind(
-            hServSock, // 주소정보 (IP, PORT)를 할당할 소켓의 파일 디스크립터
+            m_InitServSock, // 주소정보 (IP, PORT)를 할당할 소켓의 파일 디스크립터
             (SOCKADDR
-                 *)&servAddr, // 할당하고자 하는 주소정보를 지니는, 구조체 변수의 주소값
-            sizeof(servAddr)) // 2번째 인자 길이 정보
+                 *)&m_ServAddr, // 할당하고자 하는 주소정보를 지니는, 구조체 변수의 주소값
+            sizeof(m_ServAddr)) // 2번째 인자 길이 정보
         == SOCKET_ERROR)
     {
         NetworkUtil::ErrorHandling("bind Error");
     }
 
     // 연결 요청 수락 상태로 만들기
-    if (listen(hServSock, 5) == SOCKET_ERROR) // 연결 요청 수락 상태로 만들기
+    if (listen(m_InitServSock, 5) ==
+        SOCKET_ERROR) // 연결 요청 수락 상태로 만들기
     {
         NetworkUtil::ErrorHandling("listen Error");
     }
 
     // 클라이언트 연결 요청 수락하기
-    szClntAddr = sizeof(clntAddr);
+    szClntAddr = sizeof(m_ClntAddr);
 
 }
 
@@ -241,27 +276,28 @@ void EchoTCPServerLayer::acceptConnection()
     // for (int i = 0; i < 5; ++i)
     for (int i = 0; i < 1; ++i)
     {
-        hClntSock[i] = accept(hServSock, (SOCKADDR *)&clntAddr, &szClntAddr);
+        m_ClntSocks[i] =
+            accept(m_InitServSock, (SOCKADDR *)&m_ClntAddr, &m_ClntAddrSize);
 
-        if (hClntSock[i] == -1)
+        if (m_ClntSocks[i] == -1)
             NetworkUtil::ErrorHandling("accept() error");
         else
             printf("Connected client %d\n", i + 1);
 
         while (true)
         {
-            hClntStrLen[i] = recv(hClntSock[i], message, BUF_SIZE, 0);
+            m_ClntStrLen[i] = recv(m_ClntSocks[i], m_RecvBuffer, BUF_SIZE, 0);
 
-            if (hClntStrLen[i] == 0)
+            if (m_ClntStrLen[i] == 0)
                 continue;
 
             // printf("Message From Client %s\n", message);
 
-            send(hClntSock[i], message, hClntStrLen[i], 0);
+            send(m_ClntSocks[i], m_RecvBuffer, m_ClntStrLen[i], 0);
 
             break;
         }
 
-        closesocket(hClntSock[i]);
+        closesocket(m_ClntSocks[i]);
     }
 }

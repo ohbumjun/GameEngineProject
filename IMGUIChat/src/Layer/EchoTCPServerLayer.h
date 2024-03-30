@@ -24,11 +24,12 @@ private:
     void acceptConnection();
 
     static const int BUF_SIZE = 1024;
+
     // 소켓 라이브러리 초기화
-    WSADATA wsaData;
-    SOCKET hServSock;       // 서버 소켓
-    SOCKET hClntSock[5];    // 수락된 클라이언트 소켓
-    int         hClntStrLen[5]; // 수락된 클라이언트 소켓
+    WSADATA m_WsaData;
+    SOCKET m_InitServSock;       // 서버 소켓
+    SOCKET m_ClntSocks[5];    // 수락된 클라이언트 소켓
+    int         m_ClntStrLen[5]; 
     /*
     IPv4 의 주소정보를 담기 위해 정의된 구조체
 
@@ -45,17 +46,16 @@ private:
 	    in_addr_t       s_addr;     // 32비트 IPv4 인터넷 주소
     }
     */
-    SOCKADDR_IN servAddr, clntAddr;
+    SOCKADDR_IN m_ServAddr, m_ClntAddr;
 
-    
     bool m_Connected = false;
     char m_RecvBuffer[1024];
-    int recvBufferSize = 0;
-    int clntAddrSize = 0;
+    int m_RecvBufferSize = 0;
+    int m_ClntAddrSize = 0;
 
     // ImGui-related variables
     // ImGuiTextBuffer chatHistory;
-    bool showConnectWindow = true;
-    char username[32] = "";
-    char messageBuffer[256] = "";
+    bool m_ShowConnectWindow = true;
+    char m_Username[32] = "";
+    char m_MessageBuffer[256] = "";
 };
