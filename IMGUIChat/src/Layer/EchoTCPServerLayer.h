@@ -13,16 +13,16 @@ public:
 
     void OnUpdate(Hazel::Timestep ts) override;
     void OnEvent(Hazel::Event &event) override;
-    virtual void OnImGuiRender() override
-    {
-        ImGuiChatWindow();
-    }
-
+    virtual void OnImGuiRender() override;
     void ImGuiChatWindow();
-
     void ImGuiConnectWindow();
+    void ImGuiCreateClientWindow();
 
 private:
+    void createClient();
+    void initializeConnection();
+    void acceptConnection();
+
     static const int BUF_SIZE = 1024;
     // 소켓 라이브러리 초기화
     WSADATA wsaData;
@@ -48,9 +48,10 @@ private:
     SOCKADDR_IN servAddr, clntAddr;
 
     
-bool connected = false;
-    char recvBuffer[1024];
+    bool m_Connected = false;
+    char m_RecvBuffer[1024];
     int recvBufferSize = 0;
+    int clntAddrSize = 0;
 
     // ImGui-related variables
     // ImGuiTextBuffer chatHistory;

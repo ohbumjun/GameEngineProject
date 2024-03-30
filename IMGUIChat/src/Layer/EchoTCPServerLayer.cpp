@@ -12,81 +12,35 @@ Iterative Echo 서버
 #include "ServerInfo.h"
 #include "Util/Util.h"
 
+class EchoTCPClientApp : public Hazel::Application
+{
+public:
+    EchoTCPClientApp(const Hazel::ApplicationSpecification &specification)
+        : Hazel::Application(specification)
+    {
+        // PushLayer(new ChatServerLayer());
+        PushLayer(new EchoTCPServerLayer());
+    }
+
+    ~EchoTCPClientApp()
+    {
+    }
+};
+
+Hazel::Application *Hazel::CreateApplication(
+    Hazel::ApplicationCommandLineArgs args)
+{
+    Hazel::ApplicationSpecification spec;
+    spec.Name = "Sandbox";
+    spec.WorkingDirectory = "IMGUIChat";
+    spec.CommandLineArgs = args;
+
+    return new EchoTCPClientApp(spec);
+}
+
 void EchoTCPServerLayer::OnAttach()
 {
-    int szClntAddr;
-    char message[] = "Hello world!";
-
-    // if (argc != 2)
-    // {
-    //     printf("Usage : %s <port> \n", argv[0]);
-    //     exit(1);
-    // }
-
-    // 소켓 라이브러리 초기화
-    if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
-        NetworkUtil::ErrorHandling("WSAStartUp() Error");
-
-    // TCP 소켓 생성
-    hServSock = socket(
-        PF_INET, // domain : 소켓이 사용할 프로토콜 체계(Protocol Family) 정보 전달 (IPv4 : PF_INET)
-        SOCK_STREAM, // type : 소켓의 데이터 전송 방식에 대한 정보 전달 (TCP : SOCK_STREAM)
-        0 // protocol : 두 컴퓨터간 통신에 사용되는 프로토콜 정보 전달
-    );
-
-    // 소켓 생성
-    if (hServSock == INVALID_SOCKET)
-        NetworkUtil::ErrorHandling("socket() Error");
-
-    memset(&servAddr, 0, sizeof(servAddr));
-    servAddr.sin_family          = AF_INET; // 주소 체계 지정 (IPv4  : 4바이트 주소체계)
-    servAddr.sin_addr.s_addr = inet_addr(TEST_SERVER_IP_ADDRESS); // 문자열 -> 네트워크 바이트 순서로 변환한 주소
-    servAddr.sin_port            = htons(atoi(TEST_SERVER_PORT)); // 문자열 기반 PORT 번호 지정
-
-    // IP 주소, PORT 번호 할당 목적 (즉, 소켓에 주소 할당)
-    if (bind(
-            hServSock,                      // 주소정보 (IP, PORT)를 할당할 소켓의 파일 디스크립터
-            (SOCKADDR*)&servAddr, // 할당하고자 하는 주소정보를 지니는, 구조체 변수의 주소값
-            sizeof(servAddr))             // 2번째 인자 길이 정보
-        == SOCKET_ERROR)
-    {
-        NetworkUtil::ErrorHandling("bind Error");
-    }
-
-    // 연결 요청 수락 상태로 만들기
-    if (listen(hServSock, 5) == SOCKET_ERROR) // 연결 요청 수락 상태로 만들기
-    {
-        NetworkUtil::ErrorHandling("listen Error");
-    }
-
-    // 클라이언트 연결 요청 수락하기
-    szClntAddr = sizeof(clntAddr);
-
-    for (int i = 0; i < 5; ++i)
-    {
-        hClntSock[i] = accept(hServSock, (SOCKADDR *)&clntAddr, &szClntAddr);
-
-        if (hClntSock[i] == -1)
-            NetworkUtil::ErrorHandling("accept() error");
-        else
-            printf("Connected client %d\n", i + 1);
-
-        while (true)
-        {
-            hClntStrLen[i] = recv(hClntSock[i], message, BUF_SIZE, 0);
-
-            if (hClntStrLen[i] == 0)
-                continue;
-
-            // printf("Message From Client %s\n", message);
-
-            send(hClntSock[i], message, hClntStrLen[i], 0);
-
-            break;
-        }
-
-        closesocket(hClntSock[i]);
-    }
+    initializeConnection();
 }
 
 void EchoTCPServerLayer::OnDetach()
@@ -107,9 +61,14 @@ void EchoTCPServerLayer::OnEvent(Hazel::Event &event)
 {
 }
 
+void EchoTCPServerLayer::OnImGuiRender()
+{
+    ImGuiChatWindow();
+}
+
 void EchoTCPServerLayer::ImGuiChatWindow()
 {
-    ImGui::Begin("Chat", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
+    ImGui::Begin("Chat");
 
     // Display chat history
     // if (ImGui::BeginChild("ChatHistory",
@@ -201,4 +160,108 @@ void EchoTCPServerLayer::ImGuiConnectWindow()
     }
 
     ImGui::End();
+}
+
+void EchoTCPServerLayer::ImGuiCreateClientWindow()
+{
+    ImGui::Begin("Chat");
+
+    // Send button
+    if (ImGui::Button("CreateClient", ImVec2(100, 0)))
+    {
+        createClient();
+        acceptConnection();
+    }
+
+    ImGui::End();
+}
+
+void EchoTCPServerLayer::createClient()
+{
+}
+
+void EchoTCPServerLayer::initializeConnection()
+{
+    int szClntAddr;
+    char message[] = "Hello world!";
+
+    // if (argc != 2)
+    // {
+    //     printf("Usage : %s <port> \n", argv[0]);
+    //     exit(1);
+    // }
+
+    // 소켓 라이브러리 초기화
+    if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
+        NetworkUtil::ErrorHandling("WSAStartUp() Error");
+
+    // TCP 소켓 생성
+    hServSock = socket(
+        PF_INET, // domain : 소켓이 사용할 프로토콜 체계(Protocol Family) 정보 전달 (IPv4 : PF_INET)
+        SOCK_STREAM, // type : 소켓의 데이터 전송 방식에 대한 정보 전달 (TCP : SOCK_STREAM)
+        0 // protocol : 두 컴퓨터간 통신에 사용되는 프로토콜 정보 전달
+    );
+
+    // 소켓 생성
+    if (hServSock == INVALID_SOCKET)
+        NetworkUtil::ErrorHandling("socket() Error");
+
+    memset(&servAddr, 0, sizeof(servAddr));
+    servAddr.sin_family = AF_INET; // 주소 체계 지정 (IPv4  : 4바이트 주소체계)
+    //  servAddr.sin_addr.s_addr = inet_addr(TEST_SERVER_IP_ADDRESS); // 문자열 -> 네트워크 바이트 순서로 변환한 주소
+    servAddr.sin_addr.s_addr =
+        htonl(INADDR_ANY); // 문자열 -> 네트워크 바이트 순서로 변환한 주소
+    servAddr.sin_port =
+        htons(atoi(TEST_SERVER_PORT)); // 문자열 기반 PORT 번호 지정
+
+    // IP 주소, PORT 번호 할당 목적 (즉, 소켓에 주소 할당)
+    if (bind(
+            hServSock, // 주소정보 (IP, PORT)를 할당할 소켓의 파일 디스크립터
+            (SOCKADDR
+                 *)&servAddr, // 할당하고자 하는 주소정보를 지니는, 구조체 변수의 주소값
+            sizeof(servAddr)) // 2번째 인자 길이 정보
+        == SOCKET_ERROR)
+    {
+        NetworkUtil::ErrorHandling("bind Error");
+    }
+
+    // 연결 요청 수락 상태로 만들기
+    if (listen(hServSock, 5) == SOCKET_ERROR) // 연결 요청 수락 상태로 만들기
+    {
+        NetworkUtil::ErrorHandling("listen Error");
+    }
+
+    // 클라이언트 연결 요청 수락하기
+    szClntAddr = sizeof(clntAddr);
+
+}
+
+void EchoTCPServerLayer::acceptConnection()
+{
+    // for (int i = 0; i < 5; ++i)
+    for (int i = 0; i < 1; ++i)
+    {
+        hClntSock[i] = accept(hServSock, (SOCKADDR *)&clntAddr, &szClntAddr);
+
+        if (hClntSock[i] == -1)
+            NetworkUtil::ErrorHandling("accept() error");
+        else
+            printf("Connected client %d\n", i + 1);
+
+        while (true)
+        {
+            hClntStrLen[i] = recv(hClntSock[i], message, BUF_SIZE, 0);
+
+            if (hClntStrLen[i] == 0)
+                continue;
+
+            // printf("Message From Client %s\n", message);
+
+            send(hClntSock[i], message, hClntStrLen[i], 0);
+
+            break;
+        }
+
+        closesocket(hClntSock[i]);
+    }
 }

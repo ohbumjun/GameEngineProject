@@ -5,21 +5,19 @@
 */
 #include "Hazel/Core/EntryPoint.h"
 #include "Layer/ChatServerLayer.h"
+#include "Layer/EchoTCPServerLayer.h"
 
-class ChatServerApp : public Hazel::Application
+class EchoTCPServerApp : public Hazel::Application
 {
 public:
-    ChatServerApp(const Hazel::ApplicationSpecification &specification)
+    EchoTCPServerApp(const Hazel::ApplicationSpecification &specification)
         : Hazel::Application(specification)
     {
-        PushLayer(new ChatServerLayer());
-
-        // Client 측에서 ImGuiLayer 를 세팅하게 해주고 싶지 않다.
-        // Engine 측 Application 에서 추가하게 할 것이다.
-        // PushOverlay(new Hazel::ImGuiLayer());
+        // PushLayer(new ChatServerLayer());
+        PushLayer(new EchoTCPServerLayer());
     }
 
-    ~ChatServerApp()
+    ~EchoTCPServerApp()
     {
     }
 };
@@ -32,5 +30,5 @@ Hazel::Application *Hazel::CreateApplication(
     spec.WorkingDirectory = "IMGUIChat";
     spec.CommandLineArgs = args;
 
-    return new ChatServerApp(spec);
+    return new EchoTCPServerApp(spec);
 }

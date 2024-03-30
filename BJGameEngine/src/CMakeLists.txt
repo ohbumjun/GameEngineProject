@@ -228,6 +228,7 @@ LIST(APPEND TOTAL_ENGINE_FILES ${SRC_CORE_SERIALIZATION})
 # Core - Thread
 SET(HEADER_CORE_THREAD
     public/Hazel/Core/Thread/ThreadUtil.h
+    public/Hazel/Core/Thread/ThreadVars.h
     public/Hazel/Core/Thread/ThreadPool.h
     public/Hazel/Core/Thread/Thread.h
     public/Hazel/Core/Thread/ThreadTask.h

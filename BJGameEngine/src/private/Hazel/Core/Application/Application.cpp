@@ -22,7 +22,7 @@ namespace Hazel
 // make it as single ton
 Application *Application::s_Instance = nullptr;
 
-static ThreadExecuter::ThreadHandle *s_MainThreadExecuter = nullptr;
+static ThreadExecuterManager::ThreadHandle *s_MainThreadExecuter = nullptr;
 
 Application::Application(const ApplicationSpecification &specification)
     : m_Specification(specification)
@@ -51,7 +51,7 @@ Application::~Application()
         delete s_MainThreadExecuter;
     }
 
-    ThreadExecuter::Finalize();
+    ThreadExecuterManager::Finalize();
 
     Renderer::ShutDown();
 }
@@ -148,7 +148,7 @@ void Application::Initialize()
     // WindowsWindow.WindowsData.EventCallback 에 해당 함수 세팅
     m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
 
-    s_MainThreadExecuter = ThreadExecuter::Init();
+    s_MainThreadExecuter = ThreadExecuterManager::Initialize();
 
     // 해당 ImGuiLayer 에 대한 소유권이 LayerStack 에 있어야하므로
     // Unique Pointer로 생성하면 안된다.
