@@ -56,7 +56,7 @@ void EchoTCPServerLayer::OnEvent(Hazel::Event &event)
 
 void EchoTCPServerLayer::OnImGuiRender()
 {
-    // TempIMGUIUtils::PrepareDockSpace();
+    TempIMGUIUtils::PrepareDockSpace();
     ImGuiChatWindow();
     ImGuiCreateClientWindow();
 }
