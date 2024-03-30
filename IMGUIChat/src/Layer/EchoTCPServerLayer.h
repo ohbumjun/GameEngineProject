@@ -8,6 +8,7 @@ public:
     EchoTCPServerLayer() : Layer("EchoTCPServerLayer")
     {
     }
+    ~EchoTCPServerLayer();
     virtual void OnAttach() override;
     virtual void OnDetach() override;
 
@@ -58,4 +59,7 @@ private:
     bool m_ShowConnectWindow = true;
     char m_Username[32] = "";
     char m_MessageBuffer[256] = "";
+    
+private:
+    std::unordered_map<DWORD /*Process ID*/, PROCESS_INFORMATION> m_Pids;
 };

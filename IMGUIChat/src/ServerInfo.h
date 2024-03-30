@@ -17,3 +17,11 @@
 #define TEST_SERVER_PORT "9190" // PORT 번호 문자열 지정
 // #define SERVER_IP_ADDRESS "127.0.0.1"
 #define TEST_SERVER_IP_ADDRESS "211.217.168.13" // IP 주소 문자열 지정
+
+enum class NetworkType
+{
+	SERVER,
+	CLIENT, 
+	ECO_SERVER,
+	ECO_CLIENT
+};

@@ -29,6 +29,18 @@ public:
 };
 
 
+EchoTCPServerLayer::~EchoTCPServerLayer()
+{
+    for (const auto &piInfo : m_Pids)
+    {
+        const PROCESS_INFORMATION& pi = piInfo.second;
+
+        // Close process and thread handles.
+        CloseHandle(pi.hProcess);
+        CloseHandle(pi.hThread);
+	}
+}
+
 void EchoTCPServerLayer::OnAttach()
 {
     initializeConnection();
@@ -184,15 +196,20 @@ void EchoTCPServerLayer::createClient()
         Hazel::Application::Get().GetSpecification();
 
     const char *constCharExecutablePath = specification.CommandLineArgs[0];
-    LPSTR executablePath = _strdup(constCharExecutablePath);
+
+    char commandLine[256]; // Allocate more space
+
+    sprintf(commandLine,
+            "%s ECO_CLIENT",
+            constCharExecutablePath); // Format the command line string
 
     // Start the child process.
     if (!CreateProcess(NULL, // No module name (use command line)
-                        executablePath, // Command line
+                       commandLine, // Command line
                         NULL,  // Process handle not inheritable
                         NULL,  // Thread handle not inheritable
                         FALSE, // Set handle inheritance to FALSE
-                        0,     // No creation flags
+                        0,       // No creation flags
                         NULL,  // Use parent's environment block
                         NULL,  // Use parent's starting directory
                         &si,   // Pointer to STARTUPINFO structure
@@ -203,11 +220,7 @@ void EchoTCPServerLayer::createClient()
         return;
     }
 
-    free(executablePath);
-
-    // Close process and thread handles.
-    CloseHandle(pi.hProcess);
-    CloseHandle(pi.hThread);
+    m_Pids.insert({pi.dwProcessId, pi});
 }
 
 void EchoTCPServerLayer::initializeConnection()

@@ -18,8 +18,10 @@ LIST(APPEND TOTAL_IMGUICHAT_FILES ${LAYER})
 SET(UTIL 
     Util/Util.h
     Util/Util.cpp
+    Util/NetworkManager.h
+    Util/NetworkManager.cpp
 )
-SOURCE_GROUP("layer" FILES ${UTIL})
+SOURCE_GROUP("util" FILES ${UTIL})
 LIST(APPEND TOTAL_IMGUICHAT_FILES ${UTIL})
 
 SET(APP 
