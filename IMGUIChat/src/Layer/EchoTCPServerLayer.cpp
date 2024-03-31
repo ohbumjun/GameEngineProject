@@ -177,7 +177,7 @@ void EchoTCPServerLayer::ImGuiCreateClientWindow()
     if (ImGui::Button("CreateClient", ImVec2(100, 0)))
     {
         createClient();
-        // acceptConnection();
+        acceptConnection();
     }
 
     ImGui::End();
@@ -225,15 +225,6 @@ void EchoTCPServerLayer::createClient()
 
 void EchoTCPServerLayer::initializeConnection()
 {
-    int szClntAddr;
-    char message[] = "Hello world!";
-
-    // if (argc != 2)
-    // {
-    //     printf("Usage : %s <port> \n", argv[0]);
-    //     exit(1);
-    // }
-
     // 소켓 라이브러리 초기화
     if (WSAStartup(MAKEWORD(2, 2), &m_WsaData) != 0)
         NetworkUtil::ErrorHandling("WSAStartUp() Error");
@@ -255,6 +246,8 @@ void EchoTCPServerLayer::initializeConnection()
     //  servAddr.sin_addr.s_addr = inet_addr(TEST_SERVER_IP_ADDRESS); // 문자열 -> 네트워크 바이트 순서로 변환한 주소
     m_ServAddr.sin_addr.s_addr =
         htonl(INADDR_ANY); // 문자열 -> 네트워크 바이트 순서로 변환한 주소
+        // inet_addr(
+        //     TEST_SERVER_IP_ADDRESS); // 문자열 -> 네트워크 바이트 순서로 변환한 주소
     m_ServAddr.sin_port =
         htons(atoi(TEST_SERVER_PORT)); // 문자열 기반 PORT 번호 지정
 
@@ -277,37 +270,53 @@ void EchoTCPServerLayer::initializeConnection()
     }
 
     // 클라이언트 연결 요청 수락하기
-    szClntAddr = sizeof(m_ClntAddr);
+    m_ClntAddrSize = sizeof(m_ClntAddr);
 
 }
 
 void EchoTCPServerLayer::acceptConnection()
 {
-    // for (int i = 0; i < 5; ++i)
-    for (int i = 0; i < 1; ++i)
+    // while (1)
     {
-        m_ClntSocks[i] =
-            accept(m_InitServSock, (SOCKADDR *)&m_ClntAddr, &m_ClntAddrSize);
-
-        if (m_ClntSocks[i] == -1)
-            NetworkUtil::ErrorHandling("accept() error");
-        else
-            printf("Connected client %d\n", i + 1);
-
-        while (true)
+        // for (int i = 0; i < 5; ++i)
+        for (int i = 0; i < 1; ++i)
         {
-            m_ClntStrLen[i] = recv(m_ClntSocks[i], m_RecvBuffer, BUF_SIZE, 0);
+            // m_ClntSocks[i] = accept(m_InitServSock,
+            SOCKET AcceptSocket = accept(m_InitServSock,
+                                    // (SOCKADDR *)&m_ClntAddr, 
+                nullptr,
+                                    // &m_ClntAddrSize
+                                   nullptr
+            );
 
-            if (m_ClntStrLen[i] == 0)
+            if (AcceptSocket == INVALID_SOCKET)
+            {
+                NetworkUtil::ErrorHandling("accept() error");
+                closesocket(AcceptSocket);
                 continue;
+            }
+            else
+            {
+                printf("Connected client %d\n", i + 1);
+            }
 
-            // printf("Message From Client %s\n", message);
-
-            send(m_ClntSocks[i], m_RecvBuffer, m_ClntStrLen[i], 0);
-
-            break;
+            // while (true)
+            // {
+            //     m_ClntStrLen[i] =
+            //         recv(m_ClntSocks[i], m_RecvBuffer, BUF_SIZE, 0);
+            // 
+            //     if (m_ClntStrLen[i] == 0)
+            //         continue;
+            // 
+            //     // printf("Message From Client %s\n", message);
+            // 
+            //     send(m_ClntSocks[i], m_RecvBuffer, m_ClntStrLen[i], 0);
+            // 
+            //     break;
+            // }
+            // 
+            // closesocket(m_ClntSocks[i]);
         }
-
-        closesocket(m_ClntSocks[i]);
     }
+    
 }

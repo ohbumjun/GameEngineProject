@@ -6,6 +6,7 @@
 #include "Hazel/Core/EntryPoint.h"
 #include "Layer/ChatServerLayer.h"
 #include "Layer/EchoTCPServerLayer.h"
+#include "Layer/EchoTCPClientLayer.h"
 #include "ServerInfo.h"
 
 // temp 변수
@@ -23,7 +24,7 @@ public:
         : Hazel::Application(specification)
     {
         // PushLayer(new ChatServerLayer());
-        PushLayer(new EchoTCPServerLayer());
+        PushLayer(new EchoTCPClientLayer());
     }
 
     ~EchoTCPClientApp()

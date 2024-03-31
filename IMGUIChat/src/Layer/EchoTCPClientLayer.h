@@ -12,17 +12,15 @@ public:
 
     void OnUpdate(Hazel::Timestep ts) override;
     void OnEvent(Hazel::Event &event) override;
-    virtual void OnImGuiRender() override
-    {
-        ImGuiChatWindow();
-    }
-
+    virtual void OnImGuiRender() override;
     void ImGuiChatWindow();
-
     void ImGuiConnectWindow();
 
 private:
     static const int BUF_SIZE = 1024;
+
+    void connectServer();
+
     // 소켓 라이브러리 초기화
     WSADATA wsaData;
     SOCKET hClntSock;
