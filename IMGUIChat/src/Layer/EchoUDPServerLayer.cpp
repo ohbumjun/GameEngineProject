@@ -8,9 +8,9 @@ Iterative Echo 서버
 
 */
 
-#include "EchoTCPServerLayer.h"
-#include "ServerInfo.h"
+#include "EchoUDPServerLayer.h"
 #include "Hazel/Core/Application/Application.h"
+#include "ServerInfo.h"
 #include "Util/Util.h"
 
 class EchoTCPClientApp : public Hazel::Application
@@ -20,7 +20,7 @@ public:
         : Hazel::Application(specification)
     {
         // PushLayer(new ChatServerLayer());
-        PushLayer(new EchoTCPServerLayer());
+        PushLayer(new EchoUDPServerLayer());
     }
 
     ~EchoTCPClientApp()
@@ -29,54 +29,50 @@ public:
 };
 
 
-EchoTCPServerLayer::~EchoTCPServerLayer()
+EchoUDPServerLayer::~EchoUDPServerLayer()
 {
     for (const auto &piInfo : m_Pids)
     {
-        const PROCESS_INFORMATION& pi = piInfo.second;
+        const PROCESS_INFORMATION &pi = piInfo.second;
 
         // Close process and thread handles.
         CloseHandle(pi.hProcess);
         CloseHandle(pi.hThread);
-	}
+    }
 
     closesocket(m_InitServSock);
     WSACleanup(); // 윈속 라이브러리 해제
 }
 
-void EchoTCPServerLayer::OnAttach()
+void EchoUDPServerLayer::OnAttach()
 {
     initializeConnection();
 }
 
-void EchoTCPServerLayer::OnDetach()
+void EchoUDPServerLayer::OnDetach()
 {
-    for (int i = 0; i < 5; ++i)
-    {
-        closesocket(m_ClntSocks[i]);
-    }
     closesocket(m_InitServSock);
     WSACleanup(); // 윈속 라이브러리 해제
 }
 
-void EchoTCPServerLayer::OnUpdate(Hazel::Timestep ts)
+void EchoUDPServerLayer::OnUpdate(Hazel::Timestep ts)
 {
     Hazel::RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1.f});
     Hazel::RenderCommand::Clear();
 }
 
-void EchoTCPServerLayer::OnEvent(Hazel::Event &event)
+void EchoUDPServerLayer::OnEvent(Hazel::Event &event)
 {
 }
 
-void EchoTCPServerLayer::OnImGuiRender()
+void EchoUDPServerLayer::OnImGuiRender()
 {
     TempIMGUIUtils::PrepareDockSpace();
     ImGuiChatWindow();
     ImGuiCreateClientWindow();
 }
 
-void EchoTCPServerLayer::ImGuiChatWindow()
+void EchoUDPServerLayer::ImGuiChatWindow()
 {
     ImGui::Begin("Chat");
 
@@ -120,7 +116,7 @@ void EchoTCPServerLayer::ImGuiChatWindow()
     ImGui::End();
 }
 
-void EchoTCPServerLayer::ImGuiConnectWindow()
+void EchoUDPServerLayer::ImGuiConnectWindow()
 {
     ImGui::Begin("Connect", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
 
@@ -172,7 +168,7 @@ void EchoTCPServerLayer::ImGuiConnectWindow()
     ImGui::End();
 }
 
-void EchoTCPServerLayer::ImGuiCreateClientWindow()
+void EchoUDPServerLayer::ImGuiCreateClientWindow()
 {
     ImGui::Begin("CreateClient");
 
@@ -186,7 +182,7 @@ void EchoTCPServerLayer::ImGuiCreateClientWindow()
     ImGui::End();
 }
 
-void EchoTCPServerLayer::createClient()
+void EchoUDPServerLayer::createClient()
 {
     STARTUPINFO si;
     PROCESS_INFORMATION pi;
@@ -203,20 +199,20 @@ void EchoTCPServerLayer::createClient()
     char commandLine[256]; // Allocate more space
 
     sprintf(commandLine,
-            "%s ECO_TCP_CLIENT",
+            "%s ECO_UDP_CLIENT",
             constCharExecutablePath); // Format the command line string
 
     // Start the child process.
-    if (!CreateProcess(NULL, // No module name (use command line)
+    if (!CreateProcess(NULL,        // No module name (use command line)
                        commandLine, // Command line
-                        NULL,  // Process handle not inheritable
-                        NULL,  // Thread handle not inheritable
-                        FALSE, // Set handle inheritance to FALSE
-                        0,       // No creation flags
-                        NULL,  // Use parent's environment block
-                        NULL,  // Use parent's starting directory
-                        &si,   // Pointer to STARTUPINFO structure
-                        &pi)   // Pointer to PROCESS_INFORMATION structure
+                       NULL,        // Process handle not inheritable
+                       NULL,        // Thread handle not inheritable
+                       FALSE,       // Set handle inheritance to FALSE
+                       0,           // No creation flags
+                       NULL,        // Use parent's environment block
+                       NULL,        // Use parent's starting directory
+                       &si,         // Pointer to STARTUPINFO structure
+                       &pi)         // Pointer to PROCESS_INFORMATION structure
     )
     {
         printf("CreateProcess failed (%d).\n", GetLastError());
@@ -226,16 +222,16 @@ void EchoTCPServerLayer::createClient()
     m_Pids.insert({pi.dwProcessId, pi});
 }
 
-void EchoTCPServerLayer::initializeConnection()
+void EchoUDPServerLayer::initializeConnection()
 {
     // 소켓 라이브러리 초기화
     if (WSAStartup(MAKEWORD(2, 2), &m_WsaData) != 0)
         NetworkUtil::ErrorHandling("WSAStartUp() Error");
 
-    // TCP 소켓 생성
+    // UDP 소켓 생성
     m_InitServSock = socket(
         PF_INET, // domain : 소켓이 사용할 프로토콜 체계(Protocol Family) 정보 전달 (IPv4 : PF_INET)
-        SOCK_STREAM, // type : 소켓의 데이터 전송 방식에 대한 정보 전달 (TCP : SOCK_STREAM)
+        SOCK_DGRAM, // type : 소켓의 데이터 전송 방식에 대한 정보 전달 (TCP : SOCK_STREAM)
         0 // protocol : 두 컴퓨터간 통신에 사용되는 프로토콜 정보 전달
     );
 
@@ -249,8 +245,8 @@ void EchoTCPServerLayer::initializeConnection()
     //  servAddr.sin_addr.s_addr = inet_addr(TEST_SERVER_IP_ADDRESS); // 문자열 -> 네트워크 바이트 순서로 변환한 주소
     m_ServAddr.sin_addr.s_addr =
         htonl(INADDR_ANY); // 문자열 -> 네트워크 바이트 순서로 변환한 주소
-        // inet_addr(
-        //     TEST_SERVER_IP_ADDRESS); // 문자열 -> 네트워크 바이트 순서로 변환한 주소
+    // inet_addr(
+    //     TEST_SERVER_IP_ADDRESS); // 문자열 -> 네트워크 바이트 순서로 변환한 주소
     m_ServAddr.sin_port =
         htons(atoi(TEST_SERVER_PORT)); // 문자열 기반 PORT 번호 지정
 
@@ -265,68 +261,42 @@ void EchoTCPServerLayer::initializeConnection()
         NetworkUtil::ErrorHandling("bind Error");
     }
 
-    // 연결 요청 수락 상태로 만들기
-    if (listen(m_InitServSock, 5) ==
-        SOCKET_ERROR) // 연결 요청 수락 상태로 만들기
-    {
-        NetworkUtil::ErrorHandling("listen Error");
-    }
-
-    // 클라이언트 연결 요청 수락하기
+    // UDP 소켓이므로 listen 함수가 별도로 필요하지 않다.
+    // 1:1 로 미리 연결을 해놓는 것이 아니기 때문이다.
     m_ClntAddrSize = sizeof(m_ClntAddr);
-
 }
 
-void EchoTCPServerLayer::acceptConnection()
+void EchoUDPServerLayer::acceptConnection()
 {
-    // while (1)
+    while (1)
     {
         // for (int i = 0; i < 5; ++i)
         for (int i = 0; i < 1; ++i)
         {
-            // m_ClntSocks[i] = accept(m_InitServSock,
-            SOCKET AcceptSocket = accept(m_InitServSock,
-                                    (SOCKADDR *)&m_ClntAddr, 
-                                    &m_ClntAddrSize
-            );
+            int strLen = 0;
 
-            if (AcceptSocket == INVALID_SOCKET)
-            {
-                NetworkUtil::ErrorHandling("accept() error");
-                closesocket(AcceptSocket);
-                continue;
-            }
-            else
-            {
-                printf("Connected TCP client %d\n", i + 1);
-            }
+            // recvFrom, sendTo 함수 -> unconnected 소켓을 이용한 전송, 수신 함수
+            // 할당된 주소로 전달되는 모든 데이터 수신
+            strLen = recvfrom(m_InitServSock,
+                              m_RecvBuffer,
+                              BUF_SIZE,
+                              0,
+                              (SOCKADDR *)&m_ClntAddr,
+                              &m_ClntAddrSize);
+            m_RecvBuffer[0] = 0;
 
-            while (true)
-            {
-                // Server 측에서도 단 한번만 recv 를 해도 되는 건가 ?
-                m_ClntStrLen[i] =
-                    // recv(m_ClntSocks[i], m_RecvBuffer, BUF_SIZE, 0);
-                    recv(AcceptSocket, m_RecvBuffer, BUF_SIZE, 0);
+            m_RecvBuffer[strLen] = 0; // 마지막 NULL 문자 삽입]
 
-                if (m_ClntStrLen[i] == -1)
-                    continue;
+            printf("Message From UDP Client : %s", m_RecvBuffer);
 
-                if (m_ClntStrLen[i] == 0)
-                    continue;
+            sendto(m_InitServSock,
+                   m_RecvBuffer,
+                   strLen,
+                   0,
+                   (SOCKADDR *)&m_ClntAddr,
+                   sizeof(m_ClntAddrSize));
+	
 
-                m_RecvBuffer[m_ClntStrLen[i]] = 0;
-
-                printf("Message From TCP Client %s\n", m_RecvBuffer);
-            
-                // send(m_ClntSocks[i], m_RecvBuffer, m_ClntStrLen[i], 0);
-                send(AcceptSocket, m_RecvBuffer, m_ClntStrLen[i], 0);
-            
-                break;
-            }
-            
-            // closesocket(m_ClntSocks[i]);
-            closesocket(AcceptSocket);
         }
     }
-    
 }

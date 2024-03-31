@@ -6,11 +6,15 @@ SET(LAYER
     Layer/ChatClientLayer.h
     Layer/EchoTCPClientLayer.h
     Layer/EchoTCPServerLayer.h
+    Layer/EchoUDPClientLayer.h
+    Layer/EchoUDPServerLayer.h
 
     Layer/ChatServerLayer.cpp
     Layer/ChatClientLayer.cpp
     Layer/EchoTCPClientLayer.cpp
     Layer/EchoTCPServerLayer.cpp
+    Layer/EchoUDPClientLayer.cpp
+    Layer/EchoUDPServerLayer.cpp
 )
 SOURCE_GROUP("layer" FILES ${LAYER})
 LIST(APPEND TOTAL_IMGUICHAT_FILES ${LAYER})

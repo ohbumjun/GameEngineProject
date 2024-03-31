@@ -24,6 +24,8 @@ void EchoTCPClientLayer::OnDetach()
 
 void EchoTCPClientLayer::OnUpdate(Hazel::Timestep ts)
 {
+    Hazel::RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1.f});
+    Hazel::RenderCommand::Clear();
 }
 
 void EchoTCPClientLayer::OnEvent(Hazel::Event &event)
@@ -129,7 +131,7 @@ void EchoTCPClientLayer::ImGuiChatWindow()
             
             messageBuffer[readLen] = 0;
 
-		    printf("Message from server : %s \n", messageBuffer);
+		    printf("Message from TCP server : %s \n", messageBuffer);
         }
     }
 
@@ -167,7 +169,7 @@ void EchoTCPClientLayer::connectServer()
     }
     else
     {
-        HZ_CORE_INFO("Connected to server");
+        HZ_CORE_INFO("Connected to TCP server");
     }
 
     // while (1)

@@ -7,16 +7,19 @@
 #include "Layer/ChatServerLayer.h"
 #include "Layer/EchoTCPServerLayer.h"
 #include "Layer/EchoTCPClientLayer.h"
+#include "Layer/EchoUDPServerLayer.h"
+#include "Layer/EchoUDPClientLayer.h"
 #include "ServerInfo.h"
 
 // temp 변수
 std::map<std::string, NetworkType> stringToEnum = {
     {"CLIENT", NetworkType::CLIENT},
     {"SERVER", NetworkType::SERVER},
-    {"ECO_CLIENT", NetworkType::ECO_CLIENT},
-    {"ECO_SERVER", NetworkType::ECO_SERVER}
+    {"ECO_TCP_CLIENT", NetworkType::ECO_TCP_CLIENT},
+    {"ECO_TCP_CLIENT", NetworkType::ECO_TCP_SERVER},
+    {"ECO_UDP_SERVER", NetworkType::ECO_UDP_SERVER},
+    {"ECO_UDP_CLIENT", NetworkType::ECO_UDP_CLIENT}
 };
-
 class EchoTCPClientApp : public Hazel::Application
 {
 public:
@@ -47,6 +50,36 @@ public:
     }
 };
 
+class EchoUDPClientApp : public Hazel::Application
+{
+public:
+    EchoUDPClientApp(const Hazel::ApplicationSpecification &specification)
+        : Hazel::Application(specification)
+    {
+        // PushLayer(new ChatServerLayer());
+        PushLayer(new EchoUDPClientLayer());
+    }
+
+    ~EchoUDPClientApp()
+    {
+    }
+};
+
+class EchoUDPServerApp : public Hazel::Application
+{
+public:
+    EchoUDPServerApp(const Hazel::ApplicationSpecification &specification)
+        : Hazel::Application(specification)
+    {
+        // PushLayer(new ChatServerLayer());
+        PushLayer(new EchoUDPServerLayer());
+    }
+
+    ~EchoUDPServerApp()
+    {
+    }
+};
+
 Hazel::Application *Hazel::CreateApplication(
     Hazel::ApplicationCommandLineArgs args)
 {
@@ -72,7 +105,8 @@ Hazel::Application *Hazel::CreateApplication(
 	}
     else
     {
-        netType = NetworkType::ECO_SERVER;
+        // netType = NetworkType::ECO_TCP_SERVER;
+        netType = NetworkType::ECO_UDP_SERVER;
     }
     
     switch (netType)
@@ -81,10 +115,14 @@ Hazel::Application *Hazel::CreateApplication(
         break;
     case NetworkType::CLIENT:
         break;
-    case NetworkType::ECO_SERVER:
+    case NetworkType::ECO_TCP_SERVER:
         return new EchoTCPServerApp(spec);
-    case NetworkType::ECO_CLIENT:
+    case NetworkType::ECO_TCP_CLIENT:
         return new EchoTCPClientApp(spec);
+    case NetworkType::ECO_UDP_SERVER:
+        return new EchoUDPServerApp(spec);
+    case NetworkType::ECO_UDP_CLIENT:
+        return new EchoUDPClientApp(spec);
     default:
         break;
     }
