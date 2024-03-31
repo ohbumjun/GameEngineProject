@@ -7,6 +7,7 @@ public:
     EchoTCPClientLayer() : Layer("EchoTCPClientLayer")
     {
     }
+    ~EchoTCPClientLayer();
     virtual void OnAttach() override;
     virtual void OnDetach() override;
 
@@ -14,7 +15,6 @@ public:
     void OnEvent(Hazel::Event &event) override;
     virtual void OnImGuiRender() override;
     void ImGuiChatWindow();
-    void ImGuiConnectWindow();
 
 private:
     static const int BUF_SIZE = 1024;
@@ -34,5 +34,5 @@ private:
     // ImGuiTextBuffer chatHistory;
     bool showConnectWindow = true;
     char username[32] = "";
-    char messageBuffer[256] = "";
+    std::string m_InputText;
 };

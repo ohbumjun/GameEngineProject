@@ -39,6 +39,9 @@ EchoTCPServerLayer::~EchoTCPServerLayer()
         CloseHandle(pi.hProcess);
         CloseHandle(pi.hThread);
 	}
+
+    closesocket(m_InitServSock);
+    WSACleanup(); // 윈속 라이브러리 해제
 }
 
 void EchoTCPServerLayer::OnAttach()
@@ -283,10 +286,8 @@ void EchoTCPServerLayer::acceptConnection()
         {
             // m_ClntSocks[i] = accept(m_InitServSock,
             SOCKET AcceptSocket = accept(m_InitServSock,
-                                    // (SOCKADDR *)&m_ClntAddr, 
-                nullptr,
-                                    // &m_ClntAddrSize
-                                   nullptr
+                                    (SOCKADDR *)&m_ClntAddr, 
+                                    &m_ClntAddrSize
             );
 
             if (AcceptSocket == INVALID_SOCKET)
@@ -300,22 +301,31 @@ void EchoTCPServerLayer::acceptConnection()
                 printf("Connected client %d\n", i + 1);
             }
 
-            // while (true)
-            // {
-            //     m_ClntStrLen[i] =
-            //         recv(m_ClntSocks[i], m_RecvBuffer, BUF_SIZE, 0);
-            // 
-            //     if (m_ClntStrLen[i] == 0)
-            //         continue;
-            // 
-            //     // printf("Message From Client %s\n", message);
-            // 
-            //     send(m_ClntSocks[i], m_RecvBuffer, m_ClntStrLen[i], 0);
-            // 
-            //     break;
-            // }
-            // 
+            while (true)
+            {
+                // Server 측에서도 단 한번만 recv 를 해도 되는 건가 ?
+                m_ClntStrLen[i] =
+                    // recv(m_ClntSocks[i], m_RecvBuffer, BUF_SIZE, 0);
+                    recv(AcceptSocket, m_RecvBuffer, BUF_SIZE, 0);
+
+                if (m_ClntStrLen[i] == -1)
+                    continue;
+
+                if (m_ClntStrLen[i] == 0)
+                    continue;
+
+                m_RecvBuffer[m_ClntStrLen[i]] = 0;
+
+                printf("Message From Client %s\n", m_RecvBuffer);
+            
+                // send(m_ClntSocks[i], m_RecvBuffer, m_ClntStrLen[i], 0);
+                send(AcceptSocket, m_RecvBuffer, m_ClntStrLen[i], 0);
+            
+                break;
+            }
+            
             // closesocket(m_ClntSocks[i]);
+            closesocket(AcceptSocket);
         }
     }
     
