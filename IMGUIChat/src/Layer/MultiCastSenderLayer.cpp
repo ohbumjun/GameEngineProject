@@ -3,10 +3,7 @@
 
 MultiCastSenderLayer::~MultiCastSenderLayer()
 {
-    // 생성된 소켓 라이브러리 해제
-    closesocket(hSenderSock);
-
-    WSACleanup();
+	finalize();
 }
 
 void MultiCastSenderLayer::OnAttach()
@@ -16,10 +13,7 @@ void MultiCastSenderLayer::OnAttach()
 
 void MultiCastSenderLayer::OnDetach()
 {
-    // 생성된 소켓 라이브러리 해제
-    closesocket(hSenderSock);
-
-    WSACleanup();
+    finalize();
 }
 
 void MultiCastSenderLayer::OnUpdate(Hazel::Timestep ts)
@@ -108,7 +102,6 @@ void MultiCastSenderLayer::initialize()
 
     memset(&senderAddr, 0, sizeof(senderAddr));
     senderAddr.sin_family = AF_INET;
-
     // 중요한 점은, 반드시 IP 주소를 멀티캐스트 주소로 설정해야 한다는 것이다.
     senderAddr.sin_addr.s_addr = inet_addr(TEST_MULTICAST_IP_ADDRESS);
     senderAddr.sin_port = htons(atoi(TEST_SERVER_PORT));
@@ -121,6 +114,23 @@ void MultiCastSenderLayer::initialize()
                IP_MULTICAST_TTL,
                (const char *)(void *)&timeLive,
                sizeof(timeLive));
+}
+
+void MultiCastSenderLayer::finalize()
+{
+    for (const auto &piInfo : m_Pids)
+    {
+        const PROCESS_INFORMATION &pi = piInfo.second;
+
+        // Close process and thread handles.
+        CloseHandle(pi.hProcess);
+        CloseHandle(pi.hThread);
+    }
+
+    // 생성된 소켓 라이브러리 해제
+    closesocket(hSenderSock);
+
+    WSACleanup();
 }
 
 void MultiCastSenderLayer::createClient()
@@ -139,9 +149,13 @@ void MultiCastSenderLayer::createClient()
 
     char commandLine[256]; // Allocate more space
 
+    char numAddedToPort[2]; 
+    sprintf(numAddedToPort, "%d", (int)m_Pids.size());
+
     sprintf(commandLine,
-            "%s MULTICAST_RECEIVER",
-            constCharExecutablePath); // Format the command line string
+            "%s MULTICAST_RECEIVER %s",
+            constCharExecutablePath,
+            numAddedToPort); // Format the command line string
 
     // Start the child process.
     if (!CreateProcess(NULL,        // No module name (use command line)

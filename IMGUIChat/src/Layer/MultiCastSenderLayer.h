@@ -28,6 +28,7 @@ private:
 
     void createClient();
     void initialize();
+    void finalize();
 
     // 소켓 라이브러리 초기화
     WSADATA wsaData;

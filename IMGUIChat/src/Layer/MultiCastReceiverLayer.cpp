@@ -99,17 +99,34 @@ void MultiCastReceiverLayer::initializeConnection()
 
     memset(&m_ServAddr, 0, sizeof(m_ServAddr));
 
-    m_ServAddr.sin_family =
-        AF_INET; // 주소 체계 지정 (IPv4  : 4바이트 주소체계)
-    //  servAddr.sin_addr.s_addr = inet_addr(TEST_SERVER_IP_ADDRESS); // 문자열 -> 네트워크 바이트 순서로 변환한 주소
-
+    m_ServAddr.sin_family = AF_INET; // 주소 체계 지정 (IPv4  : 4바이트 주소체계)
     m_ServAddr.sin_addr.s_addr = htonl(INADDR_ANY); // 문자열 -> 네트워크 바이트 순서로 변환한 주소
 
-    m_ServAddr.sin_port =
-        htons(atoi(TEST_SERVER_PORT)); // 문자열 기반 PORT 번호 지정
+    int portNum = atoi(TEST_SERVER_PORT);
     
-    // set to multicast group ip address to join
+    const Hazel::ApplicationSpecification &specification = Hazel::Application::Get().GetSpecification();
+
+    if (specification.CommandLineArgs.Count > 2)
+    {
+        const char* addedPortNum = specification.CommandLineArgs[2];
+        portNum += atoi(addedPortNum);
+    }
+
+    m_ServAddr.sin_port = htons(portNum); // 문자열 기반 PORT 번호 지정
+
+    // The bind function for UDP sockets behaves differently on Windows compared to Linux/Unix systems. 
+    // On Windows, binding a UDP socket to a port also implicitly joins the multicast group 
+    // associated with that port (if applicable).
+    if (bind(m_ReceiverSock, (SOCKADDR*)&m_ServAddr, sizeof(m_ServAddr)) ==
+        SOCKET_ERROR)
+    {
+        NetworkUtil::ErrorHandling("bind Error");
+        return;
+    }
+
+    // 데이터를 수신하는 측에서는 가입이라는 절차를 추가적으로 거쳐야 한다.
 	m_JoinAdr.imr_multiaddr.s_addr = inet_addr(TEST_MULTICAST_IP_ADDRESS);
+	// m_JoinAdr.imr_multiaddr.s_addr = inet_addr(TEST_SERVER_IP_ADDRESS);
     m_JoinAdr.imr_interface.s_addr = htonl(INADDR_ANY);
   	
     // setsockopt() 함수를 이용하여 소켓 옵션 설정
@@ -130,6 +147,7 @@ void MultiCastReceiverLayer::receiveResponse()
     {
         memset(m_RecvBuffer, 0, BUF_SIZE - 1);
 
+        // 현재 잘 동작 안하는데 이 함수를 비동기로 변경하면 되려나..?
         receiveLen = recvfrom(m_ReceiverSock, 
             m_RecvBuffer, BUF_SIZE - 1, 0, NULL, 0);
 
