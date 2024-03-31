@@ -2,13 +2,13 @@
 #include "ServerInfo.h"
 #include <Hazel.h>
 
-class EchoUDPServerLayer : public Hazel::Layer
+class MultiCastReceiverLayer : public Hazel::Layer
 {
 public:
-    EchoUDPServerLayer() : Layer("EchoUDPServerLayer")
+    MultiCastReceiverLayer() : Layer("MultiCastReceiverLayer")
     {
     }
-    ~EchoUDPServerLayer();
+    ~MultiCastReceiverLayer();
     virtual void OnAttach() override;
     virtual void OnDetach() override;
 
@@ -16,19 +16,19 @@ public:
     void OnEvent(Hazel::Event &event) override;
     virtual void OnImGuiRender() override;
     void ImGuiChatWindow();
-    void ImGuiConnectWindow();
-    void ImGuiCreateClientWindow();
 
 private:
-    void createClient();
     void initializeConnection();
-    void acceptConnection();
+    void receiveResponse();
 
     static const int BUF_SIZE = 1024;
 
     // 소켓 라이브러리 초기화
     WSADATA m_WsaData;
-    SOCKET m_InitServSock; // 서버 소켓
+    // 멀티캐스트 그룹에 가입하기 위한 구조체
+    struct ip_mreq m_JoinAdr; 
+    int receiveLen = 0;
+    SOCKET m_ReceiverSock; 
     /*
     IPv4 의 주소정보를 담기 위해 정의된 구조체
 
@@ -46,18 +46,5 @@ private:
     }
     */
     SOCKADDR_IN m_ServAddr, m_ClntAddr;
-
-    bool m_Connected = false;
     char m_RecvBuffer[1024];
-    int m_RecvBufferSize = 0;
-    int m_ClntAddrSize = 0;
-
-    // ImGui-related variables
-    // ImGuiTextBuffer chatHistory;
-    bool m_ShowConnectWindow = true;
-    char m_Username[32] = "";
-    char m_MessageBuffer[256] = "";
-
-private:
-    std::unordered_map<DWORD /*Process ID*/, PROCESS_INFORMATION> m_Pids;
 };

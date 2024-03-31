@@ -1,13 +1,18 @@
 #pragma once
 #include "ServerInfo.h"
 #include <Hazel.h>
-class EchoUDPClientLayer : public Hazel::Layer
+/*
+* (참고)
+* 멀티캐스트란, UDP 기반 그룹 중심 전송 방식으로, 멀티캐스트 
+* 그룹에 속한 호스트들에게 데이터를 전송하는 방식이다.
+*/
+class MultiCastSenderLayer : public Hazel::Layer
 {
 public:
-    EchoUDPClientLayer() : Layer("EchoUDPClientLayer")
+    MultiCastSenderLayer() : Layer("MultiCastSenderLayer")
     {
     }
-    ~EchoUDPClientLayer();
+    ~MultiCastSenderLayer();
     virtual void OnAttach() override;
     virtual void OnDetach() override;
 
@@ -15,24 +20,25 @@ public:
     void OnEvent(Hazel::Event &event) override;
     virtual void OnImGuiRender() override;
     void ImGuiChatWindow();
+    void ImGuiCreateReceiverWindow();
 
 private:
     static const int BUF_SIZE = 1024;
+    static const int TTL = 64;
 
+    void createClient();
     void initialize();
 
     // 소켓 라이브러리 초기화
     WSADATA wsaData;
-    SOCKET hClntSock;
-    SOCKADDR_IN clntAddr;
+    SOCKET hSenderSock;
+    SOCKADDR_IN senderAddr;
 
     bool connected = false;
     char recvBuffer[1024];
     int recvBufferSize = 0;
 
-    // ImGui-related variables
-    // ImGuiTextBuffer chatHistory;
-    bool showConnectWindow = true;
-    char username[32] = "";
     std::string m_InputText;
+
+    std::unordered_map<DWORD /*Process ID*/, PROCESS_INFORMATION> m_Pids;
 };

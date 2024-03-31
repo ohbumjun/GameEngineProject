@@ -41,6 +41,7 @@
 
 #ifdef HZ_PLATFORM_WINDOWS
     #include <WinSock2.h>
+	#include <WS2tcpip.h>
     #include <Windows.h>
 #endif
 

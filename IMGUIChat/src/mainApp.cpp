@@ -7,8 +7,8 @@
 #include "Layer/ChatServerLayer.h"
 #include "Layer/EchoTCPServerLayer.h"
 #include "Layer/EchoTCPClientLayer.h"
-#include "Layer/EchoUDPServerLayer.h"
-#include "Layer/EchoUDPClientLayer.h"
+#include "Layer/MultiCastSenderLayer.h"
+#include "Layer/MultiCastReceiverLayer.h"
 #include "ServerInfo.h"
 
 // temp 변수
@@ -17,8 +17,8 @@ std::map<std::string, NetworkType> stringToEnum = {
     {"SERVER", NetworkType::SERVER},
     {"ECO_TCP_CLIENT", NetworkType::ECO_TCP_CLIENT},
     {"ECO_TCP_CLIENT", NetworkType::ECO_TCP_SERVER},
-    {"ECO_UDP_SERVER", NetworkType::ECO_UDP_SERVER},
-    {"ECO_UDP_CLIENT", NetworkType::ECO_UDP_CLIENT}
+    {"MULTICAST_RECEIVER", NetworkType::MULTICAST_RECEIVER},
+    {"MULTICAST_SENDER", NetworkType::MULTICAST_SENDER}
 };
 class EchoTCPClientApp : public Hazel::Application
 {
@@ -50,32 +50,32 @@ public:
     }
 };
 
-class EchoUDPClientApp : public Hazel::Application
+class MulticastReceiverApp : public Hazel::Application
 {
 public:
-    EchoUDPClientApp(const Hazel::ApplicationSpecification &specification)
+    MulticastReceiverApp(const Hazel::ApplicationSpecification &specification)
         : Hazel::Application(specification)
     {
         // PushLayer(new ChatServerLayer());
-        PushLayer(new EchoUDPClientLayer());
+        PushLayer(new MultiCastReceiverLayer());
     }
 
-    ~EchoUDPClientApp()
+    ~MulticastReceiverApp()
     {
     }
 };
 
-class EchoUDPServerApp : public Hazel::Application
+class MulticastSenderApp : public Hazel::Application
 {
 public:
-    EchoUDPServerApp(const Hazel::ApplicationSpecification &specification)
+    MulticastSenderApp(const Hazel::ApplicationSpecification &specification)
         : Hazel::Application(specification)
     {
         // PushLayer(new ChatServerLayer());
-        PushLayer(new EchoUDPServerLayer());
+        PushLayer(new MultiCastSenderLayer());
     }
 
-    ~EchoUDPServerApp()
+    ~MulticastSenderApp()
     {
     }
 };
@@ -106,7 +106,7 @@ Hazel::Application *Hazel::CreateApplication(
     else
     {
         // netType = NetworkType::ECO_TCP_SERVER;
-        netType = NetworkType::ECO_UDP_SERVER;
+        netType = NetworkType::MULTICAST_SENDER;
     }
     
     switch (netType)
@@ -119,10 +119,10 @@ Hazel::Application *Hazel::CreateApplication(
         return new EchoTCPServerApp(spec);
     case NetworkType::ECO_TCP_CLIENT:
         return new EchoTCPClientApp(spec);
-    case NetworkType::ECO_UDP_SERVER:
-        return new EchoUDPServerApp(spec);
-    case NetworkType::ECO_UDP_CLIENT:
-        return new EchoUDPClientApp(spec);
+    case NetworkType::MULTICAST_RECEIVER:
+        return new MulticastReceiverApp(spec);
+    case NetworkType::MULTICAST_SENDER:
+        return new MulticastSenderApp(spec);
     default:
         break;
     }

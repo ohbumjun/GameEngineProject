@@ -39,7 +39,10 @@ EchoTCPServerLayer::~EchoTCPServerLayer()
         CloseHandle(pi.hProcess);
         CloseHandle(pi.hThread);
 	}
-
+    for (int i = 0; i < 5; ++i)
+    {
+        closesocket(m_ClntSocks[i]);
+    }
     closesocket(m_InitServSock);
     WSACleanup(); // 윈속 라이브러리 해제
 }
@@ -51,12 +54,6 @@ void EchoTCPServerLayer::OnAttach()
 
 void EchoTCPServerLayer::OnDetach()
 {
-    for (int i = 0; i < 5; ++i)
-    {
-        closesocket(m_ClntSocks[i]);
-    }
-    closesocket(m_InitServSock);
-    WSACleanup(); // 윈속 라이브러리 해제
 }
 
 void EchoTCPServerLayer::OnUpdate(Hazel::Timestep ts)
