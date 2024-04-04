@@ -99,30 +99,6 @@ namespace decs {
 		}
 
 		std::array<Bucket, 8> buckets;
-
-		//bool find(size_t hash, T& outItem) {
-		//	const unsigned int idx = hash & (7);
-		//	for (int i = 0; i < BucketSize; ++i) {
-		//		if (buckets[idx].item_hashes[i] == hash) {
-		//			outItem = ;
-		//			return true;
-		//		}
-		//	}
-		//	return false;
-		//};
-		//void insert(const T& item, size_t hash) {
-		//
-		//	const unsigned int idx = hash & (7);
-		//
-		//	T swap = item;
-		//	size_t swap_hash = hash;
-		//
-		//	for (int i = 0; i < BucketSize; ++i) {
-		//
-		//		std::swap(buckets[idx].item_hashes[i], swap_hash);
-		//		std::swap(buckets[idx].items[i], swap);
-		//	}
-		//};
 	};
 
 	struct MetatypeHash {
@@ -158,6 +134,7 @@ namespace decs {
 		uint16_t size{ 0 };
 		uint16_t align{ 0 };
 
+		
 		bool is_empty() const { return align == 0; };
 
 
@@ -495,7 +472,9 @@ namespace decs {
 			if (arch) {
 				arch->full_chunks++;
 
-				//do it properly later
+				// do it properly later
+				// 해당 Archetype 이 들고 있는 chunk 에 들어갈 수 있는
+				// entity 의 최대 개수
 				int archsize = arch->componentList->chunkCapacity;
 
 				std::partition(arch->chunks.begin(), arch->chunks.end(), [archsize](DataChunk* cnk) {
