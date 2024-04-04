@@ -138,13 +138,18 @@ namespace decs {
 		bool is_empty() const { return align == 0; };
 
 
+		// 해당 함수를 통해서 각 type 에 대한 unique MetatypeHash 값을 얻어올 수 있다.
+		// 여기서 matcher_hash 는 component type 을 매칭할 때 효율적으로 사용된다.
 		template<typename T>
 		static constexpr MetatypeHash build_hash() {
 
+			// 인자로 들어온 type 에서 reference 와 const 를 제거한다.
 			using sanitized = std::remove_const_t<std::remove_reference_t<T>>;
 
+			// 들어온 type 에 대한 hash 값을 만들어주고, 그 값을 MetaTypeHash 라는 형태로 만들어준다.
 			MetatypeHash hash;
 			hash.name_hash = MetatypeHash::hash<sanitized>();
+			// bit mask where the bit at the position of (hash.name_hash % 63) is set to 1. 
 			hash.matcher_hash |= (uint64_t)0x1L << (uint64_t)((hash.name_hash) % 63L);
 			return hash;
 		};
@@ -264,11 +269,14 @@ namespace decs {
 		}
 	};
 
+	// 내가 원하는 Archetype 을 찾고자 할 때 사용된다.
 	struct Query {
+		// 찾는 component 목록 
 		std::vector<MetatypeHash> require_comps;
+		// 찾지 않는 component 목록
 		std::vector<MetatypeHash> exclude_comps;
 
-
+		// store the "bitwise OR of the matcher hashes" of the required and excluded components.
 		size_t require_matcher{ 0 };
 		size_t exclude_matcher{ 0 };
 
@@ -289,6 +297,7 @@ namespace decs {
 			return *this;
 		}
 
+		// Query 를 제작하는 함수 
 		Query& build() {
 			auto compare_hash = [](const MetatypeHash& A, const MetatypeHash& B) {
 				return A.name_hash < B.name_hash;
@@ -307,9 +316,11 @@ namespace decs {
 			auto remove_eid = [](const MetatypeHash& type) {
 				return (type == Metatype::build_hash<EntityID>());
 			};
+			// reqire_comps, exclude_comps 목록에서 EntityId type 관련 정ㅈ보는 지운다.
 			require_comps.erase(std::remove_if(require_comps.begin(), require_comps.end(), remove_eid), require_comps.end());
 			exclude_comps.erase(std::remove_if(exclude_comps.begin(), exclude_comps.end(), remove_eid), exclude_comps.end());
 
+			// hash 값을 기준으로 다시 재 정렬한다.
 			std::sort(require_comps.begin(), require_comps.end(), compare_hash);
 			std::sort(exclude_comps.begin(), exclude_comps.end(), compare_hash);
 
@@ -442,15 +453,26 @@ namespace decs {
 		inline EntityID erase_entity_in_chunk(DataChunk* chunk, uint16_t index);
 		inline DataChunk* build_chunk(ChunkComponentList* cmpList);
 
-
+		// type_list is a simple template that takes a variadic list of types. 
+		// It's used to represent a list of types.
+		// it's just a way to group together types in template meta programming
 		template<typename... Type>
 		struct type_list {};
 
+		// args is a function template that takes a pointer to a member function 
+		// 즉, 인자가 특정 class 의 멤버 함수에 대한 포인터이다.
+		// and returns a type_list of the member function's parameter types. 
+		// It's used to get the parameter types of a member function.
+		// 즉, 해당 함수의 파라미터 타입들을, type_list 라는 구조체 형태로 리턴시켜주는 것이다.
 		template<typename Class, typename Ret, typename... Args>
 		type_list<Args...> args(Ret(Class::*)(Args...) const);
 
+		// 템플릿 인자 T 에 대한 MetaType 정보를 만들어주는 함수
 		template<typename T>
 		static const Metatype* get_metatype() {
+			// type T 에 대한 Metatype 이 단 한번만 계산되도록
+			// static local 변수를 활용한다.
+			// 아래 변수는, 람다 함수를 정의 + 호출. 까지 한꺼번에 포함된 것이다.
 			static const Metatype* mt = []() {
 				constexpr size_t name_hash = Metatype::build_hash<T>().name_hash;
 
@@ -878,26 +900,47 @@ namespace decs {
 		template<typename F>
 		void iterate_matching_archetypes(ECSWorld* world, const Query& query, F&& function) {
 
+			// archetypeSignatures 에는, archetype 들의 hash key ? 들이
+			// vector 형태로 모여있다.
+			// 해당 변수를 순회한다는 것은, 모든 world 에 존재하는 모든 archetype 을
+			// 순회하겠다는 의미이다.
 			for (int i = 0; i < world->archetypeSignatures.size(); i++)
 			{
+				// require_matcher 와 exclude_matcher 를 이용하여 & bit 연산을 수행한다.
 				//if there is a good match, doing an and not be 0
 				uint64_t includeTest = world->archetypeSignatures[i] & query.require_matcher;
 
-				//implement later
+				// implement later
 				uint64_t excludeTest = world->archetypeSignatures[i] & query.exclude_matcher;
-				if (includeTest != 0) {
 
+				// includeTest 가 0이 아니라는 의미는
+				// ex) world->archetypeSignatures[i] : 0011
+				// ex) query.require_matcher         : 0001
+				//                    result         : 0001
+				// 현재 archetype 이, 현재 찾고자 하는 component type 을 최소 한개 이상 
+				// 가지고 있다는 의미이다.
+				// 만약 0 이라면, 내가 찾고자 하는 component type 을 하나도 가지고 있지
+				// 않다는 의미이다.
+				if (includeTest != 0) {
 					auto componentList = world->archetypes[i]->componentList;
 
-					//might match an excluded component, check here
+					// might match an excluded component, check here
+					// 만약 excludeTest 도 0 이 아니라면, 
+					// 해당 archetype 이. 내가 찾지 않는 component 목록도 가지고 있다는 의미이다
+					// (참고) 그런데 exCludeTest 가 0이 아니면. 그냥 애초에 바로
+					// continue 시키면 되는 것 아닌가 ?
 					if (excludeTest != 0) {
 
 						bool invalid = false;
-						//dumb algo, optimize later					
+
+						//dumb algo, optimize later	
+						// 그러면, 현재 내가 제외하고자 하는 component type 목록을
+						// 모두 순회한다.				
 						for (int mtA = 0; mtA < query.exclude_comps.size(); mtA++) {
-
+							// 그리고, archetype 이 가지고 있는 component type 목록들도 순회를 한다.
 							for (auto cmp : componentList->components) {
-
+								// 만약, archetype 이, 현재 내가 제거하고자 하는 component type 을
+								// 지니고 있다면 break 할 것이다.
 								if (cmp.type->hash == query.exclude_comps[mtA]) {
 									//any check and we out
 									invalid = true;
@@ -908,6 +951,8 @@ namespace decs {
 								break;
 							}
 						}
+
+						// 현재 archetype 이 아니라면, 그 다음 archetype 목록을 본다.
 						if (invalid) {
 							continue;
 						}
@@ -915,6 +960,9 @@ namespace decs {
 
 					//dumb algo, optimize later
 					int matches = 0;
+
+					// require_comp 와 archetype component type 을 다 비교하면서
+					// match count 개수를 센다.
 					for (int mtA = 0; mtA < query.require_comps.size(); mtA++) {
 
 						for (auto cmp : componentList->components) {
@@ -925,7 +973,11 @@ namespace decs {
 							}
 						}
 					}
-					//all perfect
+
+					// all perfect.
+					// 여기 까지 왔다는 것은, 내가 원하는 component 를 지닌
+					// archetype 을 찾았다는 것이다.
+					// 그러면 해당 archetype 에 대해, function 을 수행해준다.
 					if (matches == query.require_comps.size()) {
 
 						function(world->archetypes[i]);
@@ -1230,10 +1282,16 @@ namespace decs {
 	{
 		using params = decltype(adv::args(&Func::operator()));
 
+		// 인자로 넘어온 query 에는 내가 찾고자 하는 component type 정보가
+		// 들어있게 된다.
 		adv::iterate_matching_archetypes(this, query, [&](Archetype* arch) {
 
+			// 내가 원하는 component 를 가진 archetype 을 찾았다면
+			// 해당 archetype 의 chunk 를 모두 순회한다.
 			for (auto chnk : arch->chunks) {
 
+				// 해당 chunk 내의 모든 component 데이터를 돌면서
+				// function 을 실행해주는 함수이다.
 				adv::unpack_chunk(params{}, chnk, function);
 			}
 			});
@@ -1241,9 +1299,30 @@ namespace decs {
 	template<typename Func>
 	void decs::ECSWorld::for_each(Func&& function)
 	{
+		/*
+		template<typename... Type>
+		struct type_list {};
+
+		template<typename Class, typename Ret, typename... Args>
+		type_list<Args...> args(Ret(Class::*)(Args...) const);
+
+		Func 라는 함수의 인자 목록들을 가져온다.
+		decltype 은 인자 type 들의 type_list 라는 struct의 type 정보를 가져오는 keyword 이다.
+		
+		int x = 0;
+		decltype(x) y = x;  // y has the same type as x (int)
+		
+		*/
+		
 		using params = decltype(adv::args(&Func::operator()));
 
 		Query query;
+
+		// params 는 type_list<Args..> 가 된다.
+		// 그러면 adv::unpack_querywith 내부에서는, Args... 라는 type 들의 list 를 순회하면서
+		// 해당 type 들을 찾는 ? Query struct 를 만들어주게 되는 것이다.
+		// 즉, 아래 함수를 통해서 Query.With 을 호출한다. 그러면 Query.require_comps 에
+		// type_list<Args...> 에 있는 모든 type 정보가 들어가게 된다.
 		adv::unpack_querywith(params{}, query).build();
 
 		for_each<Func>(query, std::move(function));
