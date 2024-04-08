@@ -30,6 +30,9 @@ private:
     void initialize();
     void finalize();
 
+    //  child process 들을 등록시킬 job object
+    HANDLE hJob;
+
     // 소켓 라이브러리 초기화
     WSADATA wsaData;
     SOCKET hSenderSock;
@@ -40,6 +43,5 @@ private:
     int recvBufferSize = 0;
 
     std::string m_InputText;
-
-    std::unordered_map<DWORD /*Process ID*/, PROCESS_INFORMATION> m_Pids;
+    int m_ClientCount = 0;
 };

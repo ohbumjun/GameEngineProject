@@ -3,12 +3,31 @@
 
 MultiCastSenderLayer::~MultiCastSenderLayer()
 {
-	finalize();
 }
 
 void MultiCastSenderLayer::OnAttach()
 {
     initialize();
+
+    hJob = CreateJobObject(NULL, NULL);
+    if (hJob == NULL)
+    {
+        printf("CreateJobObject failed (%d).\n", GetLastError());
+        CloseHandle(hJob);
+        return;
+    }
+
+    // Set up job information to kill all child processes when the job is closed.
+    JOBOBJECT_EXTENDED_LIMIT_INFORMATION jeli = {0};
+    jeli.BasicLimitInformation.LimitFlags = JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE;
+    if (!SetInformationJobObject(hJob,
+                                 JobObjectExtendedLimitInformation,
+                                 &jeli,
+                                 sizeof(jeli)))
+    {
+        printf("SetInformationJobObject failed (%d).\n", GetLastError());
+        return;
+    }
 }
 
 void MultiCastSenderLayer::OnDetach()
@@ -118,18 +137,9 @@ void MultiCastSenderLayer::initialize()
 
 void MultiCastSenderLayer::finalize()
 {
-    for (const auto &piInfo : m_Pids)
-    {
-        const PROCESS_INFORMATION &pi = piInfo.second;
-
-        // Close process and thread handles.
-        CloseHandle(pi.hProcess);
-        CloseHandle(pi.hThread);
-    }
-
+    CloseHandle(hJob);
     // 생성된 소켓 라이브러리 해제
     closesocket(hSenderSock);
-
     WSACleanup();
 }
 
@@ -150,7 +160,7 @@ void MultiCastSenderLayer::createClient()
     char commandLine[256]; // Allocate more space
 
     char numAddedToPort[2]; 
-    sprintf(numAddedToPort, "%d", (int)m_Pids.size());
+    sprintf(numAddedToPort, "%d", (int)m_ClientCount++);
 
     sprintf(commandLine,
             "%s MULTICAST_RECEIVER %s",
@@ -163,7 +173,9 @@ void MultiCastSenderLayer::createClient()
                        NULL,        // Process handle not inheritable
                        NULL,        // Thread handle not inheritable
                        FALSE,       // Set handle inheritance to FALSE
-                       0,           // No creation flags
+                        // 새 프로세스의 기본 스레드는 일시 중단된 상태로 만들어지고 
+                        // ResumeThread 함수가 호출될 때까지 실행되지 않습니다.
+                       CREATE_SUSPENDED, 
                        NULL,        // Use parent's environment block
                        NULL,        // Use parent's starting directory
                        &si,         // Pointer to STARTUPINFO structure
@@ -174,5 +186,30 @@ void MultiCastSenderLayer::createClient()
         return;
     }
 
-    m_Pids.insert({pi.dwProcessId, pi});
+    if (!AssignProcessToJobObject(hJob, pi.hProcess))
+    {
+        printf("AssignProcessToJobObject failed (%d).\n", GetLastError());
+
+        CloseHandle(hJob);
+        CloseHandle(pi.hProcess);
+        CloseHandle(pi.hThread);
+        return;
+    }
+
+    // Resume the child process.
+    if (ResumeThread(pi.hThread) == -1)
+    {
+        printf("ResumeThread failed (%d).\n", GetLastError());
+        return;
+    }
+
+    // handle, thread handle 닫기
+    // 사실상 ref count -1 시켜주기
+    // 그러면 부모 프로세스 입장에서, 자식 프로세스에 대해 가지고 있는 Ref Cnt 를
+    // -1 시켜준다.
+    // 이를 통해, 자식 프로세스가 죽으면, 자식 커널 오브젝트가 사라지게 한다.
+    CloseHandle(pi.hProcess);
+    CloseHandle(pi.hThread);
+
+    // m_Pids.insert({pi.dwProcessId, pi});
 }

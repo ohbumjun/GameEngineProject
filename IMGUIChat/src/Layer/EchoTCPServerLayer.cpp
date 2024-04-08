@@ -39,6 +39,9 @@ EchoTCPServerLayer::~EchoTCPServerLayer()
         CloseHandle(pi.hProcess);
         CloseHandle(pi.hThread);
 	}
+
+    m_Pids.clear();
+
     for (int i = 0; i < 5; ++i)
     {
         closesocket(m_ClntSocks[i]);
