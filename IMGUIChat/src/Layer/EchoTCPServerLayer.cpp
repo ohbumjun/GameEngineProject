@@ -198,13 +198,13 @@ void EchoTCPServerLayer::createClient()
     const Hazel::ApplicationSpecification &specification =
         Hazel::Application::Get().GetSpecification();
 
-    const char *constCharExecutablePath = specification.CommandLineArgs[0];
+    std::string constCharExecutablePath = specification.CommandLineArgs[0];
 
     char commandLine[256]; // Allocate more space
 
     sprintf(commandLine,
             "%s ECO_TCP_CLIENT",
-            constCharExecutablePath); // Format the command line string
+            constCharExecutablePath.c_str()); // Format the command line string
 
     // Start the child process.
     if (!CreateProcess(NULL, // No module name (use command line)

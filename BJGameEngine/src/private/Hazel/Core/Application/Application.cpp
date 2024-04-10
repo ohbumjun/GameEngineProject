@@ -24,6 +24,16 @@ Application *Application::s_Instance = nullptr;
 
 static ThreadExecuterManager::ThreadHandle *s_MainThreadExecuter = nullptr;
 
+ApplicationCommandLineArgs::ApplicationCommandLineArgs(int count,
+                                                              char **Args) : 
+    m_Count(count)
+{
+	for (int i = 0; i < count; i++)
+	{
+        m_Args.push_back(Args[i]);
+	}
+}
+
 Application::Application(const ApplicationSpecification &specification)
     : m_Specification(specification)
 {

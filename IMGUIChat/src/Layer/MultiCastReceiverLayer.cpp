@@ -106,10 +106,10 @@ void MultiCastReceiverLayer::initializeConnection()
     
     const Hazel::ApplicationSpecification &specification = Hazel::Application::Get().GetSpecification();
 
-    if (specification.CommandLineArgs.Count > 2)
+    if (specification.CommandLineArgs.GetCount() > 2)
     {
-        const char* addedPortNum = specification.CommandLineArgs[2];
-        portNum += atoi(addedPortNum);
+        std::string addedPortNum = specification.CommandLineArgs[2];
+        portNum += atoi(addedPortNum.c_str());
     }
 
     m_ServAddr.sin_port = htons(portNum); // 문자열 기반 PORT 번호 지정
@@ -126,7 +126,6 @@ void MultiCastReceiverLayer::initializeConnection()
 
     // 데이터를 수신하는 측에서는 가입이라는 절차를 추가적으로 거쳐야 한다.
 	m_JoinAdr.imr_multiaddr.s_addr = inet_addr(TEST_MULTICAST_IP_ADDRESS);
-	// m_JoinAdr.imr_multiaddr.s_addr = inet_addr(TEST_SERVER_IP_ADDRESS);
     m_JoinAdr.imr_interface.s_addr = htonl(INADDR_ANY);
   	
     // setsockopt() 함수를 이용하여 소켓 옵션 설정

@@ -19,16 +19,34 @@ namespace Hazel
 {
 struct HAZEL_API ApplicationCommandLineArgs
 {
-    int Count = 0;
-    char **Args = nullptr;
-    const char *operator[](int index) const
+public:
+    ApplicationCommandLineArgs() = default;
+
+    ApplicationCommandLineArgs(int count, char **Args);
+
+    const std::string& operator[](int index) const
     {
-        HZ_CORE_ASSERT(index < Count, "index out of range");
-        return Args[index];
+        HZ_CORE_ASSERT(index < m_Count, "index out of range");
+        return m_Args[index];
     }
+
+    inline int GetCount()
+    {
+		return m_Count;
+    }
+    inline int GetCount() const
+    {
+        return m_Count;
+    }
+
+private:
+    int m_Count = 0;
+    std::vector<std::string> m_Args;
+
 };
 struct HAZEL_API ApplicationSpecification
 {
+
     std::string Name = "Hazel Application";
     std::string WorkingDirectory = "";
     ApplicationCommandLineArgs CommandLineArgs;

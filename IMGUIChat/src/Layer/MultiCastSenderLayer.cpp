@@ -9,7 +9,17 @@ void MultiCastSenderLayer::OnAttach()
 {
     initialize();
 
+    /*
+    * Job 이란 ?
+    * https://www.youtube.com/watch?v=2QRkNCrBrjI
+    * 
+    * Job Object 란, 1개 이상의 프로세스들을 하나의 set 로 관리하는
+    * 커널 오브젝트이다.
+    * 
+    * 
+    */
     hJob = CreateJobObject(NULL, NULL);
+
     if (hJob == NULL)
     {
         printf("CreateJobObject failed (%d).\n", GetLastError());
@@ -73,11 +83,17 @@ void MultiCastSenderLayer::ImGuiChatWindow()
             int readLen = 0;
             int readCnt = 0;
 
+            char buf[BUF_SIZE];
+
+            memcpy(buf, m_InputText.c_str(), m_InputText.length() + 1);
+
             // send, recv       : connected 소켓을 이용한 데이터 송수신에 사용됨
-            // sendto, recvto : unconnected 소켓을 이용한 데이터 송수신에 사용됨
+            // sendto, recvFrom : unconnected 소켓을 이용한 데이터 송수신에 사용됨
             sendto(hSenderSock,
-                          m_InputText.c_str(),
-                          strlen(m_InputText.c_str()),
+                          // m_InputText.c_str(),
+                         //  strlen(m_InputText.c_str()),
+                        buf, 
+                        strlen(buf),
                           0,
                    (SOCKADDR *)&senderAddr,
                    sizeof(senderAddr));
@@ -155,7 +171,7 @@ void MultiCastSenderLayer::createClient()
     const Hazel::ApplicationSpecification &specification =
         Hazel::Application::Get().GetSpecification();
 
-    const char *constCharExecutablePath = specification.CommandLineArgs[0];
+    std::string strExecutablePath = specification.CommandLineArgs[0];
 
     char commandLine[256]; // Allocate more space
 
@@ -164,7 +180,7 @@ void MultiCastSenderLayer::createClient()
 
     sprintf(commandLine,
             "%s MULTICAST_RECEIVER %s",
-            constCharExecutablePath,
+            strExecutablePath.c_str(),
             numAddedToPort); // Format the command line string
 
     // Start the child process.

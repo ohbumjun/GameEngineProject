@@ -90,7 +90,7 @@ Hazel::Application *Hazel::CreateApplication(
 
     NetworkType netType;
 
-    if (args.Count > 1)
+    if (args.GetCount() > 1)
     {
         std::string netTypeStr = args[1];
 
