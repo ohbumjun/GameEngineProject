@@ -22,6 +22,13 @@ MultiCastReceiverLayer::~MultiCastReceiverLayer()
 void MultiCastReceiverLayer::OnAttach()
 {
     initializeConnection();
+
+    m_ReceiveThread.SetThreadName(const_cast<char *>("ReceiveThread"));
+
+    // Thread 가, Worker의 Execute 함수를 실행할 수 있게 한다.
+    m_ReceiveThread.StartThread(&MultiCastReceiverLayer::receiveResponse, this);
+
+    m_CricSect = Hazel::ThreadUtils::CreateCritSect();
 }
 
 void MultiCastReceiverLayer::OnDetach()
@@ -30,8 +37,6 @@ void MultiCastReceiverLayer::OnDetach()
 
 void MultiCastReceiverLayer::OnUpdate(Hazel::Timestep ts)
 {
-    receiveResponse();
-
     Hazel::RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1.f});
     Hazel::RenderCommand::Clear();
 }
@@ -39,7 +44,7 @@ void MultiCastReceiverLayer::OnUpdate(Hazel::Timestep ts)
 void MultiCastReceiverLayer::OnEvent(Hazel::Event &event)
 {
 }
-
+ 
 void MultiCastReceiverLayer::OnImGuiRender()
 {
     TempIMGUIUtils::PrepareDockSpace();
@@ -48,29 +53,33 @@ void MultiCastReceiverLayer::OnImGuiRender()
 
 void MultiCastReceiverLayer::ImGuiChatWindow()
 {
+    static bool scrollToBottom = false;
+
     ImGui::Begin("Chat");
+    
+    ImGui::BeginChild("Received",
+                      ImVec2(0, -ImGui::GetFrameHeightWithSpacing()),
+                      true);
 
-    // Display chat history
-    // if (ImGui::BeginChild("ChatHistory",
-    //                       ImVec2(0, -ImGui::GetItemsViewRect().h / 2 + 60),
-    //                       true))
-    // {
-    //     ImGui::TextWrapped(chatHistory.begin(), chatHistory.end());
-    //     if (recvBufferSize > 0)
-    //     {
-    //         chatHistory.appendf("\nReceived: %s\n", recvBuffer);
-    //         recvBufferSize = 0; // Clear receive buffer after displaying
-    //     }
-    //     ImGui::SetScrollHereY(1.0f); // Always scroll to the bottom
-    // }
-    // ImGui::EndChild();
+    Hazel::ThreadUtils::LockCritSect(m_CricSect);
 
-    // Input field for message
-    // ImGui::InputTextMultiline("",
-    //                             messageBuffer,
-    //                             256,
-    //                             ImVec2(-1.0f, 60.0f),
-    //                             ImGuiInputTextFlags_EnterReturnsTrue);
+    for (int i = 0; i < m_ReceivedMessage.size(); i++)
+    {
+        ImGui::Text("%s", m_ReceivedMessage[i]);
+    }
+
+    Hazel::ThreadUtils::UnlockCritSect(m_CricSect);
+
+    if (scrollToBottom)
+    {
+        ImGui::SetScrollHereY(1.0f);
+    }
+    
+    scrollToBottom = false;
+
+    ImGui::EndChild();
+
+    ImGui::Separator();
 
     // Send button
     if (ImGui::Button("Send", ImVec2(100, 0)))
@@ -142,18 +151,27 @@ void MultiCastReceiverLayer::initializeConnection()
 
 void MultiCastReceiverLayer::receiveResponse()
 {
+    static char recvBuffer[1024];
+
     while (1)
     {
-        memset(m_RecvBuffer, 0, BUF_SIZE - 1);
+        memset(recvBuffer, 0, BUF_SIZE - 1);
 
         // 현재 잘 동작 안하는데 이 함수를 비동기로 변경하면 되려나..?
         receiveLen = recvfrom(m_ReceiverSock, 
-            m_RecvBuffer, BUF_SIZE - 1, 0, NULL, 0);
+            recvBuffer, BUF_SIZE - 1, 0, NULL, 0);
 
         if (receiveLen < 0)
             break;
 
-        m_RecvBuffer[receiveLen] = 0;
-        printf("Message from MT Sender : %s \n", m_RecvBuffer);
+        recvBuffer[receiveLen] = 0;
+
+        printf("Message from MT Sender : %s \n", recvBuffer);
+
+        Hazel::ThreadUtils::LockCritSect(m_CricSect);
+
+        m_ReceivedMessage.emplace_back(recvBuffer);
+        
+        Hazel::ThreadUtils::UnlockCritSect(m_CricSect);
     }
 }

@@ -1,6 +1,8 @@
 #pragma once
 #include "ServerInfo.h"
 #include <Hazel.h>
+#include "Hazel/Core/Thread/Thread.h"
+#include "Hazel/Core/Thread/ThreadUtil.h"
 
 class MultiCastReceiverLayer : public Hazel::Layer
 {
@@ -46,5 +48,8 @@ private:
     }
     */
     SOCKADDR_IN m_ServAddr, m_ClntAddr;
-    char m_RecvBuffer[1024];
+
+    std::vector<std::string> m_ReceivedMessage; 
+    Hazel::Thread m_ReceiveThread;
+    Hazel::CRIC_SECT *m_CricSect;
 };
