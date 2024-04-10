@@ -9,7 +9,6 @@
 #include "Hazel/Event/Event.h"
 #include "Hazel/ImGui/ImGuiLayer.h"
 #include "Window.h"
-
 #include "Hazel/Utils/TimeStep.h"
 
 
@@ -84,6 +83,8 @@ public:
     {
         return *s_Instance;
     }
+
+    inline class ThreadPool *GetMainThreadPool();
 
 private:
     bool OnWindowClose(WindowCloseEvent &e);

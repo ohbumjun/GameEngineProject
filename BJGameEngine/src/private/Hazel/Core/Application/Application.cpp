@@ -4,6 +4,7 @@
 #include "Hazel/Utils/PlatformUtils.h"
 #include "Renderer/RenderCommand.h"
 #include "Renderer/Renderer.h"
+#include "Hazel/Core/Thread/ThreadPool.h"
 #include "Hazel/Core/Thread/ThreadExecuter.h"
 #include "hzpch.h"
 #include <glad/glad.h>
@@ -23,6 +24,7 @@ namespace Hazel
 Application *Application::s_Instance = nullptr;
 
 static ThreadExecuterManager::ThreadHandle *s_MainThreadExecuter = nullptr;
+static ThreadPool *s_ThreadPool = nullptr;
 
 ApplicationCommandLineArgs::ApplicationCommandLineArgs(int count,
                                                               char **Args) : 
@@ -59,6 +61,11 @@ Application::~Application()
     if (s_MainThreadExecuter)
     {
         delete s_MainThreadExecuter;
+    }
+
+    if (s_ThreadPool)
+    {
+        delete s_ThreadPool;
     }
 
     ThreadExecuterManager::Finalize();
@@ -160,6 +167,8 @@ void Application::Initialize()
 
     s_MainThreadExecuter = ThreadExecuterManager::Initialize();
 
+    s_ThreadPool = new ThreadPool(3, "MainThreadPool");
+
     // 해당 ImGuiLayer 에 대한 소유권이 LayerStack 에 있어야하므로
     // Unique Pointer로 생성하면 안된다.
     // m_ImGuiLayer = std::make_unique<ImGuiLayer>();
@@ -181,6 +190,11 @@ void Application::PopLayer(Layer *layer)
 {
     m_LayerStack.PopLayer(layer);
 };
+
+ThreadPool* Application::GetMainThreadPool()
+{
+    return s_ThreadPool;
+}
 bool Application::OnWindowClose(WindowCloseEvent &e)
 {
     // 해당 함수 호추 이후, Application::Run( ) 함수가 더이상 돌아가지 않게 될 것이다.
