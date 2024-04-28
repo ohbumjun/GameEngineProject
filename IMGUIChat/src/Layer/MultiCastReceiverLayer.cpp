@@ -26,7 +26,7 @@ void MultiCastReceiverLayer::OnAttach()
     m_ReceiveThread.SetThreadName(const_cast<char *>("ReceiveThread"));
 
     // Thread 가, Worker의 Execute 함수를 실행할 수 있게 한다.
-    m_ReceiveThread.StartThread(&MultiCastReceiverLayer::receiveResponse, this);
+    m_ReceiveThread.StartThread([&]() { this->receiveResponse(); });
 
     m_CricSect = Hazel::ThreadUtils::CreateCritSect();
 }

@@ -494,6 +494,8 @@ SET(HEADER_UTILS
     public/Hazel/Utils/Random.h
     public/Hazel/Utils/StringUtil.h
     public/Hazel/Utils/TimeStep.h
+    public/Hazel/Utils/MetaProgrammingInfo.h
+    public/Hazel/Utils/FunctorInvoker.h
 )
 SOURCE_GROUP("utils/public" FILES ${HEADER_UTILS})
 LIST(APPEND TOTAL_ENGINE_FILES ${HEADER_UTILS})
