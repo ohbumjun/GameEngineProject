@@ -172,6 +172,7 @@ void MultiCastSenderLayer::initialize()
     }
 
     senderAddr.sin_port = htons(atoi(TEST_SERVER_PORT));
+
     // 멀티 캐스트 IP
     // senderAddr.sin_addr.s_addr = inet_addr(TEST_MULTICAST_IP_ADDRESS);
     // 

@@ -115,20 +115,8 @@ void MultiCastReceiverLayer::initializeConnection()
     // Receiver 측에서는 어떤 address 던 허용한다.
     m_ServAddr.sin_addr.s_addr = htonl(INADDR_ANY); // 문자열 -> 네트워크 바이트 순서로 변환한 주소
     
-    int portNum = atoi(TEST_SERVER_PORT);
-    
-    const Hazel::ApplicationSpecification &specification = Hazel::Application::Get().GetSpecification();
-    
-    if (specification.CommandLineArgs.GetCount() > 2)
-    {
-        std::string addedPortNum = specification.CommandLineArgs[2];
-        portNum += atoi(addedPortNum.c_str());
-    }
-    
-    m_ServAddr.sin_port = htons(portNum); // 문자열 기반 PORT 번호 지정
-
     // port 번호는 sender 쪽에서 설정한 port 번호로 해야 한다.
-    // m_ServAddr.sin_port = htons(atoi(TEST_SERVER_PORT));
+    m_ServAddr.sin_port = htons(atoi(TEST_SERVER_PORT));
 
    //- On Windows, binding a UDP socket to a port also implicitly joins the multicast group 
    //  associated with that port (if applicable).
@@ -213,8 +201,6 @@ void MultiCastReceiverLayer::joinMulticastGroup()
         return;
     }
    
-    //  m_JoinAdr.imr_multiaddr.s_addr = inet_addr(TEST_MULTICAST_IP_ADDRESS);
-    
     // 그룹에 가입할 호스트의 주소정보
     m_JoinAdr.imr_interface.s_addr = htonl(INADDR_ANY);
 
