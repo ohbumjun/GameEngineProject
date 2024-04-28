@@ -94,9 +94,9 @@ void MultiCastSenderLayer::ImGuiChatWindow()
                          //  strlen(m_InputText.c_str()),
                         buf, 
                         strlen(buf),
-                          0,
-                   (SOCKADDR *)&senderAddr,
-                   sizeof(senderAddr));
+                        0,
+                        (SOCKADDR *)&senderAddr,
+                        sizeof(senderAddr));
          }
     }
 
@@ -118,6 +118,8 @@ void MultiCastSenderLayer::ImGuiCreateReceiverWindow()
 
 void MultiCastSenderLayer::initialize()
 {
+    // TTL : 패킷을 얼마나 멀리보낼 것인가.
+    // 정확히는, 최대 몇개의 라우터를 거쳐갈 수 있게 할 것인가.
     int timeLive = TTL;
 
     // 소켓 라이브러리 초기화
@@ -135,19 +137,53 @@ void MultiCastSenderLayer::initialize()
         return;
     }
 
+    // Allow reuse of port
+    int optval = 1;
+    if ((setsockopt(hSenderSock,
+                    SOL_SOCKET,
+                    SO_REUSEADDR,
+                    (char *)&optval,
+                    sizeof(optval))) < 0)
+    {
+        std::cout << "Socket set SO_REUSEADDR fail\n";
+        closesocket(hSenderSock);
+        WSACleanup();
+        return;
+    }
+
+    /*
+    This socket is almost identical to a unicast socket, the only difference is that you are sending to a multicast address. Namely, IP adress from 224.0.0.0 to 239.255.255.255.
+    */
+    // set taret address
     memset(&senderAddr, 0, sizeof(senderAddr));
+
     senderAddr.sin_family = AF_INET;
-    // 중요한 점은, 반드시 IP 주소를 멀티캐스트 주소로 설정해야 한다는 것이다.
-    senderAddr.sin_addr.s_addr = inet_addr(TEST_MULTICAST_IP_ADDRESS);
+
+    std::string IP  = TEST_MULTICAST_IP_ADDRESS;
+
+    // inet_pton : text 형태의 ipvt 주소를 binary ip newwork 형태로 변경해주는 함수
+    if (inet_pton(AF_INET, (PCSTR)(IP.c_str()), &senderAddr.sin_addr.s_addr) <
+        0)
+    {
+        std::cout << "Multicast failed set join group\n";
+        closesocket(hSenderSock);
+        WSACleanup();
+        return;
+    }
+
     senderAddr.sin_port = htons(atoi(TEST_SERVER_PORT));
-    
-    // Set up for sending to multicast group (enable sending)
+    // 멀티 캐스트 IP
+    // senderAddr.sin_addr.s_addr = inet_addr(TEST_MULTICAST_IP_ADDRESS);
+    // 
+    // // 멀티 캐스트 Port
+    // senderAddr.sin_port             = htons(atoi(TEST_SERVER_PORT));
+    // 
+
+    // TTL 설정
     setsockopt(hSenderSock,
                IPPROTO_IP,
-               // The TTL determines the maximum number of routers a packet
-               // can pass through before being discarded
                IP_MULTICAST_TTL,
-               (const char *)(void *)&timeLive,
+               (const char*)(void *)&timeLive,
                sizeof(timeLive));
 }
 

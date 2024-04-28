@@ -22,6 +22,10 @@ public:
 private:
     void initializeConnection();
     void receiveResponse();
+    /*
+    *@breif 데이터를 수신하는 측에서는 가입이라는 절차를 추가적으로 거쳐야 한다.
+    */
+    void joinMulticastGroup();
 
     static const int BUF_SIZE = 1024;
 

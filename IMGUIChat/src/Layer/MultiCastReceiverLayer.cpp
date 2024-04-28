@@ -65,7 +65,7 @@ void MultiCastReceiverLayer::ImGuiChatWindow()
 
     for (int i = 0; i < m_ReceivedMessage.size(); i++)
     {
-        ImGui::Text("%s", m_ReceivedMessage[i]);
+        ImGui::Text("%s", m_ReceivedMessage[i].c_str());
     }
 
     Hazel::ThreadUtils::UnlockCritSect(m_CricSect);
@@ -97,69 +97,86 @@ void MultiCastReceiverLayer::initializeConnection()
 
     // UDP 소켓 생성
     m_ReceiverSock = socket(
-        PF_INET, // domain : 소켓이 사용할 프로토콜 체계(Protocol Family) 정보 전달 (IPv4 : PF_INET)
-        SOCK_DGRAM, // type : 소켓의 데이터 전송 방식에 대한 정보 전달 (TCP : SOCK_STREAM)
-        0 // protocol : 두 컴퓨터간 통신에 사용되는 프로토콜 정보 전달
+        PF_INET,             // domain : 소켓이 사용할 프로토콜 체계(Protocol Family) 정보 전달 (IPv4 : PF_INET)
+        SOCK_DGRAM,     // type : 소켓의 데이터 전송 방식에 대한 정보 전달 (TCP : SOCK_STREAM)
+        IPPROTO_UDP // protocol : 두 컴퓨터간 통신에 사용되는 프로토콜 정보 전달
     );
 
     // 소켓 생성
     if (m_ReceiverSock == INVALID_SOCKET)
+    {
         NetworkUtil::ErrorHandling("socket() Error");
+    }
 
     memset(&m_ServAddr, 0, sizeof(m_ServAddr));
-
+    
     m_ServAddr.sin_family = AF_INET; // 주소 체계 지정 (IPv4  : 4바이트 주소체계)
+    
+    // Receiver 측에서는 어떤 address 던 허용한다.
     m_ServAddr.sin_addr.s_addr = htonl(INADDR_ANY); // 문자열 -> 네트워크 바이트 순서로 변환한 주소
-
+    
     int portNum = atoi(TEST_SERVER_PORT);
     
     const Hazel::ApplicationSpecification &specification = Hazel::Application::Get().GetSpecification();
-
+    
     if (specification.CommandLineArgs.GetCount() > 2)
     {
         std::string addedPortNum = specification.CommandLineArgs[2];
         portNum += atoi(addedPortNum.c_str());
     }
-
+    
     m_ServAddr.sin_port = htons(portNum); // 문자열 기반 PORT 번호 지정
 
-    // The bind function for UDP sockets behaves differently on Windows compared to Linux/Unix systems. 
-    // On Windows, binding a UDP socket to a port also implicitly joins the multicast group 
-    // associated with that port (if applicable).
+    // port 번호는 sender 쪽에서 설정한 port 번호로 해야 한다.
+    // m_ServAddr.sin_port = htons(atoi(TEST_SERVER_PORT));
+
+   //- On Windows, binding a UDP socket to a port also implicitly joins the multicast group 
+   //  associated with that port (if applicable).
     if (bind(m_ReceiverSock, (SOCKADDR*)&m_ServAddr, sizeof(m_ServAddr)) ==
         SOCKET_ERROR)
     {
+        int bindError = WSAGetLastError();
+        std::cerr << "Bind failed with error code: " << bindError << " - ";
+        char *errorMessage;
+        FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |
+                          FORMAT_MESSAGE_FROM_SYSTEM |
+                          FORMAT_MESSAGE_IGNORE_INSERTS,
+                      NULL,
+                      bindError,
+                      MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+                      (LPSTR)&errorMessage,
+                      0,
+                      NULL);
+        std::cerr << errorMessage << std::endl;
+        LocalFree(errorMessage);
+        closesocket(m_ReceiverSock);
+        WSACleanup();
+
         NetworkUtil::ErrorHandling("bind Error");
         return;
     }
 
-    // 데이터를 수신하는 측에서는 가입이라는 절차를 추가적으로 거쳐야 한다.
-	m_JoinAdr.imr_multiaddr.s_addr = inet_addr(TEST_MULTICAST_IP_ADDRESS);
-    m_JoinAdr.imr_interface.s_addr = htonl(INADDR_ANY);
-  	
-    // setsockopt() 함수를 이용하여 소켓 옵션 설정
-    // IP_ADD_MEMBERSHIP : 멀티캐스트 그룹에 가입
-    if (setsockopt(m_ReceiverSock,
-        IPPROTO_IP,
-        IP_ADD_MEMBERSHIP,
-        (const char*)&m_JoinAdr,
-        sizeof(m_JoinAdr)) == SOCKET_ERROR)
-    {
-        NetworkUtil:: ErrorHandling("setsock() error");
-    }
+    joinMulticastGroup();
 }
 
 void MultiCastReceiverLayer::receiveResponse()
 {
     static char recvBuffer[1024];
 
+    char ReceivedIP[46] = {0};
+
     while (1)
     {
         memset(recvBuffer, 0, BUF_SIZE - 1);
 
+        // recvfrom : unconnected 소켓을 이용한 데이터 송수신
         // 현재 잘 동작 안하는데 이 함수를 비동기로 변경하면 되려나..?
         receiveLen = recvfrom(m_ReceiverSock, 
-            recvBuffer, BUF_SIZE - 1, 0, NULL, 0);
+            recvBuffer, 
+            BUF_SIZE - 1, 
+            0, 
+            NULL, 
+            0);
 
         if (receiveLen < 0)
             break;
@@ -168,10 +185,45 @@ void MultiCastReceiverLayer::receiveResponse()
 
         printf("Message from MT Sender : %s \n", recvBuffer);
 
+        sockaddr_in ClientAddr;
+        inet_ntop(AF_INET, &ClientAddr.sin_addr, (PSTR)ReceivedIP, 46);
+        std::cout << "Received from: " << ReceivedIP << ", "
+                  << ntohs(ClientAddr.sin_port) << "\n";
+  
         Hazel::ThreadUtils::LockCritSect(m_CricSect);
 
-        m_ReceivedMessage.emplace_back(recvBuffer);
+        m_ReceivedMessage.push_back(recvBuffer);
         
         Hazel::ThreadUtils::UnlockCritSect(m_CricSect);
+    }
+}
+
+void MultiCastReceiverLayer::joinMulticastGroup()
+{
+    // Ip is the multicast IP we want to receive from
+    std::string IP = TEST_MULTICAST_IP_ADDRESS;
+    if (inet_pton(AF_INET,
+                  (PCSTR)(IP.c_str()),
+                  &m_JoinAdr.imr_multiaddr.s_addr) <
+        0)
+    {
+        std::cout << "IP invalid\n";
+        closesocket(m_ReceiverSock);
+        WSACleanup();
+        return;
+    }
+   
+    //  m_JoinAdr.imr_multiaddr.s_addr = inet_addr(TEST_MULTICAST_IP_ADDRESS);
+    
+    // 그룹에 가입할 호스트의 주소정보
+    m_JoinAdr.imr_interface.s_addr = htonl(INADDR_ANY);
+
+    if (setsockopt(m_ReceiverSock,
+                IPPROTO_IP,                  // 그룹가입에 사용되는 프로토콜 레벨
+                IP_ADD_MEMBERSHIP,   // 해당 프로토콜 레벨에서 사용되는 프로토콜 이름
+                (char *)&m_JoinAdr,
+                sizeof(m_JoinAdr)) == SOCKET_ERROR)
+    {
+        NetworkUtil::ErrorHandling("setsock() error");
     }
 }
