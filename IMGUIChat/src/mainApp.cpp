@@ -34,7 +34,7 @@ public:
         : Hazel::Application(specification)
     {
         // PushLayer(new ChatServerLayer());
-        // PushLayer(new OverlappedClientLayer());
+        PushLayer(new OverlappedClientLayer());
     }
 
     ~OverlappedSenderApp()

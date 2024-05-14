@@ -22,16 +22,19 @@ public:
 
 private:
     void initialize();
-    void receiveMessage(Hazel::UUID threadId);
-    void receiveConnection();
+    void receiveMessage();
 
     static const int BUF_SIZE = 1024;
 
     WSADATA wsaData;
     SOCKET hSocket;
+    int receiveLen = 0;
     SOCKADDR_IN sendAddr;
     WSABUF dataBuf;
     WSAEVENT evObj;
     WSAOVERLAPPED overlapped;
     std::string inputText;
+    std::vector<std::string> m_ReceivedMessage;
+    Hazel::Thread m_ReceiveThread;
+    Hazel::CRIC_SECT *m_CricSect;
 };

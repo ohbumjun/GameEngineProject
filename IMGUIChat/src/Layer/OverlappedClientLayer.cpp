@@ -11,6 +11,13 @@ OverlappedClientLayer::~OverlappedClientLayer()
 void OverlappedClientLayer::OnAttach()
 {
     initialize();
+
+    m_ReceiveThread.SetThreadName(const_cast<char *>("ReceiveThread"));
+
+    // Thread 가, Worker의 Execute 함수를 실행할 수 있게 한다.
+    m_ReceiveThread.StartThread([&]() { this->receiveMessage(); });
+
+    m_CricSect = Hazel::ThreadUtils::CreateCritSect();
 }
 
 void OverlappedClientLayer::OnDetach()
@@ -22,6 +29,8 @@ void OverlappedClientLayer::OnDetach()
 
 void OverlappedClientLayer::OnUpdate(Hazel::Timestep ts)
 {
+    Hazel::RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1.f});
+    Hazel::RenderCommand::Clear();
 }
 
 void OverlappedClientLayer::OnEvent(Hazel::Event &event)
@@ -32,7 +41,7 @@ void OverlappedClientLayer::OnImGuiRender()
 {
     ImGuiChatWindow();
 }
-
+ 
 void OverlappedClientLayer::ImGuiChatWindow()
 {
     ImGui::Begin("Chat", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
@@ -133,10 +142,36 @@ void OverlappedClientLayer::initialize()
     overlapped.hEvent = evObj;
 }
 
-void OverlappedClientLayer::receiveMessage(Hazel::UUID threadId)
+void OverlappedClientLayer::receiveMessage()
 {
-}
+    static char recvBuffer[1024];
 
-void OverlappedClientLayer::receiveConnection()
-{
+    char ReceivedIP[46] = {0};
+
+    while (1)
+    {
+        memset(recvBuffer, 0, BUF_SIZE - 1);
+
+        // recvfrom : unconnected 소켓을 이용한 데이터 송수신
+        // 현재 잘 동작 안하는데 이 함수를 비동기로 변경하면 되려나..?
+        receiveLen = recvfrom(hSocket, recvBuffer, BUF_SIZE - 1, 0, NULL, 0);
+
+        if (receiveLen < 0)
+            break;
+
+        recvBuffer[receiveLen] = 0;
+
+        printf("Message from MT Sender : %s \n", recvBuffer);
+
+        sockaddr_in ClientAddr;
+        inet_ntop(AF_INET, &ClientAddr.sin_addr, (PSTR)ReceivedIP, 46);
+        std::cout << "Received from: " << ReceivedIP << ", "
+                  << ntohs(ClientAddr.sin_port) << "\n";
+
+        Hazel::ThreadUtils::LockCritSect(m_CricSect);
+
+        m_ReceivedMessage.push_back(recvBuffer);
+
+        Hazel::ThreadUtils::UnlockCritSect(m_CricSect);
+    }
 }
