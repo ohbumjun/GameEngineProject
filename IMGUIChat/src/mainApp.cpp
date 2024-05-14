@@ -9,17 +9,55 @@
 #include "Layer/EchoTCPClientLayer.h"
 #include "Layer/MultiCastSenderLayer.h"
 #include "Layer/MultiCastReceiverLayer.h"
+#include "Layer/OverlappedServerLayer.h"
+#include "Layer/OverlappedClientLayer.h"
 #include "ServerInfo.h"
 
 // temp 변수
 std::map<std::string, NetworkType> stringToEnum = {
     {"CLIENT", NetworkType::CLIENT},
     {"SERVER", NetworkType::SERVER},
+
     {"ECO_TCP_CLIENT", NetworkType::ECO_TCP_CLIENT},
     {"ECO_TCP_CLIENT", NetworkType::ECO_TCP_SERVER},
+
     {"MULTICAST_RECEIVER", NetworkType::MULTICAST_RECEIVER},
-    {"MULTICAST_SENDER", NetworkType::MULTICAST_SENDER}
+    {"MULTICAST_SENDER", NetworkType::MULTICAST_SENDER},
+
+    {"OVERLAPPED_RECEIVER", NetworkType::OVERLAPPED_RECEIVER},
+    {"OVERLAPPED_SENDER", NetworkType::OVERLAPPED_SENDER}
 };
+class OverlappedSenderApp : public Hazel::Application
+{
+public:
+    OverlappedSenderApp(const Hazel::ApplicationSpecification &specification)
+        : Hazel::Application(specification)
+    {
+        // PushLayer(new ChatServerLayer());
+        // PushLayer(new OverlappedClientLayer());
+    }
+
+    ~OverlappedSenderApp()
+    {
+    }
+};
+
+
+class OverlappedReceiverApp : public Hazel::Application
+{
+public:
+    OverlappedReceiverApp(const Hazel::ApplicationSpecification &specification)
+        : Hazel::Application(specification)
+    {
+        // PushLayer(new ChatServerLayer());
+        PushLayer(new OverlappedServerLayer());
+    }
+
+    ~OverlappedReceiverApp()
+    {
+    }
+};
+
 class EchoTCPClientApp : public Hazel::Application
 {
 public:
@@ -106,7 +144,7 @@ Hazel::Application *Hazel::CreateApplication(
     else
     {
         // netType = NetworkType::ECO_TCP_SERVER;
-        netType = NetworkType::MULTICAST_SENDER;
+        netType = NetworkType::OVERLAPPED_RECEIVER;
     }
     
     switch (netType)
@@ -123,6 +161,10 @@ Hazel::Application *Hazel::CreateApplication(
         return new MulticastReceiverApp(spec);
     case NetworkType::MULTICAST_SENDER:
         return new MulticastSenderApp(spec);
+    case NetworkType::OVERLAPPED_RECEIVER:
+        return new OverlappedReceiverApp(spec);
+    case NetworkType::OVERLAPPED_SENDER:
+        return new OverlappedSenderApp(spec);
     default:
         break;
     }

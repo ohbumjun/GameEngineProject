@@ -59,3 +59,34 @@ void TempIMGUIUtils::PrepareDockSpace()
     
     ImGui::End();
 }
+
+void NetworkUtil::ErrorHandling(const char *message)
+{
+    fputs(message, stderr);
+    fputc('\n', stderr);
+    PrintErrorMessage();
+    exit(1);
+}
+
+void NetworkUtil::PrintErrorMessage()
+{
+    DWORD errorCode = ERROR_FILE_NOT_FOUND; // Replace with actual error code
+
+    // Get the error code
+    DWORD lastError = GetLastError();
+    if (lastError != 0)
+    {
+        // Convert error code to string
+        TCHAR buffer[256];
+        FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM,
+                      NULL,
+                      lastError,
+                      MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+                      buffer,
+                      sizeof(buffer) / sizeof(TCHAR),
+                      NULL);
+
+        // Print the error message
+        std::wcout << L"Error: " << buffer << std::endl;
+    }
+}

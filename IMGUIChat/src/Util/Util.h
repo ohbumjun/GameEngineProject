@@ -12,10 +12,6 @@ public:
 class NetworkUtil
 {
 public:
-    static void ErrorHandling(const char *message)
-    {
-        fputs(message, stderr);
-        fputc('\n', stderr);
-        exit(1);
-    }
+    static void ErrorHandling(const char *message);
+    static void PrintErrorMessage();
 };
