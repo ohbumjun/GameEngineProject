@@ -24,7 +24,10 @@
 enum class NetworkType
 {
 	SERVER,
-	CLIENT, 
+    CLIENT,
+
+    TCP_SERVER,
+    TCP_CLIENT,
 
 	ECO_TCP_SERVER,
 	ECO_TCP_CLIENT,

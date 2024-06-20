@@ -25,8 +25,42 @@ std::map<std::string, NetworkType> stringToEnum = {
     {"MULTICAST_SENDER", NetworkType::MULTICAST_SENDER},
 
     {"OVERLAPPED_RECEIVER", NetworkType::OVERLAPPED_RECEIVER},
-    {"OVERLAPPED_SENDER", NetworkType::OVERLAPPED_SENDER}
+    {"OVERLAPPED_SENDER", NetworkType::OVERLAPPED_SENDER},
+
+    {"TCP_CLIENT", NetworkType::TCP_CLIENT},
+    {"TCP_SERVER", NetworkType::TCP_SERVER}
 };
+
+class TCPServerApp : public Hazel::Application
+{
+public:
+    TCPServerApp(const Hazel::ApplicationSpecification &specification)
+        : Hazel::Application(specification)
+    {
+        // PushLayer(new ChatServerLayer());
+        PushLayer(new OverlappedClientLayer());
+    }
+
+    ~TCPServerApp()
+    {
+    }
+};
+
+class TCPClientApp : public Hazel::Application
+{
+public:
+    TCPClientApp(const Hazel::ApplicationSpecification &specification)
+        : Hazel::Application(specification)
+    {
+        // PushLayer(new ChatServerLayer());
+        PushLayer(new OverlappedClientLayer());
+    }
+
+    ~TCPClientApp()
+    {
+    }
+};
+
 class OverlappedSenderApp : public Hazel::Application
 {
 public:

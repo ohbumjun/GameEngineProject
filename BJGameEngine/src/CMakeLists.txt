@@ -613,7 +613,113 @@ SET(SRC_RENDERER
 SOURCE_GROUP("renderer/public" FILES ${SRC_RENDERER})
 LIST(APPEND TOTAL_ENGINE_FILES ${SRC_RENDERER})
 
-# Hazel
+## Network
+# Network - Lobby
+SET(HEADER_NETWORK_LOGICLIB_LOBBY
+    public/Network/LogicLib/Lobby/Lobby.h
+    public/Network/LogicLib/Lobby/LobbyManager.h
+)
+SOURCE_GROUP("network/public/logiclib/lobby" FILES ${HEADER_NETWORK_LOGICLIB_LOBBY})
+LIST(APPEND TOTAL_ENGINE_FILES ${HEADER_NETWORK_LOGICLIB_LOBBY})
+
+SET(SRC_NETWORK_LOGICLIB_LOBBY
+    private/Network/LogicLib/Lobby/Lobby.cpp
+    private/Network/LogicLib/Lobby/LobbyManager.cpp
+)
+SOURCE_GROUP("network/private/logiclib/lobby" FILES ${SRC_NETWORK_LOGICLIB_LOBBY})
+LIST(APPEND TOTAL_ENGINE_FILES ${SRC_NETWORK_LOGICLIB_LOBBY})
+
+# Network - Room
+SET(HEADER_NETWORK_LOGICLIB_ROOM
+    public/Network/LogicLib/Room/Room.h
+    public/Network/LogicLib/Room/RoomManager.h
+)
+SOURCE_GROUP("network/public/logiclib/room" FILES ${HEADER_NETWORK_LOGICLIB_ROOM})
+LIST(APPEND TOTAL_ENGINE_FILES ${HEADER_NETWORK_LOGICLIB_ROOM})
+
+SET(SRC_NETWORK_LOGICLIB_ROOM
+    private/Network/LogicLib/Room/Room.cpp
+    private/Network/LogicLib/Room/RoomManager.cpp
+)
+SOURCE_GROUP("network/private/logiclib/room" FILES ${SRC_NETWORK_LOGICLIB_ROOM})
+LIST(APPEND TOTAL_ENGINE_FILES ${SRC_NETWORK_LOGICLIB_ROOM})
+
+# Network - Packet
+SET(HEADER_NETWORK_LOGICLIB_PACKET
+    public/Network/LogicLib/Packet/PacketProcess.h
+)
+SOURCE_GROUP("network/public/logiclib/packet" FILES ${HEADER_NETWORK_LOGICLIB_PACKET})
+LIST(APPEND TOTAL_ENGINE_FILES ${HEADER_NETWORK_LOGICLIB_PACKET})
+
+SET(SRC_NETWORK_LOGICLIB_PACKET
+    private/Network/LogicLib/Packet/PacketProcess.cpp
+    private/Network/LogicLib/Packet/PacketProcessLobby.cpp
+    private/Network/LogicLib/Packet/PacketProcessLogin.cpp
+    private/Network/LogicLib/Packet/PacketProcessRoom.cpp
+)
+SOURCE_GROUP("network/private/logiclib/packet" FILES ${SRC_NETWORK_LOGICLIB_PACKET})
+LIST(APPEND TOTAL_ENGINE_FILES ${SRC_NETWORK_LOGICLIB_PACKET})
+
+# Network - User
+SET(HEADER_NETWORK_LOGICLIB_USER
+    public/Network/LogicLib/User/User.h
+    public/Network/LogicLib/User/UserManager.h
+    public/Network/LogicLib/User/ConnectedUserManager.h
+)
+SOURCE_GROUP("network/public/logiclib/user" FILES ${HEADER_NETWORK_LOGICLIB_USER})
+LIST(APPEND TOTAL_ENGINE_FILES ${HEADER_NETWORK_LOGICLIB_USER})
+
+SET(SRC_NETWORK_LOGICLIB_USER
+    private/Network/LogicLib/User/UserManager.cpp
+    private/Network/LogicLib/User/ConnectedUserManager.cpp
+)
+SOURCE_GROUP("network/private/logiclib/user" FILES ${SRC_NETWORK_LOGICLIB_USER})
+LIST(APPEND TOTAL_ENGINE_FILES ${SRC_NETWORK_LOGICLIB_USER})
+
+# Network - Game
+SET(HEADER_NETWORK_LOGICLIB_GAME
+    public/Network/LogicLib/Game/Game.h
+)
+SOURCE_GROUP("network/public/logiclib/game" FILES ${HEADER_NETWORK_LOGICLIB_GAME})
+LIST(APPEND TOTAL_ENGINE_FILES ${HEADER_NETWORK_LOGICLIB_GAME})
+
+SET(SRC_NETWORK_LOGICLIB_GAME
+    private/Network/LogicLib/Game/Game.cpp
+)
+SOURCE_GROUP("network/private/logiclib/game" FILES ${SRC_NETWORK_LOGICLIB_GAME})
+LIST(APPEND TOTAL_ENGINE_FILES ${SRC_NETWORK_LOGICLIB_GAME})
+
+# Network - Common
+SET(HEADER_NETWORK_COMMON
+    public/Network/Common/conmanip.h
+    public/Network/Common/ErrorCode.h
+    public/Network/Common/Packet.h
+    public/Network/Common/PacketID.h
+    public/Network/Common/ConsoleLogger.h
+)
+SOURCE_GROUP("network/public/common" FILES ${HEADER_NETWORK_COMMON})
+LIST(APPEND TOTAL_ENGINE_FILES ${HEADER_NETWORK_COMMON})
+
+# Network - NetLib
+SET(HEADER_NETWORK_NETLIP
+    public/Network/NetLib/Define.h
+    public/Network/NetLib/ILog.h
+    public/Network/NetLib/ITcpNetwork.h
+    public/Network/NetLib/ServerNetErrorCode.h
+    public/Network/NetLib/TcpNetwork.h
+    public/Network/NetLib/Server.h
+)
+SOURCE_GROUP("network/public/netlib" FILES ${HEADER_NETWORK_NETLIP})
+LIST(APPEND TOTAL_ENGINE_FILES ${HEADER_NETWORK_NETLIP})
+
+SET(SRC_NETWORK_NETLIP
+    private/Network/NetLib/TcpNetwork.cpp
+    private/Network/NetLib/Server.cpp
+)
+SOURCE_GROUP("network/private/netlib" FILES ${SRC_NETWORK_NETLIP})
+LIST(APPEND TOTAL_ENGINE_FILES ${SRC_NETWORK_NETLIP})
+
+## Hazel
 SET(HAZEL_HEADER
     Hazel.h
     hzpch.h

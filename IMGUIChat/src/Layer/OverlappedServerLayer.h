@@ -18,9 +18,6 @@ public:
         WSAOVERLAPPED overlapped;
         WSAEVENT evObj;
         Hazel::UUID id;
-        WSABUF dataBuf;
-        // 수신된 데이터 정보가 저장될 버퍼의 정보를 지닌 WSABUF 구조체
-        char buf[BUF_SIZE];
         Hazel::SpinLock clientDataLock; 
         Hazel::Thread communicateThread;
         std::string idString;
@@ -57,6 +54,11 @@ private:
     HANDLE hJob;
     int m_ClientCount   = 0;
     SOCKET m_ReceiverSock;
+    WSAEVENT m_ServerEvent;
+
+    std::string m_InputText;
+    Hazel::UUID m_CurrentChatUUID;
+
     SOCKADDR_IN m_ServAddr;
     std::unordered_map<Hazel::UUID, ClientInfo*> m_ConnectedClients;
     Hazel::Thread m_AcceptThread;     // Client 요청을 받는 쓰레드 

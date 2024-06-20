@@ -30,7 +30,6 @@ private:
     SOCKET hSocket;
     int receiveLen = 0;
     SOCKADDR_IN sendAddr;
-    WSABUF dataBuf;
     WSAEVENT evObj;
     WSAOVERLAPPED overlapped;
     std::string inputText;

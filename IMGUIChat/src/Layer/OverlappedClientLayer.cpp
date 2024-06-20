@@ -64,8 +64,9 @@ void OverlappedClientLayer::ImGuiChatWindow()
             char msg[BUF_SIZE];
 
             memcpy(msg, inputText.c_str(), inputText.length() + 1);
-            
-            dataBuf.len = strlen(msg) - 1;
+
+            WSABUF dataBuf;
+            dataBuf.len = strlen(msg) ;
             dataBuf.buf = msg;
 
             // WSASend 함수를 호출하고나서도 여전히 IO가 진행중이라면, 즉, 데이터를 계속해서 전송중이라면
@@ -83,8 +84,6 @@ void OverlappedClientLayer::ImGuiChatWindow()
                 // WSASend 함수를 호출하고나서도 여전히 IO가 진행중이라면, 즉, 데이터를 계속해서 전송중이라면
                 if (WSAGetLastError() == WSA_IO_PENDING)
                 {
-                    puts("Background data send");
-
                     // 해당 IO가 끝나면 overlapped.hEvent, 즉 evObj 이벤트 커널 오브젝트가 signaled 상태가 된다
                     // signaled 상태가 될 때까지 기다린다. (WSA_INFINITE)
                     WSAWaitForMultipleEvents(1,
@@ -102,6 +101,8 @@ void OverlappedClientLayer::ImGuiChatWindow()
                                            (LPDWORD)&sendBytes,
                                            FALSE,
                                            NULL);
+
+                   bool h = true;
                 }
                 else
                 {
@@ -144,34 +145,55 @@ void OverlappedClientLayer::initialize()
 
 void OverlappedClientLayer::receiveMessage()
 {
-    static char recvBuffer[1024];
-
+    static char recvBuffer[BUF_SIZE];
+    int recvBytes = 0, flags = 0;
     char ReceivedIP[46] = {0};
 
     while (1)
     {
-        memset(recvBuffer, 0, BUF_SIZE - 1);
+        WSABUF dataBuf;
+        dataBuf.len = BUF_SIZE;
+        dataBuf.buf = recvBuffer;
 
-        // recvfrom : unconnected 소켓을 이용한 데이터 송수신
-        // 현재 잘 동작 안하는데 이 함수를 비동기로 변경하면 되려나..?
-        receiveLen = recvfrom(hSocket, recvBuffer, BUF_SIZE - 1, 0, NULL, 0);
+        if (WSARecv(hSocket,
+            &dataBuf,
+            1,
+            (LPDWORD)&recvBytes,
+            (LPDWORD)&flags,
+            &overlapped,
+            NULL) == SOCKET_ERROR)
+        {
+            // 해당 함수 호출 이후에도, 데이터의 수신이 계속된다면
+            if (WSAGetLastError() == WSA_IO_PENDING)
+            {
+                // 해당 IO가 끝나면 overlapped.hEvent,
+                // 즉 evObj 이벤트 커널 오브젝트가 signaled 상태가 된다
+                // signaled 상태가 될 때까지 기다린다. (WSA_INFINITE)
+                // ex) Client 측에서 송신이 끝나면, 이제 Signaled 상태기 된다는 것이다.
+                WSAWaitForMultipleEvents(1, &evObj, TRUE, WSA_INFINITE, FALSE);
 
-        if (receiveLen < 0)
-            break;
+                // 실제 전송된 데이터의 크기를 확인
+                WSAGetOverlappedResult(hSocket,
+                                       &overlapped,
+                                       (LPDWORD)&recvBytes,
+                                       FALSE,
+                                       NULL);
 
-        recvBuffer[receiveLen] = 0;
+                sockaddr_in ClientAddr;
+                inet_ntop(AF_INET, &ClientAddr.sin_addr, (PSTR)ReceivedIP, 46);
+                std::cout << "Received from: " << ReceivedIP << ", "
+                          << ntohs(ClientAddr.sin_port) << "\n";
 
-        printf("Message from MT Sender : %s \n", recvBuffer);
+                Hazel::ThreadUtils::LockCritSect(m_CricSect);
 
-        sockaddr_in ClientAddr;
-        inet_ntop(AF_INET, &ClientAddr.sin_addr, (PSTR)ReceivedIP, 46);
-        std::cout << "Received from: " << ReceivedIP << ", "
-                  << ntohs(ClientAddr.sin_port) << "\n";
+                m_ReceivedMessage.push_back(recvBuffer);
 
-        Hazel::ThreadUtils::LockCritSect(m_CricSect);
-
-        m_ReceivedMessage.push_back(recvBuffer);
-
-        Hazel::ThreadUtils::UnlockCritSect(m_CricSect);
+                Hazel::ThreadUtils::UnlockCritSect(m_CricSect);
+            }
+            else
+            {
+                NetworkUtil::ErrorHandling("WSARecv() Error");
+            }
+        }
     }
 }

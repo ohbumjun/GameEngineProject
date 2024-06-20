@@ -9,6 +9,10 @@ SET(LAYER
     Layer/MultiCastReceiverLayer.h
     Layer/OverlappedClientLayer.h
     Layer/OverlappedServerLayer.h
+    Layer/OverlappedClientLayer.h
+    Layer/OverlappedServerLayer.h
+    Layer/TCPClientLayer.h
+    Layer/TCPServerLayer.h
 
     Layer/ChatServerLayer.cpp
     Layer/ChatClientLayer.cpp
@@ -18,6 +22,8 @@ SET(LAYER
     Layer/MultiCastSenderLayer.cpp
     Layer/OverlappedClientLayer.cpp
     Layer/OverlappedServerLayer.cpp
+    Layer/TCPClientLayer.cpp
+    Layer/TCPServerLayer.cpp
 )
 SOURCE_GROUP("layer" FILES ${LAYER})
 LIST(APPEND TOTAL_IMGUICHAT_FILES ${LAYER})
