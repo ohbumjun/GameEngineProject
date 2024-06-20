@@ -8,47 +8,47 @@ SOURCE_GROUP("${CMAKE_CURRENT_SOURCE_DIR}/private" FILES    ${ENGINE_SOURCES})
 LIST(APPEND TOTAL_ENGINE_FILES ${ENGINE_HEADERS})
 LIST(APPEND TOTAL_ENGINE_FILES ${ENGINE_SOURCES})
 
-## Assets
-# Asset - Image
-SET(SRC_ASSET_IMAGE
-    private/Hazel/Asset/Image/SubTexture2D.cpp
-    private/Hazel/Asset/Image/Texture.cpp
+## Resource
+SET(HEADER_RESOURCE
+    public/Hazel/Resource/ResourceContainer.h
 )
-SOURCE_GROUP("asset/image/private" FILES ${SRC_ASSET_IMAGE})
-LIST(APPEND TOTAL_ENGINE_FILES ${SRC_ASSET_IMAGE})
+SOURCE_GROUP("resource/public" FILES ${HEADER_RESOURCE})
+LIST(APPEND TOTAL_ENGINE_FILES ${HEADER_RESOURCE})
 
-SET(HEADER_ASSET_IMAGE
-    public/Hazel/Asset/Image/SubTexture2D.h
-    public/Hazel/Asset/Image/Texture.h
+SET(SRC_RESOURCE
+    private/Hazel/Resource/ResourceContainer.cpp
 )
-SOURCE_GROUP("asset/image/public" FILES ${HEADER_ASSET_IMAGE})
-LIST(APPEND TOTAL_ENGINE_FILES ${HEADER_ASSET_IMAGE})
+SOURCE_GROUP("resource/private" FILES ${HEADER_RESOURCE})
+LIST(APPEND TOTAL_ENGINE_FILES ${HEADER_RESOURCE})
 
-# Asset - Shader
-SET(SRC_ASSET_SHADER
-    private/Hazel/Asset/Shader/Shader.cpp
+# Resource - Image
+SET(HEADER_RESOURCE_IMAGE
+    public/Hazel/Resource/Image/SubTexture2D.h
+    public/Hazel/Resource/Image/Texture.h
 )
-SOURCE_GROUP("asset/shader/private" FILES ${SRC_ASSET_SHADER})
-LIST(APPEND TOTAL_ENGINE_FILES ${SRC_ASSET_SHADER})
+SOURCE_GROUP("resource/image/public" FILES ${HEADER_RESOURCE_IMAGE})
+LIST(APPEND TOTAL_ENGINE_FILES ${HEADER_RESOURCE_IMAGE})
 
-SET(HEADER_ASSET_SHADER
-    public/Hazel/Asset/Shader/Shader.h
+SET(SRC_RESOURCE_IMAGE
+    private/Hazel/Resource/Image/SubTexture2D.cpp
+    private/Hazel/Resource/Image/Texture.cpp
 )
-SOURCE_GROUP("asset/shader/public" FILES ${HEADER_ASSET_SHADER})
-LIST(APPEND TOTAL_ENGINE_FILES ${HEADER_ASSET_SHADER})
+SOURCE_GROUP("resource/image/private" FILES ${SRC_RESOURCE_IMAGE})
+LIST(APPEND TOTAL_ENGINE_FILES ${SRC_RESOURCE_IMAGE})
 
-# Asset Codes
-SET(HEADER_ASSET
-    public/Hazel/Asset/ResourceManager.h
+# Resource - Shader
+SET(HEADER_RESOURCE_SHADER
+    public/Hazel/Resource/Shader/Shader.h
 )
-SOURCE_GROUP("asset/public" FILES ${HEADER_ASSET})
-LIST(APPEND TOTAL_ENGINE_FILES ${HEADER_ASSET})
+SOURCE_GROUP("resource/shader/public" FILES ${HEADER_RESOURCE_SHADER})
+LIST(APPEND TOTAL_ENGINE_FILES ${HEADER_RESOURCE_SHADER})
 
-SET(SRC_ASSET
-    private/Hazel/Asset/ResourceManager.cpp
+SET(SRC_RESOURCE_SHADER
+    private/Hazel/Resource/Shader/Shader.cpp
 )
-SOURCE_GROUP("asset/private" FILES ${SRC_ASSET})
-LIST(APPEND TOTAL_ENGINE_FILES ${SRC_ASSET})
+SOURCE_GROUP("resource/shader/private" FILES ${SRC_RESOURCE_SHADER})
+LIST(APPEND TOTAL_ENGINE_FILES ${SRC_RESOURCE_SHADER})
+
 
 ## Core
 # Core - Allocator
@@ -131,12 +131,14 @@ LIST(APPEND TOTAL_ENGINE_FILES ${SRC_CORE_GC})
 # Core - ID
 SET(HEADER_CORE_ID
     public/Hazel/Core/ID/UUID.h
+    public/Hazel/Core/ID/FileId.h
 )
 SOURCE_GROUP("core/ID/public" FILES ${HEADER_CORE_ID})
 LIST(APPEND TOTAL_ENGINE_FILES ${HEADER_CORE_ID})
 
 SET(SRC_CORE_ID
     private/Hazel/Core/ID/UUID.cpp
+    private/Hazel/Core/ID/FileId.cpp
 )
 SOURCE_GROUP("core/ID/private" FILES ${SRC_CORE_ID})
 LIST(APPEND TOTAL_ENGINE_FILES ${SRC_CORE_ID})
@@ -273,7 +275,7 @@ SET(HEADER_CORE_ALL
     public/Hazel/Core/Core.h
     public/Hazel/Core/EntryPoint.h
 )
-SOURCE_GROUP("core/public" FILES ${HEADER_CORE_ALL})
+SOURCE_GROUP("core" FILES ${HEADER_CORE_ALL})
 LIST(APPEND TOTAL_ENGINE_FILES ${HEADER_CORE_ALL})
 
 ## Debug
@@ -495,6 +497,7 @@ SET(HEADER_UTILS
     public/Hazel/Utils/StringUtil.h
     public/Hazel/Utils/TimeStep.h
     public/Hazel/Utils/MetaProgrammingInfo.h
+    public/Hazel/Utils/SpookyHash.h
     public/Hazel/Utils/FunctorInvoker.h
 )
 SOURCE_GROUP("utils/public" FILES ${HEADER_UTILS})
@@ -505,6 +508,7 @@ SET(SRC_UTILS
     private/Hazel/Utils/EngineUtil.cpp
     private/Hazel/Utils/Log.cpp
     private/Hazel/Utils/Random.cpp
+    public/Hazel/Utils/SpookyHash.cpp
     private/Hazel/Utils/StringUtil.cpp
 )
 SOURCE_GROUP("utils/private" FILES ${SRC_UTILS})

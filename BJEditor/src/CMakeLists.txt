@@ -3,48 +3,29 @@
 
 SET(TOTAL_EDITOR_FILES) # lv1engine 은 그냥 그대로 사용함 ;
 
+# Files
 SET(FILE_HEADERS 
     public/File/FileManager.h
     public/File/PathManager.h
 )
 SOURCE_GROUP("file/public" FILES ${FILE_HEADERS})
-LIST(APPEND TOTAL_ENGINE_FILES ${FILE_HEADERS})
+LIST(APPEND TOTAL_EDITOR_FILES ${FILE_HEADERS})
 
 SET(FILE_SOURCES
     private/File/FileManager.cpp
     private/File/PathManager.cpp
 )
 SOURCE_GROUP("file/private" FILES ${FILE_SOURCES})
-LIST(APPEND TOTAL_ENGINE_FILES ${FILE_SOURCES})
+LIST(APPEND TOTAL_EDITOR_FILES ${FILE_SOURCES})
 
-# Create filters for Visual Studio
-# foreach(FILE ${EDITOR_SOURCES} ${EDITOR_HEADERS}) 
-#     # Get the directory of the source file
-#     get_filename_component(PARENT_DIR "${FILE}" DIRECTORY)
-# 
-#     # Remove common directory prefix to make the group
-#     string(REPLACE "${CMAKE_CURRENT_SOURCE_DIR}" "" GROUP "${PARENT_DIR}")
-# 
-#     # Make sure we are using windows slashes
-#     string(REPLACE "/" "\\" GROUP "${GROUP}")
-# 
-#     # Group into "Source Files" and "Header Files"
-#     if ("${FILE}" MATCHES ".*\\.cpp")
-#         set(GROUP "Source Files${GROUP}")
-#     elseif("${FILE}" MATCHES ".*\\.h")
-#         set(GROUP "Header Files${GROUP}")
-#     endif()
-# 
-#     source_group("${GROUP}" FILES "${FILE}")
-# endforeach()
-
+# Panels
 SET(PANEL_HEADERS 
     public/Panel/ComponentPanel/CameraPanel.h
     public/Panel/ContentBrowserPanel.h
     public/Panel/SceneHierarchyPanel.h
 )
 SOURCE_GROUP("panel/public" FILES ${PANEL_HEADERS})
-LIST(APPEND TOTAL_ENGINE_FILES ${PANEL_HEADERS})
+LIST(APPEND TOTAL_EDITOR_FILES ${PANEL_HEADERS})
 
 SET(PANEL_SOURCES
     private/Panel/ComponentPanel/CameraPanel.cpp
@@ -52,16 +33,38 @@ SET(PANEL_SOURCES
     private/Panel/SceneHierarchyPanel.cpp
 )
 SOURCE_GROUP("panel/private" FILES ${PANEL_SOURCES})
-LIST(APPEND TOTAL_ENGINE_FILES ${PANEL_SOURCES})
+LIST(APPEND TOTAL_EDITOR_FILES ${PANEL_SOURCES})
 
+# Editor Asset
+SET(EDITORASSET_HEADERS 
+    public/EditorAsset/EditorAsset.h
+    public/EditorAsset/EditorAssetAttribute.h
+    public/EditorAsset/EditorAssetExtension.h
+    public/EditorAsset/EditorAssetInfo.h
+    public/EditorAsset/EditorAssetManager.h
+    public/EditorAsset/EditorAssetProcessor.h
+)
+SOURCE_GROUP("editorAsset/public" FILES ${EDITORASSET_HEADERS})
+LIST(APPEND TOTAL_EDITOR_FILES ${EDITORASSET_HEADERS})
 
+SET(EDITORASSET_SOURCES
+    private/EditorAsset/EditorAsset.cpp
+    private/EditorAsset/EditorAssetAttribute.cpp
+    private/EditorAsset/EditorAssetExtension.cpp
+    private/EditorAsset/EditorAssetInfo.cpp
+    private/EditorAsset/EditorAssetManager.cpp
+    private/EditorAsset/EditorAssetProcessor.cpp
+)
+SOURCE_GROUP("editorAsset/private" FILES ${EDITORASSET_SOURCES})
+LIST(APPEND TOTAL_EDITOR_FILES ${EDITORASSET_SOURCES})
+
+# Editor
 SET(EDITOR_HEADERS
     public/EditorLayer.h
     public/ParticleSystem.h
 )
 SOURCE_GROUP("panel/private" FILES ${EDITOR_HEADERS})
-LIST(APPEND TOTAL_ENGINE_FILES ${EDITOR_HEADERS})
-
+LIST(APPEND TOTAL_EDITOR_FILES ${EDITOR_HEADERS})
 
 SET(EDITOR_SOURCES
     private/EditorLayer.cpp
@@ -69,7 +72,7 @@ SET(EDITOR_SOURCES
     private/HazelEditorApp.cpp
 )
 SOURCE_GROUP("panel/private" FILES ${EDITOR_SOURCES})
-LIST(APPEND TOTAL_ENGINE_FILES ${EDITOR_SOURCES})
+LIST(APPEND TOTAL_EDITOR_FILES ${EDITOR_SOURCES})
 
 set(EDITOR_INCLUDES 
 "${CMAKE_SOURCE_DIR}/BJEditor/src/public"
@@ -77,7 +80,7 @@ set(EDITOR_INCLUDES
 
 # executable : main 함수가 반드시 존재해야 한다.
 add_executable(${EDITOR_NAME} 
-${TOTAL_ENGINE_FILES}
+${TOTAL_EDITOR_FILES}
 )
 
 target_compile_definitions(
