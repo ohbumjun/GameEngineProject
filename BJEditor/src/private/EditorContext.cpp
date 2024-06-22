@@ -1,9 +1,11 @@
 #include "EditorContext.h"
 #include <string>
-#include "FileSystem.h"
+#include "Hazel/FileSystem/DirectorySystem.h"
 
-static const std::string& stringBuiltIn = FileSystem::CombinePath("BuiltIn", "Resource");
-
+namespace HazelEditor
+{
+static const std::string &stringBuiltIn =
+    Hazel::DirectorySystem::CombinePath("BuiltIn", "Resource");
 const char* EditorContext::Directories::engine = "Engine";
 const char* EditorContext::Directories::bundle = "Bundle";
 const char* EditorContext::Directories::settings = "Settings";
@@ -16,3 +18,4 @@ const char* EditorContext::Directories::builtin = "BuiltIn";
 const char* EditorContext::Directories::builtinresource = stringBuiltIn.c_str();
 //const char* EditorContext::Directories::builtinShader = stringBuiltinShader.c_str();
 const char* EditorContext::Directories::program = "Program";
+} // namespace HazelEditor

@@ -1,4 +1,4 @@
-﻿#include "Hazel/Asset/Image/SubTexture2D.h"
+﻿#include "Hazel/Resource/Image/SubTexture2D.h"
 #include "hzpch.h"
 
 namespace Hazel

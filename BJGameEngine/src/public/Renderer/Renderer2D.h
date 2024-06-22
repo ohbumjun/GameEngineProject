@@ -1,8 +1,8 @@
 ﻿#pragma once
 
 #include "Camera/OrthographicCamera.h"
-#include "Hazel/Asset/Image/SubTexture2D.h"
-#include "Hazel/Asset/Image/Texture.h"
+#include "Hazel/Resource/Image/SubTexture2D.h"
+#include "Hazel/Resource/Image/Texture.h"
 #include "Hazel/Scene/Component/Renderer/SpriteRenderComponent.h"
 #include "Renderer/Camera/Camera.h"
 #include "Renderer/Camera/EditorCamera.h"

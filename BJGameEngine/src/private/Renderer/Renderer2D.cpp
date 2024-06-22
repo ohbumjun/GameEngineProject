@@ -1,5 +1,5 @@
 ﻿#include "Renderer/Renderer2D.h"
-#include "Hazel/Asset/Shader/Shader.h"
+#include "Hazel/Resource/Shader/Shader.h"
 #include "Renderer/Buffer/UniformBuffer.h"
 #include "Renderer/Buffer/VertexArray.h"
 #include "Renderer/RenderCommand.h"

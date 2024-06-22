@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Camera/OrthographicCamera.h"
-#include "Hazel/Asset/Shader/Shader.h"
+#include "Hazel/Resource/Shader/Shader.h"
 #include "RenderCommand.h"
 #include "Renderer/Buffer/VertexArray.h"
 #include "RendererAPI.h"

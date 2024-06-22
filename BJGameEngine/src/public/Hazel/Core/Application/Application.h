@@ -1,8 +1,8 @@
 ﻿#pragma once
 
-#include "Hazel/Asset/Image/SubTexture2D.h"
-#include "Hazel/Asset/Image/Texture.h"
-#include "Hazel/Asset/Shader/Shader.h"
+#include "Hazel/Resource/Image/SubTexture2D.h"
+#include "Hazel/Resource/Image/Texture.h"
+#include "Hazel/Resource/Shader/Shader.h"
 #include "Hazel/Core/Core.h"
 #include "Hazel/Core/Layer/LayerStack.h"
 #include "Hazel/Event/ApplicationEvent.h"

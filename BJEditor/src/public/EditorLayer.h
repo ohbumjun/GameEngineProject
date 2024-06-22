@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "Hazel/Asset/Image/SubTexture2D.h"
+#include "Hazel/Resource/Image/SubTexture2D.h"
 #include "Panel/ContentBrowserPanel.h"
 #include "Panel/SceneHierarchyPanel.h"
 #include "ParticleSystem.h"

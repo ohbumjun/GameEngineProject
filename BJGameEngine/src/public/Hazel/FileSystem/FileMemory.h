@@ -2,7 +2,7 @@
 
 #include "FileModes.h"
 
-namespace HazelEditor
+namespace Hazel
 {
 
 
@@ -36,5 +36,5 @@ private:
     HANDLE m_FileHandle;
     size_t m_Position = 0;
     size_t m_Length = 0;
-}
+};
 }; // namespace HazelEditor

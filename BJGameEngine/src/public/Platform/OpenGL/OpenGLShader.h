@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "Hazel/Asset/Shader/Shader.h"
+#include "Hazel/Resource/Shader/Shader.h"
 
 #include <glm/glm.hpp>
 

@@ -1,4 +1,4 @@
-#include "SpookyHash.h"
+#include "Hazel/Utils/SpookyHash.h"
 
 //
 // short hash ... it could be used on any message,

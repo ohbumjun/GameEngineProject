@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Hazel/Asset/Image/Texture.h"
+#include "Hazel/Resource/Image/Texture.h"
 #include <glad/glad.h>
 
 namespace Hazel

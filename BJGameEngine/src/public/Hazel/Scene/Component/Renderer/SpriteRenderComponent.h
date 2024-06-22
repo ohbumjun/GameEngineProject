@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 
-#include "Hazel/Asset/Image/Texture.h"
+#include "Hazel/Resource/Image/Texture.h"
 #include "Hazel/Scene/Component/Component.h"
 
 class Serializer;
