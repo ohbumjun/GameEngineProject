@@ -2,6 +2,10 @@
 
 #include "FileModes.h"
 
+namespace HazelEditor
+{
+
+
 class FileMemory
 {
 
@@ -32,4 +36,5 @@ private:
     HANDLE m_FileHandle;
     size_t m_Position = 0;
     size_t m_Length = 0;
-};
+}
+}; // namespace HazelEditor

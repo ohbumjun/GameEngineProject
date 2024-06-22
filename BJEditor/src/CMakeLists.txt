@@ -43,6 +43,9 @@ SET(EDITORASSET_HEADERS
     public/EditorAsset/EditorAssetInfo.h
     public/EditorAsset/EditorAssetManager.h
     public/EditorAsset/EditorAssetProcessor.h
+    public/EditorAsset/ShaderEditorAsset.h
+    public/EditorAsset/TextureEditorAsset.h
+    public/EditorAsset/TextureEditorAssetProcessor.h
 )
 SOURCE_GROUP("editorAsset/public" FILES ${EDITORASSET_HEADERS})
 LIST(APPEND TOTAL_EDITOR_FILES ${EDITORASSET_HEADERS})
@@ -54,6 +57,9 @@ SET(EDITORASSET_SOURCES
     private/EditorAsset/EditorAssetInfo.cpp
     private/EditorAsset/EditorAssetManager.cpp
     private/EditorAsset/EditorAssetProcessor.cpp
+    private/EditorAsset/ShaderEditorAsset.cpp
+    private/EditorAsset/TextureEditorAsset.cpp
+    private/EditorAsset/TextureEditorAssetProcessor.cpp
 )
 SOURCE_GROUP("editorAsset/private" FILES ${EDITORASSET_SOURCES})
 LIST(APPEND TOTAL_EDITOR_FILES ${EDITORASSET_SOURCES})
@@ -62,16 +68,18 @@ LIST(APPEND TOTAL_EDITOR_FILES ${EDITORASSET_SOURCES})
 SET(EDITOR_HEADERS
     public/EditorLayer.h
     public/ParticleSystem.h
+    public/EditorContext.h
 )
-SOURCE_GROUP("panel/private" FILES ${EDITOR_HEADERS})
+SOURCE_GROUP("editor/public" FILES ${EDITOR_HEADERS})
 LIST(APPEND TOTAL_EDITOR_FILES ${EDITOR_HEADERS})
 
 SET(EDITOR_SOURCES
     private/EditorLayer.cpp
     private/ParticleSystem.cpp
     private/HazelEditorApp.cpp
+    private/EditorContext.cpp
 )
-SOURCE_GROUP("panel/private" FILES ${EDITOR_SOURCES})
+SOURCE_GROUP("editor/private" FILES ${EDITOR_SOURCES})
 LIST(APPEND TOTAL_EDITOR_FILES ${EDITOR_SOURCES})
 
 set(EDITOR_INCLUDES 

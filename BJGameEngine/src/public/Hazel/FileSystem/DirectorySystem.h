@@ -3,6 +3,9 @@
 #include "FileModes.h"
 #include "hzpch.h"
 
+namespace Hazel
+{
+
 struct FileInfo
 {
     std::string m_Name;
@@ -46,6 +49,9 @@ public:
     // 확장자 리턴
     static std::string GetExtenstion(const char *path);
 
+    // 파일 이름 리턴
+    static std::string GetPathame(const char *path);
+
     // win system 에 맞게 파일 경로를 변경해준다.
     static std::string ToWinSystemPath(const std::string &str);
 
@@ -67,3 +73,4 @@ public:
                                      const char *src_utf8,
                                      bool need_safe_conversion = false);
 };
+}

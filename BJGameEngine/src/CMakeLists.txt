@@ -18,8 +18,8 @@ LIST(APPEND TOTAL_ENGINE_FILES ${HEADER_RESOURCE})
 SET(SRC_RESOURCE
     private/Hazel/Resource/ResourceContainer.cpp
 )
-SOURCE_GROUP("resource/private" FILES ${HEADER_RESOURCE})
-LIST(APPEND TOTAL_ENGINE_FILES ${HEADER_RESOURCE})
+SOURCE_GROUP("resource/private" FILES ${SRC_RESOURCE})
+LIST(APPEND TOTAL_ENGINE_FILES ${SRC_RESOURCE})
 
 # Resource - Image
 SET(HEADER_RESOURCE_IMAGE
@@ -508,7 +508,7 @@ SET(SRC_UTILS
     private/Hazel/Utils/EngineUtil.cpp
     private/Hazel/Utils/Log.cpp
     private/Hazel/Utils/Random.cpp
-    public/Hazel/Utils/SpookyHash.cpp
+    private/Hazel/Utils/SpookyHash.cpp
     private/Hazel/Utils/StringUtil.cpp
 )
 SOURCE_GROUP("utils/private" FILES ${SRC_UTILS})

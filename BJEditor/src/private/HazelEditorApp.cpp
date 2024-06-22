@@ -24,7 +24,7 @@ public:
         // Engine 측 Application 에서 추가하게 할 것이다.
         // PushOverlay(new Hazel::ImGuiLayer());
 
-        HazelEditor::FileManager::Initialize();
+        HazelEditor::FileManager::Initialize(args[0].c_str());
     }
 
     ~EditorApplication()
