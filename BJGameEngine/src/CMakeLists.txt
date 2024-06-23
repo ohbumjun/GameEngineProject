@@ -12,12 +12,28 @@ LIST(APPEND TOTAL_ENGINE_FILES ${ENGINE_SOURCES})
 SET(SRC_RESOURCE
     public/Hazel/Resource/ResourceContainer.h
     public/Hazel/Resource/DefaultResourceManager.h
+    public/Hazel/Resource/AssetManagerBase.h
 
     private/Hazel/Resource/ResourceContainer.cpp
     private/Hazel/Resource/DefaultResourceManager.cpp
+    private/Hazel/Resource/AssetManagerBase.cpp
 )
 SOURCE_GROUP("resource/" FILES ${SRC_RESOURCE})
 LIST(APPEND TOTAL_ENGINE_FILES ${SRC_RESOURCE})
+
+# Resource - Image
+SET(HEADER_RESOURCE_FONT
+    public/Hazel/Resource/Font/Font.h
+)
+SOURCE_GROUP("resource/font/public" FILES ${HEADER_RESOURCE_FONT})
+LIST(APPEND TOTAL_ENGINE_FILES ${HEADER_RESOURCE_FONT})
+
+SET(SRC_RESOURCE_FONT
+    private/Hazel/Resource/Font/Font.cpp
+)
+SOURCE_GROUP("resource/font/private" FILES ${SRC_RESOURCE_FONT})
+LIST(APPEND TOTAL_ENGINE_FILES ${SRC_RESOURCE_FONT})
+
 
 # Resource - Image
 SET(HEADER_RESOURCE_IMAGE

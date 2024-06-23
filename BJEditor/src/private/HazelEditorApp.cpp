@@ -5,6 +5,7 @@
 따라서main app 이 있는 곳으로 include 처리한다.
 */
 #include "EditorLayer.h"
+#include "ProjectSelectLayer.h"
 #include "File/FileManager.h"
 #include "Hazel/Core/EntryPoint.h"
 
@@ -18,7 +19,8 @@ public:
               Hazel::ApplicationSpecification{"Hazelnut", "", args})
     {
         // PushLayer(new ExampleLayer());
-        PushLayer(new HazelEditor::EditorLayer());
+        // PushLayer(new HazelEditor::EditorLayer());
+        PushLayer(new HazelEditor::ProjectSelectLayer());
 
         HazelEditor::FileManager::Initialize(args[0].c_str());
     }

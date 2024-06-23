@@ -1,0 +1,4 @@
+namespace Hazel
+{
+
+} // namespace Hazel

@@ -33,8 +33,7 @@ namespace HazelEditor
 {
 extern const std::filesystem::path g_AssetPath;
 
-ProjectSelectLayer::ProjectSelectLayer()
-    : Layer("ProjectSelectLayer")
+ProjectSelectLayer::ProjectSelectLayer() : Layer("ProjectSelectLayer")
 {
 }
 
@@ -44,7 +43,7 @@ void ProjectSelectLayer::OnAttach()
     //	m_CheckerboardTexture = Hazel::TextureManager::CreateTexture2D("assets/textures/sample.png");
     // m_SpriteSheet = Hazel::TextureManager::CreateTexture2D("assets/game/textures/RPGpack_sheet_2X.png");
 
-    m_ProjectSelectPanel = Hazel::CreateRef<HazelEditor::ProjectSelectLayer>();
+    m_ProjectSelectPanel = Hazel::CreateRef<HazelEditor::ProjectSelectPanel>();
 }
 void ProjectSelectLayer::OnDetach()
 {
@@ -60,18 +59,18 @@ void ProjectSelectLayer::OnUpdate(Hazel::Timestep ts)
 }
 void ProjectSelectLayer::OnEvent(Hazel::Event &event)
 {
-   // m_CameraController.OnEvent(event);
-   // 
-   // if (m_SceneState == SceneState::Edit)
-   // {
-   //     m_EditorCamera.OnEvent(event);
-   // }
-   // 
-   // Hazel::EventDispatcher dispatcher(event);
-   // dispatcher.Dispatch<Hazel::KeyPressedEvent>(
-   //     HZ_BIND_EVENT_FN(ProjectSelectLayer::onKeyPressed));
-   // dispatcher.Dispatch<Hazel::MouseButtonPressedEvent>(
-   //     HZ_BIND_EVENT_FN(ProjectSelectLayer::onMouseButtonPressed));
+    // m_CameraController.OnEvent(event);
+    //
+    // if (m_SceneState == SceneState::Edit)
+    // {
+    //     m_EditorCamera.OnEvent(event);
+    // }
+    //
+    // Hazel::EventDispatcher dispatcher(event);
+    // dispatcher.Dispatch<Hazel::KeyPressedEvent>(
+    //     HZ_BIND_EVENT_FN(ProjectSelectLayer::onKeyPressed));
+    // dispatcher.Dispatch<Hazel::MouseButtonPressedEvent>(
+    //     HZ_BIND_EVENT_FN(ProjectSelectLayer::onMouseButtonPressed));
 }
 void ProjectSelectLayer::OnImGuiRender()
 {
@@ -143,3 +142,4 @@ void ProjectSelectLayer::drawPanels()
     // Panels
     m_ProjectSelectPanel->OnImGuiRender();
 }
+} // namespace HazelEditor

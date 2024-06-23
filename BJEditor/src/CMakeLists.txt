@@ -49,6 +49,8 @@ SET(EDITORASSET_HEADERS
     public/EditorAsset/ShaderEditorAssetProcessor.h
     public/EditorAsset/TextureEditorAsset.h
     public/EditorAsset/TextureEditorAssetProcessor.h
+    public/EditorAsset/FontEditorAsset.h
+    public/EditorAsset/FontEditorAssetProcessor.h
     public/EditorAsset/DefaultResourceEditorLoader.h
 )
 SOURCE_GROUP("editorAsset/public" FILES ${EDITORASSET_HEADERS})
@@ -65,6 +67,8 @@ SET(EDITORASSET_SOURCES
     private/EditorAsset/ShaderEditorAssetProcessor.cpp
     private/EditorAsset/TextureEditorAsset.cpp
     private/EditorAsset/TextureEditorAssetProcessor.cpp
+    private/EditorAsset/FontEditorAsset.cpp
+    private/EditorAsset/FontEditorAssetProcessor.cpp
     private/EditorAsset/DefaultResourceEditorLoader.cpp
 )
 SOURCE_GROUP("editorAsset/private" FILES ${EDITORASSET_SOURCES})
