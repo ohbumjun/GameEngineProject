@@ -2,10 +2,12 @@
 #include "Hazel/Input/Input.h"
 #include "Hazel/Utils/Log.h"
 #include "Hazel/Utils/PlatformUtils.h"
+#include "Hazel/Resource/AssetManagerBase.h"
 #include "Renderer/RenderCommand.h"
 #include "Renderer/Renderer.h"
 #include "Hazel/Core/Thread/ThreadPool.h"
 #include "Hazel/Core/Thread/ThreadExecuter.h"
+#include "Hazel/Core/EngineContext.h"
 #include "hzpch.h"
 #include <glad/glad.h>
 
@@ -26,17 +28,7 @@ Application *Application::s_Instance = nullptr;
 static ThreadExecuterManager::ThreadHandle *s_MainThreadExecuter = nullptr;
 static ThreadPool *s_ThreadPool = nullptr;
 
-ApplicationCommandLineArgs::ApplicationCommandLineArgs(int count,
-                                                              char **Args) : 
-    m_Count(count)
-{
-	for (int i = 0; i < count; i++)
-	{
-        m_Args.push_back(Args[i]);
-	}
-}
-
-Application::Application(const ApplicationSpecification &specification)
+Application::Application(const ApplicationContext &specification)
     : m_Specification(specification)
 {
     HZ_PROFILE_FUNCTION();
@@ -46,13 +38,10 @@ Application::Application(const ApplicationSpecification &specification)
     s_Instance = this;
 
     // Set working directory here
-    if (!m_Specification.WorkingDirectory.empty())
+    if (!m_Specification.GetWorkingDirectory().empty())
     {
         // std::filesystem::current_path(m_Specification.WorkingDirectory);
     }
-
-    Initialize();
-    Renderer::Init();
 }
 Application::~Application()
 {
@@ -160,7 +149,7 @@ void Application::Initialize()
 {
     // Window 생성자 호출 => WIndowsWindow 생성
     m_Window = std::unique_ptr<Window>(
-        Window::Create(WindowProps(m_Specification.Name)));
+        Window::Create(WindowProps(m_Specification.GetName())));
 
     // WindowsWindow.WindowsData.EventCallback 에 해당 함수 세팅
     m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));

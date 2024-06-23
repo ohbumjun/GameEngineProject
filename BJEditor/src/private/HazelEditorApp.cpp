@@ -8,21 +8,55 @@
 #include "ProjectSelectLayer.h"
 #include "File/FileManager.h"
 #include "Hazel/Core/EntryPoint.h"
+#include "Hazel/Resource/AssetManagerBase.h"
+#include "Hazel/Resource/DefaultResourceManager.h"
+#include "EditorAsset/EditorAssetManager.h"
+#include "Hazel/Core/EngineContext.h"
 
 namespace Hazel
 {
 class EditorApplication : public Hazel::Application
 {
 public:
-    EditorApplication(ApplicationCommandLineArgs args)
-        : Hazel::Application(
-              Hazel::ApplicationSpecification{"Hazelnut", "", args})
+    EditorApplication(Hazel::ApplicationCommandLineArgs args) 
+        : Hazel::Application(Hazel::ApplicationContext{"Hazelnut", "", args})
     {
-        // PushLayer(new ExampleLayer());
-        // PushLayer(new HazelEditor::EditorLayer());
-        PushLayer(new HazelEditor::ProjectSelectLayer());
+    }
 
-        HazelEditor::FileManager::Initialize(args[0].c_str());
+    virtual void Initialize() override
+    {
+        {
+            EngineContext::Initialize();
+        }
+        {
+            AssetManagerController::Initialize(new HazelEditor::EditorAssetManagerController());
+
+            // Default Asset 들 모두 Import 하기
+            DefaultResourceManager::LoadDefaultResources();
+        }
+        
+        {
+            Application::Initialize();
+        }
+
+        {
+            Renderer::Init();
+        }
+
+        {
+            const ApplicationContext &applicationContext = Application::Get().GetSpecification();
+            const ApplicationCommandLineArgs &applicationCommandLineArgs =applicationContext.GetCommandLineArgs();
+            HazelEditor::FileManager::Initialize( applicationCommandLineArgs[0].c_str());
+        }
+       
+        {
+            PushLayer(new HazelEditor::ProjectSelectLayer());
+        }
+    }
+
+    void Finalize()
+    {
+
     }
 
     ~EditorApplication()
@@ -30,8 +64,10 @@ public:
     }
 };
 
-Hazel::Application *CreateApplication(ApplicationCommandLineArgs args)
+Application *CreateApplication(ApplicationCommandLineArgs args)
 {
-    return new EditorApplication(args);
+    Application * app = new EditorApplication(args);
+    app->Initialize();
+    return app;
 }
 } // namespace Hazel

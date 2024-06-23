@@ -55,7 +55,7 @@ public:
 
         /**builtin Æú´õ
 		 */
-        static const char *builtin;
+        // static const char *builtin;
     };
 };
 };

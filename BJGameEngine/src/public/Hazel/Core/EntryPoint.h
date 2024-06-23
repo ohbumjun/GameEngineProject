@@ -16,7 +16,8 @@ int main(int argc, char **argv)
     Hazel::Log::GetClientLogger()->info("Hello");
 
     HZ_PROFILE_BEGIN_SESSION("Startup", "HazelProfile-Startup.json");
-    auto *app = Hazel::CreateApplication({argc, argv});
+    auto *app =
+        Hazel::CreateApplication(Hazel::ApplicationCommandLineArgs{argc, argv});
     HZ_PROFILE_END_SESSION();
 
     HZ_PROFILE_BEGIN_SESSION("Runtime", "HazelProfile-Runtime.json");

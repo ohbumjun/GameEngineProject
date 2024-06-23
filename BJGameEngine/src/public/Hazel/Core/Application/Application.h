@@ -20,15 +20,19 @@ struct HAZEL_API ApplicationCommandLineArgs
 {
 public:
     ApplicationCommandLineArgs() = default;
-
-    ApplicationCommandLineArgs(int count, char **Args);
-
+    ApplicationCommandLineArgs(int count, char **Args) :
+        m_Count(count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            m_Args.push_back(Args[i]);
+        }
+    }
     const std::string& operator[](int index) const
     {
         HZ_CORE_ASSERT(index < m_Count, "index out of range");
         return m_Args[index];
     }
-
     inline int GetCount()
     {
 		return m_Count;
@@ -37,15 +41,35 @@ public:
     {
         return m_Count;
     }
-
 private:
     int m_Count = 0;
     std::vector<std::string> m_Args;
-
 };
-struct HAZEL_API ApplicationSpecification
-{
 
+class HAZEL_API ApplicationContext
+{
+public:
+    ApplicationContext(const std::string& name, const std::string &workingDirectory,
+        const ApplicationCommandLineArgs &commandLineArgs)
+		: Name(name), WorkingDirectory(workingDirectory), CommandLineArgs(commandLineArgs)
+	{
+	}
+
+    const ApplicationCommandLineArgs& GetCommandLineArgs() const
+	{
+		return CommandLineArgs;
+	}
+
+    const std::string& GetName() const
+    {
+        return Name;
+    }
+
+const std::string& GetWorkingDirectory() const
+	{
+		return WorkingDirectory;
+	}
+private:
     std::string Name = "Hazel Application";
     std::string WorkingDirectory = "";
     ApplicationCommandLineArgs CommandLineArgs;
@@ -55,13 +79,13 @@ class HAZEL_API Application
 {
 public:
     // Application(const std::string& name = "DefaultName");
-    Application(const ApplicationSpecification &specification);
+    Application(const ApplicationContext &specification);
     virtual ~Application();
     void Run();
     void Close();
     void OnEvent(Event &e);
     void Finalize();
-    void Initialize();
+    virtual void Initialize();
     void PushLayer(Layer *layer);
     void PushOverlay(Layer *layer);
     void PopLayer(Layer *layer);
@@ -70,7 +94,7 @@ public:
     {
         return m_ImGuiLayer;
     };
-    const ApplicationSpecification &GetSpecification() const
+    const ApplicationContext &GetSpecification() const
     {
         return m_Specification;
     }
@@ -91,7 +115,7 @@ private:
     bool OnWindowResize(WindowResizeEvent &e);
 
     // unique ptr 로 세팅해줌으로써 소멸자에서 별도로 소멸시켜줄 필요가 없다.
-    ApplicationSpecification m_Specification;
+    ApplicationContext m_Specification;
     std::unique_ptr<Window> m_Window;
     ImGuiLayer *m_ImGuiLayer;
     bool m_Running = true;

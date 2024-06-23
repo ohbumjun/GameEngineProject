@@ -288,6 +288,10 @@ LIST(APPEND TOTAL_ENGINE_FILES ${SRC_CORE_APPLICATION})
 SET(HEADER_CORE_ALL
     public/Hazel/Core/Core.h
     public/Hazel/Core/EntryPoint.h
+    public/Hazel/Core/EngineContext.h
+
+    private/Hazel/Core/EngineContext.cpp
+
 )
 SOURCE_GROUP("core" FILES ${HEADER_CORE_ALL})
 LIST(APPEND TOTAL_ENGINE_FILES ${HEADER_CORE_ALL})

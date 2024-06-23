@@ -4,23 +4,36 @@
 
 namespace Hazel
 {
-	// Engine, Editor 에서의 Asset 관련 Manager 공용 Class
-	class AssetManagerBase
+	/*
+	Adapter pattern is about making
+	2 interfaces that arent't compatible
+	compatible
+	*/
+	class AssetManagerController
 	{
     public:
-        static void Initialize(AssetManagerBase *assetManager)
-		{
-            HZ_CORE_ASSERT(assetManager, "AssetManager is nullptr");
-            HZ_CORE_ASSERT(s_Instance == nullptr, "AssetManager Already Initialized");
-		}
-		static void Finalize()
-		{
-			if (s_Instance)
-			{
+        static void Initialize(AssetManagerController *assetManager);
+        static void Finalize()
+        {
+            if (s_Instance)
+            {
                 delete s_Instance;
-			}
-		}
+            }
+        }
+        static void LoadAsset(const std::string &relativePath);
+        static AssetManagerController *GetInst()
+        {
+            return s_Instance;
+        }
+
+    protected:
+        virtual void loadAsset(const std::string &relativePath) = 0;
     private:
-        static AssetManagerBase *s_Instance;
+        static AssetManagerController *s_Instance;
+	};
+
+	class BundlePackManagerController : public AssetManagerController
+	{
+
 	};
 } // namespace Hazel

@@ -7,6 +7,7 @@
 // imbuibuild.cpp 에 해당 h 파일들에 대한 cpp 파일들도
 // 컴파일할 수 있게 정보를 세팅해두었기 때문이다.
 #include "Hazel/Core/Application/Application.h"
+#include "Hazel/Core/EngineContext.h"
 #include "ImGuizmo.h"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
@@ -31,7 +32,8 @@ void ImGuiLayer::OnAttach()
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
 
-    static std::string resourceRootPath = RESOURCE_ROOT;
+    // static std::string resourceRootPath = RESOURCE_ROOT;
+    static std::string resourceRootPath = EngineContext::GetDefaultAssetPath();
 
     ImGui::CreateContext();
     ImGuiIO &io = ImGui::GetIO();
@@ -53,11 +55,12 @@ void ImGuiLayer::OnAttach()
     char openSansRegularPath[200];
 
     strcpy(openSansBoldPath, resourceRootPath.c_str()); // Copy str1 to result
-    strcat(openSansBoldPath, "assets/fonts/opensans/OpenSans-Bold.ttf");
+    strcat(openSansBoldPath, EngineContext::ResourceDirectories::fonts);
+    strcat(openSansBoldPath, "/opensans/OpenSans-Bold.ttf");
 
-    strcpy(openSansRegularPath,
-           resourceRootPath.c_str()); // Copy str1 to result
-    strcat(openSansRegularPath, "assets/fonts/opensans/OpenSans-Regular.ttf");
+    strcpy(openSansRegularPath, resourceRootPath.c_str()); // Copy str1 to result
+    strcat(openSansRegularPath, EngineContext::ResourceDirectories::fonts);
+    strcat(openSansRegularPath, "/opensans/OpenSans-Regular.ttf");
 
     io.Fonts->AddFontFromFileTTF(openSansBoldPath, fontSize);
     io.FontDefault =
