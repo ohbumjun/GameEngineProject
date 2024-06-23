@@ -20,10 +20,6 @@ public:
         // PushLayer(new ExampleLayer());
         PushLayer(new HazelEditor::EditorLayer());
 
-        // Client 측에서 ImGuiLayer 를 세팅하게 해주고 싶지 않다.
-        // Engine 측 Application 에서 추가하게 할 것이다.
-        // PushOverlay(new Hazel::ImGuiLayer());
-
         HazelEditor::FileManager::Initialize(args[0].c_str());
     }
 

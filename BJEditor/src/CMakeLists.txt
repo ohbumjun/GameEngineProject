@@ -23,6 +23,7 @@ SET(PANEL_HEADERS
     public/Panel/ComponentPanel/CameraPanel.h
     public/Panel/ContentBrowserPanel.h
     public/Panel/SceneHierarchyPanel.h
+    public/Panel/ProjectSelectPanel.h
 )
 SOURCE_GROUP("panel/public" FILES ${PANEL_HEADERS})
 LIST(APPEND TOTAL_EDITOR_FILES ${PANEL_HEADERS})
@@ -31,6 +32,7 @@ SET(PANEL_SOURCES
     private/Panel/ComponentPanel/CameraPanel.cpp
     private/Panel/ContentBrowserPanel.cpp
     private/Panel/SceneHierarchyPanel.cpp
+    private/Panel/ProjectSelectPanel.cpp
 )
 SOURCE_GROUP("panel/private" FILES ${PANEL_SOURCES})
 LIST(APPEND TOTAL_EDITOR_FILES ${PANEL_SOURCES})
@@ -44,8 +46,10 @@ SET(EDITORASSET_HEADERS
     public/EditorAsset/EditorAssetManager.h
     public/EditorAsset/EditorAssetProcessor.h
     public/EditorAsset/ShaderEditorAsset.h
+    public/EditorAsset/ShaderEditorAssetProcessor.h
     public/EditorAsset/TextureEditorAsset.h
     public/EditorAsset/TextureEditorAssetProcessor.h
+    public/EditorAsset/DefaultResourceEditorLoader.h
 )
 SOURCE_GROUP("editorAsset/public" FILES ${EDITORASSET_HEADERS})
 LIST(APPEND TOTAL_EDITOR_FILES ${EDITORASSET_HEADERS})
@@ -58,14 +62,17 @@ SET(EDITORASSET_SOURCES
     private/EditorAsset/EditorAssetManager.cpp
     private/EditorAsset/EditorAssetProcessor.cpp
     private/EditorAsset/ShaderEditorAsset.cpp
+    private/EditorAsset/ShaderEditorAssetProcessor.cpp
     private/EditorAsset/TextureEditorAsset.cpp
     private/EditorAsset/TextureEditorAssetProcessor.cpp
+    private/EditorAsset/DefaultResourceEditorLoader.cpp
 )
 SOURCE_GROUP("editorAsset/private" FILES ${EDITORASSET_SOURCES})
 LIST(APPEND TOTAL_EDITOR_FILES ${EDITORASSET_SOURCES})
 
 # Editor
 SET(EDITOR_HEADERS
+    public/ProjectSelectLayer.h
     public/EditorLayer.h
     public/ParticleSystem.h
     public/EditorContext.h
@@ -74,6 +81,7 @@ SOURCE_GROUP("editor/public" FILES ${EDITOR_HEADERS})
 LIST(APPEND TOTAL_EDITOR_FILES ${EDITOR_HEADERS})
 
 SET(EDITOR_SOURCES
+    private/ProjectSelectLayer.cpp
     private/EditorLayer.cpp
     private/ParticleSystem.cpp
     private/HazelEditorApp.cpp

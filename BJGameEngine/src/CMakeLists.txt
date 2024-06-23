@@ -9,16 +9,14 @@ LIST(APPEND TOTAL_ENGINE_FILES ${ENGINE_HEADERS})
 LIST(APPEND TOTAL_ENGINE_FILES ${ENGINE_SOURCES})
 
 ## Resource
-SET(HEADER_RESOURCE
-    public/Hazel/Resource/ResourceContainer.h
-)
-SOURCE_GROUP("resource/public" FILES ${HEADER_RESOURCE})
-LIST(APPEND TOTAL_ENGINE_FILES ${HEADER_RESOURCE})
-
 SET(SRC_RESOURCE
+    public/Hazel/Resource/ResourceContainer.h
+    public/Hazel/Resource/DefaultResourceManager.h
+
     private/Hazel/Resource/ResourceContainer.cpp
+    private/Hazel/Resource/DefaultResourceManager.cpp
 )
-SOURCE_GROUP("resource/private" FILES ${SRC_RESOURCE})
+SOURCE_GROUP("resource/" FILES ${SRC_RESOURCE})
 LIST(APPEND TOTAL_ENGINE_FILES ${SRC_RESOURCE})
 
 # Resource - Image
