@@ -25,32 +25,19 @@ public:
 
     virtual void Initialize() override
     {
-        {
-            EngineContext::Initialize();
-        }
-        {
-            AssetManagerController::Initialize(new HazelEditor::EditorAssetManagerController());
+        // 기본 세팅
+        AssetManagerController::Initialize(new HazelEditor::EditorAssetManagerController());
+        DefaultResourceManager::LoadDefaultResources();
 
-            // Default Asset 들 모두 Import 하기
-            DefaultResourceManager::LoadDefaultResources();
-        }
-        
-        {
-            Application::Initialize();
-        }
+        // Application 
+        Application::Initialize();
 
-        {
-        }
-
-        {
-            const ApplicationContext &applicationContext = Application::Get().GetSpecification();
-            const ApplicationCommandLineArgs &applicationCommandLineArgs =applicationContext.GetCommandLineArgs();
-            HazelEditor::FileManager::Initialize( applicationCommandLineArgs[0].c_str());
-        }
+        // Editor 용
+        const ApplicationContext &applicationContext = Application::Get().GetSpecification();
+        const ApplicationCommandLineArgs &applicationCommandLineArgs =applicationContext.GetCommandLineArgs();
+        HazelEditor::FileManager::Initialize( applicationCommandLineArgs[0].c_str());
        
-        {
-            PushLayer(new HazelEditor::ProjectSelectLayer());
-        }
+         PushLayer(new HazelEditor::ProjectSelectLayer());
     }
 
     void Finalize()

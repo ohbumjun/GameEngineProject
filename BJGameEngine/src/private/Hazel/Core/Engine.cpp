@@ -8,17 +8,17 @@ namespace Hazel
 {
     Engine* Engine::s_Instance = nullptr;
 
-Engine::Engine()
-{
-}
-Engine::~Engine()
-{
-}
-void Engine::Initialize()
-{
-    m_EngineContext.initialize();
-}
-void Engine::Finalize()
-{
-}
+    Engine::Engine()
+    {
+    }
+    Engine::~Engine()
+    {
+    }
+    void Engine::Initialize()
+    {
+        m_EngineContext.initialize();
+    }
+    void Engine::Finalize()
+    {
+    }
 } // namespace Hazel

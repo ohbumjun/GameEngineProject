@@ -33,7 +33,10 @@ void ImGuiLayer::OnAttach()
     IMGUI_CHECKVERSION();
 
     // static std::string resourceRootPath = RESOURCE_ROOT;
-    static std::string resourceRootPath = EngineContext::GetDefaultAssetPath();
+
+    auto applicationContext = Application::Get().GetSpecification();
+    const std::string &resourceRootPath =
+        applicationContext.GetDefaultAssetPath();
 
     ImGui::CreateContext();
     ImGuiIO &io = ImGui::GetIO();
@@ -55,11 +58,11 @@ void ImGuiLayer::OnAttach()
     char openSansRegularPath[200];
 
     strcpy(openSansBoldPath, resourceRootPath.c_str()); // Copy str1 to result
-    strcat(openSansBoldPath, EngineContext::ResourceDirectories::fonts);
+    strcat(openSansBoldPath, ApplicationContext::ResourceDirectories::fonts);
     strcat(openSansBoldPath, "/opensans/OpenSans-Bold.ttf");
 
     strcpy(openSansRegularPath, resourceRootPath.c_str()); // Copy str1 to result
-    strcat(openSansRegularPath, EngineContext::ResourceDirectories::fonts);
+    strcat(openSansRegularPath, ApplicationContext::ResourceDirectories::fonts);
     strcat(openSansRegularPath, "/opensans/OpenSans-Regular.ttf");
 
     io.Fonts->AddFontFromFileTTF(openSansBoldPath, fontSize);

@@ -23,12 +23,46 @@ namespace Hazel
 	*/
 #define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 
+const char *ApplicationContext::Directories::defaultAssets      = "DefaultAssets";
+const char *ApplicationContext::ResourceDirectories::fonts      = "fonts";
+const char *ApplicationContext::ResourceDirectories::textures   = "textures";
+const char *ApplicationContext::ResourceDirectories::shaders    = "shaders";
+
 // make it as single ton
 Application *Application::s_Instance = nullptr;
 
 static ThreadExecuterManager::ThreadHandle *s_MainThreadExecuter = nullptr;
 static ThreadPool *s_ThreadPool = nullptr;
 
+#pragma region ApplicationContext
+void ApplicationContext::initialize()
+{
+    const std::string &execPath = m_CommandLineArgs[0];
+
+    size_t buildPos = execPath.find("build");
+
+    HZ_CORE_ASSERT(buildPos != std::string::npos, "Invalid exec path");
+
+    // Find the last directory separator before "build"
+    // ex) D:\DirectXPersonalProjectFolder\EngineSeriesTutorials\HazelGameEngine\build\Debug\Editor.exe
+    // ex) -> D:\DirectXPersonalProjectFolder\EngineSeriesTutorials\HazelGameEngine\
+
+    size_t lastDirSeparator = execPath.rfind('\\', buildPos);
+
+    // Extract the substring before "build" including the directory separator
+    std::string resourcePath = execPath.substr(0, lastDirSeparator + 1);
+
+    resourcePath += "BJResource\\";
+
+    m_ResourceRootPath = resourcePath;
+
+    // m_DefaultResourcePath = resourcePath + "";
+
+    m_DefaultAssetsPath = resourcePath + "DefaultAssets\\";
+}
+#pragma endregion
+
+#pragma region Application
 Application::Application(const ApplicationContext &specification)
     : m_Specification(specification)
 {
@@ -37,12 +71,6 @@ Application::Application(const ApplicationContext &specification)
     HZ_CORE_ASSERT(!s_Instance, "Application Alread Exists");
 
     s_Instance = this;
-
-    // Set working directory here
-    if (!m_Specification.GetWorkingDirectory().empty())
-    {
-        // std::filesystem::current_path(m_Specification.WorkingDirectory);
-    }
 }
 Application::~Application()
 {
@@ -58,9 +86,6 @@ Application::~Application()
         delete s_ThreadPool;
     }
 
-    ThreadExecuterManager::Finalize();
-
-    Renderer::ShutDown();
 }
 void Application::Run()
 {
@@ -145,6 +170,10 @@ void Application::OnEvent(Event &e)
 }
 void Application::Finalize()
 {
+    ThreadExecuterManager::Finalize();
+
+    Renderer::ShutDown();
+
     Engine::GetInstance()->Finalize();
 
     Engine::DeleteInstance();
@@ -158,21 +187,26 @@ void Application::Initialize()
     // WindowsWindow.WindowsData.EventCallback 에 해당 함수 세팅
     m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
 
+    // 과연 별도의 Engine Class 가 정말 필요할까 ?
     Engine::GetInstance()->Initialize();
 
     Renderer::Init();
 
+    initImgui();
+    
     s_MainThreadExecuter = ThreadExecuterManager::Initialize();
 
     s_ThreadPool = new ThreadPool(3, "MainThreadPool");
-
+};
+void Application::initImgui()
+{
     // 해당 ImGuiLayer 에 대한 소유권이 LayerStack 에 있어야하므로
     // Unique Pointer로 생성하면 안된다.
     // m_ImGuiLayer = std::make_unique<ImGuiLayer>();
     m_ImGuiLayer = new ImGuiLayer();
 
     PushOverlay(m_ImGuiLayer);
-};
+}
 void Application::PushLayer(Layer *layer)
 {
     m_LayerStack.PushLayer(layer);
@@ -216,4 +250,6 @@ bool Application::OnWindowResize(WindowResizeEvent &e)
     // 모든 Layer 가 Resize Event 를 알게 하기 위해 return false
     return false;
 };
+
+#pragma endregion
 }; // namespace Hazel

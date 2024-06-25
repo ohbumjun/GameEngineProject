@@ -1,5 +1,5 @@
 #include "Hazel/Resource/DefaultResourceManager.h"
-#include "Hazel/Core/EngineContext.h"
+#include "Hazel/Core/Application/Application.h"
 #include "Hazel/Resource/AssetManagerBase.h"
 #include <filesystem>
 
@@ -69,7 +69,9 @@ void DefaultResourceManager::LoadDefaultResources()
 	// 모든 asset 들을 미리 Load 한다.
 	// 이때 사용하는 것은 AssetManagerBase 의 함수들을 활용한다.
 
-	const std::string &defaultAssetFolderPath = EngineContext::GetDefaultAssetPath();
+    auto applicationContext = Application::Get().GetSpecification();
+    const std::string &defaultAssetFolderPath =
+        applicationContext.GetDefaultAssetPath();
 
     std::filesystem::path startingPath(defaultAssetFolderPath);
 
@@ -104,12 +106,13 @@ void DefaultResourceManager::LoadDefaultResources()
 
         const char *lastPartStr = lastPart.c_str();
 
-        if (lastPartStr == EngineContext::ResourceDirectories::textures)
+        if (lastPartStr == ApplicationContext::ResourceDirectories::textures)
         {
             // texture 형태로 등록 ?
             loadDefaultAsset(subfolderName);
         }
-        else if (lastPartStr == EngineContext::ResourceDirectories::shaders)
+        else if (lastPartStr ==
+                 ApplicationContext::ResourceDirectories::shaders)
         {
             // 마찬가지로 texture 형태로 등록 ?
             loadDefaultAsset(subfolderName);

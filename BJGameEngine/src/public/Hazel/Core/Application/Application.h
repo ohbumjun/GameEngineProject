@@ -49,36 +49,69 @@ private:
 class HAZEL_API ApplicationContext
 {
 public:
-    ApplicationContext(const std::string& name, const std::string &workingDirectory,
+    // Application 사용 폴더명 모음.
+    struct Directories
+    {
+        /*
+        * builtin 폴더
+		 */
+        static const char *defaultAssets;
+    };
+
+    struct ResourceDirectories
+    {
+        static const char *fonts;
+        static const char *shaders;
+        static const char *textures;
+    };
+
+    ApplicationContext(const std::string& name, 
         const ApplicationCommandLineArgs &commandLineArgs)
-		: Name(name), WorkingDirectory(workingDirectory), CommandLineArgs(commandLineArgs)
+		: m_Name(name), m_CommandLineArgs(commandLineArgs)
 	{
+        initialize();
 	}
 
     const ApplicationCommandLineArgs& GetCommandLineArgs() const
 	{
-		return CommandLineArgs;
+        return m_CommandLineArgs;
 	}
 
     const std::string& GetName() const
     {
-        return Name;
+        return m_Name;
     }
 
-const std::string& GetWorkingDirectory() const
-	{
-		return WorkingDirectory;
-	}
+    const std::string &GetDefaultAssetPath()
+    {
+        return m_DefaultAssetsPath;
+    }
+
+    // static std::string GetDefaultResourcePath()
+    // {
+    //     return m_DefaultResourcePath;
+    // }
+   const  std::string& GetResourceRootPath()
+    {
+        return m_ResourceRootPath;
+    }
+
 private:
-    std::string Name = "Hazel Application";
-    std::string WorkingDirectory = "";
-    ApplicationCommandLineArgs CommandLineArgs;
+    void initialize();
+
+    std::string m_Name = "Hazel Application";
+    std::string m_DefaultAssetsPath;
+    std::string m_ResourceRootPath;
+    ApplicationCommandLineArgs m_CommandLineArgs;
 };
-// _declspec(dllexport) class Application
+
+/*
+* Application Class 가 사실상 Engine 의 역할을 한다.
+* 따라서 Engine 혹은 EngineContext 가 필요한지는 조금 더 생각해봐야 한다.
+*/
 class HAZEL_API Application
 {
 public:
-    // Application(const std::string& name = "DefaultName");
     Application(const ApplicationContext &specification);
     virtual ~Application();
     void Run();
@@ -86,6 +119,8 @@ public:
     void OnEvent(Event &e);
     void Finalize();
     virtual void Initialize();
+    // @brief Editor 혹은 Engine Layer 를 추가한 이후, 별도로 초기화 하기 위해 함수 구분
+    void initImgui();
     void PushLayer(Layer *layer);
     void PushOverlay(Layer *layer);
     void PopLayer(Layer *layer);

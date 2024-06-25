@@ -7,6 +7,14 @@
 namespace Hazel
 {
 
+    /*
+    * Game Engine 을 마치 Layer 들의 Stack 처럼 생각해도 된다.
+    * 
+    * 사용 용도
+    * 1) Render Order 를 결정할 수 있다.
+    * 2) Event 처리 순서를 결정할 수 있다.
+    * 3) Update 순서도 결정할 수 있다.
+    */
 class HAZEL_API Layer
 {
 public:
