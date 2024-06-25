@@ -1,4 +1,5 @@
 ﻿#include "Hazel/Core/Application/Application.h"
+#include "Hazel/Core/Engine.h"
 #include "Hazel/Input/Input.h"
 #include "Hazel/Utils/Log.h"
 #include "Hazel/Utils/PlatformUtils.h"
@@ -144,6 +145,9 @@ void Application::OnEvent(Event &e)
 }
 void Application::Finalize()
 {
+    Engine::GetInstance()->Finalize();
+
+    Engine::DeleteInstance();
 }
 void Application::Initialize()
 {
@@ -153,6 +157,10 @@ void Application::Initialize()
 
     // WindowsWindow.WindowsData.EventCallback 에 해당 함수 세팅
     m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
+
+    Engine::GetInstance()->Initialize();
+
+    Renderer::Init();
 
     s_MainThreadExecuter = ThreadExecuterManager::Initialize();
 

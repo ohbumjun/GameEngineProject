@@ -15,7 +15,7 @@ std::string EngineContext::m_DefaultAssetsPath;
 // std::string EngineContext::m_DefaultResourcePath;
 std::string EngineContext::m_ResourceRootPath;
 
-void EngineContext::Initialize()
+void EngineContext::initialize()
 {
 	// Application 의 Context 를 가져온다.
     const ApplicationContext &applicationContext = Application::Get().GetSpecification();

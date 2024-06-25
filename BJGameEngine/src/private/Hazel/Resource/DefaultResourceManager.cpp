@@ -87,7 +87,7 @@ void DefaultResourceManager::LoadDefaultResources()
     // Engine Context 에 정의된 asset type 별로 import 를 한다.
     for (const auto &subfolder : subfolders)
 	{
-		const std::string& subfolderName = subfolder.filename().string();
+		const std::string& subfolderName = subfolder.string();
 
         // 일단 현재는 특정 type 의 default asset 들만 load 하게 하기 위해서
         // folder file name 을 검사하여 load 할지 말지를 결정할 것이다.

@@ -40,7 +40,6 @@ public:
         }
 
         {
-            Renderer::Init();
         }
 
         {

@@ -5,6 +5,8 @@ namespace Hazel
 
 class EngineContext
 {
+    friend class Engine;
+
 public:
     // Engine 사용 폴더명 모음.
     struct Directories
@@ -22,7 +24,6 @@ public:
         static const char *textures;
     };
 
-    static void Initialize();
     static std::string GetDefaultAssetPath()
     {
         return m_DefaultAssetsPath;
@@ -36,6 +37,8 @@ public:
         return m_ResourceRootPath;
     }
  private:
+    static void initialize();
+
     static std::string m_DefaultAssetsPath;
     // static std::string m_DefaultResourcePath;
     static std::string m_ResourceRootPath;

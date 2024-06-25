@@ -289,8 +289,10 @@ SET(HEADER_CORE_ALL
     public/Hazel/Core/Core.h
     public/Hazel/Core/EntryPoint.h
     public/Hazel/Core/EngineContext.h
+    public/Hazel/Core/Engine.h
 
     private/Hazel/Core/EngineContext.cpp
+    private/Hazel/Core/Engine.cpp
 
 )
 SOURCE_GROUP("core" FILES ${HEADER_CORE_ALL})
