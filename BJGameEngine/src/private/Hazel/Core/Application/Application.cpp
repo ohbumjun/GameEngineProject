@@ -37,9 +37,9 @@ static ThreadPool *s_ThreadPool = nullptr;
 #pragma region ApplicationContext
 void ApplicationContext::initialize()
 {
-    const std::string &execPath = m_CommandLineArgs[0];
+    m_ExecutableDirectoryPath = m_CommandLineArgs[0];
 
-    size_t buildPos = execPath.find("build");
+    size_t buildPos = m_ExecutableDirectoryPath.find("build");
 
     HZ_CORE_ASSERT(buildPos != std::string::npos, "Invalid exec path");
 
@@ -47,10 +47,11 @@ void ApplicationContext::initialize()
     // ex) D:\DirectXPersonalProjectFolder\EngineSeriesTutorials\HazelGameEngine\build\Debug\Editor.exe
     // ex) -> D:\DirectXPersonalProjectFolder\EngineSeriesTutorials\HazelGameEngine\
 
-    size_t lastDirSeparator = execPath.rfind('\\', buildPos);
+    size_t lastDirSeparator = m_ExecutableDirectoryPath.rfind('\\', buildPos);
 
     // Extract the substring before "build" including the directory separator
-    std::string resourcePath = execPath.substr(0, lastDirSeparator + 1);
+    std::string resourcePath =
+        m_ExecutableDirectoryPath.substr(0, lastDirSeparator + 1);
 
     resourcePath += "BJResource\\";
 

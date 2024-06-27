@@ -87,21 +87,26 @@ public:
         return m_DefaultAssetsPath;
     }
 
-    // static std::string GetDefaultResourcePath()
-    // {
-    //     return m_DefaultResourcePath;
-    // }
    const  std::string& GetResourceRootPath()
     {
         return m_ResourceRootPath;
     }
 
+const std::string& GetExecutableDirectoryPath()
+	{
+		return m_ExecutableDirectoryPath;
+	}
+
 private:
     void initialize();
 
     std::string m_Name = "Hazel Application";
+    // @brief Default Asset 의 경로
     std::string m_DefaultAssetsPath;
+    // @brief BJResource 와 같이 Resource 들이 담긴 최상위 경로
     std::string m_ResourceRootPath;
+    // @brief 실행 파일이 있는 경로
+    std::string m_ExecutableDirectoryPath;
     ApplicationCommandLineArgs m_CommandLineArgs;
 };
 
