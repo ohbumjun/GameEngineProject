@@ -197,6 +197,8 @@ void Application::Initialize()
     s_MainThreadExecuter = ThreadExecuterManager::Initialize();
 
     s_ThreadPool = new ThreadPool(3, "MainThreadPool");
+
+    // 필요하다면 이 부분에 Audio 관련 초기화를 진행한다.
 };
 void Application::initImgui()
 {

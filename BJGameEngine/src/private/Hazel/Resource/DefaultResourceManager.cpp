@@ -93,18 +93,16 @@ void DefaultResourceManager::LoadDefaultResources()
 
         // 일단 현재는 특정 type 의 default asset 들만 load 하게 하기 위해서
         // folder file name 을 검사하여 load 할지 말지를 결정할 것이다.
-        size_t pos = subfolderName.rfind(std::string{'\\', '/'});
+        size_t pos = subfolderName.rfind(std::string{'\\'});
 
         // If a separator is found, extract the last part name
-        std::string lastPart;
+        std::string lastPartStr;
 
         HZ_CORE_ASSERT(pos != std::string::npos,
                        "Invalid asset path: {0}",
                        subfolderName);
 
-        lastPart = subfolderName.substr(pos + 1);
-
-        const char *lastPartStr = lastPart.c_str();
+        lastPartStr = subfolderName.substr(pos + 1);
 
         if (lastPartStr == ApplicationContext::ResourceDirectories::textures)
         {

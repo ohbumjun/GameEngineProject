@@ -3,8 +3,10 @@
 namespace Hazel
 {
 
-PoolAllocator::PoolAllocator(const size_t totalSize, const size_t chunkSize)
-    : MemoryPoolAllocator(totalSize), m_ChunkSize(chunkSize)
+PoolAllocator::PoolAllocator(const size_t totalSize,
+                             const size_t chunkSize,
+                             const size_t alignment)
+    : m_TotalSize(totalSize), m_ChunkSize(chunkSize), m_Alignment(alignment)
 {
     assert(totalSize % chunkSize == 0);
     assert(totalSize % 8 == 0);
@@ -15,7 +17,9 @@ PoolAllocator::~PoolAllocator()
     free(m_StartPtr);
 }
 
-void *PoolAllocator::Allocate(const size_t allocateSize, const size_t alignment)
+void *PoolAllocator::Allocate(const size_t allocateSize,
+                              const char *flie = nullptr,
+                              size_t line)
 {
     assert(m_ChunkSize == allocateSize);
 

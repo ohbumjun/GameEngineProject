@@ -114,7 +114,7 @@ class HAZEL_API Application
 public:
     Application(const ApplicationContext &specification);
     virtual ~Application();
-    void Run();
+    virtual void Run();
     void Close();
     void OnEvent(Event &e);
     void Finalize();

@@ -371,6 +371,7 @@ LIST(APPEND TOTAL_ENGINE_FILES ${SRC_STBIMAGE})
 ## Imgui
 SET(HEADER_IMGUI
     public/Hazel/ImGui/ImGuiLayer.h
+    public/Hazel/ImGui/ImGuiContextManager.h
     ${CMAKE_SOURCE_DIR}/external/imgui/imgui.h
     ${CMAKE_SOURCE_DIR}/external/imgui/imconfig.h
     ${CMAKE_SOURCE_DIR}/external/imgui/backends/imgui_impl_glfw.h
@@ -381,6 +382,7 @@ LIST(APPEND TOTAL_ENGINE_FILES ${HEADER_IMGUI})
 
 SET(SRC_IMGUI
     private/Hazel/ImGui/ImGuiLayer.cpp
+    private/Hazel/ImGui/ImGuiContextManager.cpp
     ${CMAKE_SOURCE_DIR}/external/imgui/imgui.cpp
     ${CMAKE_SOURCE_DIR}/external/imgui/imgui_widgets.cpp
     ${CMAKE_SOURCE_DIR}/external/imgui/imgui_draw.cpp

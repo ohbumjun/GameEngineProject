@@ -4,8 +4,9 @@
 namespace Hazel
 {
 
-StackAllocator::StackAllocator(size_t totalSize)
-    : MemoryPoolAllocator(totalSize), m_StartPtr(nullptr), m_Offset(0)
+StackAllocator::StackAllocator(size_t totalSize, size_t alignment)
+    : m_TotalSize(totalSize), m_StartPtr(nullptr), m_Offset(0),
+      m_Alignment(alignment)
 {
 }
 
@@ -15,7 +16,9 @@ StackAllocator::~StackAllocator()
     delete m_StartPtr;
 }
 
-void *StackAllocator::Allocate(const size_t allocSize, const size_t alignment)
+void *StackAllocator::Allocate(const size_t allocSize,
+                               const char *flie = nullptr,
+                               size_t line)
 {
     const size_t currentAddress = (size_t)m_StartPtr + m_Offset;
 
@@ -23,7 +26,7 @@ void *StackAllocator::Allocate(const size_t allocSize, const size_t alignment)
     // size_t calculated_padding = CEngineUtil::CalculatePaddingWithHeader(m_Offset - , alignment, sizeof(AllocationHeader));
     size_t padding =
         Utils::EngineUtil::CalculatePaddingWithHeader(m_Offset,
-                                                      alignment,
+                                                      m_Alignment,
                                                       sizeof(AllocationHeader));
 
     // 의도대로 라면, m_StartPtr 초기 위치에

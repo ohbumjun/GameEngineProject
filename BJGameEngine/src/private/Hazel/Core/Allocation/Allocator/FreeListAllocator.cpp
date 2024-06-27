@@ -7,161 +7,9 @@
 namespace Hazel
 {
 
-FreeListAllocator::FreeListAllocator(const size_t totalSize,
-                                     FreeListAllocatorPlacementPolicy Policy)
-    : MemoryPoolAllocator(totalSize), m_Policy(Policy)
-{
-}
+#pragma region Scope
 
-FreeListAllocator::~FreeListAllocator()
-{
-    delete m_StartPtr;
-
-    m_StartPtr = nullptr;
-}
-
-void *FreeListAllocator::Allocate(const size_t allocSize,
-                                  const size_t alignment)
-{
-    const size_t allocHeaderSize = sizeof(FreeListAllocator::AllocationHeader);
-    const size_t freeHeaderSize = sizeof(FreeListAllocator::FreeHeader);
-
-    size_t nodeSize = sizeof(Node);
-    // assert(allocSize >= nodeSize);
-    assert(allocSize >= 8);
-
-    // Free Memory Block 을 돌면서
-    // 최적의 Free Memory Block 을 찾는다.
-    std::size_t padding;
-    Node *affectedNode = nullptr, *prevNode = nullptr;
-
-    find(allocSize, alignment, padding, prevNode, affectedNode);
-
-    // 부족할시 메모리 추가할당하기 (여러 개 Area 로 나눠서 FreeList Allocator 로직 진행하기)
-    assert(affectedNode != nullptr && "Not Enough Memory");
-
-    const size_t alignmentPadding = padding - allocHeaderSize;
-    const size_t requiredSize = allocSize + padding;
-
-    const size_t rest = affectedNode->data.blockSize - requiredSize;
-
-    // split block into data block, and a free block of size 'rest'
-    Node *newFreeNode = (Node *)((std::size_t)affectedNode + requiredSize);
-
-    if (rest > 0)
-    {
-        newFreeNode->data.blockSize = rest;
-        newFreeNode->next = nullptr;
-
-
-        // m_FreeList.insert(affectedNode, newFreeNode);
-        insertNode(affectedNode, newFreeNode);
-    }
-
-    // m_FreeList.remove(prevNode, affectedNode);
-    removeNode(prevNode, affectedNode);
-
-    // set up date block
-    const std::size_t headerAddress = (size_t)affectedNode + alignmentPadding;
-    const std::size_t dataAdderess = headerAddress + allocHeaderSize;
-
-    FreeListAllocator::AllocationHeader *HeaderPtr =
-        (FreeListAllocator::AllocationHeader *)headerAddress;
-
-    HeaderPtr->blockSize = requiredSize;
-
-    // headerAddress 로부터, padding 만큼 이전에 가면
-    // 가장 마지막에 할당된 datablock 의 끝 위치가 나온다는 의미
-    HeaderPtr->padding = (char)alignmentPadding;
-
-    int x[2];
-    x[2] = 3;
-
-    m_Used += requiredSize;
-    m_Peak = m_Used;
-
-    return (void *)dataAdderess;
-}
-
-void FreeListAllocator::Free(void *ptr)
-{
-    // Insert It in a sorted position by the address number
-    // - Data Address
-    const std::size_t currentAddresss = (std::size_t)ptr;
-    const std::size_t headerAddress =
-        currentAddresss - sizeof(FreeListAllocator::AllocationHeader);
-
-    const FreeListAllocator::AllocationHeader *allocHeader(
-        (FreeListAllocator::AllocationHeader *)headerAddress);
-
-    /*
-	Node* freeNode = (Node*)(headerAddress);
-	freeNode->data.blockSize = allocHeader->blockSize + allocHeader->padding;
-	*/
-    Node *freeNode =
-        (Node *)((std::size_t)headerAddress - allocHeader->padding);
-    freeNode->data.blockSize = allocHeader->blockSize;
-
-    freeNode->next = nullptr;
-
-    Node *iter = m_FreeList.m_Head;
-    Node *iterPrev = nullptr;
-
-    while (iter != nullptr)
-    {
-        if (ptr < iter)
-        {
-            m_FreeList.insert(iterPrev, freeNode);
-            break;
-        }
-        iterPrev = iter;
-        iter = iter->next;
-    }
-
-    m_Used -= freeNode->data.blockSize;
-
-    // Tree 정보에 새로 생성한 freeNode 정보를 넣어준다.
-    if (m_Policy == FreeListAllocatorPlacementPolicy::FIND_SPEED)
-    {
-        m_SizeAVLTree.Insert(freeNode->data.blockSize, freeNode);
-    }
-
-    // Merge Contiguous Nodes
-    coalescene(iterPrev, freeNode);
-}
-
-void FreeListAllocator::Init()
-{
-    if (m_StartPtr == nullptr)
-        delete m_StartPtr;
-
-    m_StartPtr = new byte[m_TotalSize];
-
-    Reset();
-}
-
-void FreeListAllocator::Reset()
-{
-    m_Used = 0;
-    m_Peak = 0;
-
-    Node *firstNode = (Node *)m_StartPtr;
-    firstNode->data.blockSize = m_TotalSize;
-    firstNode->next = nullptr;
-    firstNode->prev = nullptr;
-
-    m_FreeList.m_Head = nullptr;
-    m_FreeList.insert(nullptr, firstNode);
-
-    m_SizeAVLTree.Clear();
-
-    if (m_Policy == FreeListAllocatorPlacementPolicy::FIND_SPEED)
-    {
-        m_SizeAVLTree.Insert(m_TotalSize, firstNode);
-    }
-}
-
-void FreeListAllocator::coalescene(Node *prevBlock, Node *freeBlock)
+void FreeListAllocator::Scope::coalescene(Node *prevBlock, Node *freeBlock)
 {
     if (freeBlock->next != nullptr &&
         (std::size_t)freeBlock + freeBlock->data.blockSize ==
@@ -213,7 +61,168 @@ void FreeListAllocator::coalescene(Node *prevBlock, Node *freeBlock)
     }
 }
 
-void FreeListAllocator::find(const size_t allocSize,
+FreeListAllocator::Scope::Scope(size_t totalSize,
+                                FreeListAllocatorPlacementPolicy policy)
+{
+    m_Policy = policy;
+
+    m_StartPtr = new byte[totalSize];
+
+    m_Used = 0;
+    m_Peak = 0;
+
+    Node *firstNode = (Node *)m_StartPtr;
+    firstNode->data.blockSize = totalSize;
+    firstNode->next = nullptr;
+    firstNode->prev = nullptr;
+
+    m_FreeList.m_Head = nullptr;
+    m_FreeList.insert(nullptr, firstNode);
+
+    m_SizeAVLTree.Clear();
+
+    if (m_Policy == FreeListAllocatorPlacementPolicy::FIND_SPEED)
+    {
+        m_SizeAVLTree.Insert(totalSize, firstNode);
+    }
+}
+
+FreeListAllocator::Scope::~Scope()
+{
+	delete m_StartPtr;
+    m_StartPtr = nullptr;
+}
+
+bool FreeListAllocator::Scope::HasEnoughSpace(const size_t allocSize,
+                                              const size_t alignment)
+{
+    const size_t allocHeaderSize = sizeof(FreeListAllocator::AllocationHeader);
+    const size_t freeHeaderSize = sizeof(FreeListAllocator::FreeHeader);
+
+    size_t nodeSize = sizeof(Node);
+    // assert(allocSize >= nodeSize);
+    assert(allocSize >= 8);
+
+    // Free Memory Block 을 돌면서
+    // 최적의 Free Memory Block 을 찾는다.
+    Node *affectedNode = nullptr, *prevNode = nullptr;
+
+    find(allocSize,
+         alignment,
+         m_LastFoundPadding,
+         m_LastFoundPrevNode,
+         affectedNode);
+
+    m_LastFoundNode = affectedNode;
+
+    return m_LastFoundNode != nullptr;
+}
+
+bool FreeListAllocator::Scope::Contain(void *dataAddress, size_t scopeSize)
+{ 
+    // m_Memory[0] : 해당 Area 의 메모리 시작 위치
+    const bool s = &m_StartPtr[0] <= dataAddress;
+
+    // m_Memory[m_Chunk] : 해당 Area 의 메모리 끝 위치 (혹은 다음에 할당할 Block 위치)
+    const bool l = dataAddress <= &m_StartPtr[scopeSize];
+
+    return s && l;
+}
+
+void *FreeListAllocator::Scope::Alloc(const size_t allocSize)
+{
+    const size_t allocHeaderSize = sizeof(FreeListAllocator::AllocationHeader);
+    const size_t freeHeaderSize = sizeof(FreeListAllocator::FreeHeader);
+    size_t nodeSize = sizeof(Node);
+
+    const size_t alignmentPadding = m_LastFoundPadding - allocHeaderSize;
+    const size_t requiredSize = allocSize + m_LastFoundPadding;
+
+    const size_t rest = m_LastFoundNode->data.blockSize - requiredSize;
+
+    // split block into data block, and a free block of size 'rest'
+    Node *newFreeNode = (Node *)((std::size_t)m_LastFoundNode + requiredSize);
+
+    if (rest > 0)
+    {
+        newFreeNode->data.blockSize = rest;
+        newFreeNode->next = nullptr;
+
+        // m_FreeList.insert(affectedNode, newFreeNode);
+        insertNode(m_LastFoundNode, newFreeNode);
+    }
+
+    // m_FreeList.remove(prevNode, affectedNode);
+    removeNode(m_LastFoundPrevNode, m_LastFoundNode);
+
+    // set up date block
+    const std::size_t headerAddress =
+        (size_t)m_LastFoundNode + alignmentPadding;
+    const std::size_t dataAdderess = headerAddress + allocHeaderSize;
+
+    FreeListAllocator::AllocationHeader *HeaderPtr =
+        (FreeListAllocator::AllocationHeader *)headerAddress;
+
+    HeaderPtr->blockSize = requiredSize;
+
+    // headerAddress 로부터, padding 만큼 이전에 가면
+    // 가장 마지막에 할당된 datablock 의 끝 위치가 나온다는 의미
+    HeaderPtr->padding = (char)alignmentPadding;
+
+    m_Used += requiredSize;
+    m_Peak = m_Used;
+
+    return (void *)dataAdderess;
+}
+
+void FreeListAllocator::Scope::Free(void *ptr)
+{
+    // Insert It in a sorted position by the address number
+    // - Data Address
+    const std::size_t currentAddresss = (std::size_t)ptr;
+    const std::size_t headerAddress =
+        currentAddresss - sizeof(FreeListAllocator::AllocationHeader);
+
+    const FreeListAllocator::AllocationHeader *allocHeader(
+        (FreeListAllocator::AllocationHeader *)headerAddress);
+
+    /*
+	Node* freeNode = (Node*)(headerAddress);
+	freeNode->data.blockSize = allocHeader->blockSize + allocHeader->padding;
+	*/
+    Node *freeNode =
+        (Node *)((std::size_t)headerAddress - allocHeader->padding);
+    freeNode->data.blockSize = allocHeader->blockSize;
+
+    freeNode->next = nullptr;
+
+    Node *iter = m_FreeList.m_Head;
+    Node *iterPrev = nullptr;
+
+    while (iter != nullptr)
+    {
+        if (ptr < iter)
+        {
+            m_FreeList.insert(iterPrev, freeNode);
+            break;
+        }
+        iterPrev = iter;
+        iter = iter->next;
+    }
+
+    m_Used -= freeNode->data.blockSize;
+
+    // Tree 정보에 새로 생성한 freeNode 정보를 넣어준다.
+    if (m_Policy == FreeListAllocatorPlacementPolicy::FIND_SPEED)
+    {
+        m_SizeAVLTree.Insert(freeNode->data.blockSize, freeNode);
+    }
+
+    // Merge Contiguous Nodes
+    coalescene(iterPrev, freeNode);
+}
+
+void FreeListAllocator::Scope::find(const size_t allocSize,
                              const size_t alignment,
                              size_t &padding,
                              Node *&prevNode,
@@ -239,7 +248,7 @@ void FreeListAllocator::find(const size_t allocSize,
     }
 }
 
-void FreeListAllocator::findBest(const size_t allocSize,
+void FreeListAllocator::Scope::findBest(const size_t allocSize,
                                  const size_t alignment,
                                  size_t &padding,
                                  Node *&prevNode,
@@ -276,7 +285,7 @@ void FreeListAllocator::findBest(const size_t allocSize,
     foundNode = bestBlock;
 }
 
-void FreeListAllocator::findFirst(const size_t allocSize,
+void FreeListAllocator::Scope::findFirst(const size_t allocSize,
                                   const size_t alignment,
                                   size_t &padding,
                                   Node *&prevNode,
@@ -304,7 +313,7 @@ void FreeListAllocator::findFirst(const size_t allocSize,
     foundNode = iter;
 }
 
-void FreeListAllocator::findSpeed(const size_t allocSize,
+void FreeListAllocator::Scope::findSpeed(const size_t allocSize,
                                   const size_t alignment,
                                   size_t &padding,
                                   Node *&prevNode,
@@ -358,7 +367,7 @@ void FreeListAllocator::findSpeed(const size_t allocSize,
 }
 
 // freeList insert, remove 부분들을 아래 함수들로 대체해야 한다.
-void FreeListAllocator::insertNode(Node *prev, Node *current)
+void FreeListAllocator::Scope::insertNode(Node *prev, Node *current)
 {
     m_FreeList.insert(prev, current);
 
@@ -368,7 +377,7 @@ void FreeListAllocator::insertNode(Node *prev, Node *current)
     }
 }
 
-void FreeListAllocator::removeNode(Node *prev, Node *current)
+void FreeListAllocator::Scope::removeNode(Node *prev, Node *current)
 {
     m_FreeList.remove(prev, current);
 
@@ -377,4 +386,78 @@ void FreeListAllocator::removeNode(Node *prev, Node *current)
         m_SizeAVLTree.Erase(current->data.blockSize, current);
     }
 }
+#pragma endregion
+
+FreeListAllocator::FreeListAllocator(const size_t totalSize,
+                                     const size_t alignment = 4)
+    : m_ScopeSize(totalSize), m_Alignment(alignment)
+{
+    Scope *newScope = new Scope(m_ScopeSize, m_Policy);
+    m_Scopes.push_back(newScope);
+
+    m_TotalMemorySize += m_ScopeSize;
+}
+
+FreeListAllocator::~FreeListAllocator()
+{
+for (Scope *scope : m_Scopes)
+	{
+		delete scope;
+	}
+	m_Scopes.clear();
+}
+
+void *FreeListAllocator::Allocate(const size_t allocSize,
+                                  const char *flie = nullptr,
+                                  size_t line)
+{   
+    assert(allocSize != 0, "allocSize must be greater than 0");
+
+    for (Scope* scope : m_Scopes)
+    {
+        if (scope->HasEnoughSpace(allocSize, m_Alignment))
+        {
+            return scope->Alloc(allocSize);
+        }
+    }
+
+    m_TotalMemorySize += m_ScopeSize;
+
+    Scope *newScope = new Scope(m_ScopeSize, m_Policy);
+    m_Scopes.push_back(newScope);
+
+    return newScope->Alloc(allocSize);
+}
+
+void *FreeListAllocator::Reallocate(void *ptr,
+                                    size_t size,
+                                    const char *flie,
+                                    size_t line)
+{
+    if (size > m_ScopeSize)
+        THROW("Size is larger than Chunk");
+
+    // 우선 메모리 할당을 한다.
+    void *r = Allocate(size, flie, line);
+
+    // ptr 에 있는 메모리를 r 로 복사한다.
+    memcpy(r, ptr, size);
+
+    // ptr 은 해제 한다.
+    Free(ptr);
+
+    return r;
+}
+
+void FreeListAllocator::Free(void *dataAddress)
+{
+    for (size_t i = 0; i < m_Scopes.size(); ++i)
+    {
+        if (m_Scopes[i]->Contain(dataAddress))
+        {
+            m_Scopes[i]->Free(dataAddress);
+        }
+    }
+}
+
 } // namespace Hazel
