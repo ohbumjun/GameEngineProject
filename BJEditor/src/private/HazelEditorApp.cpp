@@ -11,6 +11,8 @@
 #include "Hazel/Resource/AssetManagerBase.h"
 #include "Hazel/Resource/DefaultResourceManager.h"
 #include "EditorAsset/EditorAssetManager.h"
+#include "EditorContext.h"
+#include "Editor.h"
 #include "Hazel/Core/EngineContext.h"
 
 namespace Hazel
@@ -29,8 +31,8 @@ public:
 
         // 필요하다면, Audio 관련 초기화도 Application 생성자 안에서 처리
 
-        // Editor 생성
-
+        // Editor 생성 및 EditorContext 관련 초기화
+        HazelEditor::Editor *editor = HazelEditor::EditorContext::Initialize();
 
         // 기본 세팅
         AssetManagerController::Initialize(new HazelEditor::EditorAssetManagerController());

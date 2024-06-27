@@ -49,14 +49,24 @@ public:
 		 */
         static const char *builtinShader;
 
-        /**Log 폴더
+        /*
+         * Log 폴더
 		 */
         static const char *log;
 
-        /**builtin 폴더
+        /*
+         * builtin 폴더
 		 */
         // static const char *builtin;
     };
+
+    static Editor* Initialize();
+
+    EditorContext();
+    ~EditorContext();
+
+private:
+    static EditorContext* m_Instance;
 };
 };
 
