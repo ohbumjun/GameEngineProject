@@ -32,6 +32,14 @@ public:
     virtual void *Allocate(size_t size,
                            const char *flie = nullptr,
                            size_t line = 0);
+    // @brief TODO 구현해야 한다.
+    virtual void *Reallocate(void *ptr,
+                             size_t size,
+                             const char *flie = nullptr,
+                             size_t line = 0)
+    {
+        return nullptr;
+    };
     virtual void Free(void *ptr);
     virtual void Init();
     virtual void Reset();

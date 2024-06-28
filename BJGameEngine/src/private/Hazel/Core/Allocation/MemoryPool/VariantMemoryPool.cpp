@@ -21,7 +21,7 @@ void *VariantMemoryPool::Allocate(const size_t allocateSize)
 void VariantMemoryPool::Init(uint TotalSize,
                              FreeListAllocatorPlacementPolicy policy)
 {
-    m_Allocator = new FreeListAllocator(TotalSize, policy);
+    m_Allocator = new FreeListAllocator(TotalSize);
 }
 
 void VariantMemoryPool::onFree(void *ptr)

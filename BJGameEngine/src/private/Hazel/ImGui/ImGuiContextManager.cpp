@@ -32,95 +32,6 @@ static void imgui_free(void *ptr, void *user_data)
     // lv_free(ptr);
 }
 
-ImGuiLayer::ImGuiLayer() : Layer("ImGuiLayer")
-{
-}
-
-ImGuiLayer::~ImGuiLayer()
-{
-}
-
-void ImGuiLayer::OnAttach()
-{
-
-}
-
-void ImGuiLayer::OnDetach()
-{
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
-}
-
-void ImGuiLayer::OnEvent(Event &e)
-{
-    /*
-		아무런 조치를 취하지 않는 이상
-		w,a,s,d 키를 누르면 FrameBuffer 를 담은 Viewport 상에서의 Camera 가 이동한다.
-		왜냐하면 우리가 사용하는 Imgui 전체가 ImguiLayer 이고 
-		Application 상에서 ImguiLayer 부터 ? (이건 변할 수 있음) event 를 처리하기 때문에
-		우리가 다른 Imgui 조작을 가하더라도, 무조건 FrameBuffer Viewport Window 쪽으로
-		Event 사항이 전달되기 때문이다.
-
-		그런데 예를 들어, 우리가 Imgui 상에서 다른 window 에서 어떤 조작을 가하다가
-		w,s,a,d 를 입력했는데 그것이 FrameBuffer 의 Camera 를 이동시키는 것은
-		말이 안된다. 특정 상황에서만 Camera 를 이동시키는 Event 를 발생시키고 싶다.
-
-		따라서  해당 Frame Buffer Viewport Window 를 클릭하지 않는 이상..?
-		해당 Window 에 Focus 하고 있지 않은 이상..? 
-		
-		FrameBuffer 를 담는 Viewport Window 는 Event 관련 동작을 
-		수행하지 않게 하고 싶은 것이다.
-		*/
-    if (m_BlockEvents)
-    {
-        ImGuiIO &io = ImGui::GetIO();
-
-        // - e.IsInCategory 와  io.WantCaptureMouse 가 둘다 true 여야만 e.m_threadHandles 가 true가 될 것이다.
-        // - io.WantCaptureMouse 등의 변수는 실제 imgui 와 유저의 interaction 에 의해서 실시간으로 변하는 값이다.
-        //   ex) ImGui 에 마우스를 올리면  io.WantCaptureMouse 변수는 true, 아니면 false
-        // - 만약 e.m_Handled 가 되면, 	void Application::OnEvent(Event& e) 에서 ImGuiLayer 가 해당
-        //   이벤트를 처리한 것으로 인식하고, 다른 Layer 들은 결과적으로 해당 이벤트를 처리하지 않게 된다.
-        e.m_Handled |= e.IsInCategory(EventCategoryMouse) & io.WantCaptureMouse;
-        e.m_Handled |=
-            e.IsInCategory(EventCategoryKeyBoard) & io.WantCaptureKeyboard;
-    }
-}
-
-void ImGuiLayer::Begin()
-{
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
-
-    ImGuizmo::BeginFrame();
-}
-
-void ImGuiLayer::End()
-{
-    ImGuiIO &io = ImGui::GetIO();
-    Application &app = Application::Get();
-    io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(),
-                            (float)app.GetWindow().GetHeight());
-
-    // Rendering
-    ImGui::Render();
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-    {
-        GLFWwindow *backup_current_context = glfwGetCurrentContext();
-        ImGui::UpdatePlatformWindows();
-        ImGui::RenderPlatformWindowsDefault();
-        glfwMakeContextCurrent(backup_current_context);
-    }
-}
-
-void ImGuiLayer::BlockEvents(bool block)
-{
-    m_BlockEvents = block;
-}
-
 void ImguiContextManager::setDarkThemeColor()
 {
     auto &colors = ImGui::GetStyle().Colors;
@@ -152,12 +63,6 @@ void ImguiContextManager::setDarkThemeColor()
     colors[ImGuiCol_TitleBg] = ImVec4{0.15f, 0.1505f, 0.151f, 1.0f};
     colors[ImGuiCol_TitleBgActive] = ImVec4{0.15f, 0.1505f, 0.151f, 1.0f};
     colors[ImGuiCol_TitleBgCollapsed] = ImVec4{0.15f, 0.1505f, 0.151f, 1.0f};
-}
-
-void ImGuiLayer::OnImGuiRender()
-{
-    static bool show = true;
-    // ImGui::ShowDemoWindow(&show);
 }
 
 ImguiContextManager::ImguiContextManager()

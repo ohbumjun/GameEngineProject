@@ -188,9 +188,6 @@ void Application::Initialize()
     // WindowsWindow.WindowsData.EventCallback 에 해당 함수 세팅
     m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
 
-    // 과연 별도의 Engine Class 가 정말 필요할까 ?
-    Engine::GetInstance()->Initialize();
-
     Renderer::Init();
 
     initImgui();

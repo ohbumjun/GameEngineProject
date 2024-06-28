@@ -17,7 +17,7 @@ StackAllocator::~StackAllocator()
 }
 
 void *StackAllocator::Allocate(const size_t allocSize,
-                               const char *flie = nullptr,
+                               const char *flie ,
                                size_t line)
 {
     const size_t currentAddress = (size_t)m_StartPtr + m_Offset;

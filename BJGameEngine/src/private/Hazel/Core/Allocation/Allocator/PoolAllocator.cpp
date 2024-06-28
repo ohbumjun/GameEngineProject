@@ -18,7 +18,7 @@ PoolAllocator::~PoolAllocator()
 }
 
 void *PoolAllocator::Allocate(const size_t allocateSize,
-                              const char *flie = nullptr,
+                              const char *flie ,
                               size_t line)
 {
     assert(m_ChunkSize == allocateSize);

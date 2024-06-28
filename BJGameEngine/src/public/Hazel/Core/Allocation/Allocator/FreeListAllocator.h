@@ -35,7 +35,7 @@ class FreeListAllocator : public Allocable
         ~Scope();
 
         bool HasEnoughSpace(const size_t allocSize, const size_t alignment);
-        bool Contain(void *addressPtr, size_t scopeSize));
+        bool Contain(void *addressPtr, size_t scopeSize);
         void *Alloc(const size_t allocSize);
         void Free(void *ptr);
 
@@ -86,7 +86,7 @@ public:
     }
     virtual void *Allocate(const size_t allocSize,
                            const char *flie = nullptr,
-                           size_t line);
+                           size_t line = 0);
 
     virtual void *Reallocate(void *ptr,
                              size_t size,

@@ -1,6 +1,12 @@
+#include "hzpch.h"
 #include "EditorContext.h"
 #include "Editor.h"
 #include "EditorAsset/EditorAssetExtension.h"
+#include "Hazel/Resource/AssetManagerBase.h"
+#include "EditorAsset/EditorAssetManager.h"
+#include "Hazel/ImGui/ImGuiContextManager.h"
+#include "Hazel/Core/Application/Application.h"
+#include "File/FileManager.h"
 
 namespace HazelEditor
 {
@@ -14,6 +20,20 @@ Editor *EditorContext::Initialize()
     // AssetExtension
     EditorAssetExtension::Initialize();
 
+    Hazel::AssetManagerController::Initialize(
+        new HazelEditor::EditorAssetManagerController());
+
+    // ImguiContextManager
+    Hazel::ImguiContextManager::Initialize();
+    ImGuiContext *context = Hazel::ImguiContextManager::CreateContext();
+
+    const Hazel::ApplicationContext &applicationContext =
+        Hazel::Application::Get().GetSpecification();
+    const Hazel::ApplicationCommandLineArgs &applicationCommandLineArgs =
+        applicationContext.GetCommandLineArgs();
+
+    HazelEditor::FileManager::Initialize(applicationContext.ge);
+
     // CoreCLR
 
     // Editor »ý¼º
@@ -24,9 +44,7 @@ EditorContext::EditorContext()
 {
 }
 
-EditorContext::~EditorContext()
-{
-}
+EditorContext::~EditorContext(){};
 
-}
+};
 

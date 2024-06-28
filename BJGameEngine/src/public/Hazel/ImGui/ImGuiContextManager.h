@@ -28,6 +28,6 @@ public:
  private:
     static void setDarkThemeColor();
 
-    static FreeListAllocator * s_imguiAllocator;
+    static class FreeListAllocator * s_imguiAllocator;
 };
 } // namespace Hazel

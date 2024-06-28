@@ -17,7 +17,7 @@ FixedMemoryPool::~FixedMemoryPool()
 void *FixedMemoryPool::Allocate(const size_t allocateSize)
 {
     // return m_Allocator->Allocate(allocateSize, MemoryPoolInfo::ALIGNMENT);
-    return m_Allocator->Allocate(m_SingleDataSize, MemoryPoolInfo::ALIGNMENT);
+    return m_Allocator->Allocate(m_SingleDataSize);
 }
 
 void FixedMemoryPool::Init(const uint TotalNumber, int SingleSize)

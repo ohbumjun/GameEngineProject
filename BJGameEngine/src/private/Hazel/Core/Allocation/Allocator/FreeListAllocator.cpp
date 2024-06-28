@@ -389,7 +389,7 @@ void FreeListAllocator::Scope::removeNode(Node *prev, Node *current)
 #pragma endregion
 
 FreeListAllocator::FreeListAllocator(const size_t totalSize,
-                                     const size_t alignment = 4)
+                                     const size_t alignment)
     : m_ScopeSize(totalSize), m_Alignment(alignment)
 {
     Scope *newScope = new Scope(m_ScopeSize, m_Policy);
@@ -408,7 +408,7 @@ for (Scope *scope : m_Scopes)
 }
 
 void *FreeListAllocator::Allocate(const size_t allocSize,
-                                  const char *flie = nullptr,
+                                  const char *flie,
                                   size_t line)
 {   
     assert(allocSize != 0, "allocSize must be greater than 0");
@@ -453,7 +453,7 @@ void FreeListAllocator::Free(void *dataAddress)
 {
     for (size_t i = 0; i < m_Scopes.size(); ++i)
     {
-        if (m_Scopes[i]->Contain(dataAddress))
+        if (m_Scopes[i]->Contain(dataAddress, m_ScopeSize))
         {
             m_Scopes[i]->Free(dataAddress);
         }

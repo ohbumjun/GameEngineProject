@@ -71,7 +71,6 @@ SET(HEADER_CORE_ALLOCATOR
     public/Hazel/Core/Allocation/Allocator/GeneralAllocator.h
     public/Hazel/Core/Allocation/Allocator/DefaultHeapAllocator.h
     public/Hazel/Core/Allocation/Allocator/FreeListAllocator.h
-    public/Hazel/Core/Allocation/Allocator/MemoryPoolAllocator.h
     public/Hazel/Core/Allocation/Allocator/PoolAllocator.h
     public/Hazel/Core/Allocation/Allocator/StackAllocator.h
 )
@@ -83,7 +82,6 @@ SET(SRC_CORE_ALLOCATOR
     private/Hazel/Core/Allocation/Allocator/GeneralAllocator.cpp
     private/Hazel/Core/Allocation/Allocator/DefaultHeapAllocator.cpp
     private/Hazel/Core/Allocation/Allocator/FreeListAllocator.cpp
-    private/Hazel/Core/Allocation/Allocator/MemoryPoolAllocator.cpp
     private/Hazel/Core/Allocation/Allocator/PoolAllocator.cpp
     private/Hazel/Core/Allocation/Allocator/StackAllocator.cpp
 )
