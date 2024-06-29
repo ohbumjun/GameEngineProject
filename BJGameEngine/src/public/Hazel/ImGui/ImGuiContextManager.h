@@ -6,8 +6,6 @@
 #include "Hazel/Event/KeyEvent.h"
 #include "Hazel/Event/MouseEvent.h"
 
-class ImGuiContext;
-
 namespace Hazel
 {
 // export 해줘야 한다.
@@ -21,13 +19,11 @@ public:
 
     static void Finalize();
 
-    static ImGuiContext *CreateContext();
+    static void CreateContext();
 
-    static void DestroyContext(ImGuiContext *context);
+    static void DestroyContext(class ImGuiContext *context);
 
  private:
     static void setDarkThemeColor();
-
-    static class FreeListAllocator * s_imguiAllocator;
 };
 } // namespace Hazel

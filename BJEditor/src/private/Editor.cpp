@@ -5,10 +5,6 @@
 namespace HazelEditor
 {
 
-	void Editor::CreateEditor()
-{
-}
-
 Editor::Editor()
 {
 	// Make Window

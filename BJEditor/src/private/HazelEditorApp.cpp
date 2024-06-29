@@ -10,7 +10,6 @@
 #include "Hazel/Resource/DefaultResourceManager.h"
 #include "EditorContext.h"
 #include "Editor.h"
-#include "Hazel/Core/EngineContext.h"
 
 namespace Hazel
 {
@@ -32,7 +31,7 @@ public:
         m_Editor = HazelEditor::EditorContext::Initialize();
 
         // 기본 세팅
-        DefaultResourceManager::LoadDefaultResources();
+        // DefaultResourceManager::LoadDefaultResources();
 
         // Application 
         Application::Initialize();
@@ -42,6 +41,18 @@ public:
 
     virtual void Run()
     {
+        // 그냥 Run 로직은 그대로 두고, Editor Layer 측을 모두 수정하자.
+
+        // Editor Run
+        // -> 각 Editor 용 Window 들 Draw
+        // -> 내부적으로 Panel 들도 Draw
+        // -> Layer 와 어떻게 함께 사용할 것인가 ?
+
+        // Imgui Render
+
+        // Scee Update
+
+        // Scene Render
     }
 
     void Finalize()
@@ -53,7 +64,7 @@ public:
     }
 
  private:
-    HazelEditor::Editor *m_Editor
+    HazelEditor::Editor *m_Editor;
 };
 
 Application *CreateApplication(ApplicationCommandLineArgs args)

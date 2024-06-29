@@ -5,14 +5,10 @@
 // imbuibuild.cpp 에 해당 h 파일들에 대한 cpp 파일들도
 // 컴파일할 수 있게 정보를 세팅해두었기 때문이다.
 #include "Hazel/Core/Application/Application.h"
-#include "Hazel/Core/EngineContext.h"
-#include "ImGuizmo.h"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
 
 // TEMPORARY
-#include <GLFW/glfw3.h>
-#include <glad/glad.h>
 #include "Hazel/ImGui/ImGuiContextManager.h"
 #include "Hazel/Core/Allocation/Allocator/FreeListAllocator.h"
 
@@ -22,14 +18,16 @@ FreeListAllocator *s_imguiAllocator = new FreeListAllocator(1024 * 1024);
 
 static void *imgui_malloc(size_t sz, void *user_data)
 {
-    return s_imguiAllocator->Allocate(sz, __FILE__, __LINE__);
-    // return lv_malloc(sz);
+    // return s_imguiAllocator->Allocate(sz, __FILE__, __LINE__);
+
+    return malloc(sz);
 }
 
 static void imgui_free(void *ptr, void *user_data)
 {
-    s_imguiAllocator->Free(ptr);
-    // lv_free(ptr);
+   //  s_imguiAllocator->Free(ptr);
+
+    return free(ptr);
 }
 
 void ImguiContextManager::setDarkThemeColor()
@@ -84,7 +82,7 @@ void ImguiContextManager::Finalize()
 {
 }
 
-ImGuiContext *ImguiContextManager::CreateContext()
+void ImguiContextManager::CreateContext()
 {
     // static std::string resourceRootPath = RESOURCE_ROOT;
 
@@ -144,8 +142,6 @@ ImGuiContext *ImguiContextManager::CreateContext()
     // Setup Platform/Renderer bindings
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 410");
-
-    return imguiContext;
 }
 
 void ImguiContextManager::DestroyContext(ImGuiContext *context)

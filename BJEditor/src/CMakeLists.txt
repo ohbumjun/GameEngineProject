@@ -18,12 +18,34 @@ SET(FILE_SOURCES
 SOURCE_GROUP("file/private" FILES ${FILE_SOURCES})
 LIST(APPEND TOTAL_EDITOR_FILES ${FILE_SOURCES})
 
+# Windows
+SET(EDITORWINDOW_HEADERS 
+    public/EditorWindows/BaseWindow.h
+    public/EditorWindows/EditorWindow.h
+    public/EditorWindows/GuiWindow.h
+)
+SOURCE_GROUP("editorwindow/public" FILES ${EDITORWINDOW_HEADERS})
+LIST(APPEND TOTAL_EDITOR_FILES ${EDITORWINDOW_HEADERS})
+
+SET(EDITORWINDOW_SOURCES
+    private/EditorWindows/BaseWindow.cpp
+    private/EditorWindows/EditorWindow.cpp
+    private/EditorWindows/GuiWindow.cpp
+)
+SOURCE_GROUP("editorwindow/private" FILES ${EDITORWINDOW_SOURCES})
+LIST(APPEND TOTAL_EDITOR_FILES ${EDITORWINDOW_SOURCES})
+
+
 # Panels
 SET(PANEL_HEADERS 
     public/Panel/ComponentPanel/CameraPanel.h
     public/Panel/ContentBrowserPanel.h
     public/Panel/SceneHierarchyPanel.h
-    public/Panel/ProjectSelectPanel.h
+    public/Panel/DockSpacePanel.h
+    public/Panel/MessagePanel.h
+    public/Panel/Panel.h
+    public/Panel/NativePanel.h
+    public/Panel/ProgressPanel.h
 )
 SOURCE_GROUP("panel/public" FILES ${PANEL_HEADERS})
 LIST(APPEND TOTAL_EDITOR_FILES ${PANEL_HEADERS})
@@ -32,7 +54,11 @@ SET(PANEL_SOURCES
     private/Panel/ComponentPanel/CameraPanel.cpp
     private/Panel/ContentBrowserPanel.cpp
     private/Panel/SceneHierarchyPanel.cpp
-    private/Panel/ProjectSelectPanel.cpp
+    private/Panel/DockSpacePanel.cpp
+    private/Panel/MessagePanel.cpp
+    private/Panel/Panel.cpp
+    private/Panel/NativePanel.cpp
+    private/Panel/ProgressPanel.cpp
 )
 SOURCE_GROUP("panel/private" FILES ${PANEL_SOURCES})
 LIST(APPEND TOTAL_EDITOR_FILES ${PANEL_SOURCES})
@@ -88,6 +114,7 @@ LIST(APPEND TOTAL_EDITOR_FILES ${EDITOR_HEADERS})
 SET(EDITOR_SOURCES
     private/ProjectSelectLayer.cpp
     private/EditorLayer.cpp
+    private/EditorContext.cpp
     private/ParticleSystem.cpp
     private/HazelEditorApp.cpp
     private/Editor.cpp
