@@ -462,6 +462,8 @@ public:
 
     static int pr_str_wchar_to_utf8(char *dest, uint32 ch);
 
+    static int pr_str_wchar_to_utf8(char *dest, uint32 ch);
+
     static int pr_str_utf8_read_escape_sequence(const char *src, uint32 *dest);
 
     static int pr_str_utf8_unescape(char *buf, int sz, const char *src);

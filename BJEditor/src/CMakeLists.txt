@@ -109,6 +109,9 @@ SET(EDITOR_HEADERS
     public/ParticleSystem.h
     public/EditorContext.h
     public/Editor.h
+    public/Project.h
+    public/ProjectContext.h
+    public/EditorSettings.h
 )
 SOURCE_GROUP("editor/public" FILES ${EDITOR_HEADERS})
 LIST(APPEND TOTAL_EDITOR_FILES ${EDITOR_HEADERS})
@@ -120,6 +123,9 @@ SET(EDITOR_SOURCES
     private/ParticleSystem.cpp
     private/HazelEditorApp.cpp
     private/Editor.cpp
+    private/Project.cpp
+    private/ProjectContext.cpp
+    private/EditorSettings.cpp
 )
 SOURCE_GROUP("editor/private" FILES ${EDITOR_SOURCES})
 LIST(APPEND TOTAL_EDITOR_FILES ${EDITOR_SOURCES})

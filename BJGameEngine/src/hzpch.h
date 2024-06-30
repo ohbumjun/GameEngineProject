@@ -1,5 +1,9 @@
 ﻿#pragma once
 
+#define _CRT_SECURE_NO_WARNINGS
+
+#define UNICODE
+
 // Standard
 #include <assert.h>
 #include <bitset>
@@ -11,6 +15,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <string>
+#include <shlwapi.h>
 
 // Utils
 #include <algorithm>
@@ -58,6 +63,12 @@ typedef unsigned int uint32;
 typedef unsigned int uint;
 typedef unsigned long ulong;
 typedef unsigned long long uint64;
+
+#define CHAR_INIT_SHORT_LENGTH 256
+#define CHAR_INIT_LENGTH 512
+#define CHAR_INIT_LONG_LENGTH 2048
+
+
 
 // Exception
 #define THROW(fmt, ...)                                                        \

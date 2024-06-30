@@ -143,6 +143,8 @@ struct TypeInfo final
 
     std::set<FieldInfo> m_fieldInfos;
 
+    ConstructorInfo constructors;
+
     uint32 m_PointerCount;
 
     /**
