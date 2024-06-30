@@ -73,6 +73,7 @@ SET(HEADER_CORE_ALLOCATOR
     public/Hazel/Core/Allocation/Allocator/FreeListAllocator.h
     public/Hazel/Core/Allocation/Allocator/PoolAllocator.h
     public/Hazel/Core/Allocation/Allocator/StackAllocator.h
+    public/Hazel/Core/Allocation/Allocator/EngineAllocator.h
 )
 SOURCE_GROUP("core/allocation/allocator/public" FILES ${HEADER_CORE_ALLOCATOR})
 LIST(APPEND TOTAL_ENGINE_FILES ${HEADER_CORE_ALLOCATOR})
@@ -84,6 +85,7 @@ SET(SRC_CORE_ALLOCATOR
     private/Hazel/Core/Allocation/Allocator/FreeListAllocator.cpp
     private/Hazel/Core/Allocation/Allocator/PoolAllocator.cpp
     private/Hazel/Core/Allocation/Allocator/StackAllocator.cpp
+    private/Hazel/Core/Allocation/Allocator/EngineAllocator.cpp
 )
 SOURCE_GROUP("core/allocation/allocator/private" FILES ${SRC_CORE_ALLOCATOR})
 LIST(APPEND TOTAL_ENGINE_FILES ${SRC_CORE_ALLOCATOR})

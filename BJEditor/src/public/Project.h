@@ -8,7 +8,7 @@ namespace HazelEditor
 {
 class Project
 {
-    friend class EditorWindow;
+public:
 
     enum class PlayState : uint8
     {
@@ -30,7 +30,6 @@ class Project
         MAX,
     };
 
-public:
 	// @param projectPath 프로젝트 절대경로
     Project(const char *projectPath);
     ~Project();

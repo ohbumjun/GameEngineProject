@@ -114,6 +114,7 @@ SET(EDITOR_HEADERS
     public/Project.h
     public/ProjectContext.h
     public/EditorSettings.h
+    public/IconsFontAwesome6.h
 )
 SOURCE_GROUP("editor/public" FILES ${EDITOR_HEADERS})
 LIST(APPEND TOTAL_EDITOR_FILES ${EDITOR_HEADERS})

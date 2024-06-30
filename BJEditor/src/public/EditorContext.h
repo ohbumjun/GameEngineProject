@@ -69,6 +69,9 @@ public:
 
     EditorContext();
     ~EditorContext();
+
+    const EditorSettings& GetSettings() const { return m_Settings; }
+
     void LoadSettings();
     void SaveSettings();
 
