@@ -504,7 +504,9 @@ void StringUtil::ReplaceStrOpt(char *dest,
                                char const *const replace)
 {
     /*
-    It replaces all occurrences of a specific pattern (pattern) in a source string (src) with a replacement string (replace) and optionally writes the modified string to a destination buffer (dest).
+    It replaces all occurrences of a specific pattern (pattern) in a source string (src) 
+    with a replacement string (replace) 
+    and optionally writes the modified string to a destination buffer (dest).
     */
     size_t const replen = strlen(replace);
     size_t const patlen = strlen(pattern);

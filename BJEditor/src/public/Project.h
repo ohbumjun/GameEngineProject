@@ -8,6 +8,8 @@ namespace HazelEditor
 {
 class Project
 {
+    friend class EditorWindow;
+
     enum class PlayState : uint8
     {
         PLAY,
