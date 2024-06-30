@@ -474,8 +474,10 @@ public:
                                char target,
                                char replacement);
 
-    static std::vector<std::string> p_split_string(const std::string &origin,
+    static std::vector<std::string> SplitString(const std::string &origin,
                                                    char split);
+    static std::vector<std::string> SplitString(const std::string &origin,
+                                                const std::string &delimiter);
 
 #pragma region trim_example
     /*

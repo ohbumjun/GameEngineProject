@@ -450,7 +450,7 @@ std::string StringUtil::pr_str_system_to_utf8(const char *cp)
 }
 
 
-std::vector<std::string> StringUtil::p_split_string(const std::string &origin,
+std::vector<std::string> StringUtil::SplitString(const std::string &origin,
                                                     char split)
 {
     char delimiter = ',';
@@ -479,6 +479,23 @@ std::vector<std::string> StringUtil::p_split_string(const std::string &origin,
     }
 
     return substrings;
+}
+
+std::vector<std::string> StringUtil::SplitString(const std::string &str,
+                                                 const std::string &delimiter)
+{
+    std::vector<std::string> tokens;
+    std::string s = str;
+    size_t pos = 0;
+    std::string token;
+    while ((pos = s.find(delimiter)) != std::string::npos)
+    {
+        token = s.substr(0, pos);
+        tokens.push_back(token);
+        s.erase(0, pos + delimiter.length());
+    }
+    tokens.push_back(s); // 마지막 토큰 추가
+    return tokens;
 }
 
 std::string StringUtil::pr_trim_start(const std::string &str, char c)
