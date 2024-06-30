@@ -31,4 +31,11 @@ public:
 private:
     ProjectContext(const char *absolutePath);
 };
+
+/**
+ * @brief 현재 열려있는 프로젝트의 컨텍스트 반환, 열려있지 않은 경우 nullptr
+ * @file #include "editor/project/LvProject.h"
+ */
+ProjectContext * BJ_GetProjectContext();
+
 } // namespace HazelEditor

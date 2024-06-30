@@ -6,6 +6,8 @@
 #define DIRECTORY_SEPARATOR_WCHAR L'\\'
 #define DIRECTORY_SEPARATOR_CHAR '\\'
 
+namespace Hazel
+{
 enum class FileAccessMode : uint8
 {
     READ_ONLY,
@@ -28,3 +30,6 @@ enum class FilePosMode : uint8
     CURRENT,
     END
 };
+
+}
+

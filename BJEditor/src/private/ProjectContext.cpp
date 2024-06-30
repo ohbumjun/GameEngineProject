@@ -14,6 +14,7 @@ ProjectContext::ProjectContext(const char *absolutePath) : project(nullptr)
     builtinDirectoryPath =
         Hazel::DirectorySystem::CombinePath(absolutePath,
         EditorContext::Directories::builtin);
+
     programDirectoryPath =
         Hazel::DirectorySystem::CombinePath(absolutePath, EditorContext::Directories::program);
     
@@ -23,6 +24,7 @@ ProjectContext::ProjectContext(const char *absolutePath) : project(nullptr)
     assetCacheDirectoryPath = Hazel::DirectorySystem::CombinePath(
         absolutePath,
         EditorContext::Directories::library);
+
     assetCacheDirectoryPath = Hazel::DirectorySystem::CombinePath(
         assetCacheDirectoryPath.c_str(),
         EditorContext::Directories::Cache::asset);
@@ -30,14 +32,17 @@ ProjectContext::ProjectContext(const char *absolutePath) : project(nullptr)
     reflectCacheDirectoryPath = Hazel::DirectorySystem::CombinePath(
         absolutePath,
         EditorContext::Directories::library);
+
     reflectCacheDirectoryPath = Hazel::DirectorySystem::CombinePath(
         reflectCacheDirectoryPath.c_str(),
         EditorContext::Directories::Cache::reflect);
 
     solutionDirectoryPath =
         Hazel::DirectorySystem::CombinePath(absolutePath, EditorContext::Directories::solution);
+    
     resourcesDirectoryPath =
         Hazel::DirectorySystem::CombinePath(absolutePath, EditorContext::Directories::resources);
+    
     bundleDirectoryPath =
         Hazel::DirectorySystem::CombinePath(absolutePath, EditorContext::Directories::bundle);
 }
@@ -179,6 +184,11 @@ void ProjectContext::Finalize(Project *project)
     FileManager::Finalize();
 
     // LvObjectAddress::SetFinder(nullptr);
+}
+
+ProjectContext *BJ_GetProjectContext()
+{
+    return s_projectContext;
 }
 
 } // namespace HazelEditor

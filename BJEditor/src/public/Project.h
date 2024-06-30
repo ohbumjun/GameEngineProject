@@ -53,6 +53,9 @@ public:
     void Pause();
     void Stop();
     void NextFrame();
+
+    // @details 아래 2개의 함수는 나중에 프로젝트가 여러개 ?
+    // 가 될 때 진행해주도록 한다.
     void SaveSettings();
     void LoadSettings();
 
