@@ -46,6 +46,7 @@ SET(PANEL_HEADERS
     public/Panel/Panel.h
     public/Panel/NativePanel.h
     public/Panel/ProgressPanel.h
+    public/Panel/PanelController.h
 )
 SOURCE_GROUP("panel/public" FILES ${PANEL_HEADERS})
 LIST(APPEND TOTAL_EDITOR_FILES ${PANEL_HEADERS})
@@ -59,6 +60,7 @@ SET(PANEL_SOURCES
     private/Panel/Panel.cpp
     private/Panel/NativePanel.cpp
     private/Panel/ProgressPanel.cpp
+    private/Panel/PanelController.cpp
 )
 SOURCE_GROUP("panel/private" FILES ${PANEL_SOURCES})
 LIST(APPEND TOTAL_EDITOR_FILES ${PANEL_SOURCES})
