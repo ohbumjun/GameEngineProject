@@ -460,17 +460,18 @@ public:
     // static int pr_str_utf8_extra_length(const char* src_utf8);
     static int CalculateUTF8ExtraLength(const char *src_utf8);
 
-    static int pr_str_wchar_to_utf8(char *dest, uint32 ch);
-
-    static int pr_str_wchar_to_utf8(char *dest, uint32 ch);
+    // static int pr_str_wchar_to_utf8(char *dest, uint32 ch);
+    static int ChangeWCharToUTF8(char *dest, uint32 ch);
 
     static int pr_str_utf8_read_escape_sequence(const char *src, uint32 *dest);
 
     static int pr_str_utf8_unescape(char *buf, int sz, const char *src);
 
-    static bool pr_str_is_utf8(const char *c);
+    // static bool pr_str_is_utf8(const char *c);
+    static bool IsStrUTF8(const char *c);
 
-    static std::string pr_str_system_to_utf8(const char *cp);
+    // static std::string pr_str_system_to_utf8(const char *cp);
+    static std::string ChangeSystemStrToUTF8(const char *cp);
 
     static void ReplaceWString(std::wstring &str,
                                char target,
@@ -480,6 +481,11 @@ public:
                                                    char split);
     static std::vector<std::string> SplitString(const std::string &origin,
                                                 const std::string &delimiter);
+
+    static void ReplaceStrOpt(char *dest,
+                                   char const *const src,
+                                   char const *const pattern,
+                                   char const *const replace);
 
 #pragma region trim_example
     /*
@@ -532,17 +538,23 @@ Trimmed End : '   Hello, world!'
 */
 #pragma endregion
 
-    static std::string pr_trim_start(const std::string &str, char c);
+    // static std::string pr_trim_start(const std::string &str, char c);
+    static std::string TrimStart(const std::string &str, char c);
 
-    static std::string pr_trim_end(const std::string &str, char c);
+    // static std::string pr_trim_end(const std::string &str, char c);
+    static std::string TrimEnd(const std::string &str, char c);
 
-    static std::string pr_trim(const std::string &str, char c);
+    // static std::string pr_trim(const std::string &str, char c);
+    static std::string Trim(const std::string &str, char c);
 
-    static std::wstring pr_trim_start(const std::wstring &str, char c);
+    // static std::wstring pr_trim_start(const std::wstring &str, char c);
+    static std::wstring TrimStart(const std::wstring &str, char c);
 
-    static std::wstring pr_trim_end(const std::wstring &str, char c);
+    // static std::wstring pr_trim_end(const std::wstring &str, char c);
+    static std::wstring TrimEnd(const std::wstring &str, char c);
 
-    static std::wstring pr_trim(const std::wstring &str, char c);
+    // static std::wstring pr_trim(const std::wstring &str, char c);
+    static std::wstring Trim(const std::wstring &str, char c);
 };
 
 } // namespace Utils

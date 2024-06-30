@@ -8,7 +8,7 @@ class ProjectContext
 {
 public:
     static Project *Initialize(const std::string& absolutePath);
-    static void Finalize();
+    static void Finalize(Project *project);
 
     Project *project;
 

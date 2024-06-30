@@ -55,6 +55,20 @@ public:
 
     // @brief 파일 경로에 존재 확인
     static bool ExistFilePath(const char *path);
+    
+     // @brief 디렉터리를 생성
+    static bool CreateDirectoryPath(const char *path);
+
+	// @brief 디렉터리 유/무.
+    static bool ExistDirectoryPath(const char *path);
+
+	// @brief 디렉터리를 카피합니다.
+    static bool CopyDirectoryPath(const char *dst,
+                                  const char *src); // TODO : Test 필요
+
+	// @brief 디렉터리를 제거합니다.
+    static bool RemoveDirectoryPath(const char *path);
+
 
     // @brief 순소 폴더 경로 리턴
     static std::string GetPathDirectory(const char *path);

@@ -99,47 +99,50 @@ std::distance(editorContext->m_Settings.m_LastOpenProjects.begin(), iterator);
         absolutePath.c_str(),
                         EditorContext::Directories::library);
 
-    if (!lv_directory_exist(s_projectContext->bundleDirectoryPath.c_str()))
+    if (!Hazel::DirectorySystem::ExistDirectoryPath(s_projectContext->bundleDirectoryPath.c_str()))
     {
-        lv_directory_create(s_projectContext->bundleDirectoryPath.c_str());
+        Hazel::DirectorySystem::CreateDirectoryPath(
+            s_projectContext->bundleDirectoryPath.c_str());
     }
 
-    if (!lv_directory_exist(s_projectContext->builtinDirectoryPath.c_str()))
+    if (!Hazel::DirectorySystem::ExistDirectoryPath(
+            s_projectContext->builtinDirectoryPath.c_str()))
     {
-        lv_directory_create(s_projectContext->builtinDirectoryPath.c_str());
+        Hazel::DirectorySystem::CreateDirectoryPath(
+            s_projectContext->builtinDirectoryPath.c_str());
     }
 
-    if (!lv_directory_exist(libraryPath.c_str()))
+    if (!Hazel::DirectorySystem::ExistDirectoryPath(libraryPath.c_str()))
     {
-        lv_directory_create(libraryPath.c_str());
+        Hazel::DirectorySystem::CreateDirectoryPath(libraryPath.c_str());
     }
 
-    if (!lv_directory_exist(
+    if (!Hazel::DirectorySystem::ExistDirectoryPath(
             s_projectContext->assetCacheDirectoryPath.c_str()))
     {
-        lv_directory_create(
+        Hazel::DirectorySystem::CreateDirectoryPath(
             s_projectContext->assetCacheDirectoryPath.c_str());
     }
 
 
-    if (!lv_directory_exist(
+    if (!Hazel::DirectorySystem::ExistDirectoryPath(
             s_projectContext->reflectCacheDirectoryPath.c_str()))
     {
-        lv_directory_create(
+        Hazel::DirectorySystem::CreateDirectoryPath(
             s_projectContext->reflectCacheDirectoryPath.c_str());
     }
 
-    if (!lv_directory_exist(
+    if (!Hazel::DirectorySystem::ExistDirectoryPath(
             s_projectContext->solutionDirectoryPath.c_str()))
     {
-        lv_directory_create(
+        Hazel::DirectorySystem::CreateDirectoryPath(
             s_projectContext->solutionDirectoryPath.c_str());
     }
 
     return s_projectContext->project;
 }
 
-void ProjectContext::Finalize()
+void ProjectContext::Finalize(Project *project)
 {
     // 메인 쓰레드에서만 !
     // LV_CHECK_MAIN_THREAD();
@@ -149,34 +152,24 @@ void ProjectContext::Finalize()
     // 에디터가 종료되기 전에 현재 Project Setting Data를 파일로 저장시킨다.
     project->SaveSettings();
 
-    // @yuiena 03/25
-    // scene은 열려있는거만 저장하는데 Manifest는 전부 저장하고 있어서 데이터가 안맞는 문제가 있다.
-    // 열려있지 않는 scene이라도 변경점이 있다면 isChange, SetChangeState 함수등을 통해 바꾸고 체크해야한다.
-    // 아래도 만약에 굳이 변경점이 없는 Scene이라면 저장하지 않아도 되지만 현재는 Scene이 변경점을 제대로 체크하고있지 않아 그대로 둔다.
-
     // 현재 프로젝트를 닫기 전에 현재 작업중인 Scene이 있으면 Serialize하고 마무리한다.
-    if (LvEditorSceneManager::GetActive() != nullptr)
-    {
-        LvAsset *sceneAsset = LvAssetDatabase::GetAssetByInstanceId(
-            LvEditorSceneManager::GetActive()
-                ->GetContainer()
-                ->host->GetInstanceId());
-        LV_CHECK(sceneAsset, "LvScene Asset is not created. Wrong Logic!");
+    // if (LvEditorSceneManager::GetActive() != nullptr)
+    // {
+    //     LvAsset *sceneAsset = LvAssetDatabase::GetAssetByInstanceId(
+    //         LvEditorSceneManager::GetActive()
+    //             ->GetContainer()
+    //             ->host->GetInstanceId());
+    //     LV_CHECK(sceneAsset, "LvScene Asset is not created. Wrong Logic!");
+    // 
+    //     // 이미 만들어졌던 Scene 저장되게하기
+    //     LvAssetDatabase::SaveAsset(sceneAsset);
+    //     //현재 Scene Clear
+    //     // - RenderDatabase에 data refCount -1
+    //     LvEditorSceneManager::GetActive()->Finalize();
+    //     // 위에 저장된 Scene은 LvAssetdatabase에서 관리되어서 해제되므로, 이 context에서는 nullptr 처리함
+    //     LvEditorSceneManager::SetActive(nullptr);
+    // }
 
-        // 이미 만들어졌던 Scene 저장되게하기
-        LvAssetDatabase::SaveAsset(sceneAsset);
-        //현재 Scene Clear
-        // - RenderDatabase에 data refCount -1
-        LvEditorSceneManager::GetActive()->Finalize();
-        // 위에 저장된 Scene은 LvAssetdatabase에서 관리되어서 해제되므로, 이 context에서는 nullptr 처리함
-        LvEditorSceneManager::SetActive(nullptr);
-    }
-
-    if (LvAssetProcessor::IsInitialized())
-        LvAssetProcessor::Finalize();
-
-    if (LvAssetDatabase::IsUsable)
-        LvAssetDatabase::IsUsable = nullptr;
     EditorAssetManager::Finalize();
 
     delete s_projectContext;
@@ -184,8 +177,8 @@ void ProjectContext::Finalize()
     s_projectContext = nullptr;
 
     FileManager::Finalize();
-    LvObjectAddress::SetFinder(nullptr);
-    LvObjectLabelTable::SetFinder(nullptr);
+
+    // LvObjectAddress::SetFinder(nullptr);
 }
 
 } // namespace HazelEditor

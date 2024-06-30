@@ -284,7 +284,7 @@ int StringUtil::CalculateUTF8ExtraLength(const char *src_utf8)
     return addedCnt;
 }
 
-int StringUtil::pr_str_wchar_to_utf8(char *dest, uint32 ch)
+int StringUtil::ChangeWCharToUTF8(char *dest, uint32 ch)
 {
     if (ch < 0x80)
     {
@@ -352,7 +352,7 @@ int StringUtil::pr_str_utf8_unescape(char *buf, int sz, const char *src)
     return 1;
 }
 
-bool StringUtil::pr_str_is_utf8(const char *c)
+bool StringUtil::IsStrUTF8(const char *c)
 {
     for (size_t i = 0; i < strlen(c); ++i)
     {
@@ -391,7 +391,7 @@ bool StringUtil::pr_str_is_utf8(const char *c)
     return true;
 }
 
-std::string StringUtil::pr_str_system_to_utf8(const char *cp)
+std::string StringUtil::ChangeSystemStrToUTF8(const char *cp)
 {
     const auto inStr = (const wchar_t *)cp;
     const size_t cpSize = strlen(cp);
@@ -498,7 +498,52 @@ std::vector<std::string> StringUtil::SplitString(const std::string &str,
     return tokens;
 }
 
-std::string StringUtil::pr_trim_start(const std::string &str, char c)
+void StringUtil::ReplaceStrOpt(char *dest,
+                               char const *const src,
+                               char const *const pattern,
+                               char const *const replace)
+{
+    /*
+    It replaces all occurrences of a specific pattern (pattern) in a source string (src) with a replacement string (replace) and optionally writes the modified string to a destination buffer (dest).
+    */
+    size_t const replen = strlen(replace);
+    size_t const patlen = strlen(pattern);
+
+    size_t patcnt = 0;
+    const char *oriptr;
+    const char *patloc;
+
+    // find how many times the pattern occurs in the original string
+    for (oriptr = src; (patloc = strstr(oriptr, pattern));
+         oriptr = patloc + patlen)
+    {
+        patcnt++;
+    }
+
+    {
+        if (dest != NULL)
+        {
+            // copy the original string,
+            // replacing all the instances of the pattern
+            char *retptr = dest;
+            for (oriptr = src; (patloc = strstr(oriptr, pattern));
+                 oriptr = patloc + patlen)
+            {
+                size_t const skplen = patloc - oriptr;
+                // copy the section until the occurence of the pattern
+                strncpy(retptr, oriptr, skplen);
+                retptr += skplen;
+                // copy the replacement
+                strncpy(retptr, replace, replen);
+                retptr += replen;
+            }
+            // copy the rest of the string.
+            strcpy(retptr, oriptr);
+        }
+    }
+}
+
+std::string StringUtil::TrimStart(const std::string &str, char c)
 {
     size_t start = str.find_first_not_of(c);
     if (start == std::string::npos)
@@ -508,7 +553,7 @@ std::string StringUtil::pr_trim_start(const std::string &str, char c)
     return str.substr(start);
 }
 
-std::string StringUtil::pr_trim_end(const std::string &str, char c)
+std::string StringUtil::TrimEnd(const std::string &str, char c)
 {
     size_t end = str.find_last_not_of(c);
     if (end == std::string::npos)
@@ -518,12 +563,12 @@ std::string StringUtil::pr_trim_end(const std::string &str, char c)
     return str.substr(0, end + 1);
 }
 
-std::string StringUtil::pr_trim(const std::string &str, char c)
+std::string StringUtil::Trim(const std::string &str, char c)
 {
     return pr_trim_end(pr_trim_start(str, c), c);
 }
 
-std::wstring StringUtil::pr_trim_start(const std::wstring &str, char c)
+std::wstring StringUtil::TrimStart(const std::wstring &str, char c)
 {
     size_t start = str.find_first_not_of(c);
     if (start == std::wstring::npos)
@@ -533,7 +578,7 @@ std::wstring StringUtil::pr_trim_start(const std::wstring &str, char c)
     return str.substr(start);
 }
 
-std::wstring StringUtil::pr_trim_end(const std::wstring &str, char c)
+std::wstring StringUtil::TrimEnd(const std::wstring &str, char c)
 {
     size_t end = str.find_last_not_of(c);
     if (end == std::wstring::npos)
@@ -543,7 +588,7 @@ std::wstring StringUtil::pr_trim_end(const std::wstring &str, char c)
     return str.substr(0, end + 1);
 }
 
-std::wstring StringUtil::pr_trim(const std::wstring &str, char c)
+std::wstring StringUtil::Trim(const std::wstring &str, char c)
 {
     return pr_trim_end(pr_trim_start(str, c), c);
 }
