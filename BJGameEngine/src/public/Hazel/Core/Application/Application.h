@@ -169,5 +169,5 @@ private:
 };
 
 // To be defined in Client
-Application *CreateApplication(Hazel::ApplicationCommandLineArgs args);
+Application *CreateApplication(ApplicationCommandLineArgs args);
 }; // namespace Hazel

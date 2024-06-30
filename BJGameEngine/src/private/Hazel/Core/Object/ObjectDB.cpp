@@ -2,15 +2,20 @@
 #include "Hazel/Core/Object/BaseObject.h"
 #include "Hazel/Core/Object/ObjectID.h"
 #include "hzpch.h"
+#include <random>
+
+static std::random_device s_RandomDevice;
+static std::mt19937_64 s_Engine(s_RandomDevice());
+static std::uniform_int_distribution<uint32_t> s_UniformDistribution;
 
 namespace Hazel
 {
+
 DefaultHeapAllocator ObjectDB::m_Allocator;
 SpinLock ObjectDB::m_SpinLock;
 uint32_t ObjectDB::m_SlotCnt;
 uint32_t ObjectDB::m_SlotMax;
 ObjectDB::ObjectSlot *ObjectDB::m_ObjectSlotArray;
-uint64_t ObjectDB::m_ValidateNumber;
 
 void ObjectDB::Clean()
 {
@@ -30,23 +35,22 @@ ObjectID ObjectDB::Add(BaseObject *p_object)
                        "ObjectDB::Add() : m_SlotCnt >= m_SlotMax");
         // CRASH_COND(m_SlotCnt == (1 << OBJECTDB_m_SlotMax_COUNT_BITS));
 
-        uint32_t new_m_SlotMax = m_SlotMax > 0 ? m_SlotMax * 2 : 1;
+        uint32_t newSlotMax = m_SlotMax > 0 ? m_SlotMax * 2 : 1;
 
         m_ObjectSlotArray = (ObjectSlot *)m_Allocator.Reallocate(
             m_ObjectSlotArray,
-            sizeof(ObjectSlot) * new_m_SlotMax);
+            sizeof(ObjectSlot) * newSlotMax);
 
-        for (uint32_t i = m_SlotMax; i < new_m_SlotMax; i++)
+        for (uint32_t i = m_SlotMax; i < newSlotMax; i++)
         {
             m_ObjectSlotArray[i].object = nullptr;
-            m_ObjectSlotArray[i].is_ref_counted = false;
-            m_ObjectSlotArray[i].next_free = i;
-            m_ObjectSlotArray[i].valid_num = 0;
+            m_ObjectSlotArray[i].nextFree = i;
+            m_ObjectSlotArray[i].uniqueId = 0;
         }
-        m_SlotMax = new_m_SlotMax;
+        m_SlotMax = newSlotMax;
     }
 
-    uint32_t slot = m_ObjectSlotArray[m_SlotCnt].next_free;
+    uint32_t slot = m_ObjectSlotArray[m_SlotCnt].nextFree;
 
     if (m_ObjectSlotArray[slot].object != nullptr)
     {
@@ -55,27 +59,14 @@ ObjectID ObjectDB::Add(BaseObject *p_object)
     }
 
     m_ObjectSlotArray[slot].object = p_object;
-    m_ObjectSlotArray[slot].is_ref_counted = p_object->IsRefCounted();
-    m_ValidateNumber = (m_ValidateNumber + 1) & OBJECTDB_VALIDATOR_MASK;
 
-    // if (unlikely(m_ValidateCounter == 0)) {
-    if (m_ValidateNumber == 0)
-    {
-        m_ValidateNumber = 1;
-    }
+    m_ObjectSlotArray[slot].uniqueId = s_UniformDistribution(s_Engine);
 
-    m_ObjectSlotArray[slot].valid_num = m_ValidateNumber;
-
-    uint64_t id = m_ValidateNumber;
+    uint64_t id = m_ObjectSlotArray[slot].uniqueId;
 
     id <<= OBJECTDB_SLOT_MAX_COUNT_BITS;
 
     id |= uint64_t(slot);
-
-    if (p_object->IsRefCounted())
-    {
-        id |= OBJECTDB_REFERENCE_BIT;
-    }
 
     m_SlotCnt++;
 
@@ -109,13 +100,13 @@ void ObjectDB::Remove(BaseObject *p_object)
     uint64_t validator =
         (t >> OBJECTDB_SLOT_MAX_COUNT_BITS) & OBJECTDB_VALIDATOR_MASK;
 
-    if (m_ObjectSlotArray[slot].valid_num != validator)
+    if (m_ObjectSlotArray[slot].uniqueId != validator)
     {
         m_SpinLock.Unlock();
 
         // ERR_FAIL_COND(m_ObjectSlotArray[slot].valid_num != validator);
 
-        HZ_CORE_ASSERT(m_ObjectSlotArray[slot].valid_num == validator,
+        HZ_CORE_ASSERT(m_ObjectSlotArray[slot].uniqueId == validator,
                        "ObjectDB::Remove() : m_ObjectSlotArray[slot].valid_num "
                        "!= validator");
     }
@@ -126,11 +117,10 @@ void ObjectDB::Remove(BaseObject *p_object)
     m_SlotCnt--;
 
     //set the free slot properly
-    m_ObjectSlotArray[m_SlotCnt].next_free = slot;
+    m_ObjectSlotArray[m_SlotCnt].nextFree = slot;
 
     //invalidate, so checks against it fail
-    m_ObjectSlotArray[slot].valid_num = 0;
-    m_ObjectSlotArray[slot].is_ref_counted = false;
+    m_ObjectSlotArray[slot].uniqueId = 0;
     m_ObjectSlotArray[slot].object = nullptr;
 
     m_SpinLock.Unlock();
