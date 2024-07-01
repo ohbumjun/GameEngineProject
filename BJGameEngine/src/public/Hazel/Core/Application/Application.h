@@ -72,30 +72,34 @@ public:
         initialize();
 	}
 
-    const ApplicationCommandLineArgs& GetCommandLineArgs() const
-	{
-        return m_CommandLineArgs;
-	}
+const ApplicationCommandLineArgs& GetCommandLineArgs() const
+{
+    return m_CommandLineArgs;
+}
 
-    const std::string& GetName() const
-    {
-        return m_Name;
-    }
+const std::string& GetName() const
+{
+    return m_Name;
+}
 
-    const std::string &GetDefaultAssetPath()
-    {
-        return m_DefaultAssetsPath;
-    }
+const std::string &GetDefaultAssetPath() const
+{
+    return m_DefaultAssetsPath;
+}
 
-   const  std::string& GetResourceRootPath()
-    {
-        return m_ResourceRootPath;
-    }
+const  std::string& GetResourceRootPath() const
+{
+    return m_ResourceRootPath;
+}
 
-const std::string& GetExecutableDirectoryPath()
-	{
-		return m_ExecutableDirectoryPath;
-	}
+const std::string& GetExecutableDirectoryPath() const
+{
+	return m_ExecutableDirectoryPath;
+}
+const std::string &GetEngineRootPath() const
+{
+    return m_EngineRootPath;
+}
 
 private:
     void initialize();
@@ -107,6 +111,8 @@ private:
     std::string m_ResourceRootPath;
     // @brief 실행 파일이 있는 경로
     std::string m_ExecutableDirectoryPath;
+    // @brief Engine 최상단 경로
+    std::string m_EngineRootPath;
     ApplicationCommandLineArgs m_CommandLineArgs;
 };
 

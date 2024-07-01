@@ -53,6 +53,8 @@ void ApplicationContext::initialize()
     std::string resourcePath =
         m_ExecutableDirectoryPath.substr(0, lastDirSeparator + 1);
 
+    m_EngineRootPath = resourcePath;
+
     resourcePath += "BJResource\\";
 
     m_ResourceRootPath = resourcePath;

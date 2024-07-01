@@ -103,6 +103,19 @@ public:
         }
         onEndSaveSeq();
     }
+    template <typename T>
+    void Save(const char *key, std::vector<T> &t)
+    {
+        static TypeId type = Reflection::RegistType<T>();
+
+        onSaveKey(key);
+        onBeginSaveSeq(type, t.size());
+        for (size_t i = 0; i < t.size(); ++i)
+        {
+            onSave((T &)t[i]);
+        }
+        onEndSaveSeq();
+    }
 
 protected:
     virtual void onBeginSaveMap() = 0;

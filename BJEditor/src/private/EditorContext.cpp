@@ -3,7 +3,9 @@
 #include "Hazel/FileSystem/DirectorySystem.h"
 #include "Hazel/FileSystem/FileStream.h"
 #include "EditorAsset/EditorAssetExtension.h"
+#include "Hazel/Core/Serialization/JsonSerializer.h"
 #include "Hazel/ImGui/ImGuiContextManager.h"
+#include "Hazel/Core/Application/Application.h"
 
 namespace HazelEditor
 {
@@ -23,11 +25,18 @@ const char *EditorContext::Directories::Cache::reflect = "ReflectCache";
 const char *EditorContext::Directories::Cache::shader = "ShaderCache";
 const char *EditorContext::Directories::Cache::builtInShader = "BuiltInShaderCache";
 
-EditorContext *EditorContext::m_Instance = nullptr;
+EditorContext *s_EditorContextInstance = nullptr;
+
+std::string s_EditorRootPath;
 
 Editor *EditorContext::Initialize()
 {
-    m_Instance = new EditorContext();
+    const std::string& engineRootPath = Hazel::Application::Get().GetSpecification().GetEngineRootPath();
+
+    s_EditorRootPath =
+        Hazel::DirectorySystem::CombinePath(engineRootPath.c_str(), "Editor");
+
+    s_EditorContextInstance = new EditorContext();
 
     // AssetExtension
     EditorAssetExtension::Initialize();
@@ -49,10 +58,14 @@ EditorContext::EditorContext()
 {
     //assetProcessor = new Editor::LvAssetProcessor();
 
+    // BJEditor/EditosSettings.json 와 같은 파일 경로가 되어야 한다. 
     _settingsFilePath =
-        lv_path_combine(lv_path_application_data(), "EditorSettings.yaml");
+        // lv_path_combine(lv_path_application_data(), "EditorSettings.yaml");
+        Hazel::DirectorySystem::CombinePath(s_EditorRootPath.c_str(),
+                                            "EditorSettings.json");
 
-    if (!lv_file_exist(_settingsFilePath.c_str()))
+    // if (!lv_file_exist(_settingsFilePath.c_str()))
+    if (!Hazel::DirectorySystem::ExistFilePath(_settingsFilePath.c_str()))
     {
         SaveSettings();
     }
@@ -73,7 +86,8 @@ void EditorContext::LoadSettings()
     {
         const std::string jsonPath =
             // lv_path_combine(lv_path_application_data(), "EditorSettings.json");
-            Hazel::DirectorySystem::CombinePath(lv_path_application_data(), "EditorSettings.json");
+            Hazel::DirectorySystem::CombinePath(s_EditorRootPath.c_str(),
+                                                "EditorSettings.json");
         
         // LvFileStream settingsFile(jsonPath.c_str(), LvFileMode::OPEN);
         Hazel::FileStream settingsFile(jsonPath.c_str(), Hazel::FileOpenMode::OPEN);
@@ -81,12 +95,12 @@ void EditorContext::LoadSettings()
         if (settingsFile.GetDataLength() <= 0)
             return;
 
-        LvInputStream inputStream(&settingsFile);
+        Hazel::InputStream inputStream(&settingsFile);
 
         settingString = inputStream.ReadToEnd();
 
-        settingsFile.Flush();
-        settingsFile.Close();
+        settingsFile.FlushToFile();
+        settingsFile.End();
 
         // lv_file_delete(jsonPath.c_str());
         Hazel::DirectorySystem::DeleteFilePath(jsonPath.c_str());
@@ -95,8 +109,9 @@ void EditorContext::LoadSettings()
         {
             if (!settingString.empty())
             {
-                LvJsonDomArchive archive(settingString.c_str());
-                settings.Deserialize(archive);
+               //  LvJsonDomArchive archive(settingString.c_str());
+                Hazel::JsonSerializer archive(settingString.c_str());
+               m_Settings.Deserialize(&archive);
             }
 
             SaveSettings();
@@ -104,53 +119,60 @@ void EditorContext::LoadSettings()
         }
     }
 
-    LvFileStream settingsFile(_settingsFilePath.c_str(), LvFileMode::OPEN);
+    Hazel::FileStream settingsFile(_settingsFilePath.c_str(), Hazel::FileOpenMode::OPEN);
 
-    if (settingsFile.Length() <= 0)
+    if (settingsFile.GetDataLength() <= 0)
         return;
 
-    LvInputStream inputStream(&settingsFile);
+    Hazel::InputStream inputStream(&settingsFile);
 
     settingString = inputStream.ReadToEnd();
 
-    settingsFile.Flush();
-    settingsFile.Close();
+    settingsFile.FlushToFile();
+    settingsFile.End();
 
-    LvYamlArchive archive(settingString.c_str());
-
-    const bool document = settingString[0] == '%';
-
-    if (document)
-        archive.ReadStartDocument();
-    settings.Deserialize(archive);
-
-    if (document)
-        archive.ReadEndDocument();
-
-    if (valueApply)
-    {
+    // LvYamlArchive archive(settingString.c_str());
+    // 
+    // const bool document = settingString[0] == '%';
+    // 
+    // if (document)
+    //     archive.ReadStartDocument();
+    // settings.Deserialize(archive);
+    // 
+    // if (document)
+    //     archive.ReadEndDocument();
+    // 
+    // if (valueApply)
+    // {
         SaveSettings();
-    }
+    // }
 }
 void EditorContext::SaveSettings()
 {
-    LvString settingString;
-    LvYamlArchive archive;
+    std::string settingString;
+    // LvYamlArchive archive;
+    Hazel::JsonSerializer archive;
 
-    LvFileStream settingsFile(_settingsFilePath.c_str(), LvFileMode::CREATE);
-    LvOutputStream outputStream(&settingsFile);
-    archive.WriteStartDocument();
-    settings.Serialize(archive);
-    archive.WriteEndDocument();
-    settingString = archive.GetResult();
+    Hazel::FileStream settingsFile(_settingsFilePath.c_str(), Hazel::FileOpenMode::CREATE);
+    Hazel::OutputStream outputStream(&settingsFile);
+
+    archive.BeginSaveMap();
+    m_Settings.Serialize(&archive);
+    archive.EndSaveMap();
+
+    settingString = archive.GetFinalResult();
     outputStream.WriteText(settingString.c_str());
 
-    settingsFile.Flush();
-    settingsFile.Close();
+    settingsFile.FlushToFile();
+    settingsFile.End();
 };
 
 EditorContext *BJ_GetEditorContext()
 {
-    return m_Instance;
+    return s_EditorContextInstance;
+}
+const char *BJ_GetEditorDirRootPath()
+{
+    return s_EditorRootPath.c_str();
 }
 } // namespace HazelEditor
