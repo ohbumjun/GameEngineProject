@@ -159,7 +159,8 @@ public:
     template <typename T>
     void BeginLoadMap(T *target)
     {
-        BeginLoadMap(Reflection::GetTypeID<T>(), target);
+        static TypeId typeId = Reflection::GetTypeID<T>();
+        BeginLoadMap(typeId, target);
     }
 
     // key

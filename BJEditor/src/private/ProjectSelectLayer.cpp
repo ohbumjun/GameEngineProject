@@ -43,7 +43,7 @@ void ProjectSelectLayer::OnAttach()
     //	m_CheckerboardTexture = Hazel::TextureManager::CreateTexture2D("assets/textures/sample.png");
     // m_SpriteSheet = Hazel::TextureManager::CreateTexture2D("assets/game/textures/RPGpack_sheet_2X.png");
 
-    m_ProjectSelectPanel = Hazel::CreateRef<HazelEditor::ProjectSelectPanel>();
+    // m_ProjectSelectPanel = Hazel::CreateRef<HazelEditor::ProjectSelectPanel>();
 }
 void ProjectSelectLayer::OnDetach()
 {
@@ -140,6 +140,6 @@ void ProjectSelectLayer::prepareDockSpace()
 void ProjectSelectLayer::drawPanels()
 {
     // Panels
-    m_ProjectSelectPanel->OnImGuiRender();
+    // m_ProjectSelectPanel->OnImGuiRender();
 }
 } // namespace HazelEditor

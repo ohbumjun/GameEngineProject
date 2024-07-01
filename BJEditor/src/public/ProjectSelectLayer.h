@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-#include "Panel/ProjectSelectPanel.h"
 #include <Hazel.h>
 
 namespace HazelEditor
@@ -28,6 +27,6 @@ private:
     void prepareDockSpace();
     void drawPanels();
 
-    Hazel::Ref<ProjectSelectPanel> m_ProjectSelectPanel;
+    // Hazel::Ref<ProjectSelectPanel> m_ProjectSelectPanel;
 };
 } // namespace HazelEditor

@@ -339,7 +339,8 @@ int StringUtil::pr_str_utf8_unescape(char *buf, int sz, const char *src)
             amt = 1;
         }
         src += amt;
-        amt = pr_str_wchar_to_utf8(temp, ch);
+        // amt = pr_str_wchar_to_utf8(temp, ch);
+        amt = ChangeWCharToUTF8(temp, ch);
         if (amt > sz - c)
             break;
         memcpy(&buf[c], temp, amt);
@@ -404,7 +405,8 @@ std::string StringUtil::ChangeSystemStrToUTF8(const char *cp)
     std::wstring buffer;
     buffer.resize(bufferSize);
 
-    if (!pr_str_is_utf8(cp))
+    // if (!pr_str_is_utf8(cp))
+    if (!IsStrUTF8(cp))
     {
         MultiByteToWideChar(
             CP_UTF8,
@@ -567,7 +569,7 @@ std::string StringUtil::TrimEnd(const std::string &str, char c)
 
 std::string StringUtil::Trim(const std::string &str, char c)
 {
-    return pr_trim_end(pr_trim_start(str, c), c);
+    return TrimEnd(TrimStart(str, c), c);
 }
 
 std::wstring StringUtil::TrimStart(const std::wstring &str, char c)
@@ -592,6 +594,6 @@ std::wstring StringUtil::TrimEnd(const std::wstring &str, char c)
 
 std::wstring StringUtil::Trim(const std::wstring &str, char c)
 {
-    return pr_trim_end(pr_trim_start(str, c), c);
+    return TrimEnd(TrimStart(str, c), c);
 }
 } // namespace Utils

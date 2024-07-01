@@ -107,7 +107,10 @@ struct HAZEL_API ConstructorInfo
     {
     }
 
-    ConstructorInfo(ConstructorInfo &&o) noexcept;
+    ConstructorInfo(ConstructorInfo&& o) noexcept
+    {
+
+    }
 
     ~ConstructorInfo() = default;
 };

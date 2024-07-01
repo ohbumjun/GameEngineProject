@@ -18,20 +18,8 @@ public:
 		return m_LastOpenProjects; 
 	}
 
-    virtual void Serialize(Hazel::Serializer *archive) override
-    {
-        archive->BeginSaveMap("EditorSettings");
-        archive->Save("LastOpenProjects", m_LastOpenProjects);
-        archive->EndSaveMap();
-    }
-    virtual void Deserialize(Hazel::Serializer *archive) override
-    {
-        m_LastOpenProjects.clear();
-
-        archive->BeginLoadMap("EditorSettings");
-        archive->Load("LastOpenProjects", m_LastOpenProjects);
-        archive->EndLoadMap();
-    }
+    virtual void Serialize(Hazel::Serializer *archive) override;
+    virtual void Deserialize(Hazel::Serializer *archive) override;
 
 private:
 	std::vector<std::string> m_LastOpenProjects;

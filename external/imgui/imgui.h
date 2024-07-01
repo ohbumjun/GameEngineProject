@@ -375,7 +375,6 @@ typedef void (*ImGuiMemFreeFunc)(
 IM_MSVC_RUNTIME_CHECKS_OFF
 struct ImVec2
 {
-    friend ImVec2 operator*(const ImVec2 &lhs, float rhs);
     float x, y;
     constexpr ImVec2() : x(0.0f), y(0.0f)
     {
@@ -398,10 +397,6 @@ struct ImVec2
     IM_VEC2_CLASS_EXTRA // Define additional constructors and implicit cast operators in imconfig.h to convert back and forth between your math types and ImVec2.
 #endif
 };
-ImVec2 operator*(const ImVec2 &lhs, float rhs)
-{
-    return ImVec2(lhs.x * rhs, lhs.y * rhs);
-}
 
 // ImVec4: 4D vector used to store clipping rectangles, colors etc. [Compile-time configurable type]
 struct ImVec4
