@@ -69,6 +69,9 @@ public:
 	// @brief 디렉터리를 제거합니다.
     static bool RemoveDirectoryPath(const char *path);
 
+	// @brief 부모 디렉토리 패스를 출력
+    static std::string GetPathParent(const char *path);
+
     // @brief 순소 폴더 경로 리턴
     static std::string GetPathDirectory(const char *path);
 
