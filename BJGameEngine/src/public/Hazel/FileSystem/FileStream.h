@@ -1,22 +1,23 @@
 ﻿#pragma once
 
 #include "FileModes.h"
+#include "Hazel/Core/Serialization/Stream.h"
 
 namespace Hazel
 {
 
 
-class FileMemory
+class FileStream : public Stream
 {
 
 public:
-    FileMemory(HANDLE file);
+    FileStream(HANDLE file);
 
-    FileMemory(const char *path, FileOpenMode mode);
+    FileStream(const char *path, FileOpenMode mode);
 
-    FileMemory(const char *path, FileOpenMode mode, FileAccessMode access);
+    FileStream(const char *path, FileOpenMode mode, FileAccessMode access);
 
-    ~FileMemory();
+    ~FileStream();
 
     int64 GetCurrentPos();
 

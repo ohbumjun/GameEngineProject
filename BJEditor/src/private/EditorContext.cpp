@@ -1,6 +1,7 @@
 #include "EditorContext.h"
 #include <string>
 #include "Hazel/FileSystem/DirectorySystem.h"
+#include "Hazel/FileSystem/FileStream.h"
 #include "EditorAsset/EditorAssetExtension.h"
 #include "Hazel/ImGui/ImGuiContextManager.h"
 
@@ -66,16 +67,18 @@ EditorContext::~EditorContext()
 }
 void EditorContext::LoadSettings()
 {
-    LvString settingString;
+    std::string settingString;
 
-    // @donghun @TODO 해당 예외처리는 나중에 마이너 버전이 올라가면 제거할 것.
-    if (!lv_file_exist(_settingsFilePath.c_str()))
+    if (!Hazel::DirectorySystem::ExistFilePath(_settingsFilePath.c_str()))
     {
-        const LvString jsonPath =
-            lv_path_combine(lv_path_application_data(), "EditorSettings.json");
-        LvFileStream settingsFile(jsonPath.c_str(), LvFileMode::OPEN);
+        const std::string jsonPath =
+            // lv_path_combine(lv_path_application_data(), "EditorSettings.json");
+            Hazel::DirectorySystem::CombinePath(lv_path_application_data(), "EditorSettings.json");
+        
+        // LvFileStream settingsFile(jsonPath.c_str(), LvFileMode::OPEN);
+        Hazel::FileStream settingsFile(jsonPath.c_str(), Hazel::FileOpenMode::OPEN);
 
-        if (settingsFile.Length() <= 0)
+        if (settingsFile.GetDataLength() <= 0)
             return;
 
         LvInputStream inputStream(&settingsFile);
@@ -85,11 +88,12 @@ void EditorContext::LoadSettings()
         settingsFile.Flush();
         settingsFile.Close();
 
-        lv_file_delete(jsonPath.c_str());
+        // lv_file_delete(jsonPath.c_str());
+        Hazel::DirectorySystem::DeleteFilePath(jsonPath.c_str());
 
-        if (settingString.IsEmpty() || settingString[0] == '{')
+        if (settingString.empty() || settingString[0] == '{')
         {
-            if (!settingString.IsEmpty())
+            if (!settingString.empty())
             {
                 LvJsonDomArchive archive(settingString.c_str());
                 settings.Deserialize(archive);
@@ -115,35 +119,13 @@ void EditorContext::LoadSettings()
     LvYamlArchive archive(settingString.c_str());
 
     const bool document = settingString[0] == '%';
+
     if (document)
         archive.ReadStartDocument();
     settings.Deserialize(archive);
+
     if (document)
         archive.ReadEndDocument();
-
-    // @donggun 잘못된 값을 로드 하였다면 수정 하여야 함.
-    bool valueApply = false;
-    if (settings.outLogFilePath.IsEmpty() ||
-        !lv_file_exist(settings.outLogFilePath.c_str()))
-    {
-        settings.outLogFilePath =
-            lv_path_combine(lv_path_application_data(), "editor.log");
-        valueApply = true;
-    }
-
-    if (settings.autoCreateProject.IsEmpty() ||
-        !lv_directory_exist(settings.autoCreateProject.c_str()))
-    {
-        settings.autoCreateProject =
-            lv_path_combine(lv_path_application_data(), "Projects");
-        valueApply = true;
-    }
-
-    if (0 == settings.logMaxCount)
-    {
-        settings.logMaxCount = LvEditorSettings().logMaxCount;
-        valueApply = true;
-    }
 
     if (valueApply)
     {

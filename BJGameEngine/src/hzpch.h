@@ -15,7 +15,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <string>
-#include <shlwapi.h>
+// #include <shlwapi.h> -> include 시키면 빌드 에러 발생
 
 // Utils
 #include <algorithm>

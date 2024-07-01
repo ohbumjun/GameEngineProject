@@ -79,6 +79,7 @@ private:
     static EditorContext* m_Instance;
     class Project* m_Project;
     EditorSettings m_Settings;
+    std::string _settingsFilePath;
 };
 
 EditorContext* BJ_GetEditorContext();

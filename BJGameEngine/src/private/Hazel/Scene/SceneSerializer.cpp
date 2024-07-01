@@ -1,6 +1,6 @@
 ﻿#include "Hazel/Scene/SceneSerializer.h"
 #include "Hazel/Core/Serialization/JsonSerializer.h"
-#include "Hazel/FileSystem/FileMemory.h"
+#include "Hazel/FileSystem/FileStream.h"
 #include "Hazel/Scene/Entity.h"
 #include "hzpch.h"
 
@@ -17,11 +17,11 @@ void SceneSerializer::SerializeText(const std::string &filePath)
     const std::string &result = writer.GetFinalResult();
 
     // 해당 경로의 파일은 항상 생성하는 방향으로 진행할 것이다.
-    FileMemory fileMemory(filePath.c_str(), FileOpenMode::CREATE);
+    FileStream FileStream(filePath.c_str(), FileOpenMode::CREATE);
 
-    fileMemory.SerializeData(result.c_str(), result.length());
-    fileMemory.FlushToFile();
-    fileMemory.End();
+    FileStream.SerializeData(result.c_str(), result.length());
+    FileStream.FlushToFile();
+    FileStream.End();
 }
 
 void SceneSerializer::SerializeBinary(const std::string &filePath)
@@ -31,15 +31,15 @@ void SceneSerializer::SerializeBinary(const std::string &filePath)
 void SceneSerializer::DeserializeText(const std::string &filePath)
 {
     // 해당 경로의 파일은 항상 생성하는 방향으로 진행할 것이다.
-    FileMemory fileMemory(filePath.c_str(),
+    FileStream FileStream(filePath.c_str(),
                           FileOpenMode::OPEN,
                           FileAccessMode::READ_ONLY);
 
-    char *buffer = new char[fileMemory.GetDataLength() + 1];
-    fileMemory.DeserializeData(buffer, fileMemory.GetDataLength());
+    char *buffer = new char[FileStream.GetDataLength() + 1];
+    FileStream.DeserializeData(buffer, FileStream.GetDataLength());
 
     // 마지막 NULL 넣어주기
-    buffer[fileMemory.GetDataLength()] = NULL;
+    buffer[FileStream.GetDataLength()] = NULL;
 
     JsonSerializer reader(buffer);
     m_Scene->Deserialize(&reader);

@@ -229,6 +229,7 @@ SET(HEADER_CORE_SERIALIZATION
     public/Hazel/Core/Serialization/JsonSerializer.h
     public/Hazel/Core/Serialization/Serializer.h
     public/Hazel/Core/Serialization/SerializeTarget.h
+    public/Hazel/Core/Serialization/Stream.h
 )
 SOURCE_GROUP("core/Serialization/public" FILES ${HEADER_CORE_SERIALIZATION})
 LIST(APPEND TOTAL_ENGINE_FILES ${HEADER_CORE_SERIALIZATION})
@@ -237,6 +238,7 @@ SET(SRC_CORE_SERIALIZATION
     private/Hazel/Core/Serialization/JsonSerializer.cpp
     private/Hazel/Core/Serialization/Serializer.cpp
     private/Hazel/Core/Serialization/SerializeTarget.cpp
+    private/Hazel/Core/Serialization/Stream.cpp
 )
 SOURCE_GROUP("core/Serialization/private" FILES ${SRC_CORE_SERIALIZATION})
 LIST(APPEND TOTAL_ENGINE_FILES ${SRC_CORE_SERIALIZATION})
@@ -328,7 +330,7 @@ LIST(APPEND TOTAL_ENGINE_FILES ${SRC_EVENT})
 ## FileSystem
 SET(HEADER_FILESYSTEM
     public/Hazel/FileSystem/DirectorySystem.h
-    public/Hazel/FileSystem/FileMemory.h
+    public/Hazel/FileSystem/FileStream.h
     public/Hazel/FileSystem/FileModes.h
 )
 SOURCE_GROUP("filesystem/public" FILES ${HEADER_FILESYSTEM})
@@ -336,7 +338,7 @@ LIST(APPEND TOTAL_ENGINE_FILES ${HEADER_FILESYSTEM})
 
 SET(SRC_FILESYSTEM
     private/Hazel/FileSystem/DirectorySystem.cpp
-    private/Hazel/FileSystem/FileMemory.cpp
+    private/Hazel/FileSystem/FileStream.cpp
 )
 SOURCE_GROUP("filesystem/private" FILES ${SRC_FILESYSTEM})
 LIST(APPEND TOTAL_ENGINE_FILES ${SRC_FILESYSTEM})
