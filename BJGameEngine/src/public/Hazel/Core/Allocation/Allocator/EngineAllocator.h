@@ -9,8 +9,10 @@ namespace Hazel
 	
 class EngineAllocator 
 {
+public:
+    static void *BJ_EngineAllocate(size_t size);
+    static void BJ_EngineFree(void *ptr);
 };
+EngineAllocator *BJ_GetEngineAllocator();
 
-void* BJ_EngineAllocate(size_t size);
-void BJ_EngineFree(void* ptr);
 } // namespace Hazel

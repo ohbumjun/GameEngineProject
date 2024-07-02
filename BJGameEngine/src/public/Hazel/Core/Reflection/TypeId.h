@@ -2,7 +2,7 @@
 
 namespace Hazel
 {
-class TypeId
+class HAZEL_API TypeId
 {
 public:
     constexpr TypeId() = default;

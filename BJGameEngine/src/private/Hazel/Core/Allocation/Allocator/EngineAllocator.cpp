@@ -12,12 +12,12 @@ EngineAllocator *BJ_GetEngineAllocator()
 {
     return s_EngineAllocator;
 }
-void *BJ_EngineAllocator(size_t size)
+void *EngineAllocator::BJ_EngineAllocate(size_t size)
 {
     // size 에 맞춰서, FreeListAllocator 를 사용할지 PoolAllocator 를 사용할지 결정
     return s_FreeListAllocator.Allocate(size);
 }
-void BJ_EngineFree(void *ptr)
+void EngineAllocator::BJ_EngineFree(void *ptr)
 {
     s_FreeListAllocator.Free(ptr);
 }
