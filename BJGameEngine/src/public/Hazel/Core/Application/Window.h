@@ -28,10 +28,33 @@ class HAZEL_API Window
 {
 public:
     using EventCallbackFn = std::function<void(Event &)>;
+    
+    static Window *Create(const WindowProps &props = WindowProps());
+    
     virtual ~Window()
     {
     }
-    virtual void OnUpdate() = 0;
+
+    void Init();
+
+    void Open();
+
+    void Close();
+
+    // @brief Update 전에 호출되는 함수
+    void NextFrame();
+
+    // @brief Frame 을 정리해주는 함수
+    void EndFrame();
+
+    // @breif 화면에 그려주는 함수 ?
+    void Present();
+
+    // @brief Event 
+    virtual void PeekEvent();
+
+    // virtual void OnUpdate() = 0;
+    virtual void Update(float deltatime);
 
     virtual uint32_t GetWidth() const = 0;
     virtual uint32_t GetHeight() const = 0;
@@ -44,7 +67,27 @@ public:
     // ex) OpenGL -> return GLFW Window
     virtual void *GetNativeWindow() const = 0;
 
-    static Window *Create(const WindowProps &props = WindowProps());
+    protected:
+protected:
+    virtual void onInit();
+
+    virtual void onUpdate(float deltatime);
+
+    virtual void onOpen();
+
+    virtual void onEndFrame();
+
+    virtual void onClose();
+
+    virtual void onGUI();
+
+    virtual void onPrepare(float deltaTime);
+
+    virtual void onRender(float deltaTime);
+
+    virtual void onNextFrame();
+
+    virtual void onPresent();
 };
 
 } // namespace Hazel

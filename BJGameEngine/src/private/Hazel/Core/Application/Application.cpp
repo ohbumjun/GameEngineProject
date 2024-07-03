@@ -92,6 +92,8 @@ Application::~Application()
 }
 void Application::Run()
 {
+    m_Window->NextFrame();
+
     while (m_Running)
     {
         HZ_PROFILE_SCOPE("Run Loop");
@@ -134,7 +136,9 @@ void Application::Run()
         // 해당 줄이 위 줄보다 아래에 와야 한다
         // 아래 함수에 swap buffer 함수가 있어서,
         // Front Buffer 에 그려진 Scene 을 Back Buffer 와 바꿔버리는 역할을 하기 때문이다.
-        m_Window->OnUpdate();
+        m_Window->PeekEvent();
+
+        m_Window->EndFrame();
 
         // MainThread 에 예약된 작업을 Frame 마지막에 추가한다.
         s_MainThreadExecuter->ExecuteHandle();

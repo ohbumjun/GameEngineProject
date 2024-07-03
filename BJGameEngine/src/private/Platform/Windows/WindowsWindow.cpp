@@ -25,24 +25,30 @@ Window *Hazel::Window::Create(const WindowProps &props)
 
 WindowsWindow::WindowsWindow(const WindowProps &props)
 {
-    Init(props);
+    init(props);
 }
 
 WindowsWindow::~WindowsWindow()
 {
 }
 
-void WindowsWindow::OnUpdate()
+void WindowsWindow::PeekEvent()
 {
+    /*
+    Processes all pending events in the GLFW event queue.
+    Triggers any registered callback functions associated with those events.
+    */
     glfwPollEvents();
+}
 
+void WindowsWindow::onEndFrame()
+{
     // refresh window
     // 왜 m_Context->SwapBuffers() 안에 해당 함수를 옮겨놓는가 ?
     // 여러 render api 에 맞게 동작시키기 위해서 일종의 Renderer 라는 Wrapper 로
     // 한번 더 감싸는 것이다. 아래의 함수는 open gl 이라는 render api 에만
     // 한정되어 동작하는 함수이기 때문이다.
     // glfwSwapBuffers(m_Window);
-
     m_Context->SwapBuffers();
 }
 
@@ -61,7 +67,7 @@ bool WindowsWindow::IsVSync() const
     return m_Data.VSync;
 }
 
-void WindowsWindow::Init(const WindowProps &props)
+void WindowsWindow::init(const WindowProps &props)
 {
     HZ_PROFILE_FUNCTION();
 
@@ -213,7 +219,7 @@ void WindowsWindow::Init(const WindowProps &props)
         });
 }
 
-void WindowsWindow::Shutdown()
+void WindowsWindow::shutdown()
 {
     glfwDestroyWindow(m_Window);
 }

@@ -14,7 +14,9 @@ public:
     WindowsWindow(const WindowProps &props);
     virtual ~WindowsWindow();
 
-    void OnUpdate() override;
+    // @brief Event
+    virtual void PeekEvent();
+
 
     inline unsigned int GetWidth() const override
     {
@@ -39,10 +41,11 @@ public:
     }
 
 private:
-    virtual void Init(const WindowProps &props);
-    virtual void Shutdown();
+    // @brief Frame 을 정리해주는 함수
+    void onEndFrame() override;
+    virtual void init(const WindowProps &props);
+    virtual void shutdown();
 
-private:
     // Handle To Window
     GLFWwindow *m_Window;
 
