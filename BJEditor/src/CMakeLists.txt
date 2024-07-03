@@ -36,6 +36,24 @@ SOURCE_GROUP("editorwindow/private" FILES ${EDITORWINDOW_SOURCES})
 LIST(APPEND TOTAL_EDITOR_FILES ${EDITORWINDOW_SOURCES})
 
 
+# GuiProcessors
+SET(GUIPROCESSOR_HEADERS 
+    public/GuiProcessors/BaseGuiProcessor.h
+    public/GuiProcessors/EditorGuiProcessor.h
+    public/GuiProcessors/GuiProcessor.h
+)
+SOURCE_GROUP("guiprocessor/public" FILES ${GUIPROCESSOR_HEADERS})
+LIST(APPEND TOTAL_EDITOR_FILES ${GUIPROCESSOR_HEADERS})
+
+SET(GUIPROCESSOR_SOURCES
+    private/GuiProcessors/BaseGuiProcessor.cpp
+    private/GuiProcessors/EditorGuiProcessor.cpp
+    private/GuiProcessors/GuiProcessor.cpp
+)
+SOURCE_GROUP("guiprocessor/private" FILES ${GUIPROCESSOR_SOURCES})
+LIST(APPEND TOTAL_EDITOR_FILES ${GUIPROCESSOR_SOURCES})
+
+
 # Panels
 SET(PANEL_HEADERS 
     public/Panel/ComponentPanel/CameraPanel.h
