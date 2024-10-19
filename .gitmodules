@@ -1,0 +1,21 @@
+[submodule "HazelGameEngine/vendor/spdlog"]
+	path = HazelGameEngine/vendor/spdlog
+	url = https://github.com/gabime/spdlog.git
+[submodule "HazelGameEngine/vendor/GLFW"]
+	path = HazelGameEngine/vendor/GLFW
+	url = https://github.com/TheCherno/glfw.git
+[submodule "HazelGameEngine/vender/imgui"]
+	path = HazelGameEngine/vender/imgui
+	url = https://github.com/TheCherno/imgui.git
+[submodule "HazelGameEngine/vendor/glm"]
+	path = HazelGameEngine/vendor/glm
+	url = https://github.com/g-truc/glm.git
+[submodule "HazelGameEngine/vender/yaml-cpp"]
+	path = yaml-cpp
+	url = https://github.com/TheCherno/yaml-cpp.git
+[submodule "HazelGameEngine/vendor/ImGuizmo"]
+	path = HazelGameEngine/vendor/ImGuizmo
+	url = https://github.com/TheCherno/ImGuizmo.git
+[submodule "HazelGameEngine/vendor/Box2D"]
+	path = HazelGameEngine/vendor/Box2D
+	url = https://github.com/TheCherno/box2d.git

@@ -1,0 +1,1116 @@
+SET(RENDERER_PRIVATE_UTIL)
+SOURCE_GROUP("renderer\\private\\util" FILES ${RENDERER_PRIVATE_UTIL})
+SET(UI_TEXT_PUBLIC)
+SOURCE_GROUP("ui\\text\\public" FILES ${UI_TEXT_PUBLIC})
+SET(UI_TEXT_PRIVATE)
+SOURCE_GROUP("ui\\text\\private" FILES ${UI_TEXT_PRIVATE})
+SET(UI_FONT_PUBLIC)
+SOURCE_GROUP("ui\\font\\public" FILES ${UI_FONT_PUBLIC})
+SET(UI_FONT_PRIVATE)
+SOURCE_GROUP("ui\\font\\private" FILES ${UI_FONT_PRIVATE})
+SET(UI_TEXT)
+SOURCE_GROUP("ui\\text" FILES ${UI_TEXT})
+SET(UI_FONT)
+SOURCE_GROUP("ui\\font" FILES ${UI_FONT})
+SET(PLATFORM_PUBLIC)
+SOURCE_GROUP("platform\\public" FILES ${PLATFORM_PUBLIC})
+SET(PLATFORM_PRIVATE)
+SOURCE_GROUP("platform\\private" FILES ${PLATFORM_PRIVATE})
+SET(CINEMATIC_PUBLIC)
+SOURCE_GROUP("cinematic\\public" FILES ${CINEMATIC_PUBLIC})
+SET(CINEMATIC_PRIVATE)
+SOURCE_GROUP("cinematic\\private" FILES ${CINEMATIC_PRIVATE})
+SET(TESTING_PRIVATE)
+SOURCE_GROUP("testing\\private" FILES ${TESTING_PRIVATE})
+SET(MODULE_PUBLIC)
+SOURCE_GROUP("module\\public" FILES ${MODULE_PUBLIC})
+SET(ATTRIBUTE_PUBLIC)
+SOURCE_GROUP("attribute\\public" FILES ${ATTRIBUTE_PUBLIC})
+SET(ATTRIBUTE_PRIVATE)
+SOURCE_GROUP("attribute\\private" FILES ${ATTRIBUTE_PRIVATE})
+SET(ARCHIVE_PUBLIC)
+SOURCE_GROUP("archive\\public" FILES ${ARCHIVE_PUBLIC})
+SET(ARCHIVE_PRIVATE)
+SOURCE_GROUP("archive\\private" FILES ${ARCHIVE_PRIVATE})
+SET(RENDERER_PRIVATE_POSTPROCESS
+	private/renderer/postprocess/LvAmbientOcclusionSetting.cpp
+	private/renderer/postprocess/LvAutoExposureSetting.cpp
+	private/renderer/postprocess/LvBloomSetting.cpp
+	private/renderer/postprocess/LvColorLookupSetting.cpp
+	private/renderer/postprocess/LvDepthOfFieldSetting.cpp
+	private/renderer/postprocess/LvGrainSetting.cpp
+	private/renderer/postprocess/LvLendsDistortionSetting.cpp
+	private/renderer/postprocess/LvMotionBlurSetting.cpp
+	private/renderer/postprocess/LvPostProcessEffectSettings.cpp
+	private/renderer/postprocess/LvScreenSpaceReflectionsSetting.cpp
+	private/renderer/postprocess/LvVignetteSetting.cpp
+	private/renderer/postprocess/LvToneMappingSetting.cpp
+	private/renderer/postprocess/LvAtmosphericHeightFogSetting.cpp
+)
+SOURCE_GROUP("renderer\\private\\postprocess" FILES ${RENDERER_PRIVATE_POSTPROCESS})
+SET(RENDERER_PUBLIC_POSTPROCESS
+	renderer/postprocess/LvAmbientOcclusionSetting.h
+	renderer/postprocess/LvAutoExposureSetting.h
+	renderer/postprocess/LvBloomSetting.h
+	renderer/postprocess/LvColorLookupSetting.h
+	renderer/postprocess/LvDepthOfFieldSetting.h
+	renderer/postprocess/LvGrainSetting.h
+	renderer/postprocess/LvLendsDistortionSetting.h
+	renderer/postprocess/LvMotionBlurSetting.h
+	renderer/postprocess/LvPostProcessEffectSettings.h
+	renderer/postprocess/LvScreenSpaceReflectionsSetting.h
+	renderer/postprocess/LvVignetteSetting.h
+	renderer/postprocess/LvToneMappingSetting.h
+	renderer/postprocess/LvAtmosphericHeightFogSetting.h
+)
+SOURCE_GROUP("renderer\\public\\postprocess" FILES ${RENDERER_PUBLIC_POSTPROCESS})
+SET(UTIL_PUBLIC)
+SOURCE_GROUP("util\\public" FILES ${UTIL_PUBLIC})
+SET(UTIL_PRIVATE)
+SOURCE_GROUP("util\\private" FILES ${UTIL_PRIVATE})
+SET(PRIVATE_WIN32)
+SOURCE_GROUP("private\\win32" FILES ${PRIVATE_WIN32})
+SET(ASSET_PUBLIC)
+SOURCE_GROUP("asset\\public" FILES ${ASSET_PUBLIC})
+SET(ASSET_PRIVATE)
+SOURCE_GROUP("asset\\private" FILES ${ASSET_PRIVATE})
+SET(UI_CORE_PUBLIC)
+SOURCE_GROUP("ui\\core\\public" FILES ${UI_CORE_PUBLIC})
+SET(UI_CORE_PRIVATE)
+SOURCE_GROUP("ui\\core\\private" FILES ${UI_CORE_PRIVATE})
+SET(UI_CORE)
+SOURCE_GROUP("ui\\core" FILES ${UI_CORE})
+SET(SHADER_PUBLIC)
+SOURCE_GROUP("shader\\public" FILES ${SHADER_PUBLIC})
+SET(SHADER_PRIVATE)
+SOURCE_GROUP("shader\\private" FILES ${SHADER_PRIVATE})
+SET(COMPONENT_PUBLIC component/LvUIRayReceiverComponent.h)
+SOURCE_GROUP("component\\public" FILES ${COMPONENT_PUBLIC})
+SET(COMPONENT_PRIVATE private/component/LvUIRayReceiverComponent.cpp)
+SOURCE_GROUP("component\\private" FILES ${COMPONENT_PRIVATE})
+SET(UI_LAYOUT_PUBLIC)
+SOURCE_GROUP("ui\\layout\\public" FILES ${UI_LAYOUT_PUBLIC})
+SET(UI_LAYOUT_PRIVATE)
+SOURCE_GROUP("ui\\layout\\private" FILES ${UI_LAYOUT_PRIVATE})
+SET(UI_LAYOUT)
+SOURCE_GROUP("ui\\layout" FILES ${UI_LAYOUT})
+SET(THREAD_PRIVATE)
+SOURCE_GROUP("thread\\private" FILES ${THREAD_PRIVATE})
+SET(THIRDPARTY_YOGA)
+SOURCE_GROUP("thirdparty\\yoga" FILES ${THIRDPARTY_YOGA})
+SET(THIRDPARTY_TINYXML2)
+SOURCE_GROUP("thirdparty\\tinyxml2" FILES ${THIRDPARTY_TINYXML2})
+SET(TESTING_PUBLIC)
+SOURCE_GROUP("module\\public" FILES ${MODULE_PUBLIC})
+SET(MODULE_PRIVATE)
+SOURCE_GROUP("module\\private" FILES ${MODULE_PRIVATE})
+SET(EXPERIMENT_YOGA)
+SOURCE_GROUP("experiment\\yoga" FILES ${EXPERIMENT_YOGA})
+SET(UTILS_PUBLIC)
+SOURCE_GROUP("utils\\public" FILES ${UTILS_PUBLIC})
+SET(UTILS_PRIVATE)
+SOURCE_GROUP("utils\\private" FILES ${UTILS_PRIVATE})
+SET(THIRDPARTY_LZ4)
+SOURCE_GROUP("thirdparty\\lz4" FILES ${THIRDPARTY_LZ4})
+SET(THIRDPARTY_IMGUI)
+SOURCE_GROUP("thirdparty\\imgui" FILES ${THIRDPARTY_IMGUI})
+SET(THIRDPARTY_FONT)
+SOURCE_GROUP("thirdparty\\font" FILES ${THIRDPARTY_FONT})
+SET(SERIALIZER_PUBLIC)
+SOURCE_GROUP("serializer\\public" FILES ${SERIALIZER_PUBLIC})
+SET(SERIALIZER_PRIVATE)
+SOURCE_GROUP("serializer\\private" FILES ${SERIALIZER_PRIVATE})
+SET(RENDERER_PUBLIC)
+SOURCE_GROUP("renderer\\public" FILES ${RENDERER_PUBLIC})
+SET(RENDERER_PRIVATE)
+SOURCE_GROUP("renderer\\private" FILES ${RENDERER_PRIVATE})
+SET(LVTF_PUBLIC)
+SOURCE_GROUP("lvtf\\public" FILES ${LVTF_PUBLIC})
+SET(LVTF_PRIVATE)
+SOURCE_GROUP("lvtf\\private" FILES ${LVTF_PRIVATE})
+SET(INPUT_PUBLIC)
+SET(TOTAL_FILE)
+SOURCE_GROUP("input\\public" FILES ${INPUT_PUBLIC})
+IF(EXISTS "${LV_ENGINE_SRC_DIR}/engine/private/reflect/CMakeLists.txt")
+	ADD_SUBDIRECTORY("private/reflect")
+ENDIF()
+SOURCE_GROUP("private\\reflect" FILES ${SRC_ENGINE_GEN})
+LIST(APPEND TOTAL_FILE ${SRC_ENGINE_GEN})
+SET(INC_ENINGE
+	LvObject.h
+	#LvObjectRelation.h
+	LvObjectAddress.h
+	LvObjectLabelTable.h
+	LvPrototypeProvider.h
+	LvPreferences.h
+	LvPlayerPreferences.h
+	LvAnimation.h
+	LvAnimationCurve.h
+	LvAnimationClip.h
+	LvAnimationController.h
+	LvKeyframe.h
+	LvanimationGraph.h
+	LvAnimationPath.h
+	LvAnimationInterpolation.h
+	LvCamera.h
+	LvFlag.h
+	LvAnimationChannel.h
+	LvAnimationSampler.h
+	LvAnimationSamplerTimeStamps.h
+	LvEngine.h
+	LvMaterial.h
+	LvCloneMaterial.h
+	LvGlyph.h
+	LvAtlasPacker.h
+	LvMaterialVariant.h
+	LvMesh.h
+	LvModelNode.h
+	LvArmature.h
+	LvResourceManager.h
+	LvPreamble.h
+	LvTransform.h
+	LvVectorUtility.h
+	LvApplicable.h
+	LvMeshOptimizer.h
+	LvDynamicObject.h
+	LvCachedPropertyPath.h
+	LvEngineAllocator.h
+	LvScene.h
+	LvSceneSetting.h
+	LvPack.h
+	LvTFObject.h
+	LvImage.h
+	LvLight.h
+	LvShader.h
+	LvSceneGraph.h
+	LvInputManager.h
+	LvIdentifier.h
+	LvPrefab.h
+	LvPrefabStorage.h
+	LvPrefabOverride.h
+	LvManagedJob.h
+	LvManagedJobSystem.h
+	LvEntity.h
+	LvGameEntity.h
+	LvImGuiContextManager.h
+	LvText.h
+	LvFont.h
+	LvImageFont.h
+	LvLayerMask.h
+	LvParticle.h
+	LvParticleActions.h
+	LvBuildSettings.h
+	LvTexture.h
+	LvRenderTexture.h
+	LvSurface.h
+	LvSprite.h
+	LvScreen.h
+	LvInput.h
+	LvInputHandler.h
+	LvShadow.h
+	LvGeometry.h
+	LvBound.h
+	LvSystemJobs.h
+	LvCoreJobs.h
+	LvJobSystem.h
+	LvBVH.h
+	LvAnimationBlendDesc.h
+	LvAnimationPipeline.h
+	LvAnimationBlendState.h
+	LvAnimationBlendHelper.h
+	LvResourceExtension.h
+	LvAtlas.h
+	LvPostProcessProfile.h
+	LvSerializeEvent.h
+	LvColorGradient.h
+	LvBezier.h
+	LvUserSetting.h
+	LvNoise.h
+	LvCachedValue.h
+	LvSequencer.h
+	LvReflectionTypeDefinition.h
+	LvSparseSet.h
+	LvSparseSetContainer.h
+	LvEntryBundle.h
+	LvDataBlock.h
+	LvNativeEventHandler.h
+	LvShaderProperties.h
+	LvShaderKeyword.h
+	LvShaderCache.h
+	LvWorld.h
+	LvGlobalKeywordManager.h
+	LvShaderKeywordUtil.h
+	LvUnknown.h
+	LvObjectHandle.h
+	LvBuiltInResource.h
+	LvCoroutine.h
+	LvShaderTagID.h
+)
+SOURCE_GROUP("public" FILES ${INC_ENINGE})
+LIST(APPEND TOTAL_FILE ${INC_ENINGE})
+SET(SRC_ENINGE
+	private/LvObject.cpp
+	#private/LvObjectRelation.cpp
+	private/LvObjectAddress.cpp
+	private/LvObjectHandle.cpp
+	private/LvObjectLabelTable.cpp
+	private/LvPack.cpp
+	private/LvBuiltInDistribute.h
+	private/LvBuiltInDistribute.cpp
+	private/LvBuiltInResource.cpp
+	private/LvPreferences.cpp
+	private/LvPlayerPreferences.cpp
+	private/LvAnimation.cpp
+	private/LvAnimationCurve.cpp
+	private/LvAnimationClip.cpp
+	private/LvAnimationController.cpp
+	private/LvAnimationGraph.cpp
+	private/LvCamera.cpp
+	private/LvAnimationChannel.cpp
+	private/LvAnimationSampler.cpp
+	private/LvAnimationSamplerTimeStamps.cpp
+	private/LvEngine.cpp
+	private/LvMaterial.cpp
+	private/LvCloneMaterial.cpp
+	private/LvGlyph.cpp
+	private/LvAtlasPacker.cpp
+	private/LvMaterialVariant.cpp
+	private/LvMesh.cpp
+	private/LvModelNode.cpp
+	private/LvArmature.cpp
+	private/LvResourceManager.cpp
+	private/LvRP.cpp
+	private/LvTransform.cpp
+	private/LvVectorUtility.cpp
+	private/LvMeshOptimizer.cpp
+	private/LvDynamicObject.cpp
+	private/LvCachedPropertyPath.cpp
+	private/LvEngineAllocator.cpp
+	private/LvScene.cpp
+	private/LvSceneSetting.cpp
+	private/LvSceneGraph.cpp
+	private/LvSceneGraphInternal.h
+	private/LvSceneGraphInternal.cpp
+	private/LvPack.cpp
+	private/LvTFObject.cpp
+	private/LvImage.cpp
+	private/LvLight.cpp
+	private/LvShader.cpp
+	private/LvShadow.cpp
+	private/LvInputManager.cpp
+	private/LvIdentifier.cpp
+	private/LvEngineJob.cpp
+	private/LvEngineJobSystem.cpp
+	private/LvSparseSet.cpp
+	private/LvImGuiContextManager.cpp
+	private/LvPrefab.cpp
+	private/LvPrefabStorage.cpp
+	private/LvPrefabOverride.cpp
+	private/LvText.cpp
+	private/LvFont.cpp
+	private/LvImageFont.cpp
+	private/LvParticle.cpp
+	private/LvParticleActions.cpp
+	private/LvTexture.cpp
+	private/LvEntity.cpp
+	private/LvGameEntity.cpp
+	private/LvSurface.cpp
+	private/LvSprite.cpp
+	private/LvScreen.cpp
+	private/LvInput.cpp
+	private/LvInputHandler.cpp
+	private/LvRenderTexture.cpp
+	private/LvAnimationBlendState.cpp
+	private/LvBVH.cpp
+	private/LvGeometry.cpp
+	private/LvBound.cpp
+	private/LvCoreJobs.cpp
+	private/LvJobSystem.cpp
+	private/LvAnimationBlendDesc.cpp
+	private/LvAnimationPipeline.cpp
+	private/LvAnimationBlendHelper.cpp
+	private/LvResourceExtension.cpp
+	private/LvAtlas.cpp
+	private/LvPostProcessProfile.cpp
+	private/LvSerializeEvent.cpp
+	private/LvColorGradient.cpp
+	private/LvBezier.cpp
+	private/LvUserSetting.cpp
+	private/LvNoise.cpp
+	private/LvSequencer.cpp
+	private/LvSparseSetContainer.cpp
+	private/LvEntryBundle.cpp
+	private/LvDataBlock.cpp
+	private/LvNativeEventHandler.cpp
+	private/LvShaderProperties.cpp
+	private/LvShaderKeyword.cpp
+	private/LvShaderCache.cpp
+	private/SubShaderImpl.cpp
+	private/SubShaderImpl.h
+	private/PassImpl.cpp
+	private/PassImpl.h
+	private/LvWorld.cpp
+	private/LvGlobalKeywordManager.cpp
+	private/LvShaderKeywordUtil.cpp
+	private/LvUnknown.cpp
+	private/LvObjectInternal.h
+	private/LvObjectInternal.cpp
+	private/LvCoroutine.cpp
+	private/LvCoroutineInternal.h
+	private/LvCoroutineInternal.cpp
+	private/LvShaderTagID.cpp
+)
+SOURCE_GROUP("private" FILES ${SRC_ENINGE})
+LIST(APPEND TOTAL_FILE ${SRC_ENINGE})
+SET(INC_SHADER
+	LvShaderDataLayout.h
+	LvShaderEnumUtil.h
+	LvShaderPermutation.h
+	LvShaderEnum.h
+)
+SOURCE_GROUP("shader\\public" FILES ${INC_SHADER})
+LIST(APPEND TOTAL_FILE ${INC_SHADER})
+SET(INC_SHADER_PRIVATE
+	private/LvShaderDataLayout.cpp
+	private/LvShaderPermutation.cpp
+)
+SOURCE_GROUP("shader\\private" FILES ${INC_SHADER_PRIVATE})
+LIST(APPEND TOTAL_FILE ${INC_SHADER_PRIVATE})
+### Asset
+SET(INC_ASSET
+	asset/LvAssetBundle.h
+	asset/LvBundleRepository.h
+	asset/LvAssetType.h
+)
+SOURCE_GROUP("asset\\public" FILES ${INC_ASSET})
+LIST(APPEND TOTAL_FILE ${INC_ASSET})
+SET(SRC_ASSET
+	private/asset/LvAssetBundle.cpp
+	private/asset/LvBundleRepository.cpp
+	private/asset/LvAssetType.cpp
+)
+SOURCE_GROUP("asset\\private" FILES ${SRC_ASSET})
+LIST(APPEND TOTAL_FILE ${SRC_ASSET})
+###
+SET(INC_LVTF
+	lvtf/LvSerializedModel.h
+	lvtf/LvSerializedModelInfo.h
+	lvtf/LvSerializedContext.h
+	lvtf/LvSerializedContextView.h
+	lvtf/LvSerializedContextBuffer.h
+	lvtf/LvSerializedAccessor.h
+	lvtf/LvContextComponentType.h
+	lvtf/LvContextStructureType.h
+	lvtf/LvSerializedTexture.h
+	lvtf/LvTextureUsageType.h
+	lvtf/LvSerializedMaterial.h
+	lvtf/LvSerializedMesh.h
+	lvtf/LvSerializedSubMesh.h
+	lvtf/LvSerializedSkin.h
+	lvtf/LvSerializedNode.h
+	lvtf/LvSerializedAnimation.h
+	lvtf/LvSerializedChannel.h
+	lvtf/LvSerializedSampler.h
+	lvtf/LvPathType.h
+)
+SOURCE_GROUP("lvtf\\public" FILES ${INC_LVTF})
+LIST(APPEND TOTAL_FILE ${INC_LVTF})
+SET(SRC_LVTF
+	private/lvtf/LvSerializedModel.cpp
+	private/lvtf/LvSerializedModelInfo.cpp
+	private/lvtf/LvSerializedContext.cpp
+	private/lvtf/LvSerializedContextView.cpp
+	private/lvtf/LvSerializedContextBuffer.cpp
+	private/lvtf/LvSerializedAccessor.cpp
+	private/lvtf/LvContextStructureType.cpp
+	private/lvtf/LvSerializedTexture.cpp
+	private/lvtf/LvPathType.cpp
+	private/lvtf/LvSerializedMaterial.cpp
+	private/lvtf/LvSerializedMesh.cpp
+	private/lvtf/LvSerializedSubMesh.cpp
+	private/lvtf/LvSerializedSkin.cpp
+	private/lvtf/LvSerializedNode.cpp
+	private/lvtf/LvSerializedAnimation.cpp
+	private/lvtf/LvSerializedChannel.cpp
+	private/lvtf/LvSerializedSampler.cpp
+)
+SOURCE_GROUP("lvtf\\private" FILES ${SRC_LVTF})
+LIST(APPEND TOTAL_FILE ${SRC_LVTF})
+SET(ARCHIVE
+	archive/LvArchivable.h
+	archive/LvArchive.h
+	archive/LvDocumentObject.h
+	archive/LvJsonArchive.h
+	archive/LvJsonDomArchive.h
+	archive/LvYamlArchive.h
+	archive/LvBinaryArchive.h
+	archive/LvBinaryTypedArchive.h
+	archive/LvReferenceArchive.h
+	archive/LvEngineArchive.h
+	archive/LvPairTypeYaml.h
+)
+SOURCE_GROUP("archive\\public" FILES ${ARCHIVE})
+LIST(APPEND TOTAL_FILE ${ARCHIVE})
+SET(PRIVATE_ARCHIVE
+	private/archive/LvArchivable.cpp
+	private/archive/LvArchive.cpp
+	private/archive/LvDocumentObject.cpp
+	private/archive/LvJsonArchive.cpp
+	private/archive/LvJsonDomArchive.cpp
+	private/archive/LvYamlArchive.cpp
+	private/archive/LvBinaryArchive.cpp
+	private/archive/LvBinaryTypedArchive.cpp
+	private/archive/LvReferenceArchive.cpp
+	private/archive/LvEngineArchive.cpp
+)
+SOURCE_GROUP("archive\\private" FILES ${PRIVATE_ARCHIVE})
+LIST(APPEND TOTAL_FILE ${PRIVATE_ARCHIVE})
+SET(EXPERIMENT_SRC
+	experiment/LvSceneBVH.h
+	experiment/LvSceneBVH.cpp
+	experiment/LvPrimitiveDrawer.h
+	experiment/LvPrimitiveDrawer.cpp
+	experiment/LvLoadProcessor.h
+	experiment/LvLoadProcessor.cpp
+	experiment/LvObjectPropertyAssign.h
+	experiment/LvBundleDirectory.h
+	experiment/LvBundleDirectory.cpp
+)
+SOURCE_GROUP("experiment" FILES ${EXPERIMENT_SRC})
+LIST(APPEND TOTAL_FILE ${EXPERIMENT_SRC})
+SET(SOURCE_IMGUI
+	thirdparty/imgui/imgui.cpp
+	thirdparty/imgui/imgui.h
+	thirdparty/imgui/imgui_widgets.cpp
+	thirdparty/imgui/imgui_draw.cpp
+	thirdparty/imgui/imgui_demo.cpp
+	thirdparty/imgui/imgui_tables.cpp
+	thirdparty/imgui/imconfig.h
+)
+SOURCE_GROUP("thirdparty\\imgui" FILES ${SOURCE_IMGUI})
+LIST(APPEND TOTAL_FILE ${SOURCE_IMGUI})
+SET(PUBLIC_FONT thirdparty/IconsFontAwesome6.h)
+SOURCE_GROUP("thirdparty\\font" FILES ${PUBLIC_FONT})
+LIST(APPEND TOTAL_FILE ${PUBLIC_FONT})
+SET(SOURCE_LZ4
+	thirdparty/lz4/lz4.c
+	thirdparty/lz4/lz4.h
+	thirdparty/lz4/lz4hc.c
+	thirdparty/lz4/lz4hc.h
+	thirdparty/lz4/xxhash.c
+	thirdparty/lz4/xxhash.h
+	thirdparty/lz4/lz4frame.c
+	thirdparty/lz4/lz4frame.h
+	thirdparty/lz4/lz4frame_static.h
+)
+SOURCE_GROUP("thirdparty\\lz4" FILES ${SOURCE_LZ4})
+LIST(APPEND TOTAL_FILE ${SOURCE_LZ4})
+SET(SOURCE_YOGA
+	thirdparty/yoga/BitUtils.h
+	thirdparty/yoga/CompactValue.h
+	thirdparty/yoga/event/event.cpp
+	thirdparty/yoga/event/event.h
+	thirdparty/yoga/internal/experiments.cpp
+	thirdparty/yoga/internal/experiments.h
+	thirdparty/yoga/internal/experiments-inl.h
+	thirdparty/yoga/log.cpp
+	thirdparty/yoga/log.h
+	thirdparty/yoga/Utils.cpp
+	thirdparty/yoga/Utils.h
+	thirdparty/yoga/YGConfig.cpp
+	thirdparty/yoga/YGConfig.h
+	thirdparty/yoga/YGEnums.cpp
+	thirdparty/yoga/YGEnums.h
+	thirdparty/yoga/YGFloatOptional.h
+	thirdparty/yoga/YGLayout.cpp
+	thirdparty/yoga/YGLayout.h
+	thirdparty/yoga/YGMacros.h
+	thirdparty/yoga/YGNode.cpp
+	thirdparty/yoga/YGNode.h
+	thirdparty/yoga/YGNodePrint.cpp
+	thirdparty/yoga/YGNodePrint.h
+	thirdparty/yoga/YGStyle.cpp
+	thirdparty/yoga/YGStyle.h
+	thirdparty/yoga/YGValue.cpp
+	thirdparty/yoga/YGValue.h
+	thirdparty/yoga/Yoga-internal.h
+	thirdparty/yoga/Yoga.cpp
+	thirdparty/yoga/Yoga.h
+)
+SOURCE_GROUP("thirdparty\\yoga" FILES ${SOURCE_YOGA})
+LIST(APPEND TOTAL_FILE ${SOURCE_YOGA})
+
+SET(INC_UTILITY
+	util/LvImageUtil.h
+	util/LvUIUtil.h
+	util/LvTypeUtil.h
+	util/LvParameterUtil.h
+	util/LvArrayList.h
+	util/LvBuiltInUtil.h
+)
+SOURCE_GROUP("util\\public" FILES ${INC_UTILITY})
+LIST(APPEND TOTAL_FILE ${INC_UTILITY})
+SET(SRC_UTILITY
+	private/util/LvImageUtil.cpp
+	private/util/LvUIUtil.cpp
+	private/util/LvTypeUtil.cpp
+	private/util/LvJsonParser.h
+	private/util/LvJsonParser.cpp
+	private/util/LvParameterUtil.cpp
+	private/util/LvArrayList.cpp
+	private/util/LvBuiltInUtil.cpp
+)
+SOURCE_GROUP("util\\private" FILES ${SRC_UTILITY})
+LIST(APPEND TOTAL_FILE ${SRC_UTILITY})
+
+SET(INC_RENDERER_UTIL 
+renderer/util/LvSphericalHarmonics.h
+renderer/util/LvRenderBufferUtility.h
+renderer/util/LvRenderTextureUtility.h
+)
+SOURCE_GROUP("renderer\\public\\util" FILES ${INC_RENDERER_UTIL})
+LIST(APPEND TOTAL_FILE ${INC_RENDERER_UTIL})
+
+SET(SRC_RENDERER_UTIL 
+private/renderer/util/LvSphericalHarmonics.cpp
+private/renderer/util/LvRenderBufferUtility.cpp
+private/renderer/util/LvRenderTextureUtility.cpp
+)
+SOURCE_GROUP("renderer\\private\\util" FILES ${SRC_RENDERER_UTIL})
+LIST(APPEND TOTAL_FILE ${SRC_RENDERER_UTIL})
+
+SET(INC_RENDERER
+	renderer/LvRenderer.h
+	renderer/LvForwardRenderer.h
+	renderer/LvDeferredRenderer.h
+	renderer/LvRendererDefinitions.h
+	renderer/LvRenderBuiltInShader.h
+	renderer/LvBatchedElements.h
+	renderer/LvBatchedPrimitiveUtils.h
+	renderer/LvRenderResource.h
+	renderer/LvRenderDatabase.h
+	renderer/LvRenderServer.h
+	renderer/LvRendererJobs.h
+	renderer/LvTable.h
+)
+SOURCE_GROUP("renderer\\public" FILES ${INC_RENDERER})
+LIST(APPEND TOTAL_FILE ${INC_RENDERER})
+SET(SRC_RENDERER
+	private/renderer/LvRenderer.cpp
+	private/renderer/LvForwardRenderer.cpp
+	private/renderer/LvDeferredRenderer.cpp
+	private/renderer/LvRendererDefinitions.cpp
+	private/renderer/LvBatchedElements.cpp
+	private/renderer/LvBatchedPrimitiveUtils.cpp
+	private/renderer/LvRenderResource.cpp
+	private/renderer/LvRenderDatabase.cpp
+	private/renderer/LvRenderDatabase_SceneSetting.cpp
+	private/renderer/LvRenderDatabase_Camera.cpp
+	private/renderer/LvRenderDatabase_Image.cpp
+	private/renderer/LvRenderDatabase_LightAndBound.cpp
+	private/renderer/LvRenderDatabase_Material.cpp
+	private/renderer/LvRenderDatabase_Mesh.cpp
+	private/renderer/LvRenderDatabase_ParticleAndBound.cpp
+	private/renderer/LvRenderDatabase_PostProcessing.cpp
+	private/renderer/LvRenderDatabase_RenderAndBound.cpp
+	private/renderer/LvRenderDatabase_RenderTexture.cpp
+	private/renderer/LvRenderDatabase_Transform.cpp
+	private/renderer/LvRenderDatabase_Batch.cpp
+	private/renderer/LvRenderServer.cpp
+	private/renderer/LvTable.cpp
+	private/renderer/LvRendererJobs.cpp
+	private/renderer/LvRenderDatabase_TrailAndBound.cpp
+)
+SOURCE_GROUP("renderer\\private" FILES ${SRC_RENDERER})
+LIST(APPEND TOTAL_FILE ${SRC_RENDERER})
+SET(INC_RENDERER_RENDERPASS
+	renderer/renderpass/LvRendererPass.h
+	renderer/renderpass/LvForwardRenderPass.h
+	renderer/renderpass/LvForwardShadowMapPass.h
+	renderer/renderpass/LvForwardDepthPass.h
+	renderer/renderpass/LvForwardOpaquePass.h
+	renderer/renderpass/LvForwardTransparentPass.h
+	renderer/renderpass/LvForwardDebugPass.h
+	renderer/renderpass/LvForwardPostPass.h
+	renderer/renderpass/LvForwardSkyboxPass.h
+	renderer/renderpass/LvForwardIBLEncodingPass.h
+	renderer/renderpass/LvForwardUIPass.h
+	renderer/renderpass/LvDeferredRenderPass.h
+)
+SOURCE_GROUP("renderer\\public\\renderpass" FILES ${INC_RENDERER_RENDERPASS})
+LIST(APPEND TOTAL_FILE ${INC_RENDERER_RENDERPASS})
+SET(SRC_RENDERER_RENDERPASS
+	private/renderer/renderpass/LvRendererPass.cpp
+	private/renderer/renderpass/LvForwardRenderPass.cpp
+	private/renderer/renderpass/LvForwardShadowMapPass.cpp
+	private/renderer/renderpass/LvForwardDepthPass.cpp
+	private/renderer/renderpass/LvForwardOpaquePass.cpp
+	private/renderer/renderpass/LvForwardTransparentPass.cpp
+	private/renderer/renderpass/LvForwardDebugPass.cpp
+	private/renderer/renderpass/LvForwardPostPass.cpp
+	private/renderer/renderpass/LvForwardSkyboxPass.cpp
+	private/renderer/renderpass/LvForwardIBLEncodingPass.cpp
+	private/renderer/renderpass/LvForwardUIPass.cpp
+	private/renderer/renderpass/LvDeferredRenderPass.cpp
+)
+SOURCE_GROUP("renderer\\private\\renderpass" FILES ${SRC_RENDERER_RENDERPASS})
+LIST(APPEND TOTAL_FILE ${SRC_RENDERER_RENDERPASS})
+SET(INC_ATTRIBUTE
+	attribute/LvInspectorAttribute.h
+	attribute/LvCloneAttribute.h
+	attribute/LvComponentAttribute.h
+	attribute/LvRangeAttribute.h
+	attribute/Util/LvComponentAttributeUtil.h
+)
+SOURCE_GROUP("attribute\\public" FILES ${INC_ATTRIBUTE})
+LIST(APPEND TOTAL_FILE ${INC_ATTRIBUTE})
+SET(SRC_ATTRIBUTE
+	private/attribute/LvInspectorAttribute.cpp
+	private/attribute/LvRangeAttribute.cpp
+	private/attribute/Util/LvComponentAttributeUtil.cpp
+)
+SOURCE_GROUP("attribute\\private" FILES ${SRC_ATTRIBUTE})
+LIST(APPEND TOTAL_FILE ${SRC_ATTRIBUTE})
+SET(INC_COMPONENT
+	component/fwd.h
+	component/LvComponent.h
+	component/LvComponentContainer.h
+	component/LvComponentContainable.h
+	component/LvComponentColumn.h
+	component/LvComponentColumn.h
+	component/LvMissingComponent.h
+	component/LvScriptComponent.h
+	component/LvTransformComponent.h
+	component/LvNameComponent.h
+	component/LvLayerComponent.h
+	component/LvActiveComponent.h
+	component/LvRetainComponent.h
+	component/LvHierarchyComponent.h
+	component/LvRenderComponent.h
+	component/LvRenderBoundComponent.h
+	component/LvLightComponent.h
+	component/LvLightBoundComponent.h
+	component/LvCameraComponent.h
+	component/LvArmatureComponent.h
+	component/LvAnimationComponent.h
+	component/LvUIBasicLayoutComponent.h
+	component/LvUILayoutElementComponent.h
+	component/LvUIRectComponent.h
+	component/LvUITextComponent.h
+	component/LvUICanvasComponent.h
+	component/LvParticleComponent.h
+	component/LvParticleBoundComponent.h
+	component/LvUIImageComponent.h
+	component/LvUIDepthComponent.h
+	component/LvUIEventSystemComponent.h
+	component/LvUIEventComponent.h
+	component/LvInputModuleComponent.h
+	component/LvUIRayReceiverComponent.h
+	component/LvUIRaycasterComponent.h
+	component/LvUISpriteComponent.h
+	component/LvUIButtonComponent.h
+	component/LvUITextFieldComponent.h
+	component/LvUITextOutlineComponent.h
+	component/LvUITextGradientComponent.h
+	component/LvUIRectMaskComponent.h
+	component/LvUIMaskableComponent.h
+	component/LvPostProcessLayerComponent.h
+	component/LvPostProcessVolumeComponent.h
+	component/LvUIScrollbarComponent.h
+	component/LvUIScrollRectComponent.h
+	component/LvEventBridgeComponent.h
+	component/LvFieldData.h
+	component/LvUIToggleComponent.h
+	component/LvUIToggleGroupComponent.h
+	component/LvUIDropdownComponent.h
+	component/LvReflectionProbeComponent.h
+	component/LvLensFlareComponent.h
+	component/LvUISliderComponent.h
+	component/LvTrailComponent.h
+	component/LvTrailBoundComponent.h
+	component/LvColliderComponent.h
+)
+SOURCE_GROUP("component\\public" FILES ${INC_COMPONENT})
+LIST(APPEND TOTAL_FILE ${INC_COMPONENT})
+SET(SRC_COMPONENT
+	private/component/LvComponent.cpp
+	private/component/LvComponentInternal.h
+	private/component/LvComponentInternal.cpp
+	private/component/LvComponentContainer.cpp
+	private/component/LvComponentContainable.cpp
+	private/component/LvComponentColumn.cpp
+	private/component/LvMissingComponent.cpp
+	private/component/LvECSArchevieExtension.h
+	private/component/LvECSArchevieExtension.cpp
+	private/component/LvTransformComponent.cpp
+	private/component/LvScriptComponent.cpp
+	private/component/LvNameComponent.cpp
+	private/component/LvActiveComponent.cpp
+	private/component/LvRetainComponent.cpp
+	private/component/LvLayerComponent.cpp
+	private/component/LvHierarchyComponent.cpp
+	private/component/LvRenderComponent.cpp
+	private/component/LvRenderBoundComponent.cpp
+	private/component/LvLightComponent.cpp
+	private/component/LvLightBoundComponent.cpp
+	private/component/LvCameraComponent.cpp
+	private/component/LvArmatureComponent.cpp
+	private/component/LvAnimationComponent.cpp
+	private/component/LvUIBasicLayoutComponent.cpp
+	private/component/LvUILayoutElementComponent.cpp
+	private/component/LvUIRectComponent.cpp
+	private/component/LvUITextComponent.cpp
+	private/component/LvUICanvasComponent.cpp
+	private/component/LvParticleComponent.cpp
+	private/component/LvParticleBoundComponent.cpp
+	private/component/LvUIImageComponent.cpp
+	private/component/LvUIDepthComponent.cpp
+	private/component/LvUIEventSystemComponent.cpp
+	private/component/LvUIEventComponent.cpp
+	private/component/LvInputModuleComponent.cpp
+	private/component/LvUIRayReceiverComponent.cpp
+	private/component/LvUIRaycasterComponent.cpp
+	private/component/LvUISpriteComponent.cpp
+	private/component/LvUIButtonComponent.cpp
+	private/component/LvUITextFieldComponent.cpp
+	private/component/LvUITextOutlineComponent.cpp
+	private/component/LvUITextGradientComponent.cpp
+	private/component/LvUIRectMaskComponent.cpp
+	private/component/LvUIMaskableComponent.cpp
+	private/component/LvPostProcessLayerComponent.cpp
+	private/component/LvPostProcessVolumeComponent.cpp
+	private/component/LvUIScrollbarComponent.cpp
+	private/component/LvUIScrollRectComponent.cpp
+	private/component/LvEventBridgeComponent.cpp
+	private/component/LvFieldData.cpp
+	private/component/LvUIToggleComponent.cpp
+	private/component/LvUIToggleGroupComponent.cpp
+	private/component/LvUIDropdownComponent.cpp
+	private/component/LvReflectionProbeComponent.cpp
+	private/component/LvLensFlareComponent.cpp
+	private/component/LvUISliderComponent.cpp
+	private/component/LvTrailComponent.cpp
+	private/component/LvTrailBoundComponent.cpp
+	private/component/LvColliderComponent.cpp
+)
+SOURCE_GROUP("component\\private" FILES ${SRC_COMPONENT})
+LIST(APPEND TOTAL_FILE ${SRC_COMPONENT})
+SET(INC_COMPONENT_SYSTEM
+	component/system/LvEntityFilterable.h
+	component/system/LvActiveFilter.h
+	component/system/LvVisibleFilter.h
+	component/system/LvDirtyFilter.h
+	component/system/LvScriptFilter.h
+	component/system/LvComponentSystem.h
+	component/system/LvHierarchySortComponentSystem.h
+	component/system/LvTransformComponentSystem.h
+	component/system/LvAnimationComponentSystem.h
+	component/system/LvActiveComponentSystem.h
+	component/system/LvInputModuleComponentSystem.h
+	component/system/LvUIEventSystemComponentSystem.h
+	component/system/LvUIDepthComponentSystem.h
+	component/system/LvUICanvasComponentSystem.h
+	component/system/LvUIRaycastSystem.h
+	component/system/LvUILayoutComponentSystem.h
+	component/system/LvUIRectComponentSystem.h
+	component/system/LvUIImageComponentSystem.h
+	component/system/LvUITextFieldComponentSystem.h
+	component/system/LvUITextComponentSystem.h
+	component/system/LvUITextOutlineComponentSystem.h
+	component/system/LvUITextGradientComponentSystem.h
+	component/system/LvUIComponentSystem.h
+	component/system/LvUIScrollRectComponentSystem.h
+	component/system/LvUIScrollbarComponentSystem.h
+	component/system/LvUISliderComponentSystem.h
+	component/system/LvUIRectMaskComponentSystem.h
+	component/system/LvCameraComponentSystem.h
+	component/system/LvArmatureComponentSystem.h
+	component/system/LvRenderComponentSystem.h
+	component/system/LvParticleComponentSystem.h
+	component/system/LvLightComponentSystem.h
+	component/system/LvBoundComponentSystem.h
+	component/system/LvPostProcessLayerComponentSystem.h
+	component/system/LvPostProcessVolumeComponentSystem.h
+	component/system/LvScriptComponentSystem.h
+	component/system/LvTrailComponentSystem.h
+	component/system/LvUIButtonComponentSystem.h
+	component/system/LvUIToggleComponentSystem.h
+	component/system/LvUIDropdownComponentSystem.h
+)
+SOURCE_GROUP("component\\system\\public" FILES ${INC_COMPONENT_SYSTEM})
+LIST(APPEND TOTAL_FILE ${INC_COMPONENT_SYSTEM})
+SET(SRC_COMPONENT_SYSTEM
+	private/component/system/LvVisibleFilter.cpp
+	private/component/system/LvActiveFilter.cpp
+	private/component/system/LvDirtyFilter.cpp
+	private/component/system/LvScriptFilter.cpp
+	private/component/system/LvComponentSystem.cpp
+	private/component/system/LvHierarchySortComponentSystem.cpp
+	private/component/system/LvTransformComponentSystem.cpp
+	private/component/system/LvAnimationComponentSystem.cpp
+	private/component/system/LvActiveComponentSystem.cpp
+	private/component/system/LvInputModuleComponentSystem.cpp
+	private/component/system/LvUIEventSystemComponentSystem.cpp
+	private/component/system/LvUIDepthComponentSystem.cpp
+	private/component/system/LvUICanvasComponentSystem.cpp
+	private/component/system/LvUIRaycastSystem.cpp
+	private/component/system/LvUILayoutComponentSystem.cpp
+	private/component/system/LvUIRectComponentSystem.cpp
+	private/component/system/LvUIImageComponentSystem.cpp
+	private/component/system/LvUITextFieldComponentSystem.cpp
+	private/component/system/LvUITextComponentSystem.cpp
+	private/component/system/LvUITextOutlineComponentSystem.cpp
+	private/component/system/LvUITextGradientComponentSystem.cpp
+	private/component/system/LvUIComponentSystem.cpp
+	private/component/system/LvUIScrollRectComponentSystem.cpp
+	private/component/system/LvUIScrollbarComponentSystem.cpp
+	private/component/system/LvUISliderComponentSystem.cpp
+	private/component/system/LvUIRectMaskComponentSystem.cpp
+	private/component/system/LvCameraComponentSystem.cpp
+	private/component/system/LvArmatureComponentSystem.cpp
+	private/component/system/LvRenderComponentSystem.cpp
+	private/component/system/LvParticleComponentSystem.cpp
+	private/component/system/LvLightComponentSystem.cpp
+	private/component/system/LvBoundComponentSystem.cpp
+	private/component/system/LvPostProcessLayerComponentSystem.cpp
+	private/component/system/LvPostProcessVolumeComponentSystem.cpp
+	private/component/system/LvScriptComponentSystem.cpp
+	private/component/system/LvTrailComponentSystem.cpp
+	private/component/system/LvUIButtonComponentSystem.cpp
+	private/component/system/LvUIToggleComponentSystem.cpp
+	private/component/system/LvUIDropdownComponentSystem.cpp
+)
+SOURCE_GROUP("component\\system\\private" FILES ${SRC_COMPONENT_SYSTEM})
+LIST(APPEND TOTAL_FILE ${SRC_COMPONENT_SYSTEM})
+# Cinematic
+SET(INC_CINEMATIC
+	cinematic/LvCinematicTrack.h
+	cinematic/LvCinematicTrackType.h
+	cinematic/LvCameraTrack.h
+	cinematic/LvAnimationTrack.h
+	cinematic/LvEffectTrack.h
+	cinematic/LvShotTrack.h
+	cinematic/LvCinematicSubTrack.h
+	cinematic/LvCinematicKeyTrack.h
+	cinematic/LvCinematicKeyTrack.hpp
+	cinematic/LvCinematicClipTrack.h
+	cinematic/LvCinematicClipTrack.hpp
+	cinematic/LvAnimationSubTrack.h
+	cinematic/LvAnimationSubTrack.hpp
+	cinematic/LvEffectSubTrack.h
+	cinematic/LvEffectSubTrack.hpp
+	cinematic/LvShotSubTrack.h
+	cinematic/LvShotSubTrack.hpp
+	cinematic/LvCinematicNode.h
+	cinematic/LvCinematicFrame.h
+	cinematic/LvEasingFunctions.h
+)
+SOURCE_GROUP("cinematic\\public" FILES ${INC_CINEMATIC})
+LIST(APPEND TOTAL_FILE ${INC_CINEMATIC})
+SET(SRC_CINEMATIC
+	private/cinematic/LvCinematicTrack.cpp
+	private/cinematic/LvCameraTrack.cpp
+	private/cinematic/LvAnimationTrack.cpp
+	private/cinematic/LvEffectTrack.cpp
+	private/cinematic/LvShotTrack.cpp
+	private/cinematic/LvCinematicKeyTrack.cpp
+	private/cinematic/LvCinematicClipTrack.cpp
+	private/cinematic/LvAnimationSubTrack.cpp
+)
+SOURCE_GROUP("cinematic\\private" FILES ${SRC_CINEMATIC})
+LIST(APPEND TOTAL_FILE ${SRC_CINEMATIC})
+# Testing
+IF(NOT ANDROID AND NOT IOS)
+	SET(ENGINE_TESTING_PUBLIC
+		testing/LvAutomationWorker.h
+		testing/LvNetworkMessage.h
+		testing/LvNetworkMessenger.h
+		testing/LvSocketNetworkQueue.h
+	)
+	SOURCE_GROUP("testing\\public" FILES ${ENGINE_TESTING_PUBLIC})
+	LIST(APPEND TOTAL_FILE ${ENGINE_TESTING_PUBLIC})
+	SET(ENGINE_TESTING_PRIVATE
+		private/testing/LvAutomationWorker.cpp
+		private/testing/LvNetworkMessage.cpp
+		private/testing/LvNetworkMessenger.cpp
+		private/testing/LvSocketNetworkQueue.cpp
+	)
+	SOURCE_GROUP("testing\\private" FILES ${ENGINE_TESTING_PRIVATE})
+	LIST(APPEND TOTAL_FILE ${ENGINE_TESTING_PRIVATE})
+ENDIF()
+# Thread
+SET(ENGINE_THREAD_PRIVATE private/thread/LvDispatchQueue.cpp)
+SOURCE_GROUP("thread\\private" FILES ${ENGINE_THREAD_PRIVATE})
+LIST(APPEND TOTAL_FILE ${ENGINE_THREAD_PRIVATE})
+SET(THREAD_PUBLIC thread/LvDispatchQueue.h)
+SOURCE_GROUP("thread\\public" FILES ${THREAD_PUBLIC})
+LIST(APPEND TOTAL_FILE ${THREAD_PUBLIC})
+# Module
+SET(ENGINE_MODULE_PUBLIC module/LvLibraryLoader.h)
+SOURCE_GROUP("module\\public" FILES ${ENGINE_MODULE_PUBLIC})
+LIST(APPEND TOTAL_FILE ${ENGINE_MODULE_PUBLIC})
+SET(ENGINE_MODULE_PRIVATE private/module/LvLibraryLoader.cpp)
+SOURCE_GROUP("module\\private" FILES ${ENGINE_MODULE_PRIVATE})
+LIST(APPEND TOTAL_FILE ${ENGINE_MODULE_PRIVATE})
+SET(ENGINE_UI_TEXT_PUBLIC
+	ui/text/LvStbTruetypeExtension.h
+	ui/text/LvRichTextParser.h
+)
+SOURCE_GROUP("ui\\text\\public" FILES ${ENGINE_UI_TEXT_PUBLIC})
+LIST(APPEND TOTAL_FILE ${ENGINE_UI_TEXT_PUBLIC})
+SET(ENGINE_UI_TEXT_PRIVATE private/ui/text/LvRichTextParser.cpp)
+SOURCE_GROUP("ui\\text\\private" FILES ${ENGINE_UI_TEXT_PRIVATE})
+LIST(APPEND TOTAL_FILE ${ENGINE_UI_TEXT_PRIVATE})
+SET(ENGINE_UI_FONT_PUBLIC ui/font/LvFontUtil.h)
+SOURCE_GROUP("ui\\font\\public" FILES ${ENGINE_UI_FONT_PUBLIC})
+LIST(APPEND TOTAL_FILE ${ENGINE_UI_FONT_PUBLIC})
+SET(ENGINE_UI_FONT_PRIVATE private/ui/font/LvFontUtil.cpp)
+SOURCE_GROUP("ui\\font\\private" FILES ${ENGINE_UI_FONT_PRIVATE})
+LIST(APPEND TOTAL_FILE ${ENGINE_UI_FONT_PRIVATE})
+SET(ENGINE_UI_CORE_PUBLIC
+	ui/core/LvUIEventData.h
+	ui/core/LvUIRaycastRegistry.h
+	ui/core/LvUIRectUtil.h
+	ui/core/LvUIEnum.h
+)
+SOURCE_GROUP("ui\\core\\public" FILES ${ENGINE_UI_CORE_PUBLIC})
+LIST(APPEND TOTAL_FILE ${ENGINE_UI_CORE_PUBLIC})
+SET(EMGINE_UI_CORE_PRIVATE
+	private/ui/core/LvUIRaycastRegistry.cpp
+	private/ui/core/LvUIRectUtil.cpp
+)
+SOURCE_GROUP("ui\\core\\private" FILES ${EMGINE_UI_CORE_PRIVATE})
+LIST(APPEND TOTAL_FILE ${EMGINE_UI_CORE_PRIVATE})
+IF(APPLE)
+	IF(IOS)
+		#FILE(GLOB SOURCE_OS_SPECIFIC "ios/*.c" "ios/*.cpp" "ios/*.m" "ios/*.mm" "ios/*.h" "ios/*.hpp")
+		FILE(GLOB MM_FILES "ios/*.m" "ios/*.mm")
+		SET(SRC_PUBLIC_PLATFORM platform/LvPlatformTextInput.h)
+		SOURCE_GROUP("platform\\public" FILES ${SRC_PUBLIC_PLATFORM})
+		SET(SRC_PRIVATE_PLATFORM private/platform/ios/LvPlatformTextInput_ios.mm)
+		# MESSAGE(STATUS "ios ${SRC_PRIVATE_PLATFORM}")
+	ELSE()
+		FILE(GLOB MM_FILES "mac/*.m" "mac/*.mm")
+		#FILE(GLOB SRC_PLATFORM "mac/*.c" "mac/*.cpp" "mac/*.m" "mac/*.mm" "mac/*.h" "mac/*.hpp")
+		SET(SRC_PUBLIC_PLATFORM platform/LvPlatformTextInput.h)
+		SOURCE_GROUP("platform\\public" FILES ${SRC_PUBLIC_PLATFORM})
+		SET(SRC_PRIVATE_PLATFORM
+			private/platform/desktop/LvPlatformTextInput_desktop.cpp
+			private/platform/desktop/LvStbTextEdit.h
+			private/platform/desktop/LvStbTextEdit.cpp
+			private/platform/desktop/LvTextEdit.h
+			private/platform/desktop/LvTextEdit.cpp
+		)
+		SOURCE_GROUP("platform\\private" FILES ${SRC_PRIVATE_PLATFORM})
+		# MESSAGE(STATUS "mac ${SRC_PRIVATE_PLATFORM}")
+	ENDIF()
+	SET_PROPERTY(SOURCE ${MM_FILES} APPEND_STRING PROPERTY COMPILE_FLAGS "-fno-objc-arc")
+ELSEIF(WIN32)
+	#FILE(GLOB SRC_PLATFORM "win/*.c" "win/*.cpp" "win/*.h" "win/*.hpp" "win/*.natvis")
+	SET(SRC_PUBLIC_PLATFORM platform/LvPlatformTextInput.h)
+	SOURCE_GROUP("platform\\public" FILES ${SRC_PUBLIC_PLATFORM})
+	SET(SRC_PRIVATE_PLATFORM
+		private/platform/desktop/LvPlatformTextInput_desktop.cpp
+		private/platform/desktop/LvStbTextEdit.h
+		private/platform/desktop/LvStbTextEdit.cpp
+		private/platform/desktop/LvTextEdit.h
+		private/platform/desktop/LvTextEdit.cpp
+	)
+	SOURCE_GROUP("platform\\private" FILES ${SRC_PRIVATE_PLATFORM})
+	# MESSAGE(STATUS "win32 ${SRC_PRIVATE_PLATFORM}")
+ELSEIF(ANDROID)
+	#FILE(GLOB SRC_PLATFORM "android/*.c" "android/*.cpp" "android/*.h" "android/*.hpp")
+	SET(SRC_PUBLIC_PLATFORM platform/LvPlatformTextInput.h)
+	SOURCE_GROUP("platform\\public" FILES ${SRC_PUBLIC_PLATFORM})
+	SET(SRC_PRIVATE_PLATFORM private/platform/android/LvPlatformTextInput_Android.cpp)
+	SOURCE_GROUP("platform\\private" FILES ${SRC_PRIVATE_PLATFORM})
+	MESSAGE(STATUS "android ${SRC_PRIVATE_PLATFORM}")
+ENDIF()
+LIST(APPEND TOTAL_FILE ${SRC_PUBLIC_PLATFORM})
+LIST(APPEND TOTAL_FILE ${SRC_PRIVATE_PLATFORM})
+# NOTE deprecated files
+SET(LEGACY)
+SOURCE_GROUP("legacy" FILES ${LEGACY})
+LIST(APPEND TOTAL_FILE ${LEGACY})
+### Add LIB
+IF(ANDROID)
+	SET(PUBLIC_SRC jni/LvJniapi.h)
+	SOURCE_GROUP("public\\android" FILES ${PUBLIC_SRC})
+	SET(PRIVATE_SRC private/jni/LvJniapi.cpp)
+	SOURCE_GROUP("private\\android" FILES ${PRIVATE_SRC})
+ELSEIF(WIN32)
+	SET(PRIVATE_SRC private/LvEngine.natvis)
+	SOURCE_GROUP("private\\win32" FILES ${PRIVATE_SRC})
+ENDIF()
+LIST(APPEND TOTAL_FILE ${PUBLIC_SRC})
+LIST(APPEND TOTAL_FILE ${PRIVATE_SRC})
+SET(VERSION_TXT_FILE Version.txt)
+SOURCE_GROUP("\\" FILES ${VERSION_TXT_FILE})
+LIST(APPEND TOTAL_FILE ${VERSION_TXT_FILE})
+FILE(READ ${CMAKE_CURRENT_SOURCE_DIR}/${VERSION_TXT_FILE} VERSION_TXT)
+SET(_LV_ENGINE_MAJOR_VERSION "0")
+SET(_LV_ENGINE_MINOR_VERSION "0")
+SET(_LV_ENGINE_PATCH_VERSION "0")
+STRING(REPLACE "." ";" VERSION_LIST ${VERSION_TXT})
+LIST(GET VERSION_LIST 0 _LV_ENGINE_MAJOR_VERSION)
+LIST(GET VERSION_LIST 1 _LV_ENGINE_MINOR_VERSION)
+LIST(GET VERSION_LIST 2 _LV_ENGINE_PATCH_VERSION)
+IF(LV1ENGINE_SHARED_LIB)
+	ADD_LIBRARY(engine SHARED ${TOTAL_FILE} 
+    ${COMPONENT_PRIVATE} ${COMPONENT_PUBLIC} ${INPUT_PUBLIC} ${LVTF_PRIVATE} ${LVTF_PUBLIC} ${REFLECT_PRIVATE} ${RENDERER_PRIVATE} ${RENDERER_PUBLIC} ${SERIALIZER_PRIVATE} ${SERIALIZER_PUBLIC} ${THIRDPARTY_FONT} ${THIRDPARTY_IMGUI} ${THIRDPARTY_LZ4} ${UTILS_PRIVATE} ${UTILS_PUBLIC} ${EXPERIMENT_YOGA} ${MODULE_PRIVATE} ${MODULE_PUBLIC} ${TESTING_PRIVATE} ${TESTING_PUBLIC} ${THIRDPARTY_TINYXML2} ${THIRDPARTY_YOGA} ${THREAD_PRIVATE} ${UI_LAYOUT} ${UI_LAYOUT_PRIVATE} ${UI_LAYOUT_PUBLIC} ${COMPONENT_PRIVATE} ${COMPONENT_PUBLIC} ${SHADER_PRIVATE} ${SHADER_PUBLIC} ${UI_CORE} ${UI_CORE_PRIVATE} ${UI_CORE_PUBLIC} ${ASSET_PRIVATE} ${ASSET_PUBLIC} ${PRIVATE_WIN32} ${UTIL_PRIVATE} ${UTIL_PUBLIC} ${SETTINGS} ${SETTINGS_PUBLIC} ${SETTINGS_PRIVATE} ${RENDERER_PUBLIC_POSTPROCESS} ${RENDERER_PRIVATE_POSTPROCESS} ${ARCHIVE_PRIVATE} ${ARCHIVE_PUBLIC} ${ATTRIBUTE_PRIVATE} ${ATTRIBUTE_PUBLIC} ${MODULE_PUBLIC} ${TESTING_PRIVATE} ${CINEMATIC_PRIVATE} ${CINEMATIC_PUBLIC} ${PLATFORM_PRIVATE} ${PLATFORM_PUBLIC} ${UI_FONT} ${UI_TEXT} ${UI_FONT_PRIVATE} ${UI_FONT_PUBLIC} ${UI_TEXT_PRIVATE} ${UI_TEXT_PUBLIC} ${RENDERER_PRIVATE_UTIL})
+	TARGET_COMPILE_DEFINITIONS(engine PRIVATE IMGUI_INCLUDE_IMCONFIG_H LV_API_EXPORT TINYXML2_EXPORT __ASSEMBLY__NAME__="engine" LV_ENGINE_MAJOR_VERSION=${_LV_ENGINE_MAJOR_VERSION} LV_ENGINE_MINOR_VERSION=${_LV_ENGINE_MINOR_VERSION} LV_ENGINE_PATCH_VERSION=${_LV_ENGINE_PATCH_VERSION} $<$<CONFIG:Debug>:_DEBUG> $<$<CONFIG:MinSizeRel>:_RELEASE> $<$<CONFIG:Release>:_RELEASE> $<$<CONFIG:RelWithDebInfo>:_RELWITHDEBINFO>)
+	SET_PROPERTY(TARGET engine PROPERTY POSITION_INDEPENDENT_CODE ON)
+ELSE()
+	ADD_LIBRARY(engine STATIC ${TOTAL_FILE} ${COMPONENT_PRIVATE} ${COMPONENT_PUBLIC} ${INPUT_PUBLIC} ${LVTF_PRIVATE} ${LVTF_PUBLIC} ${REFLECT_PRIVATE} ${RENDERER_PRIVATE} ${RENDERER_PUBLIC} ${SERIALIZER_PRIVATE} ${SERIALIZER_PUBLIC} ${THIRDPARTY_FONT} ${THIRDPARTY_IMGUI} ${THIRDPARTY_LZ4} ${UTILS_PRIVATE} ${UTILS_PUBLIC} ${EXPERIMENT_YOGA} ${MODULE_PRIVATE} ${MODULE_PUBLIC} ${TESTING_PRIVATE} ${TESTING_PUBLIC} ${THIRDPARTY_TINYXML2} ${THIRDPARTY_YOGA} ${THREAD_PRIVATE} ${UI_LAYOUT} ${UI_LAYOUT_PRIVATE} ${UI_LAYOUT_PUBLIC} ${COMPONENT_PRIVATE} ${COMPONENT_PUBLIC} ${SHADER_PRIVATE} ${SHADER_PUBLIC} ${UI_CORE} ${UI_CORE_PRIVATE} ${UI_CORE_PUBLIC} ${ASSET_PRIVATE} ${ASSET_PUBLIC} ${PRIVATE_WIN32} ${UTIL_PRIVATE} ${UTIL_PUBLIC} ${SETTINGS} ${SETTINGS_PRIVATE} ${SETTINGS_PUBLIC} ${SETTINGS_PRIVATE} ${RENDERER_PUBLIC_POSTPROCESS} ${RENDERER_PRIVATE_POSTPROCESS} ${ARCHIVE_PRIVATE} ${ARCHIVE_PUBLIC} ${ATTRIBUTE_PRIVATE} ${ATTRIBUTE_PUBLIC} ${MODULE_PUBLIC} ${TESTING_PRIVATE} ${CINEMATIC_PRIVATE} ${CINEMATIC_PUBLIC} ${PLATFORM_PRIVATE} ${PLATFORM_PUBLIC} ${UI_FONT} ${UI_TEXT} ${UI_FONT_PRIVATE} ${UI_FONT_PUBLIC} ${UI_TEXT_PRIVATE} ${UI_TEXT_PUBLIC} ${RENDERER_PRIVATE_UTIL})
+	TARGET_COMPILE_DEFINITIONS(engine PRIVATE IMGUI_INCLUDE_IMCONFIG_H LV_API_EXPORT TINYXML2_EXPORT __ASSEMBLY__NAME__="engine" LV_ENGINE_MAJOR_VERSION=${_LV_ENGINE_MAJOR_VERSION} LV_ENGINE_MINOR_VERSION=${_LV_ENGINE_MINOR_VERSION} LV_ENGINE_PATCH_VERSION=${_LV_ENGINE_PATCH_VERSION} $<$<CONFIG:Debug>:_DEBUG> $<$<CONFIG:MinSizeRel>:_RELEASE> $<$<CONFIG:Release>:_RELEASE> $<$<CONFIG:RelWithDebInfo>:_RELWITHDEBINFO>)
+ENDIF()
+LINK_DIRECTORIES(${LV_LIB_DIR})
+# PROJECT_BINARY_DIR가 상대경로로 찍혀서 CMAKE_CFG_INTDIR를 통해 접근하여야 함
+# $CONFIGURATION$EFFECTIVE_PLATFORM_NAME
+SET(LV_REFLECTION_PATH ${PROJECT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/LvReflection)
+IF(APPLE)
+	# TARGET_COMPILE_OPTIONS(engine PRIVATE "-Wa,-mbig-obj") 지원안함
+	IF(IOS)
+		TARGET_LINK_LIBRARIES(engine PRIVATE "-Wl,-all_load" system render "-Wl,-noall_load -framework OpenGLES -framework Foundation -framework CoreFoundation -framework QuartzCore -framework UIKit -framework IOKit -framework Metal")
+	ELSE()
+		TARGET_LINK_LIBRARIES(engine PRIVATE "-Wl,-all_load" system render "-Wl,-noall_load" ${VULKAN} "-framework OpenGL -framework Foundation -framework CoreFoundation -framework QuartzCore -framework AppKit -framework IOKit  -framework Metal")
+		# TARGET_LINK_LIBRARIES(engine PRIVATE "-Wl,-all_load" system render "-Wl,-noall_load -framework vulkan -framework OpenGL -framework Foundation -framework CoreFoundation -framework QuartzCore -framework AppKit -framework IOKit  -framework Metal")
+		SET_TARGET_PROPERTIES(engine PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${LV_LIBRARY_OUTPUT_DIR})
+		IF(BUNDLE_PACKING)
+			SET_TARGET_PROPERTIES(engine PROPERTIES INSTALL_RPATH_USE_LINK_PATH TRUE)
+			SET_TARGET_PROPERTIES(engine PROPERTIES INSTALL_RPATH "@executable_path")
+		ENDIF()
+		IF(LV_USE_REFLECT_ENGINE)
+			ADD_CUSTOM_TARGET(CSharpGen-Engine COMMAND ${LV_REFLECTION_PATH} -s ${LV_ENGINE_SRC_DIR}/engine -c ${LV_ENGINE_SRC_DIR}/cache -o private/reflect -p engine -i ${PROJECT_SOURCE_DIR}/deps/include ${LV_ENGINE_SRC_DIR} -v ${LV_ENGINE_SRC_DIR}/engine/Version.txt -l ${PROJECT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/log -cs ${LV_ENGINE_ROOT_DIR}/script/editor/Editor-Script.csproj)
+			ADD_CUSTOM_TARGET(LvReflect-Engine COMMAND ${LV_REFLECTION_PATH} -s ${LV_ENGINE_SRC_DIR}/engine -c ${LV_ENGINE_SRC_DIR}/cache -o private/reflect -p engine -i ${PROJECT_SOURCE_DIR}/deps/include ${LV_ENGINE_SRC_DIR} -v ${LV_ENGINE_SRC_DIR}/engine/Version.txt -l ${PROJECT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/log)
+			ADD_DEPENDENCIES(engine LvReflect-Engine)
+			SET_PROPERTY(TARGET CSharpGen-Engine PROPERTY FOLDER "Commands")
+			SET_PROPERTY(TARGET LvReflect-Engine PROPERTY FOLDER "CMakePredefinedTargets/Reflect")
+			# ADD_CUSTOM_COMMAND(TARGET engine PRE_BUILD COMMENT "Generate Reflection" COMMAND ${PROJECT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/LvReflection -s ${LV_ENGINE_SRC_DIR}/engine -c ${LV_ENGINE_SRC_DIR}/cache -o private/reflect -p engine -i ${PROJECT_SOURCE_DIR}/deps/include ${LV_ENGINE_SRC_DIR} -l ${PROJECT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/log)
+		ENDIF()
+		INSTALL(TARGETS engine ARCHIVE DESTINATION "${INSTALL_FOLDER}/dev/lib" LIBRARY DESTINATION "${INSTALL_FOLDER}" RUNTIME DESTINATION "${INSTALL_FOLDER}")
+	ENDIF()
+	#SET_TARGET_PROPERTIES(engine PROPERTIES LINK_FLAGS "-Wl,-all_load")
+ELSEIF(WIN32)
+	SET_TARGET_PROPERTIES(engine PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${LV_LIBRARY_OUTPUT_DIR})
+	TARGET_COMPILE_OPTIONS(engine PRIVATE "/bigobj")
+	TARGET_LINK_LIBRARIES(engine PRIVATE system render ${JEMALLOC} ${VULKAN})
+	TARGET_LINK_OPTIONS(engine PRIVATE "/WHOLEARCHIVE:system" "/WHOLEARCHIVE:render")
+	# SET_PROPERTY(TARGET sample PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}/build/win")
+	SET_PROPERTY(TARGET engine PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${LV_PROJECT_BINARY_DIR}/${CMAKE_CFG_INTDIR}")
+	IF(LV_USE_REFLECT_ENGINE)
+		ADD_CUSTOM_TARGET(CSharpGen-Engine COMMAND ${LV_REFLECTION_PATH} -s ${LV_ENGINE_SRC_DIR}/engine -c ${LV_ENGINE_SRC_DIR}/cache -o private/reflect -p engine -i ${PROJECT_SOURCE_DIR}/deps/include ${LV_ENGINE_SRC_DIR} -v ${LV_ENGINE_SRC_DIR}/engine/Version.txt -l ${PROJECT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/log -cs ${LV_ENGINE_ROOT_DIR}/script/editor/Editor-Script.csproj)
+		ADD_CUSTOM_TARGET(LvReflect-Engine COMMAND ${LV_REFLECTION_PATH} -s ${LV_ENGINE_SRC_DIR}/engine -c ${LV_ENGINE_SRC_DIR}/cache -o private/reflect -p engine -i ${PROJECT_SOURCE_DIR}/deps/include ${LV_ENGINE_SRC_DIR} -v ${LV_ENGINE_SRC_DIR}/engine/Version.txt -l ${PROJECT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/log)
+		ADD_DEPENDENCIES(engine LvReflect-Engine)
+		SET_PROPERTY(TARGET CSharpGen-Engine PROPERTY FOLDER "Commands")
+		SET_PROPERTY(TARGET LvReflect-Engine PROPERTY FOLDER "CMakePredefinedTargets/Reflect")
+	ENDIF()
+	INSTALL(TARGETS engine ARCHIVE DESTINATION "${INSTALL_FOLDER}/dev/lib" LIBRARY DESTINATION "${INSTALL_FOLDER}" RUNTIME DESTINATION "${INSTALL_FOLDER}")
+ELSEIF(ANDROID)
+	SET_TARGET_PROPERTIES(engine PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/src/engine/")
+	# TARGET_COMPILE_OPTIONS(engine PRIVATE "-Wa,-mbig-obj")
+	TARGET_LINK_LIBRARIES(engine PRIVATE "-Wl,--whole-archive" system render "-Wl,--no-whole-archive" android log EGL GLESv2 GLESv3 vulkan "-Wl,--no-whole-archive")
+ENDIF()
+INSTALL(DIRECTORY "." PUBLIC_HEADER DESTINATION "${INSTALL_FOLDER}/dev/include/engine" FILES_MATCHING PATTERN "*.h" PATTERN "private" EXCLUDE)
+INSTALL(FILES "private/LvEngine.natvis" DESTINATION "${INSTALL_FOLDER}/dev/natvis")
+INSTALL(FILES "../Cache/engine.rso" DESTINATION "${INSTALL_FOLDER}/dev/rso")

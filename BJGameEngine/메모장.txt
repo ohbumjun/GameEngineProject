@@ -1,0 +1,24 @@
+
+
+BatchRenderer 
+1) -> 대형 지형을 공중에서 내려다 본다고 할 때
+여러 개의 Texture 가 Mapping 된 여러 Stuff 가 있을 수 있다.
+100 ~ 200 개의 Texture 를 한번에 Render 하려고 한다는 것이다.
+-> 여러 개를 하나의 Mesh 로 취급해서 DrawCall 을 줄이고자 하는 것이다.
+
+2) Atlas 를 이용해서 Texture 들을 하나의 Texture 에 통합할 수도 있고
+
+3) Atlas 를 이용해서 Animation 을 진행하고 싶을 수도 있다.
+
+4) UI
+- Layout 시스템. 
+- 각종 UI 들을 화면 여기 저기에 배치하게 될 것이다.
+- 각 UI 별로 다른 Font 글자를 쓸 수도 있다. 각 글자마다 다른 Font 를
+  적용하는 것도 필요하다.
+- Inventory 뒤의 모든 World 를 흐리게 만드는 PostProcess Effect !
+...
+...
+
+5) Interaction
+- Scripting : Lua / BluePrint (Unreal)
+- ECS / CGO (composable object with component)
