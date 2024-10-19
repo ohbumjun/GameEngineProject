@@ -75,13 +75,13 @@ public:
     // @brief 순소 폴더 경로 리턴
     static std::string GetPathDirectory(const char *path);
 
-    // @brief 확장자 리턴
+    // 확장자 리턴
     static std::string GetExtenstion(const char *path);
 
-    // @brief 파일 이름 리턴
+    // 파일 이름 리턴
     static std::string GetPathame(const char *path);
 
-    // @brief win system 에 맞게 파일 경로를 변경해준다.
+    // win system 에 맞게 파일 경로를 변경해준다.
     static std::string ToWinSystemPath(const std::string &str);
 
     static void ToWinSystemPath(char *after, const char *before);
