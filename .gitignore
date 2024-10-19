@@ -8,8 +8,7 @@ build/
 
 ## Engine
 # FileSystem
-BJGameEngine/src/public/Hazel/Core/FileSystem/
-BJGameEngine/src/private/Hazel/Core/FileSystem/
+BJGameEngine/src/private/Hazel/FileSystem/
 
 # DS
 BJGameEngine/src/public/Hazel/Core/DataStructure/RingBuffer.h
