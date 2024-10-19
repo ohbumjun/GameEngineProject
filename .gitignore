@@ -2,6 +2,7 @@
 bin/
 bin-int/
 build/
+.vscode/
 ApplicationProject/HazelProfile-Runtime.json
 Hazel-Editor/HazelProfile-Runtime.json
 
