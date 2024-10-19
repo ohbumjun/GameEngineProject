@@ -7,7 +7,6 @@ namespace Hazel
 class Allocable
 {
 public:
-    // file, line : memory leak tracking 을 위함이다.
     virtual void *Allocate(size_t size,
                            const char *flie = nullptr,
                            size_t line = 0) = 0;

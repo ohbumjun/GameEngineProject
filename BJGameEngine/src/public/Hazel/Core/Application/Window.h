@@ -53,7 +53,6 @@ public:
     // @brief Event 
     virtual void PeekEvent();
 
-    // virtual void OnUpdate() = 0;
     virtual void Update(float deltatime);
 
     virtual uint32_t GetWidth() const = 0;
@@ -61,8 +60,6 @@ public:
 
     // Window Attributes
     virtual void SetEventCallback(const EventCallbackFn &callback) = 0;
-    virtual void SetVSync(bool enabled) = 0;
-    virtual bool IsVSync() const = 0;
 
     // ex) OpenGL -> return GLFW Window
     virtual void *GetNativeWindow() const = 0;

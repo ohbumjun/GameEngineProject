@@ -14,6 +14,5 @@ void EngineContext::initialize()
 	const ApplicationCommandLineArgs &applicationCommandLineArgs =
         applicationContext.GetCommandLineArgs();
 
-
 }
 } // namespace Hazel

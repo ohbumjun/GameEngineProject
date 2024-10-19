@@ -4,9 +4,51 @@ bin-int/
 build/
 ApplicationProject/HazelProfile-Runtime.json
 Hazel-Editor/HazelProfile-Runtime.json
+
+## Engine
+# FileSystem
 HazelGameEngine/src/Hazel/FileSystem/
-<<<<<<< HEAD
-240228Code
-=======
-240228 코드
->>>>>>> 01811cffe8c6ffa51105338ffc4312c56b4aa24f
+
+# DS
+HazelGameEngine/BJGameEngine/src/public/Hazel/Core/DataStructure/RingBuffer.h
+
+# ID
+HazelGameEngine/BJGameEngine/src/public/Hazel/Core/ID/FileId.h
+HazelGameEngine/BJGameEngine/src/private/Hazel/Core/ID/FileId.cpp
+
+# Reflection
+HazelGameEngine/BJGameEngine/src/public/Hazel/Core/Reflection/Reflection.h
+HazelGameEngine/BJGameEngine/src/private/Hazel/Core/Reflection/Reflection.cpp
+
+# Serialization
+HazelGameEngine/BJGameEngine/src/public/Hazel/Core/Serialization/JsonSerializer.h
+HazelGameEngine/BJGameEngine/src/private/Hazel/Core/Serialization/JsonSerializer.cpp
+
+# Thread
+HazelGameEngine/BJGameEngine/src/public/Hazel/Core/Thread/
+HazelGameEngine/BJGameEngine/src/private/Hazel/Core/Thread/
+
+
+## Editor
+# Project
+HazelGameEngine/BJEditor/src/private/Project.cpp
+
+# asset
+HazelGameEngine/BJEditor/src/private/EditorAsset/
+HazelGameEngine/BJEditor/src/public/EditorAsset/
+
+# window
+HazelGameEngine/BJEditor/src/private/EditorWindows/
+HazelGameEngine/BJEditor/src/public/EditorWindows/
+
+# FileManager
+HazelGameEngine/BJEditor/src/private/File/
+HazelGameEngine/BJEditor/src/public/File/
+
+# Gui
+HazelGameEngine/BJEditor/src/private/GuiProcessors/
+HazelGameEngine/BJEditor/src/public/GuiProcessors/
+
+# Panel
+HazelGameEngine/BJEditor/src/private/Panel/
+HazelGameEngine/BJEditor/src/public/Panel/

@@ -4,14 +4,14 @@
 
 namespace Hazel
 {
-void *DefaultHeapAllocator::Allocate(size_t size,
+void *HeapAllocator::Allocate(size_t size,
                                      const char *file,
                                      size_t line)
 {
     return malloc(size);
 }
 
-void *DefaultHeapAllocator::Reallocate(void *ptr,
+void *HeapAllocator::Reallocate(void *ptr,
                                        size_t size,
                                        const char *file ,
                                        size_t line )
@@ -33,7 +33,7 @@ void *DefaultHeapAllocator::Reallocate(void *ptr,
 		*/
 }
 
-void DefaultHeapAllocator::Free(void *ptr)
+void HeapAllocator::Free(void *ptr)
 {
     free(ptr);
 }

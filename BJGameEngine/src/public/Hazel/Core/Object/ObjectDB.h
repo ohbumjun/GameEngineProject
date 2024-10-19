@@ -62,7 +62,7 @@ private:
     static ObjectID Add(BaseObject *p_object);
     static void Remove(BaseObject *p_object);
 
-    static DefaultHeapAllocator m_Allocator;
+    static HeapAllocator m_Allocator;
     static SpinLock m_SpinLock;
     static uint32_t m_SlotCnt;
     static uint32_t m_SlotMax;

@@ -30,7 +30,7 @@ public:
         MAX,
     };
 
-	// @param projectPath 프로젝트 절대경로
+	// projectPath 프로젝트 절대경로
     Project(const char *projectPath);
     ~Project();
     
@@ -38,17 +38,14 @@ public:
     static bool IsLoaded();
 
     
-	 // @brief 기존 프로젝트 열기
-	 // @param projectAbsolutePath 대상 프로젝트 절대경로
-    static void Open(const char *projectAbsolutePath);
+	 // 기존 프로젝트 열기
+	 //projectAbsolutePath 대상 프로젝트 절대경로
+    static void Open(const char *projectAbsPath);
 
 	// @brief 현재 프로젝트 닫기
     static void Close();
 
-	/**
-	* @brief 빌트인 에셋 로드
-	*/
-    void LoadBuiltIn(std::string &state) const;
+    void LoadBuiltInResource(std::string &state) const;
 
 	void Play();
     void Pause();
