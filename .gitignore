@@ -1,0 +1,55 @@
+.vs/
+bin/
+bin-int/
+build/
+.vscode/
+./ApplicationProject/HazelProfile-Runtime.json
+./Hazel-Editor/HazelProfile-Runtime.json
+
+## Engine
+# FileSystem
+BJGameEngine/src/public/Hazel/Core/FileSystem/
+
+# DS
+BJGameEngine/src/public/Hazel/Core/DataStructure/RingBuffer.h
+
+# ID
+BJGameEngine/src/public/Hazel/Core/ID/FileId.h
+BJGameEngine/src/private/Hazel/Core/ID/FileId.cpp
+
+# Reflection
+BJGameEngine/src/public/Hazel/Core/Reflection/Reflection.h
+BJGameEngine/src/private/Hazel/Core/Reflection/Reflection.cpp
+
+# Serialization
+BJGameEngine/src/public/Hazel/Core/Serialization/JsonSerializer.h
+HJGameEngine/src/private/Hazel/Core/Serialization/JsonSerializer.cpp
+
+# Thread
+BJGameEngine/src/public/Hazel/Core/Thread/
+BJGameEngine/src/private/Hazel/Core/Thread/
+
+
+## Editor
+# Project
+BJEditor/src/private/Project.cpp
+
+# asset
+BJEditor/src/private/EditorAsset/
+BJEditor/src/public/EditorAsset/
+
+# window
+BJEditor/src/private/EditorWindows/
+BJEditor/src/public/EditorWindows/
+
+# FileManager
+BJEditor/src/private/File/
+BJEditor/src/public/File/
+
+# Gui
+BJEditor/src/private/GuiProcessors/
+BJEditor/src/public/GuiProcessors/
+
+# Panel
+BJEditor/src/private/Panel/
+BJEditor/src/public/Panel/
