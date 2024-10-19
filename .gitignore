@@ -8,6 +8,7 @@ build/
 
 ## Engine
 # FileSystem
+BJGameEngine/CMakeLists.txt
 BJGameEngine/src/public/Hazel/Core/FileSystem/
 
 # DS
